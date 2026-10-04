@@ -41,23 +41,30 @@ export function Footer() {
       
       {/* Bottom half of Yellow Container */}
       <div className="relative w-full max-w-[1600px] bg-[#FFFF1A] rounded-b-[32px] md:rounded-b-[48px] px-2 md:px-8 pt-12 md:pt-16 pb-4 md:pb-8 shadow-2xl">
-        
+
+
         {/* Purple Inner Container */}
         <div ref={containerRef} className="relative w-full bg-[#2b1f5e] rounded-[24px] md:rounded-[32px] shadow-inner pt-16 pb-48 md:pt-20 md:pb-64 px-8 md:px-12 mx-auto text-white min-h-[400px] md:min-h-[500px]">
           
           {/* Top Center Tab */}
-          <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-40 md:w-56 h-10 bg-[#2b1f5e] rounded-t-[24px] flex items-center justify-center">
-            <svg className="absolute top-0 left-[-30px] w-[30px] h-full text-[#2b1f5e]" viewBox="0 0 30 48" fill="currentColor">
-              <path d="M30,48 V0 C30,26 13.4,48 0,48 Z" />
+          <div className="absolute -top-8 md:-top-10 left-1/2 -translate-x-1/2 w-48 md:w-64 h-8 md:h-10 bg-[#2b1f5e] flex items-center justify-center">
+            {/* Left slanted wing */}
+            <svg className="absolute top-0 left-[-48px] md:left-[-60px] w-[48px] md:w-[60px] h-full text-[#2b1f5e]" viewBox="0 0 60 40" fill="currentColor" preserveAspectRatio="none">
+              <path d="M 0 40 C 10 40 20 35 25 30 L 45 10 C 50 5 55 0 60 0 L 60 40 Z" />
             </svg>
-            <svg className="absolute top-0 right-[-30px] w-[30px] h-full text-[#2b1f5e]" viewBox="0 0 30 48" fill="currentColor">
-              <path d="M0,48 V0 C0,26 16.6,48 30,48 Z" />
+            {/* Right slanted wing */}
+            <svg className="absolute top-0 right-[-48px] md:right-[-60px] w-[48px] md:w-[60px] h-full text-[#2b1f5e]" viewBox="0 0 60 40" fill="currentColor" preserveAspectRatio="none">
+              <path d="M 60 40 C 50 40 40 35 35 30 L 15 10 C 10 5 5 0 0 0 L 0 40 Z" />
             </svg>
           </div>
 
-          {/* Bottom Cutouts (Trapezoid shapes matching yellow bg) */}
-          <div className="absolute -bottom-[1px] left-8 md:left-16 border-b-[20px] md:border-b-[24px] border-b-[#FFFF1A] border-l-[16px] border-l-transparent border-r-[16px] border-r-transparent h-0 w-24 md:w-32 z-20"></div>
-          <div className="absolute -bottom-[1px] right-8 md:right-16 border-b-[20px] md:border-b-[24px] border-b-[#FFFF1A] border-l-[16px] border-l-transparent border-r-[16px] border-r-transparent h-0 w-24 md:w-32 z-20"></div>
+          {/* Bottom Cutouts (Cyberpunk slanted chamfers matching yellow bg) */}
+          <svg className="absolute bottom-[-1px] left-[-1px] w-[120px] md:w-[160px] h-[48px] md:h-[64px] text-[#FFFF1A] z-20 pointer-events-none" viewBox="0 0 100 60" fill="currentColor" preserveAspectRatio="none">
+            <path d="M 100 60 C 90 60 85 55 80 50 L 55 25 C 50 20 45 20 35 20 L 20 20 C 5 20 0 10 0 0 L 0 60 Z" />
+          </svg>
+          <svg className="absolute bottom-[-1px] right-[-1px] w-[120px] md:w-[160px] h-[48px] md:h-[64px] text-[#FFFF1A] z-20 pointer-events-none" viewBox="0 0 100 60" fill="currentColor" preserveAspectRatio="none">
+            <path d="M 0 60 C 10 60 15 55 20 50 L 45 25 C 50 20 55 20 65 20 L 80 20 C 95 20 100 10 100 0 L 100 60 Z" />
+          </svg>
 
           {/* Content Layout */}
           <div className="relative z-10 flex flex-col md:flex-row justify-between w-full h-full text-white">
@@ -135,14 +142,16 @@ export function Footer() {
               className="w-full h-auto object-contain drop-shadow-2xl"
               priority
             />
-            {/* Meet Our Developers Button */}
-            <Link 
-              href="/developers" 
-              className="absolute bottom-4 md:bottom-6 pointer-events-auto bg-[#F44383] text-white font-bold text-[10px] md:text-xs px-4 md:px-6 py-1.5 md:py-2 rounded-full shadow-lg hover:bg-[#d8356f] hover:scale-105 transition-transform"
-            >
-              Meet Our Developers
-            </Link>
           </div>
+
+          {/* Meet Our Developers Button */}
+          <Link 
+            href="/developers" 
+            className="absolute bottom-8 right-8 md:bottom-12 md:right-16 z-30 pointer-events-auto bg-[#F44383] text-white font-bold text-[10px] md:text-xs px-4 md:px-6 py-2 md:py-2.5 rounded-md shadow-lg hover:bg-[#d8356f] hover:scale-105 transition-transform tracking-wide"
+            style={{ fontFamily: '"Futura PT", sans-serif', wordSpacing: "0.15em" }}
+          >
+            Meet Our Developers
+          </Link>
 
         </div>
       </div>
