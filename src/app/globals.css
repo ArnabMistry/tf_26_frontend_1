@@ -1,15 +1,29 @@
 @import "tailwindcss";
 
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-tantra: "TantraFont", sans-serif;
+  --font-regular: "TantraRegular", sans-serif;
+}
+
+@font-face {
+  font-family: 'TantraFont';
+  src: url('/fonts/font_bold');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TantraRegular';
+  src: url('/fonts/font_regular');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,5 +36,69 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+}
+
+@keyframes marquee-reverse {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.animate-marquee-reverse {
+  display: flex;
+  width: max-content;
+  animation: marquee-reverse 35s linear infinite;
+}
+@keyframes fallToBottom {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53); /* ease-in quad/cubic (gravity) */
+  }
+  40% {
+    /* Hits the ground */
+    transform: translateY(var(--fall-distance)) rotate(calc(var(--fall-rotation) * 0.4));
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1); /* ease-out cubic (bounce up) */
+  }
+  65% {
+    /* Peak of first bounce (about 30% back up) */
+    transform: translateY(calc(var(--fall-distance) - 120px)) rotate(calc(var(--fall-rotation) * 0.7));
+    animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53); /* ease-in (fall again) */
+  }
+  82% {
+    /* Hits ground again */
+    transform: translateY(var(--fall-distance)) rotate(var(--fall-rotation));
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1); /* ease-out (small bounce) */
+  }
+  92% {
+    /* Peak of second bounce (very small) */
+    transform: translateY(calc(var(--fall-distance) - 30px)) rotate(calc(var(--fall-rotation) * 1.1));
+    animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53); /* ease-in */
+  }
+  100% {
+    /* Final rest */
+    transform: translateY(var(--fall-distance)) rotate(var(--fall-rotation));
+  }
+}
+
+.animate-fall-to-bottom {
+  animation: fallToBottom 1.8s forwards;
 }
