@@ -1,0 +1,68 @@
+/* ============================================================
+   SponsorCard — themed clip-shaped frame card
+   Follows the events page design system (dark purple + pink)
+   ============================================================ */
+
+.card {
+  position: relative;
+  width: 100%;
+  /* aspect-ratio drives height so cards are always proportional */
+  aspect-ratio: 200 / 216;
+  isolation: isolate;
+}
+
+/* ── SVG outline frame ── */
+.frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.frameStroke {
+  fill: rgb(255 255 255 / 7%);
+  stroke: rgb(255 255 255 / 38%);
+  stroke-width: 1.5;
+  transition: fill 220ms ease, stroke 220ms ease;
+  vector-effect: non-scaling-stroke;
+}
+
+.card:hover .frameStroke {
+  fill: rgb(255 255 255 / 12%);
+  stroke: rgb(255 36 133 / 75%);
+}
+
+/* ── Sponsor logo, centered inside the frame ── */
+.inner {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* padding keeps logo away from the shaped border edges */
+  padding: 18%;
+}
+
+.logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.88;
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.card:hover .logo {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* ===== Reduced motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  .frameStroke,
+  .logo {
+    transition: none;
+  }
+}
