@@ -32,14 +32,16 @@
 
 /* ── Grid section ── */
 .section {
-  margin: 56px 70px 0;
+  max-width: 1120px;
+  margin: 48px auto 0;
+  padding-inline: 36px;
 }
 
 /* 3 equal columns */
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  column-gap: clamp(12px, 2vw, 28px);
+  column-gap: clamp(16px, 2.5vw, 36px);
   align-items: start;
 }
 
@@ -47,12 +49,13 @@
 .col {
   display: flex;
   flex-direction: column;
-  gap: clamp(12px, 2vw, 24px);
+  gap: clamp(16px, 2.5vw, 32px);
+  overflow: clip; /* prevents SVG stroke bleed from leaking outside column */
 }
 
 /* Middle column is pushed down to create the stagger from the mockup */
 .col:nth-child(2) {
-  margin-top: clamp(40px, 6vw, 80px);
+  margin-top: clamp(36px, 5vw, 64px);
 }
 
 /* ===== Responsive ===== */
@@ -63,7 +66,7 @@
   }
 
   .section {
-    margin-inline: 40px;
+    padding-inline: 24px;
   }
 }
 
@@ -78,7 +81,8 @@
   }
 
   .section {
-    margin: 40px 16px 0;
+    margin-top: 36px;
+    padding-inline: 16px;
   }
 
   /* On mobile: 2 columns, third wraps as 2-col row */

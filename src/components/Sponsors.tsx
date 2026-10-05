@@ -4,12 +4,12 @@ import Image from "next/image";
 const SponsorCard = () => (
   <div className="relative aspect-[4/5] w-full">
     <svg 
-      className="absolute inset-0 w-full h-full text-black" 
+      className="absolute inset-0 w-full h-full" 
       viewBox="0 0 100 125" 
       preserveAspectRatio="none"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
+      fill="transparent"
+      stroke="rgba(255,255,255,0.85)"
+      strokeWidth="2.5"
       strokeLinejoin="round"
       strokeLinecap="round"
       vectorEffect="non-scaling-stroke"

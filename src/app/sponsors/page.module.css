@@ -1,12 +1,24 @@
 .page {
+  position: relative;
   display: flex;
-  min-height: max(100svh, min(179.65vw, 2587px));
+  min-height: 100svh;
   flex-direction: column;
-  background-color: #201a5c;
-  background-image: linear-gradient(rgb(30 24 90 / 72%), rgb(30 24 90 / 72%)), url("/assets/bg.png");
-  background-position: top center;
-  background-size: 100% auto;
+  background-color: #241a4c;
   color: white;
+  isolation: isolate;
+}
+
+.page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: #241a4c;
+  background-image: url("/assets/bg.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  pointer-events: none;
 }
 
 .skipLink {
@@ -25,9 +37,3 @@
   transform: translateY(0);
 }
 
-@media (max-width: 700px) {
-  .page {
-    min-height: 100svh;
-    background-size: auto 1000px;
-  }
-}

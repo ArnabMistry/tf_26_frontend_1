@@ -1,0 +1,143 @@
+/* ============================================================
+   SpeakersGrid — 2-column speakers layout matching screenshot
+   ============================================================ */
+
+.explorer {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  overflow-x: clip;
+}
+
+/* ── Page title toolbar ── */
+.toolbar {
+  display: flex;
+  align-items: flex-end;
+  gap: 32px;
+  margin: 32px 38px 0;
+  border-bottom: 1px solid rgb(255 255 255 / 25%);
+  padding: 0 50px 34px;
+}
+
+.pageTitle {
+  font-family: var(--font-tantra);
+  font-weight: 400;
+  line-height: 1;
+  text-transform: uppercase;
+  font-size: clamp(4rem, 8.34vw, 7.5rem);
+  transform: scaleX(1.17);
+  transform-origin: left center;
+  color: #ffffff;
+}
+
+/* ── Grid section ── */
+.section {
+  max-width: 1200px;
+  margin: 56px auto 0;
+  padding-inline: clamp(20px, 3.5vw, 48px);
+  box-sizing: border-box;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(24px, 3.5vw, 44px);
+  row-gap: clamp(48px, 5.5vw, 68px);
+  align-items: start;
+}
+
+/* ── Bottom wordmark & divider ── */
+.wordmarkSection {
+  margin: clamp(120px, 16vw, 200px) 38px 0;
+  padding-bottom: 48px;
+}
+
+.bottomDivider {
+  border: 0;
+  border-top: 1px solid rgb(255 255 255 / 15%);
+  margin-bottom: clamp(32px, 4vw, 48px);
+}
+
+.wordmark {
+  display: block;
+  text-decoration: none;
+  max-width: 100%;
+}
+
+.wordmarkImage {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1100px) {
+  .toolbar {
+    margin-inline: 28px;
+    padding-inline: 20px;
+  }
+
+  .section {
+    padding-inline: 24px;
+  }
+
+  .wordmarkSection {
+    margin-inline: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .toolbar {
+    margin: 20px 16px 0;
+    padding: 0 0 18px;
+  }
+
+  .pageTitle {
+    font-size: clamp(2.4rem, 11vw, 3.4rem);
+    transform: scaleX(1.04);
+  }
+
+  .section {
+    margin-top: 32px;
+    padding-inline: 16px;
+  }
+
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 40px;
+  }
+
+  .wordmarkSection {
+    margin-top: 64px;
+    margin-inline: 16px;
+    padding-bottom: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .toolbar {
+    margin: 16px 12px 0;
+    padding: 0 0 14px;
+  }
+
+  .pageTitle {
+    font-size: clamp(1.9rem, 9.5vw, 2.5rem);
+    transform: none;
+  }
+
+  .section {
+    margin-top: 24px;
+    padding-inline: 12px;
+  }
+
+  .grid {
+    row-gap: 36px;
+  }
+
+  .wordmarkSection {
+    margin-top: 48px;
+    margin-inline: 12px;
+    padding-bottom: 24px;
+  }
+}

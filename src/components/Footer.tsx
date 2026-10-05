@@ -74,7 +74,7 @@ export function Footer() {
               <div>
                 <h2 ref={headingRef} className="text-2xl md:text-3xl font-extrabold uppercase tracking-tight flex flex-wrap">
                   {headingText.split("").map((char, idx) => {
-                    const randomRotation = (Math.random() - 0.5) * 120; // random between -60 and 60
+                    const randomRotation = (((idx * 37 + 13) % 100) / 100 - 0.5) * 120; // deterministic rotation between -60 and 60
                     return (
                       <span
                         key={idx}

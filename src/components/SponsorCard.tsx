@@ -39,7 +39,7 @@ export function SponsorCard({ sponsor, variant = "left" }: SponsorCardProps) {
       {/* SVG outline frame — the themed clip-shaped border */}
       <svg
         className={styles.frame}
-        viewBox="0 0 200 216"
+        viewBox="-4 -4 208 224"
         preserveAspectRatio="none"
         aria-hidden="true"
       >

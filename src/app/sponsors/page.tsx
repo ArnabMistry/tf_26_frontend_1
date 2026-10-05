@@ -30,7 +30,7 @@ export default function SponsorsPage() {
       <a href="#sponsors-content" className={styles.skipLink}>
         Skip to sponsors
       </a>
-      <Navbar variant="events" currentPath="/sponsors" />
+      <Navbar currentPath="/sponsors" />
       <SponsorsGrid />
     </div>
   );

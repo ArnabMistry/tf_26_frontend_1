@@ -1,0 +1,185 @@
+/* ============================================================
+   SpeakerCard — themed card with pink border and name badge
+   ============================================================ */
+
+.cardWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cardFrame {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  aspect-ratio: 16 / 10.5;
+  border: 2px solid #FF2485;
+  border-radius: 16px;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+.cardWrapper:hover .cardFrame {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 36, 133, 0.2);
+}
+
+/* ── Card Header: Category & Date ── */
+.cardHeader {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(14px, 2vw, 22px) clamp(18px, 2.5vw, 28px) 0;
+}
+
+.category {
+  font-family: var(--font-tantra);
+  font-size: clamp(1.4rem, 2.2vw, 2rem);
+  font-weight: 400;
+  line-height: 1;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transform: scaleX(1.1);
+  transform-origin: left center;
+}
+
+.date {
+  font-family: var(--font-tantra);
+  font-size: clamp(1.4rem, 2.2vw, 2rem);
+  font-weight: 400;
+  line-height: 1;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transform: scaleX(1.1);
+  transform-origin: right center;
+}
+
+/* ── Speaker Photo ── */
+.imageContainer {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 2px;
+}
+
+.speakerImage {
+  width: auto;
+  height: 94%;
+  max-height: 265px;
+  object-fit: contain;
+  object-position: bottom center;
+  display: block;
+  transform: scale(1.12);
+  transform-origin: bottom center;
+}
+
+/* ── Name Badge / Pill ── */
+.nameBadge {
+  position: absolute;
+  bottom: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  background-color: #FF2485;
+  padding: 4px clamp(16px, 2vw, 26px);
+  border-radius: 4px;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nameText {
+  font-family: var(--font-tantra);
+  font-size: clamp(0.9rem, 1.15vw, 1.15rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transform: scaleX(1.1);
+}
+
+/* ── Responsive Mobile ── */
+@media (max-width: 768px) {
+  .cardFrame {
+    aspect-ratio: 16 / 11;
+    border-radius: 14px;
+  }
+
+  .cardHeader {
+    padding: 12px 14px 0;
+  }
+
+  .category,
+  .date {
+    font-size: clamp(1.15rem, 4.2vw, 1.45rem);
+    transform: none;
+  }
+
+  .speakerImage {
+    height: 92%;
+    max-height: 230px;
+    transform: scale(1.06);
+  }
+
+  .nameBadge {
+    bottom: -11px;
+    padding: 3px 14px;
+  }
+
+  .nameText {
+    font-size: 0.85rem;
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .cardFrame {
+    aspect-ratio: 16 / 11.5;
+    border-radius: 12px;
+  }
+
+  .cardHeader {
+    padding: 10px 12px 0;
+  }
+
+  .category,
+  .date {
+    font-size: clamp(1rem, 3.8vw, 1.25rem);
+  }
+
+  .speakerImage {
+    height: 90%;
+    max-height: 200px;
+    transform: scale(1.04);
+  }
+
+  .nameBadge {
+    bottom: -10px;
+    padding: 2px 12px;
+  }
+
+  .nameText {
+    font-size: 0.78rem;
+  }
+}

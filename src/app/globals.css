@@ -5,6 +5,7 @@
   --font-mono: var(--font-geist-mono);
   --font-tantra: "TantraFont", sans-serif;
   --font-regular: "TantraRegular", sans-serif;
+  --font-futura: "Futura PT", "Futura", "Century Gothic", Trebuchet MS, sans-serif;
 }
 
 @font-face {
