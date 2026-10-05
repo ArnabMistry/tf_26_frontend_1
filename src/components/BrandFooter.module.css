@@ -1,0 +1,59 @@
+.footer {
+  width: 100%;
+  max-width: 1440px;
+  margin: auto auto 0;
+  padding-top: 120px;
+}
+
+.clubs {
+  margin-inline: 32px;
+  border-top: 1px solid rgb(255 255 255 / 25%);
+  padding-top: 26px;
+}
+
+.logoScroll {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #706499 transparent;
+}
+
+.clubLogos {
+  width: 100%;
+  height: auto;
+}
+
+.wordmark {
+  display: block;
+  margin: 190px 8px 0;
+}
+
+.wordmarkImage {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.footer :focus-visible {
+  outline: 2px solid #ffe43b;
+  outline-offset: 4px;
+}
+
+@media (max-width: 700px) {
+  .footer {
+    padding-top: 96px;
+  }
+
+  .clubs {
+    margin-inline: 20px;
+    padding-top: 24px;
+  }
+
+  .clubLogos {
+    width: 950px;
+    max-width: none;
+  }
+
+  .wordmark {
+    margin: 72px 6px 0;
+  }
+}

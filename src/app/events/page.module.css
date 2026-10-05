@@ -1,0 +1,33 @@
+.page {
+  display: flex;
+  min-height: max(100svh, min(179.65vw, 2587px));
+  flex-direction: column;
+  background-color: #201a5c;
+  background-image: linear-gradient(rgb(30 24 90 / 72%), rgb(30 24 90 / 72%)), url("/assets/bg.png");
+  background-position: top center;
+  background-size: 100% auto;
+  color: white;
+}
+
+.skipLink {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 50;
+  transform: translateY(-200%);
+  border-radius: 6px;
+  background: #ffe43b;
+  padding: 12px 20px;
+  color: #211952;
+}
+
+.skipLink:focus {
+  transform: translateY(0);
+}
+
+@media (max-width: 700px) {
+  .page {
+    min-height: 100svh;
+    background-size: auto 1000px;
+  }
+}

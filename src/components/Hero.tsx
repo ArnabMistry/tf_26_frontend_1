@@ -1,24 +1,11 @@
 import React from "react";
-import Link from "next/link";
 import Image from "next/image";
+import { Navbar } from "@/components/Navbar";
 
 export function Hero() {
   return (
     <section className="relative min-h-[100svh] w-full overflow-hidden bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat flex flex-col">
-      {/* Navigation */}
-      <nav className="relative z-30 flex w-full items-center justify-between px-6 py-4 lg:px-12 bg-transparent">
-        <Link href="/" className="flex items-center gap-3">
-          <Image src="/assets/tf_logo.png" alt="TantraFiesta Logo" width={40} height={40} className="h-10 w-10 object-contain" />
-          <Image src="/assets/tf_nav.png" alt="Nav Logo" width={200} height={40} className="h-6 md:h-7 w-auto object-contain hidden sm:block" />
-        </Link>
-        <div className="hidden items-center gap-6 text-sm md:flex font-bold uppercase tracking-wider text-white">
-          <Link href="/about" className="hover:text-[#FFFF1A] transition-colors">About</Link>
-          <Link href="/sponsors" className="hover:text-[#FFFF1A] transition-colors">Sponsors</Link>
-          <Link href="/events" className="hover:text-[#FFFF1A] transition-colors">Events</Link>
-          <Link href="/speakers" className="hover:text-[#FFFF1A] transition-colors">Speakers</Link>
-          <Link href="/register" className="bg-[#E7137D] text-white px-5 py-2 hover:bg-[#c60f69] transition-colors">Register Now</Link>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Main Hero Content */}
       <div className="relative flex-1 flex flex-col items-center justify-center w-full py-10 overflow-hidden">
