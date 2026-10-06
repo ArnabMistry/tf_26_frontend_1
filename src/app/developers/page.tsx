@@ -59,7 +59,7 @@ export default function DevelopersPage() {
         <section aria-labelledby="heads-heading" className="mb-16 sm:mb-24">
           <h2
             id="heads-heading"
-            className="text-xl sm:text-2xl md:text-[28px] uppercase font-bold tracking-wider text-center text-white mb-8 sm:mb-10"
+            className="text-2xl sm:text-4xl md:text-5xl uppercase font-bold tracking-wider text-center text-white mb-8 sm:mb-12"
             style={{ fontFamily: 'var(--font-futura)' }}
           >
             MEET THE <span className="italic">HEADS</span>
@@ -76,7 +76,7 @@ export default function DevelopersPage() {
         <section aria-labelledby="team-heading" className="mb-12 sm:mb-16">
           <h2
             id="team-heading"
-            className="text-xl sm:text-2xl md:text-[28px] uppercase font-bold tracking-wider text-center text-white mb-8 sm:mb-10"
+            className="text-2xl sm:text-4xl md:text-5xl uppercase font-bold tracking-wider text-center text-white mb-8 sm:mb-12"
             style={{ fontFamily: 'var(--font-futura)' }}
           >
             OUR <span className="italic">TEAM</span>
