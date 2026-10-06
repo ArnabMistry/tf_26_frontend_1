@@ -27,65 +27,36 @@ export function AboutSection() {
 
             <div className="space-y-4 text-black text-sm sm:text-base md:text-lg font-medium leading-relaxed">
               <p>
-                TantraFiesta 2025 marked the 10th edition of IIIT Nagpur&apos;s annual technical fest, carrying the theme <span className="font-bold">&ldquo;Dark Matter Eclipse: Exploring the Unexplored.&rdquo;</span> Inspired by the mysteries of the universe, the edition celebrated the spirit of venturing beyond the known — exploring new possibilities in technology, innovation, design, engineering and creativity.
+                TantraFiesta is the National-Level Annual Technical Fest of the Indian Institute of Information Technology, Nagpur. It is conceived as a platform where technology is explored beyond the classroom—through experimentation, problem-solving, and original thinking.
               </p>
-            </div>
-
-            <div className="mt-8 pt-6 border-t-2 border-black/20">
-              <h3 className="font-tantra text-2xl sm:text-3xl text-black uppercase mb-4">
-                Highlights of TF 2025
-              </h3>
-              <p className="text-black text-sm sm:text-base md:text-lg font-medium leading-relaxed mb-6">
-                With 25 technical and creative competitions spanning coding, artificial intelligence, robotics, cybersecurity, design, gaming, electronics and innovation, TantraFiesta 2025 brought together different domains of technology under one platform.
+              <p>
+                The fest brings together students with different technical interests and encourages them to question established approaches, work with emerging ideas, and apply knowledge in meaningful ways. With every edition, TantraFiesta reflects the evolving nature of technology while staying rooted in its core purpose: to promote technical curiosity, creativity, and a culture of building beyond the obvious.
               </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm md:text-base">
-                <div className="bg-black/5 p-3.5 rounded-xl border border-black/10">
-                  <span className="font-bold text-black block mb-1">Genathon 3.0</span>
-                  <span className="text-black/80">Major innovation challenge solving problems through creative technology.</span>
-                </div>
-                <div className="bg-black/5 p-3.5 rounded-xl border border-black/10">
-                  <span className="font-bold text-black block mb-1">RoboWars</span>
-                  <span className="text-black/80">Combat robots head-to-head in battles combining engineering and strategy.</span>
-                </div>
-                <div className="bg-black/5 p-3.5 rounded-xl border border-black/10">
-                  <span className="font-bold text-black block mb-1">Claude Solvathon</span>
-                  <span className="text-black/80">Two-stage AI challenge applying artificial intelligence under pressure.</span>
-                </div>
-                <div className="bg-black/5 p-3.5 rounded-xl border border-black/10">
-                  <span className="font-bold text-black block mb-1">Last Man Standing 3.0</span>
-                  <span className="text-black/80">High-energy coding face-off with the unpredictable &ldquo;Roulette of Fate&rdquo;.</span>
-                </div>
-                <div className="bg-black/5 p-3.5 rounded-xl border border-black/10">
-                  <span className="font-bold text-black block mb-1">CodeDuelz &amp; Algorithmia</span>
-                  <span className="text-black/80">Engaging coding duels and ICPC-style algorithmic problems.</span>
-                </div>
-                <div className="bg-black/5 p-3.5 rounded-xl border border-black/10">
-                  <span className="font-bold text-black block mb-1">EnigmaXplore 3.0</span>
-                  <span className="text-black/80">Live Capture The Flag cybersecurity competition.</span>
-                </div>
-                <div className="bg-black/5 p-3.5 rounded-xl border border-black/10 sm:col-span-2">
-                  <span className="font-bold text-black block mb-1">Render Riot &amp; Design-A-thon</span>
-                  <span className="text-black/80">Platforms for 3D creators, digital artists, and user-centred design solutions.</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
 
         {/* Theme Card */}
         <div className="relative bg-[#FFFF1A] rounded-2xl md:rounded-[28px] p-6 sm:p-8 md:p-12 shadow-2xl border-2 border-black/10">
-          <h2 className="font-tantra text-3xl sm:text-5xl md:text-6xl text-black uppercase tracking-tight mb-6">
-            THEME
-          </h2>
+          <div className="relative z-10">
+            <p className="text-xs sm:text-sm md:text-base font-bold uppercase tracking-widest text-black/70 mb-1">
+              THEME
+            </p>
+            <h2 className="font-tantra text-3xl sm:text-5xl md:text-6xl text-black uppercase tracking-tight mb-6">
+              INDIAN MAXIMALISM
+            </h2>
 
-          <div className="space-y-4 text-black text-sm sm:text-base md:text-lg font-medium leading-relaxed">
-            <p className="text-lg sm:text-xl md:text-2xl font-bold">
-              Theme: Dark Matter Eclipse — Exploring the Unexplored
-            </p>
-            <p>
-              The idea behind Dark Matter Eclipse was simple: some of the most powerful ideas begin where our understanding ends. Just as dark matter represents the unseen forces shaping the universe, TF 2025 encouraged participants to question conventions, experiment with emerging technologies and discover solutions beyond familiar boundaries.
-            </p>
+            <div className="space-y-4 text-black text-sm sm:text-base md:text-lg font-medium leading-relaxed">
+              <p>
+                TantraFiesta 2026 introduces <span className="font-bold">ANANTA: Surpassing the Possible</span>—a theme inspired by the idea of the infinite and technology’s ability to continually redefine its own limits.
+              </p>
+              <p>
+                Its visual identity takes shape through <span className="font-bold">Indian Maximalism</span>, where the richness of Indian aesthetics is reinterpreted through a contemporary technological lens. Bold contrasts, intricate forms, layered compositions, and expressive details create a language that feels distinctly Indian yet futuristic.
+              </p>
+              <p>
+                <span className="font-bold">ANANTA</span> represents a mindset where boundaries are not endpoints, but starting points for what can exist next.
+              </p>
+            </div>
           </div>
         </div>
 

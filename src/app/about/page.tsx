@@ -27,7 +27,7 @@ export default function AboutPage() {
       <header className="space-y-4">
         <h1 className="text-4xl font-bold tracking-tight">About TantraFiesta</h1>
         <p className="text-lg text-zinc-600 dark:text-zinc-400">
-          The annual national technical festival of IIIT Nagpur, empowering engineering innovation and collaboration.
+          The National-Level Annual Technical Fest of the Indian Institute of Information Technology, Nagpur.
         </p>
       </header>
 
@@ -37,31 +37,36 @@ export default function AboutPage() {
           About TantraFiesta
         </h2>
         <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
-          TantraFiesta is the flagship technical festival of the Indian Institute of Information Technology,
-          Nagpur. Built and managed by student communities, it serves as a melting pot for tech visionaries,
-          competitive coders, robotics builders, and innovative minds from across the country.
+          TantraFiesta is the National-Level Annual Technical Fest of the Indian Institute of Information Technology, Nagpur. It is conceived as a platform where technology is explored beyond the classroom—through experimentation, problem-solving, and original thinking.
+        </p>
+        <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          The fest brings together students with different technical interests and encourages them to question established approaches, work with emerging ideas, and apply knowledge in meaningful ways. With every edition, TantraFiesta reflects the evolving nature of technology while staying rooted in its core purpose: to promote technical curiosity, creativity, and a culture of building beyond the obvious.
+        </p>
+      </section>
+
+      {/* Section: Theme */}
+      <section id="theme" aria-labelledby="theme-heading" className="space-y-4">
+        <h2 id="theme-heading" className="text-2xl font-semibold">
+          Theme: Indian Maximalism
+        </h2>
+        <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          TantraFiesta 2026 introduces <strong className="text-zinc-900 dark:text-zinc-100">ANANTA: Surpassing the Possible</strong>—a theme inspired by the idea of the infinite and technology’s ability to continually redefine its own limits.
+        </p>
+        <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          Its visual identity takes shape through Indian Maximalism, where the richness of Indian aesthetics is reinterpreted through a contemporary technological lens. Bold contrasts, intricate forms, layered compositions, and expressive details create a language that feels distinctly Indian yet futuristic.
+        </p>
+        <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          ANANTA represents a mindset where boundaries are not endpoints, but starting points for what can exist next.
         </p>
       </section>
 
       {/* Section: History of TantraFiesta */}
       <section id="history" aria-labelledby="history-heading" className="space-y-4">
         <h2 id="history-heading" className="text-2xl font-semibold">
-          History of TantraFiesta
+          History &amp; Legacy
         </h2>
         <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
-          Since its inception, TantraFiesta has grown continuously in scale, participation, and technical
-          breadth. Each year features premier hackathons, keynote sessions, robotic combat tournaments,
-          and paper presentations that push the boundaries of undergraduate innovation.
-        </p>
-      </section>
-
-      {/* Section: Gallery */}
-      <section id="gallery" aria-labelledby="gallery-heading" className="space-y-4">
-        <h2 id="gallery-heading" className="text-2xl font-semibold">
-          Gallery
-        </h2>
-        <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
-          Explore captured highlights, stages, and project showcases from past editions of TantraFiesta.
+          Since its inception, TantraFiesta has grown continuously in scale, participation, and technical breadth. Each year features premier hackathons, keynote sessions, robotic combat tournaments, and competitions that push the boundaries of undergraduate innovation.
         </p>
       </section>
     </main>

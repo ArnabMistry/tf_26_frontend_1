@@ -27,7 +27,10 @@ const row3 = [
   { text: "EVENTS", bgFront: "bg-[#107548]", fgFront: "text-[#FDF12C]", bgBack: "bg-[#FDF12C]", fgBack: "text-[#107548]" },
 ];
 
-const duplicate = (arr: typeof row1) => [...arr, ...arr, ...arr];
+const makeSeamlessTrack = (arr: typeof row1) => {
+  const base = [...arr, ...arr, ...arr];
+  return [...base, ...base];
+};
 
 const PillCard = ({ item }: { item: typeof row1[0] }) => (
   <div className="group shrink-0 cursor-pointer [perspective:1200px]">
@@ -57,26 +60,32 @@ export function TagsMarquee() {
       
       {/* Row 1 */}
       <div className="flex w-full overflow-hidden select-none">
-        <div className="animate-marquee flex gap-4 md:gap-6 items-center whitespace-nowrap pl-4 md:pl-6">
-          {duplicate(row1).map((item, idx) => (
+        <div className="animate-marquee flex gap-4 md:gap-6 items-center whitespace-nowrap pr-4 md:pr-6">
+          {makeSeamlessTrack(row1).map((item, idx) => (
             <PillCard key={idx} item={item} />
           ))}
         </div>
       </div>
 
       {/* Row 2 (Reverse) */}
-      <div className="flex w-full overflow-hidden select-none relative -left-20">
-        <div className="animate-marquee-reverse flex gap-4 md:gap-6 items-center whitespace-nowrap pl-4 md:pl-6">
-          {duplicate(row2).map((item, idx) => (
+      <div className="flex w-full overflow-hidden select-none">
+        <div 
+          className="animate-marquee-reverse flex gap-4 md:gap-6 items-center whitespace-nowrap pr-4 md:pr-6"
+          style={{ animationDelay: "-10s" }}
+        >
+          {makeSeamlessTrack(row2).map((item, idx) => (
             <PillCard key={idx} item={item} />
           ))}
         </div>
       </div>
 
       {/* Row 3 */}
-      <div className="flex w-full overflow-hidden select-none relative -left-10">
-        <div className="animate-marquee flex gap-4 md:gap-6 items-center whitespace-nowrap pl-4 md:pl-6">
-          {duplicate(row3).map((item, idx) => (
+      <div className="flex w-full overflow-hidden select-none">
+        <div 
+          className="animate-marquee flex gap-4 md:gap-6 items-center whitespace-nowrap pr-4 md:pr-6"
+          style={{ animationDelay: "-18s" }}
+        >
+          {makeSeamlessTrack(row3).map((item, idx) => (
             <PillCard key={idx} item={item} />
           ))}
         </div>
