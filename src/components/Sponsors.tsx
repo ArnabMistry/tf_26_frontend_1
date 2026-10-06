@@ -58,7 +58,6 @@ export function Sponsors() {
           angle={-1.5}
           direction="reverse"
           speed="36s"
-          fontSize="text-xs md:text-sm"
           className="top-44 md:top-56"
         />
 

@@ -9,7 +9,6 @@ export function PhotoGallery() {
         text="DO NOT ENTER"
         angle={-2.5}
         speed="38s"
-        fontSize="text-sm md:text-xl"
         className="top-1/2 -translate-y-1/2"
       />
 

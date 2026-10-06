@@ -11,7 +11,6 @@ export function Hero() {
         text="DO NOT ENTER"
         angle={-2.5}
         speed="45s"
-        fontSize="text-xs md:text-sm"
         className="top-16 opacity-80"
       />
 
@@ -32,19 +31,14 @@ export function Hero() {
           />
         </div>
 
-        {/* Confidential Yellow Tape (Replaces WHAT THE TF?) */}
-        <div className="relative w-[125vw] left-1/2 -translate-x-1/2 rotate-[2deg] bg-[#FFE500] py-2 md:py-3 z-20 shadow-2xl border-y-[3px] border-black my-12 md:my-16 pointer-events-none select-none">
-          <div className="flex w-full whitespace-nowrap overflow-hidden">
-            <div className="animate-marquee flex gap-10 md:gap-16 text-black font-tantra text-2xl md:text-4xl uppercase tracking-tighter shrink-0">
-              {Array.from({ length: 30 }).map((_, i) => (
-                <span key={i} className="flex items-center gap-6">
-                  <span>CONFIDENTIAL</span>
-                  <span className="text-xl md:text-2xl font-mono opacity-80">///</span>
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
+        {/* Main Center Tape (Unified CrimeSceneTape with identical font size) */}
+        <CrimeSceneTape
+          position="relative"
+          text="CONFIDENTIAL"
+          angle={2}
+          speed="35s"
+          className="my-12 md:my-16"
+        />
 
         {/* Location & Coming Soon (Date completely hidden) */}
         <div
@@ -66,7 +60,6 @@ export function Hero() {
         angle={2}
         direction="reverse"
         speed="40s"
-        fontSize="text-xs md:text-sm"
         className="-bottom-1"
       />
     </section>

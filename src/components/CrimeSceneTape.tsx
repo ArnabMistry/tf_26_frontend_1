@@ -8,6 +8,7 @@ interface CrimeSceneTapeProps {
   className?: string;
   fontSize?: string;
   py?: string;
+  position?: "absolute" | "relative";
 }
 
 export function CrimeSceneTape({
@@ -16,14 +17,15 @@ export function CrimeSceneTape({
   direction = "normal",
   speed = "35s",
   className = "",
-  fontSize = "text-sm md:text-xl",
-  py = "py-1.5 md:py-2.5",
+  fontSize = "text-xl md:text-3xl",
+  py = "py-2 md:py-2.5",
+  position = "absolute",
 }: CrimeSceneTapeProps) {
   const repeatCount = 30;
 
   return (
     <div
-      className={`absolute left-1/2 w-[125vw] max-w-none select-none pointer-events-none z-20 shadow-2xl drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)] ${className}`}
+      className={`${position} left-1/2 w-[125vw] max-w-none select-none pointer-events-none z-20 shadow-2xl drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)] ${className}`}
       style={{
         transform: `translateX(-50%) rotate(${angle}deg)`,
       }}
@@ -32,7 +34,7 @@ export function CrimeSceneTape({
         {/* Repeating marquee track */}
         <div className="flex w-full whitespace-nowrap overflow-hidden">
           <div
-            className={`flex gap-8 md:gap-12 text-black font-black uppercase tracking-wider shrink-0 ${
+            className={`flex gap-8 md:gap-12 text-black font-tantra uppercase tracking-tight shrink-0 ${
               direction === "reverse" ? "animate-marquee-reverse" : "animate-marquee"
             }`}
             style={{
@@ -43,7 +45,7 @@ export function CrimeSceneTape({
             {Array.from({ length: repeatCount }).map((_, i) => (
               <span key={i} className={`flex items-center gap-6 ${fontSize}`}>
                 <span>{text}</span>
-                <span className="font-mono text-sm md:text-base opacity-75">///</span>
+                <span className="font-mono text-lg md:text-2xl opacity-75">///</span>
               </span>
             ))}
           </div>
@@ -57,10 +59,12 @@ export function StaticCrimeSceneTape({
   text = "CONFIDENTIAL",
   angle = 0,
   className = "",
+  fontSize = "text-xl md:text-3xl",
 }: {
   text?: string;
   angle?: number;
   className?: string;
+  fontSize?: string;
 }) {
   return (
     <div
@@ -69,12 +73,12 @@ export function StaticCrimeSceneTape({
         transform: `translateX(-50%) rotate(${angle}deg)`,
       }}
     >
-      <div className="bg-[#FFE500] border-y-[3px] border-black py-1 md:py-1.5 px-4 overflow-hidden whitespace-nowrap flex items-center justify-center">
-        <div className="flex items-center gap-8 text-black font-black uppercase tracking-wider text-xs sm:text-sm md:text-base">
+      <div className="bg-[#FFE500] border-y-[3px] border-black py-2 md:py-2.5 px-4 overflow-hidden whitespace-nowrap flex items-center justify-center">
+        <div className="flex items-center gap-8 text-black font-tantra uppercase tracking-tight">
           {Array.from({ length: 10 }).map((_, i) => (
-            <span key={i} className="flex items-center gap-6 shrink-0">
+            <span key={i} className={`flex items-center gap-6 shrink-0 ${fontSize}`}>
               <span>{text}</span>
-              <span className="font-mono opacity-60">///</span>
+              <span className="font-mono text-lg md:text-2xl opacity-60">///</span>
             </span>
           ))}
         </div>
