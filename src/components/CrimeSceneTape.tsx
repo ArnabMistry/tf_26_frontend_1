@@ -9,6 +9,7 @@ interface CrimeSceneTapeProps {
   fontSize?: string;
   py?: string;
   position?: "absolute" | "relative";
+  zIndex?: number;
 }
 
 export function CrimeSceneTape({
@@ -20,6 +21,7 @@ export function CrimeSceneTape({
   fontSize = "text-xl md:text-3xl",
   py = "py-2 md:py-2.5",
   position = "absolute",
+  zIndex,
 }: CrimeSceneTapeProps) {
   const repeatCount = 30;
 
@@ -28,6 +30,7 @@ export function CrimeSceneTape({
       className={`${position} left-1/2 w-[125vw] max-w-none select-none pointer-events-none z-20 shadow-2xl drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)] ${className}`}
       style={{
         transform: `translateX(-50%) rotate(${angle}deg)`,
+        ...(zIndex !== undefined ? { zIndex } : {}),
       }}
     >
       <div className={`bg-[#FFE500] border-y-[3px] border-black ${py} overflow-hidden flex flex-col justify-between`}>

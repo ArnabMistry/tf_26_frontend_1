@@ -6,20 +6,12 @@ import { CrimeSceneTape } from "@/components/CrimeSceneTape";
 export function Hero() {
   return (
     <section className="relative min-h-[100svh] w-full overflow-hidden bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat flex flex-col">
-      {/* Background Crime Scene Tape running diagonally near top */}
-      <CrimeSceneTape
-        text="DO NOT ENTER"
-        angle={-2.5}
-        speed="45s"
-        className="top-16 opacity-80"
-      />
-
       <Navbar />
 
       {/* Main Hero Content */}
       <div className="relative flex-1 flex flex-col items-center justify-center w-full py-10 overflow-hidden">
         
-        {/* Hero Text */}
+        {/* Hero Text with Tape Crossing Directly Over the Heading */}
         <div className="relative z-20 flex flex-col items-center justify-center pointer-events-none drop-shadow-2xl px-4 w-full">
           <Image
             src="/assets/tf_hero.png"
@@ -28,6 +20,15 @@ export function Hero() {
             height={400}
             className="w-full max-w-md sm:max-w-xl md:max-w-2xl lg:max-w-3xl h-auto object-contain"
             priority
+          />
+
+          {/* Crime Scene Tape crossing directly OVER the Tantra Fiesta heading */}
+          <CrimeSceneTape
+            text="DO NOT ENTER"
+            angle={-2.5}
+            speed="45s"
+            zIndex={35}
+            className="top-8 sm:top-12 md:top-16 lg:top-20"
           />
         </div>
 
