@@ -16,6 +16,7 @@ export const heads: Developer[] = [
   {
     name: "ARNAB",
     role: "UI/UX Director",
+    image: "/developers/arnab_mistry_pic.webp",
   },
   {
     name: "SARTHAK G.",
@@ -31,31 +32,31 @@ export const heads: Developer[] = [
   },
 ];
 
-// Note: Developer images can be added here once assets are finalized (e.g., image: "/developers/Tushar Agarwal.webp")
 export const team: Developer[] = [
   {
     name: "TUSHAR AGARWAL",
     role: "UI/UX Director",
-    // image: "/developers/Tushar Agarwal.webp",
+    image: "/developers/Tushar Agarwal.webp",
   },
   {
     name: "SHIVAM",
     role: "UI/UX Director",
-    // image: "/developers/Shivam.webp",
+    image: "/developers/Shivam.webp",
   },
   {
     name: "SHARDUL",
     role: "UI/UX Director",
-    // image: "/developers/shardul.webp",
+    image: "/developers/shardul.webp",
   },
   {
     name: "AVIRAL",
     role: "UI/UX Director",
-    // image: "/developers/aviral.webp",
+    image: "/developers/aviral.webp",
   },
   {
-    name: "SARTHAK G.",
+    name: "SATVIK",
     role: "UI/UX Director",
+    image: "/developers/Satvik.webp",
   },
   {
     name: "SARTHAK G.",

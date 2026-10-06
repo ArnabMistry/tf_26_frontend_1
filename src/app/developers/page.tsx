@@ -90,8 +90,8 @@ export default function DevelopersPage() {
         </section>
       </main>
 
-      {/* Same Footer as landing page */}
-      <Footer />
+      {/* Yellow Footer for Developers Page */}
+      <Footer variant="yellow" />
     </div>
   );
 }
