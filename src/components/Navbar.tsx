@@ -1,11 +1,12 @@
+"use client";
+
 import Image from "next/image";
-import Link from "next/link";
 
 const navigation = [
-  { href: "/about", label: "About" },
-  { href: "/sponsors", label: "Sponsors" },
-  { href: "/events", label: "Events" },
-  { href: "/speakers", label: "Speakers" },
+  { label: "About" },
+  { label: "Sponsors" },
+  { label: "Events" },
+  { label: "Speakers" },
 ];
 
 interface NavbarProps {
@@ -14,20 +15,16 @@ interface NavbarProps {
   registrationHref?: string;
 }
 
-export function Navbar({
-  currentPath,
-  registrationHref = "/register",
-}: NavbarProps) {
+export function Navbar({}: NavbarProps = {}) {
   return (
     <nav
-      aria-label="Main navigation"
-      className="relative z-30 mx-auto flex w-full items-center justify-between gap-4 px-6 py-4 text-white lg:px-12"
+      aria-label="Main navigation (disabled for teaser)"
+      className="relative z-30 mx-auto flex w-full items-center justify-between gap-4 px-6 py-4 text-white lg:px-12 select-none"
     >
-      {/* ── Logo ── */}
-      <Link
-        href="/"
+      {/* ── Logo (Disabled / Non-clickable) ── */}
+      <div
         aria-label="TantraFiesta home"
-        className="flex shrink-0 items-center gap-3 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-[#ffe43b]"
+        className="flex shrink-0 items-center gap-3 rounded-sm cursor-default"
       >
         <Image
           src="/assets/tf_logo.png"
@@ -43,40 +40,56 @@ export function Navbar({
           height={40}
           className="hidden h-6 w-auto object-contain sm:block md:h-7"
         />
-      </Link>
-
-      {/* ── Desktop links ── */}
-      <div className="hidden items-center gap-6 text-sm font-bold uppercase tracking-wider text-white md:flex">
-        {navigation.map(({ href, label }) => {
-          const isActive = currentPath === href;
-          return (
-            <Link
-              key={href}
-              href={href}
-              aria-current={isActive ? "page" : undefined}
-              className={`rounded-sm transition-colors hover:text-[#FFFF1A] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ffe43b] ${
-                isActive ? "text-[#FFFF1A]" : ""
-              }`}
-            >
-              {label}
-            </Link>
-          );
-        })}
-        <Link
-          href={registrationHref}
-          className="whitespace-nowrap bg-[#E7137D] px-5 py-2 text-white transition-colors hover:bg-[#c60f69] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ffe43b]"
-        >
-          Register Now
-        </Link>
       </div>
 
-      {/* ── Mobile hamburger ── */}
-      <details className="group relative md:hidden">
-        <summary
-          aria-label="Toggle navigation menu"
-          className="flex size-11 cursor-pointer list-none items-center justify-center rounded-full border-2 border-[#ff2485]/60 bg-[#ff2485]/15 text-white transition-all duration-200 hover:border-[#ff2485] hover:bg-[#ff2485]/30 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ffe43b] [&::-webkit-details-marker]:hidden"
+      {/* ── Desktop links (Disabled buttons — no hrefs, cannot be bypassed) ── */}
+      <div className="hidden items-center gap-6 text-sm font-bold uppercase tracking-wider text-white md:flex">
+        {navigation.map(({ label }) => (
+          <button
+            key={label}
+            type="button"
+            disabled
+            aria-disabled="true"
+            tabIndex={-1}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            className="cursor-not-allowed opacity-50 transition-none select-none text-white/70 hover:text-white/70"
+          >
+            {label}
+          </button>
+        ))}
+        <button
+          type="button"
+          disabled
+          aria-disabled="true"
+          tabIndex={-1}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+          className="whitespace-nowrap bg-[#E7137D]/50 px-5 py-2 text-white/70 cursor-not-allowed select-none transition-none"
         >
-          {/* Hamburger icon — transforms to × when open */}
+          Register Now
+        </button>
+      </div>
+
+      {/* ── Mobile menu button (Disabled — clicking does nothing) ── */}
+      <div className="relative md:hidden">
+        <button
+          type="button"
+          disabled
+          aria-disabled="true"
+          aria-label="Navigation disabled"
+          tabIndex={-1}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+          className="flex size-11 cursor-not-allowed items-center justify-center rounded-full border-2 border-[#ff2485]/30 bg-[#ff2485]/10 text-white/50 opacity-60"
+        >
+          {/* Hamburger icon */}
           <svg
             aria-hidden="true"
             width="20"
@@ -87,58 +100,12 @@ export function Navbar({
             strokeWidth="2"
             strokeLinecap="round"
           >
-            {/* top bar */}
-            <line
-              x1="3"
-              y1="6"
-              x2="21"
-              y2="6"
-              className="origin-center transition-transform duration-300 group-open:translate-y-[6px] group-open:rotate-45"
-            />
-            {/* middle bar — fades out when open */}
-            <line
-              x1="3"
-              y1="12"
-              x2="21"
-              y2="12"
-              className="transition-opacity duration-200 group-open:opacity-0"
-            />
-            {/* bottom bar */}
-            <line
-              x1="3"
-              y1="18"
-              x2="21"
-              y2="18"
-              className="origin-center transition-transform duration-300 group-open:-translate-y-[6px] group-open:-rotate-45"
-            />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
           </svg>
-        </summary>
-
-        {/* Dropdown — anchored to the right side, never clips viewport */}
-        <div className="absolute right-0 top-[calc(100%+10px)] z-50 flex min-w-[220px] flex-col gap-1 rounded-2xl border border-white/20 bg-[#1a1250] p-3 shadow-2xl shadow-black/60 backdrop-blur-sm">
-          {navigation.map(({ href, label }) => {
-            const isActive = currentPath === href;
-            return (
-              <Link
-                key={href}
-                href={href}
-                aria-current={isActive ? "page" : undefined}
-                className={`rounded-lg px-4 py-3 font-bold uppercase tracking-wide transition-colors hover:bg-white/10 hover:text-[#FFFF1A] focus-visible:outline-2 focus-visible:outline-[#ffe43b] ${
-                  isActive ? "bg-white/10 text-[#FFFF1A]" : ""
-                }`}
-              >
-                {label}
-              </Link>
-            );
-          })}
-          <Link
-            href={registrationHref}
-            className="mt-2 rounded-lg bg-[#E7137D] px-4 py-3 text-center font-bold uppercase tracking-wide transition-colors hover:bg-[#c60f69] focus-visible:outline-2 focus-visible:outline-[#ffe43b]"
-          >
-            Register Now
-          </Link>
-        </div>
-      </details>
+        </button>
+      </div>
     </nav>
   );
 }

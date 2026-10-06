@@ -8,7 +8,7 @@ import { StarLoader } from "@/components/StarLoader";
 
 export default function Home() {
   return (
-    <main className="flex-1 bg-zinc-950 text-white">
+    <main className="relative flex-1 bg-zinc-950 text-white overflow-x-hidden">
       <StarLoader />
       <Hero />
       <AboutSection />
@@ -19,4 +19,3 @@ export default function Home() {
     </main>
   );
 }
-

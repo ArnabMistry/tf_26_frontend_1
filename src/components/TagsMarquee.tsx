@@ -57,7 +57,6 @@ const PillCard = ({ item }: { item: typeof row1[0] }) => (
 export function TagsMarquee() {
   return (
     <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat py-12 md:py-20 overflow-hidden flex flex-col gap-4 md:gap-6">
-      
       {/* Row 1 */}
       <div className="flex w-full overflow-hidden select-none">
         <div className="animate-marquee flex gap-4 md:gap-6 items-center whitespace-nowrap pr-4 md:pr-6">

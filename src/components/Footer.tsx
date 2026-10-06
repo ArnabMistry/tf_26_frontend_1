@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { CrimeSceneTape } from "@/components/CrimeSceneTape";
 
 interface FooterProps {
   variant?: "purple" | "yellow";
@@ -115,18 +115,18 @@ export function Footer({ variant = "purple" }: FooterProps) {
                     );
                   })}
                 </h2>
-                <p className="text-xs md:text-sm font-medium mt-1 relative z-10 text-[#F44383]">
-                  ANANTA: Surpassing the Possible
+                <p className="text-xs md:text-sm font-medium mt-1 relative z-10 text-[#F44383] select-none blur-sm pointer-events-none">
+                  ██████: ██████████ ███ ████████
                 </p>
               </div>
 
               <div>
                 <h3 className="text-sm md:text-base font-bold text-black mb-3">Quick Links</h3>
-                <div className="flex flex-wrap gap-4 text-xs md:text-sm font-semibold text-black">
-                  <Link href="/" className="hover:underline">Home</Link>
-                  <Link href="/about" className="hover:underline">About</Link>
-                  <Link href="/events" className="hover:underline">Events</Link>
-                  <Link href="/contact" className="hover:underline">How to reach?</Link>
+                <div className="flex flex-wrap gap-4 text-xs md:text-sm font-semibold text-black/60 select-none">
+                  <span className="cursor-not-allowed">Home</span>
+                  <span className="cursor-not-allowed">About</span>
+                  <span className="cursor-not-allowed">Events</span>
+                  <span className="cursor-not-allowed">How to reach?</span>
                 </div>
               </div>
             </div>
@@ -177,14 +177,15 @@ export function Footer({ variant = "purple" }: FooterProps) {
             />
           </div>
 
-          {/* Meet Our Developers Button */}
-          <Link 
-            href="/developers" 
-            className="absolute bottom-8 right-8 md:bottom-12 md:right-16 z-30 pointer-events-auto bg-[#F44383] text-white font-bold text-[10px] md:text-xs px-4 md:px-6 py-2 md:py-2.5 rounded-md shadow-lg hover:bg-[#d8356f] hover:scale-105 transition-transform tracking-wide"
+          {/* Meet Our Developers Button (Disabled) */}
+          <button 
+            type="button"
+            disabled
+            className="absolute bottom-8 right-8 md:bottom-12 md:right-16 z-30 pointer-events-none bg-[#F44383]/60 text-white/80 font-bold text-[10px] md:text-xs px-4 md:px-6 py-2 md:py-2.5 rounded-md shadow-lg tracking-wide cursor-not-allowed select-none"
             style={{ fontFamily: '"Futura PT", sans-serif', wordSpacing: "0.15em" }}
           >
             Meet Our Developers
-          </Link>
+          </button>
         </div>
       </section>
     );
@@ -192,7 +193,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
 
   // Original Purple Variant for Landing Page
   return (
-    <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat pt-0 pb-12 md:pb-20 flex flex-col items-center px-4 md:px-8">
+    <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat pt-0 pb-12 md:pb-20 flex flex-col items-center px-4 md:px-8 overflow-hidden">
       
       {/* Bottom half of Yellow Container */}
       <div className="relative w-full max-w-[1600px] bg-[#FFFF1A] rounded-b-[32px] md:rounded-b-[48px] px-2 md:px-8 pt-12 md:pt-16 pb-4 md:pb-8 shadow-2xl">
@@ -244,18 +245,18 @@ export function Footer({ variant = "purple" }: FooterProps) {
                     );
                   })}
                 </h2>
-                <p className="text-xs md:text-sm font-medium mt-1 relative z-10 text-[#F44383]">
-                  ANANTA: Surpassing the Possible
+                <p className="text-xs md:text-sm font-medium mt-1 relative z-10 text-[#F44383] select-none blur-sm pointer-events-none">
+                  ██████: ██████████ ███ ████████
                 </p>
               </div>
 
               <div>
                 <h3 className="text-sm md:text-base font-bold text-[#FFFF1A] mb-3">Quick Links</h3>
-                <div className="flex flex-wrap gap-4 text-xs md:text-sm font-semibold">
-                  <Link href="/" className="hover:underline">Home</Link>
-                  <Link href="/about" className="hover:underline">About</Link>
-                  <Link href="/events" className="hover:underline">Events</Link>
-                  <Link href="/contact" className="hover:underline">How to reach?</Link>
+                <div className="flex flex-wrap gap-4 text-xs md:text-sm font-semibold text-white/60 select-none">
+                  <span className="cursor-not-allowed">Home</span>
+                  <span className="cursor-not-allowed">About</span>
+                  <span className="cursor-not-allowed">Events</span>
+                  <span className="cursor-not-allowed">How to reach?</span>
                 </div>
               </div>
             </div>
@@ -298,17 +299,27 @@ export function Footer({ variant = "purple" }: FooterProps) {
             />
           </div>
 
-          {/* Meet Our Developers Button */}
-          <Link 
-            href="/developers" 
-            className="absolute bottom-8 right-8 md:bottom-12 md:right-16 z-30 pointer-events-auto bg-[#F44383] text-white font-bold text-[10px] md:text-xs px-4 md:px-6 py-2 md:py-2.5 rounded-md shadow-lg hover:bg-[#d8356f] hover:scale-105 transition-transform tracking-wide"
+          {/* Meet Our Developers Button (Disabled) */}
+          <button 
+            type="button"
+            disabled
+            className="absolute bottom-8 right-8 md:bottom-12 md:right-16 z-30 pointer-events-none bg-[#F44383]/60 text-white/80 font-bold text-[10px] md:text-xs px-4 md:px-6 py-2 md:py-2.5 rounded-md shadow-lg tracking-wide cursor-not-allowed select-none"
             style={{ fontFamily: '"Futura PT", sans-serif', wordSpacing: "0.15em" }}
           >
             Meet Our Developers
-          </Link>
+          </button>
 
         </div>
       </div>
+
+      {/* Crime Scene Tape at Footer Base */}
+      <CrimeSceneTape
+        text="AUTHORIZED PERSONNEL ONLY"
+        angle={-1.5}
+        speed="38s"
+        fontSize="text-xs md:text-sm"
+        className="-bottom-1"
+      />
     </section>
   );
 }

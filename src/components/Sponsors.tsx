@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { CrimeSceneTape } from "@/components/CrimeSceneTape";
 
 const SponsorCard = () => (
   <div className="relative aspect-[4/5] w-full">
@@ -32,7 +33,7 @@ const SponsorCard = () => (
 
 export function Sponsors() {
   return (
-    <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat pt-12 md:pt-20 flex flex-col items-center px-4 md:px-8">
+    <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat pt-12 md:pt-20 flex flex-col items-center px-4 md:px-8 overflow-hidden">
       <div className="w-full max-w-[1600px] bg-[#FFFF1A] rounded-t-[32px] md:rounded-t-[48px] px-4 md:px-16 pt-16 md:pt-24 pb-8 relative shadow-2xl">
         
         {/* Hovercar Image Box */}
@@ -50,6 +51,16 @@ export function Sponsors() {
         <h2 className="font-tantra text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-black uppercase tracking-tight mb-16 md:mb-24 text-center mt-8 md:mt-0 relative z-10">
           OUR SPONSORS
         </h2>
+
+        {/* Crime Scene Tape across Sponsors */}
+        <CrimeSceneTape
+          text="CONFIDENTIAL"
+          angle={-1.5}
+          direction="reverse"
+          speed="36s"
+          fontSize="text-xs md:text-sm"
+          className="top-44 md:top-56"
+        />
 
         {/* Grid */}
         <div className="w-full max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 relative z-10">
