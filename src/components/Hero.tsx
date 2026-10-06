@@ -42,7 +42,7 @@ export function Hero() {
 
         {/* Location & Coming Soon (Date completely hidden) */}
         <div
-          className="z-20 flex flex-col items-center justify-center text-center drop-shadow-md pb-10 select-none"
+          className="z-20 flex flex-col items-center justify-center text-center drop-shadow-md pb-16 md:pb-24 select-none"
           style={{ fontFamily: '"Futura PT", sans-serif' }}
         >
           <div className="text-4xl md:text-7xl lg:text-[96px] font-bold italic leading-none uppercase tracking-tight text-white/95">
@@ -57,10 +57,10 @@ export function Hero() {
       {/* Crime Scene Tape crossing at bottom of hero */}
       <CrimeSceneTape
         text="AUTHORIZED PERSONNEL ONLY"
-        angle={2}
+        angle={1.5}
         direction="reverse"
         speed="40s"
-        className="-bottom-1"
+        className="bottom-6 sm:bottom-8 md:bottom-14 lg:bottom-16"
       />
     </section>
   );

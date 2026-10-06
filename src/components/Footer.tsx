@@ -317,7 +317,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
         text="AUTHORIZED PERSONNEL ONLY"
         angle={-1.5}
         speed="38s"
-        className="-bottom-1"
+        className="bottom-6 sm:bottom-8 md:bottom-12"
       />
     </section>
   );
