@@ -22,13 +22,13 @@ export function Hero() {
             priority
           />
 
-          {/* Crime Scene Tape crossing directly OVER the Tantra Fiesta heading */}
+          {/* Crime Scene Tape crossing just slightly on top of the Tantra Fiesta heading */}
           <CrimeSceneTape
             text="DO NOT ENTER"
             angle={-2.5}
             speed="45s"
             zIndex={35}
-            className="top-8 sm:top-12 md:top-16 lg:top-20"
+            className="-top-1 sm:top-0 md:top-2 lg:top-3"
           />
         </div>
 

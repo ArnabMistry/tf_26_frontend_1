@@ -149,20 +149,9 @@ export function Sponsors() {
         </div>
 
         {/* Heading */}
-        <h2 className="font-tantra text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-black uppercase tracking-tight mb-4 md:mb-6 text-center mt-8 md:mt-0 relative z-10">
+        <h2 className="font-tantra text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-black uppercase tracking-tight mb-16 md:mb-24 text-center mt-8 md:mt-0 relative z-10">
           OUR SPONSORS
         </h2>
-
-        {/* Detective Case Archive Subheader */}
-        <div className="flex flex-wrap items-center justify-center gap-2.5 mb-14 md:mb-20 relative z-10">
-          <div className="inline-flex items-center gap-2 bg-black text-[#FFFF1A] px-4 py-1.5 rounded-full font-mono text-xs md:text-sm font-bold uppercase tracking-wider shadow-lg">
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
-            <span>CASE DOSSIERS // ALL PARTNERS UNDER STRICT EMBARGO</span>
-          </div>
-          <div className="hidden sm:inline-flex items-center gap-1.5 bg-[#E7137D] text-white px-3 py-1.5 rounded-full font-mono text-xs font-bold uppercase tracking-wider shadow-md">
-            <span>UNLOCKED AT OFFICIAL LAUNCH</span>
-          </div>
-        </div>
 
         {/* Crime Scene Tape across Sponsors */}
         <CrimeSceneTape
@@ -170,7 +159,7 @@ export function Sponsors() {
           angle={-1.5}
           direction="reverse"
           speed="36s"
-          className="top-48 md:top-60"
+          className="top-44 md:top-56"
         />
 
         {/* Grid */}
