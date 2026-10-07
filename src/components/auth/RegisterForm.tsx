@@ -28,6 +28,10 @@ export function RegisterForm() {
     }, 600);
   };
 
+  const handleGoogleRegister = () => {
+    alert("Google OAuth will be connected to authentication backend.");
+  };
+
   return (
     <div className="w-full max-w-[700px]">
       <form onSubmit={handleSubmit} className="w-full">
@@ -227,8 +231,45 @@ export function RegisterForm() {
               </button>
             </div>
 
-            {/* Open notch on right */}
-            <div className="w-[54%] sm:w-[53%]" />
+            {/* Google OAuth Button: sits in cutout notch flush with right edge with solid pink border */}
+            <div className="relative w-[54%] sm:w-[53%] h-11 sm:h-12 md:h-12.5 shrink-0">
+              <button
+                type="button"
+                onClick={handleGoogleRegister}
+                className="group relative w-full h-full flex items-center justify-center cursor-pointer transition-transform duration-150 active:scale-[0.99]"
+              >
+                <svg
+                  className="absolute inset-0 w-full h-full pointer-events-none drop-shadow-md"
+                  viewBox="0 0 360 56"
+                  preserveAspectRatio="none"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M 24 2.5
+                       L 344 2.5
+                       Q 357.5 2.5 357.5 15
+                       L 357.5 41
+                       Q 357.5 53.5 344 53.5
+                       L 2.5 53.5
+                       L 24 2.5
+                       Z"
+                    fill="#181135"
+                    stroke="#E7137D"
+                    strokeWidth="3.5"
+                    strokeLinejoin="round"
+                    vectorEffect="non-scaling-stroke"
+                    className="transition-colors duration-150 group-hover:fill-[#22184b] group-hover:stroke-[#fa2773]"
+                  />
+                </svg>
+                <span
+                  className="relative z-10 text-white font-black text-[10px] min-[380px]:text-xs min-[440px]:text-sm sm:text-sm md:text-base uppercase tracking-wider pl-3 sm:pl-4 pr-1 sm:pr-2 transition-colors group-hover:text-pink-100"
+                  style={{ fontFamily: "var(--font-futura)" }}
+                >
+                  CONTINUE WITH GOOGLE
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </form>
