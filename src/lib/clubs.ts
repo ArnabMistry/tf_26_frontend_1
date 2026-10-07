@@ -72,6 +72,22 @@ export const KNOWN_CLUBS: readonly ClubInfo[] = [
       "Competitive coding and cybersecurity club hosting algorithmic sprints, Capture The Flag (CTF), and security audits.",
   },
   {
+    id: "gdg",
+    slug: "gdg",
+    name: "GDG on Campus",
+    tagline: "Google Developer Group",
+    description:
+      "Google Developer Group on Campus IIIT Nagpur, running developer-focused build events and hackathons spanning AI, hardware, and open technologies.",
+  },
+  {
+    id: "synergy",
+    slug: "synergy",
+    name: "Synergy",
+    tagline: "Esports & Gaming",
+    description:
+      "Gaming and esports society hosting competitive tournaments across titles including Valorant, BGMI, Free Fire, Call of Duty, Clash Royale, and chess.",
+  },
+  {
     id: "iotics",
     slug: "iotics",
     name: "Iotics",

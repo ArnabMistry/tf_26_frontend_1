@@ -1,0 +1,521 @@
+.detail {
+  flex: 1;
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding: 24px 70px 80px;
+}
+
+/* ── Header: title + club, with the club mark on the right ── */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding-bottom: 26px;
+  border-bottom: 1px solid rgb(255 255 255 / 25%);
+}
+
+.titleBlock {
+  min-width: 0;
+}
+
+.title {
+  font-family: var(--font-tantra);
+  font-size: clamp(3.25rem, 7.4vw, 6.5rem);
+  font-weight: 400;
+  line-height: 1;
+  text-transform: uppercase;
+  transform: scaleX(1.14);
+  transform-origin: left center;
+  overflow-wrap: anywhere;
+}
+
+.club {
+  margin-top: 12px;
+  color: #e6e1f7;
+  font-family: var(--font-futura);
+  font-size: clamp(1.35rem, 2.3vw, 2.1rem);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.clubLink {
+  color: inherit;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.clubLink:hover {
+  color: #ffe43b;
+  text-decoration: underline;
+}
+
+.mark {
+  flex-shrink: 0;
+  width: clamp(90px, 12vw, 165px);
+  height: auto;
+}
+
+/* ── Tabs ── */
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  margin-top: 28px;
+}
+
+.tab {
+  min-height: 56px;
+  padding: 10px 34px;
+  border: 1px solid rgb(255 255 255 / 55%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 10%);
+  color: #fff;
+  font-family: var(--font-futura);
+  font-size: clamp(1rem, 1.35vw, 1.35rem);
+  font-weight: 400;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.tab:hover {
+  border-color: #fff;
+  background: rgb(255 255 255 / 20%);
+}
+
+.tab[aria-selected="true"] {
+  border-color: #ff5aa5;
+  background: #e7137d;
+  color: #fff;
+}
+
+.tab[aria-selected="true"]:hover {
+  background: #d1106f;
+}
+
+.detail :is(a, button):focus-visible {
+  outline: 2px solid #ffe43b;
+  outline-offset: 4px;
+}
+
+/* ── Panels ── */
+
+.panel {
+  margin-top: 26px;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 24px;
+  background: rgb(255 255 255 / 6%);
+  padding: 34px 38px 38px;
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+.panelGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
+  gap: 44px;
+  align-items: stretch;
+}
+
+.panelMain {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.description {
+  color: #efecfa;
+  font-family: var(--font-futura);
+  font-size: clamp(1.05rem, 1.45vw, 1.45rem);
+  font-weight: 400;
+  line-height: 1.75;
+}
+
+/* ── Poster ── */
+
+.poster {
+  position: relative;
+  align-self: start;
+  width: 100%;
+  aspect-ratio: 293 / 371;
+  border: 4px solid #ffdd3e;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.posterImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.posterFallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px;
+  background: linear-gradient(160deg, #3a1d62 0%, #241a4c 55%, #51134a 100%);
+  text-align: center;
+}
+
+.posterFallbackName {
+  font-family: var(--font-tantra);
+  font-size: clamp(1.75rem, 3.4vw, 2.75rem);
+  line-height: 1;
+  text-transform: uppercase;
+  color: #ffdd3e;
+  overflow-wrap: anywhere;
+}
+
+.posterFallbackNote {
+  font-family: var(--font-futura);
+  font-size: 0.95rem;
+  color: #d5cfe7;
+}
+
+/* ── Prize box ── */
+
+.prizeBox {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 28px;
+  margin-top: 28px;
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 18px;
+  background: rgb(255 255 255 / 8%);
+  padding: 18px 24px 22px;
+}
+
+.prizeSummary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding-left: 150px;
+}
+
+.trophy {
+  width: 46px;
+  height: 46px;
+  color: #fff;
+}
+
+.prizePool {
+  font-family: var(--font-futura);
+  font-size: clamp(2rem, 3.9vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  color: #fff;
+}
+
+.rupee {
+  color: #ff2485;
+}
+
+.prizeList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  list-style: none;
+}
+
+.prizeRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 185px;
+  border-radius: 999px;
+  background: #1e1550;
+  padding: 7px 22px 7px 12px;
+  color: #fff;
+  font-family: var(--font-futura);
+  font-size: clamp(1rem, 1.3vw, 1.3rem);
+  font-weight: 400;
+}
+
+.medal {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+}
+
+/* The register CTA sits in the lower-left corner of the prize box, per design. */
+.register {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 8px;
+  background: #ff2485;
+  padding: 13px 22px;
+  color: #fff;
+  font-family: var(--font-futura);
+  font-size: clamp(0.95rem, 1.2vw, 1.2rem);
+  font-weight: 450;
+  line-height: 1;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 160ms ease;
+}
+
+.register:hover:not(:disabled) {
+  background: #df096d;
+}
+
+.register:disabled {
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+/* ── Generic tab content (stages, rules, contact) ── */
+
+.sectionHeading {
+  font-family: var(--font-futura);
+  font-size: clamp(1.4rem, 2vw, 1.9rem);
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.stageList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  list-style: none;
+}
+
+.stage {
+  border-left: 3px solid #ff2485;
+  padding-left: 18px;
+}
+
+.stageName {
+  font-family: var(--font-futura);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.stageWhen {
+  margin-top: 2px;
+  font-family: var(--font-futura);
+  font-size: 1rem;
+  color: #ffe43b;
+}
+
+.stageDetail,
+.ruleList,
+.organizerRole {
+  font-family: var(--font-futura);
+  color: #e3dff3;
+}
+
+.stageDetail {
+  margin-top: 6px;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.ruleList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding-left: 22px;
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  line-height: 1.65;
+}
+
+.organizerList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  margin: 0;
+  list-style: none;
+}
+
+.organizer {
+  border: 1px solid rgb(255 255 255 / 15%);
+  border-radius: 14px;
+  background: rgb(255 255 255 / 5%);
+  padding: 18px 20px;
+}
+
+.organizerName {
+  font-family: var(--font-futura);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.organizerRole {
+  margin-top: 2px;
+  font-size: 0.98rem;
+}
+
+.organizerContact {
+  display: block;
+  margin-top: 8px;
+  color: #ffe43b;
+  font-family: var(--font-futura);
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.organizerContact:hover {
+  text-decoration: underline;
+}
+
+.tba {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  border: 1px dashed rgb(255 255 255 / 25%);
+  border-radius: 18px;
+  padding: 46px 24px;
+  text-align: center;
+}
+
+.tbaTitle {
+  font-family: var(--font-futura);
+  font-size: 1.45rem;
+  font-weight: 600;
+  color: #ffe43b;
+}
+
+.tbaText {
+  max-width: 480px;
+  font-family: var(--font-futura);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #d5cfe7;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 1100px) {
+  .detail {
+    padding-inline: 40px;
+  }
+
+  .panelGrid {
+    gap: 30px;
+  }
+
+  .tabs {
+    gap: 14px;
+  }
+
+  .tab {
+    min-height: 50px;
+    padding-inline: 24px;
+  }
+
+  .prizeSummary {
+    padding-left: 0;
+  }
+
+  .register {
+    position: static;
+    margin-top: 16px;
+  }
+
+  .prizeBox {
+    padding-bottom: 18px;
+  }
+}
+
+@media (max-width: 860px) {
+  .panelGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .poster {
+    order: -1;
+    max-width: 320px;
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .detail {
+    padding: 16px 20px 56px;
+  }
+
+  .header {
+    align-items: flex-start;
+    gap: 16px;
+    padding-bottom: 20px;
+  }
+
+  .mark {
+    width: 72px;
+  }
+
+  .tabs {
+    gap: 10px;
+    margin-top: 22px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: #706499 transparent;
+  }
+
+  .tab {
+    min-height: 44px;
+    padding: 8px 20px;
+    font-size: 0.95rem;
+  }
+
+  .panel {
+    margin-top: 20px;
+    border-radius: 18px;
+    padding: 22px 20px 26px;
+  }
+
+  .prizeBox {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: 18px;
+  }
+
+  .prizeList {
+    width: 100%;
+  }
+
+  .prizeRow {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .register {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab,
+  .register {
+    transition: none;
+  }
+}
