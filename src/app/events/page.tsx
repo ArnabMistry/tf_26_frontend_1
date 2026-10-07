@@ -36,7 +36,7 @@ export default async function EventsPage() {
   return (
     <div className={styles.page}>
       <a href="#events-content" className={styles.skipLink}>Skip to events</a>
-      <Navbar currentPath="/events" registrationHref="#event-list" />
+      <Navbar currentPath="/events" registrationHref="/register" />
       <EventsExplorer events={events} referenceContent={!hasBackend} />
       <BrandFooter />
     </div>

@@ -139,7 +139,7 @@ export default async function EventPage(props: PageProps<"/events/[slug]">) {
       <a href="#event-content" className={styles.skipLink}>
         Skip to event details
       </a>
-      <Navbar currentPath="/events" registrationHref={event.registrationUrl ?? "/events"} />
+      <Navbar currentPath="/events" registrationHref={event.registrationUrl ?? "/register"} />
       <EventDetail event={event} />
       <BrandFooter />
     </div>

@@ -104,26 +104,37 @@ export function LoginForm() {
           {/* Action Buttons Row: sits below the right shelf with zero overlapping yellow card */}
           <div className="pb-2.5 sm:pb-3 md:pb-3.5 pl-4 sm:pl-6 pr-0 flex items-center justify-between">
             {/* Pink Primary Button: nestled into lower yellow tongue with 3D bottom bevel */}
-            <div className="relative w-[40%] sm:w-[42%] h-11 sm:h-12 md:h-12.5 shrink-0">
-              <div
-                className="absolute inset-0 bg-[#730E40] rounded-l-md"
-                style={{
-                  clipPath: "polygon(0 0, 100% 0, calc(100% - 15px) 100%, 0 100%)",
-                  transform: "translateY(5px)",
-                }}
-              />
+            <div className="relative w-[42%] sm:w-[43%] h-11 sm:h-12 md:h-12.5 shrink-0">
+              {/* 3D Bottom Shadow */}
+              <div className="absolute inset-0 translate-y-[5px] pointer-events-none">
+                <svg
+                  viewBox="0 0 300 50"
+                  preserveAspectRatio="none"
+                  className="w-full h-full fill-[#730E40]"
+                  aria-hidden="true"
+                >
+                  <path d="M 0 10 Q 0 0 10 0 L 275 0 Q 293 0 289 10 L 276 40 Q 271 50 257 50 L 10 50 Q 0 50 0 40 Z" />
+                </svg>
+              </div>
+
+              {/* Button Face */}
               <button
                 type="submit"
                 disabled={isLoading}
-                className="relative w-full h-full bg-[#E7137D] text-white font-extrabold tracking-wider text-[11px] min-[360px]:text-xs sm:text-sm md:text-base uppercase flex items-center justify-center gap-1.5 sm:gap-2 rounded-l-md transition-all duration-150 hover:brightness-105 active:translate-y-1 disabled:opacity-70 cursor-pointer"
-                style={{
-                  fontFamily: "var(--font-futura)",
-                  clipPath: "polygon(0 0, 100% 0, calc(100% - 15px) 100%, 0 100%)",
-                }}
+                className="group relative w-full h-full text-white font-extrabold tracking-wider text-[11px] min-[360px]:text-xs sm:text-sm md:text-base uppercase flex items-center justify-center gap-1.5 sm:gap-2 transition-all duration-150 active:translate-y-1 hover:brightness-105 disabled:opacity-70 cursor-pointer"
+                style={{ fontFamily: "var(--font-futura)" }}
               >
-                <span>{isLoading ? "..." : "CONTINUE"}</span>
                 <svg
-                  className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 text-white shrink-0"
+                  viewBox="0 0 300 50"
+                  preserveAspectRatio="none"
+                  className="absolute inset-0 w-full h-full fill-[#E7137D] pointer-events-none drop-shadow-sm"
+                  aria-hidden="true"
+                >
+                  <path d="M 0 10 Q 0 0 10 0 L 278 0 Q 296 0 292 10 L 279 40 Q 274 50 260 50 L 10 50 Q 0 50 0 40 Z" />
+                </svg>
+                <span className="relative z-10 pl-1">{isLoading ? "..." : "CONTINUE"}</span>
+                <svg
+                  className="relative z-10 w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 text-white shrink-0 mr-1"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -137,8 +148,8 @@ export function LoginForm() {
               </button>
             </div>
 
-            {/* Google OAuth Button: sits in cutout notch flush with right edge with solid pink border */}
-            <div className="relative w-[54%] sm:w-[53%] h-11 sm:h-12 md:h-12.5 shrink-0">
+            {/* Google OAuth Button: sits in cutout notch with rounded mirrored slant shape */}
+            <div className="relative w-[55%] sm:w-[54%] h-11 sm:h-12 md:h-12.5 shrink-0 translate-y-2 sm:translate-y-2.5">
               <button
                 type="button"
                 onClick={handleGoogleLogin}
@@ -146,30 +157,23 @@ export function LoginForm() {
               >
                 <svg
                   className="absolute inset-0 w-full h-full pointer-events-none drop-shadow-md"
-                  viewBox="0 0 360 56"
+                  viewBox="0 0 360 50"
                   preserveAspectRatio="none"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M 24 2.5
-                       L 344 2.5
-                       Q 357.5 2.5 357.5 15
-                       L 357.5 41
-                       Q 357.5 53.5 344 53.5
-                       L 2.5 53.5
-                       L 24 2.5
-                       Z"
+                    d="M 50 2 L 348 2 Q 358 2 358 12 L 358 38 Q 358 48 348 48 L 32 48 Q 16 48 21 38 L 33 12 Q 38 2 50 2 Z"
                     fill="#181135"
                     stroke="#E7137D"
-                    strokeWidth="3.5"
+                    strokeWidth="3"
                     strokeLinejoin="round"
                     vectorEffect="non-scaling-stroke"
                     className="transition-colors duration-150 group-hover:fill-[#22184b] group-hover:stroke-[#fa2773]"
                   />
                 </svg>
                 <span
-                  className="relative z-10 text-white font-black text-[10px] min-[380px]:text-xs min-[440px]:text-sm sm:text-sm md:text-base uppercase tracking-wider pl-3 sm:pl-4 pr-1 sm:pr-2 transition-colors group-hover:text-pink-100"
+                  className="relative z-10 text-white font-extrabold text-[10px] min-[380px]:text-xs min-[440px]:text-sm sm:text-sm md:text-base uppercase tracking-wider pl-4 sm:pl-5 pr-1.5 sm:pr-2 transition-colors group-hover:text-pink-100"
                   style={{ fontFamily: "var(--font-futura)" }}
                 >
                   CONTINUE WITH GOOGLE

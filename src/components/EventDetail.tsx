@@ -251,24 +251,13 @@ function PrizeBox({ event }: { event: EventDetailData }) {
         ))}
       </ul>
 
-      {event.registrationUrl ? (
-        <Link
-          href={event.registrationUrl}
-          className={styles.register}
-          aria-label={`Register now for ${event.name}`}
-        >
-          Register Now <span aria-hidden="true">↗</span>
-        </Link>
-      ) : (
-        <button
-          type="button"
-          className={styles.register}
-          disabled
-          title={`Registrations for ${event.name} have not opened yet`}
-        >
-          Register Now <span aria-hidden="true">↗</span>
-        </button>
-      )}
+      <Link
+        href="/register"
+        className={styles.register}
+        aria-label={`Register now for ${event.name}`}
+      >
+        Register Now <span aria-hidden="true">↗</span>
+      </Link>
     </div>
   );
 }
