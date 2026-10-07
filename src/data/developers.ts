@@ -35,7 +35,7 @@ export const heads: Developer[] = [
 export const team: Developer[] = [
   {
     name: "TUSHAR AGARWAL",
-    role: "UI/UX Director",
+    role: "Full Stack Developer",
     image: "/developers/Tushar Agarwal.webp",
   },
   {
@@ -45,7 +45,7 @@ export const team: Developer[] = [
   },
   {
     name: "SHARDUL",
-    role: "UI/UX Director",
+    role: "Backend Developer",
     image: "/developers/shardul.webp",
   },
   {
@@ -55,7 +55,7 @@ export const team: Developer[] = [
   },
   {
     name: "SATVIK",
-    role: "UI/UX Director",
+    role: "Frontend Developer",
     image: "/developers/Satvik.webp",
   },
   {
