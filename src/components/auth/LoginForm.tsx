@@ -102,13 +102,13 @@ export function LoginForm() {
           </div>
 
           {/* Action Buttons Row: sits below the right shelf with zero overlapping yellow card */}
-          <div className="pb-3.5 sm:pb-4 pl-4 sm:pl-5 pr-0 flex items-center justify-between">
+          <div className="pb-3.5 sm:pb-4 pl-3.5 sm:pl-5 pr-0 flex items-center justify-between">
             {/* Pink Primary Button: nestled into lower yellow tongue with 3D bottom bevel */}
-            <div className="relative w-[43.5%] sm:w-[44%] h-11 sm:h-12 shrink-0">
+            <div className="relative w-[40%] sm:w-[42%] h-11 sm:h-12 shrink-0">
               <div
                 className="absolute inset-0 bg-[#730E40] rounded-l-md"
                 style={{
-                  clipPath: "polygon(0 0, 100% 0, calc(100% - 15px) 100%, 0 100%)",
+                  clipPath: "polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%)",
                   transform: "translateY(5px)",
                 }}
               />
@@ -118,7 +118,7 @@ export function LoginForm() {
                 className="relative w-full h-full bg-[#E7137D] text-white font-extrabold tracking-wider text-[11px] min-[360px]:text-xs sm:text-sm md:text-base uppercase flex items-center justify-center gap-1 sm:gap-2 rounded-l-md transition-all duration-150 hover:brightness-105 active:translate-y-1 disabled:opacity-70 cursor-pointer"
                 style={{
                   fontFamily: "var(--font-futura)",
-                  clipPath: "polygon(0 0, 100% 0, calc(100% - 15px) 100%, 0 100%)",
+                  clipPath: "polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%)",
                 }}
               >
                 <span>{isLoading ? "..." : "CONTINUE"}</span>
@@ -128,18 +128,18 @@ export function LoginForm() {
 
             {/* Google OAuth Button: sits in cutout notch flush with right edge with pink border on all edges */}
             <div
-              className="relative w-[52.5%] sm:w-[52%] h-11 sm:h-12 bg-[#E7137D] rounded-r-lg p-[2px] shrink-0"
+              className="relative w-[54%] sm:w-[53%] h-11 sm:h-12 bg-[#E7137D] rounded-r-lg p-[2px] shrink-0"
               style={{
-                clipPath: "polygon(15px 0, 100% 0, 100% 100%, 0 100%)",
+                clipPath: "polygon(14px 0, 100% 0, 100% 100%, 0 100%)",
               }}
             >
               <button
                 type="button"
                 onClick={handleGoogleLogin}
-                className="w-full h-full bg-[#181135] text-white font-bold text-[8.5px] min-[360px]:text-[9.5px] min-[420px]:text-[11px] sm:text-xs md:text-sm uppercase tracking-tight sm:tracking-wider flex items-center justify-center transition-colors duration-150 hover:bg-[#22184b] cursor-pointer rounded-r-[6px] px-1 sm:px-2"
+                className="w-full h-full bg-[#181135] text-white font-bold text-[8px] min-[360px]:text-[9px] min-[420px]:text-[10.5px] sm:text-xs md:text-sm uppercase tracking-tight sm:tracking-wider flex items-center justify-center transition-colors duration-150 hover:bg-[#22184b] cursor-pointer rounded-r-[6px] px-1 sm:px-2"
                 style={{
                   fontFamily: "var(--font-futura)",
-                  clipPath: "polygon(14px 0, 100% 0, 100% 100%, 0 100%)",
+                  clipPath: "polygon(13px 0, 100% 0, 100% 100%, 0 100%)",
                 }}
               >
                 <span>CONTINUE WITH GOOGLE</span>

@@ -192,13 +192,13 @@ export function RegisterForm() {
           </div>
 
           {/* Action Button Row: Pink Register button in lower left, open notch on right */}
-          <div className="pb-3.5 sm:pb-4 pl-4 sm:pl-5 pr-0 flex items-center justify-between">
+          <div className="pb-3.5 sm:pb-4 pl-3.5 sm:pl-5 pr-0 flex items-center justify-between">
             {/* Pink Primary Button with 3D bottom bevel */}
-            <div className="relative w-[43.5%] sm:w-[44%] h-11 sm:h-12 shrink-0">
+            <div className="relative w-[40%] sm:w-[42%] h-11 sm:h-12 shrink-0">
               <div
                 className="absolute inset-0 bg-[#730E40] rounded-l-md"
                 style={{
-                  clipPath: "polygon(0 0, 100% 0, calc(100% - 15px) 100%, 0 100%)",
+                  clipPath: "polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%)",
                   transform: "translateY(5px)",
                 }}
               />
@@ -208,7 +208,7 @@ export function RegisterForm() {
                 className="relative w-full h-full bg-[#E7137D] text-white font-extrabold tracking-wider text-[11px] min-[360px]:text-xs sm:text-sm md:text-base uppercase flex items-center justify-center gap-1 sm:gap-2 rounded-l-md transition-all duration-150 hover:brightness-105 active:translate-y-1 disabled:opacity-70 cursor-pointer"
                 style={{
                   fontFamily: "var(--font-futura)",
-                  clipPath: "polygon(0 0, 100% 0, calc(100% - 15px) 100%, 0 100%)",
+                  clipPath: "polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%)",
                 }}
               >
                 <span>{isLoading ? "..." : "REGISTER"}</span>
@@ -217,7 +217,7 @@ export function RegisterForm() {
             </div>
 
             {/* Open notch on right */}
-            <div className="w-[52.5%] sm:w-[52%]" />
+            <div className="w-[54%] sm:w-[53%]" />
           </div>
         </div>
       </form>
