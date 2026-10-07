@@ -1,0 +1,38 @@
+.page {
+  position: relative;
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+  background-color: #241a4c;
+  color: white;
+  isolation: isolate;
+}
+
+.page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: #241a4c;
+  background-image: url("/assets/bg.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.skipLink {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 50;
+  transform: translateY(-200%);
+  border-radius: 6px;
+  background: #ffe43b;
+  padding: 12px 20px;
+  color: #211952;
+}
+
+.skipLink:focus {
+  transform: translateY(0);
+}

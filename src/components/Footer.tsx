@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { PhysicsText } from "./PhysicsText";
 
 interface FooterProps {
   variant?: "purple" | "yellow";
@@ -47,7 +48,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
         {/* Yellow Container for Developers Page */}
         <div
           ref={containerRef}
-          className="relative w-full max-w-[1600px] bg-[#FFFF1A] rounded-[24px] md:rounded-[32px] shadow-2xl pt-16 pb-48 md:pt-20 md:pb-64 px-8 md:px-12 mx-auto text-black min-h-[400px] md:min-h-[500px]"
+          className="footer-bounds relative w-full max-w-[1600px] bg-[#FFFF1A] rounded-[24px] md:rounded-[32px] shadow-2xl pt-16 pb-48 md:pt-20 md:pb-64 px-8 md:px-12 mx-auto text-black min-h-[400px] md:min-h-[500px]"
         >
           {/* Top Center Tab in Yellow */}
           <div className="absolute -top-8 md:-top-10 left-1/2 -translate-x-1/2 w-48 md:w-64 h-8 md:h-10 bg-[#FFFF1A] flex items-center justify-center">
@@ -94,27 +95,9 @@ export function Footer({ variant = "purple" }: FooterProps) {
             {/* Left Column */}
             <div className="flex flex-col gap-10 md:w-1/3">
               <div>
-                <h2
-                  ref={headingRef}
-                  className="text-2xl md:text-3xl font-extrabold uppercase tracking-tight flex flex-wrap text-black"
-                >
-                  {headingText.split("").map((char, idx) => {
-                    const randomRotation = (((idx * 37 + 13) % 100) / 100 - 0.5) * 120;
-                    return (
-                      <span
-                        key={idx}
-                        className={`inline-block origin-center ${isVisible ? "animate-fall-to-bottom" : ""}`}
-                        style={{
-                          animationDelay: `${idx * 0.12}s`,
-                          "--fall-rotation": `${randomRotation}deg`,
-                          "--fall-distance": `${fallDistance}px`,
-                        } as React.CSSProperties}
-                      >
-                        {char === " " ? "\u00A0" : char}
-                      </span>
-                    );
-                  })}
-                </h2>
+                <div ref={headingRef} className="relative z-50 min-h-[48px]">
+                  <PhysicsText startTrigger={isVisible} />
+                </div>
                 <p className="text-xs md:text-sm font-medium mt-1 relative z-10 text-[#F44383]">
                   ANANTA: Surpassing the Possible
                 </p>
@@ -198,7 +181,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
       <div className="relative w-full max-w-[1600px] bg-[#FFFF1A] rounded-b-[32px] md:rounded-b-[48px] px-2 md:px-8 pt-12 md:pt-16 pb-4 md:pb-8 shadow-2xl">
 
         {/* Purple Inner Container */}
-        <div ref={containerRef} className="relative w-full bg-[#2b1f5e] rounded-[24px] md:rounded-[32px] shadow-inner pt-16 pb-48 md:pt-20 md:pb-64 px-8 md:px-12 mx-auto text-white min-h-[400px] md:min-h-[500px]">
+        <div ref={containerRef} className="footer-bounds relative w-full bg-[#2b1f5e] rounded-[24px] md:rounded-[32px] shadow-inner pt-16 pb-48 md:pt-20 md:pb-64 px-8 md:px-12 mx-auto text-white min-h-[400px] md:min-h-[500px]">
           
           {/* Top Center Tab */}
           <div className="absolute -top-8 md:-top-10 left-1/2 -translate-x-1/2 w-48 md:w-64 h-8 md:h-10 bg-[#2b1f5e] flex items-center justify-center">
@@ -226,24 +209,9 @@ export function Footer({ variant = "purple" }: FooterProps) {
             {/* Left Column */}
             <div className="flex flex-col gap-10 md:w-1/3">
               <div>
-                <h2 ref={headingRef} className="text-2xl md:text-3xl font-extrabold uppercase tracking-tight flex flex-wrap">
-                  {headingText.split("").map((char, idx) => {
-                    const randomRotation = (((idx * 37 + 13) % 100) / 100 - 0.5) * 120; // deterministic rotation between -60 and 60
-                    return (
-                      <span
-                        key={idx}
-                        className={`inline-block origin-center ${isVisible ? "animate-fall-to-bottom" : ""}`}
-                        style={{
-                          animationDelay: `${idx * 0.12}s`,
-                          "--fall-rotation": `${randomRotation}deg`,
-                          "--fall-distance": `${fallDistance}px`
-                        } as React.CSSProperties}
-                      >
-                        {char === " " ? "\u00A0" : char}
-                      </span>
-                    );
-                  })}
-                </h2>
+                <div ref={headingRef} className="relative z-50 min-h-[48px]">
+                  <PhysicsText startTrigger={isVisible} />
+                </div>
                 <p className="text-xs md:text-sm font-medium mt-1 relative z-10 text-[#F44383]">
                   ANANTA: Surpassing the Possible
                 </p>
