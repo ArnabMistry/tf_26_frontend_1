@@ -29,10 +29,10 @@ export function RegisterForm() {
   };
 
   return (
-    <div className="w-full max-w-[620px]">
+    <div className="w-full max-w-[700px]">
       <form onSubmit={handleSubmit} className="w-full">
         {/* Unified Yellow Card Shell: Matches Login card size and height identically */}
-        <div className="relative w-full h-[345px] sm:h-[355px] flex flex-col justify-between">
+        <div className="relative w-full h-[355px] sm:h-[370px] md:h-[385px] flex flex-col justify-between">
           {/* Continuous SVG Background: Exact Figma Contour with shelf at 81.2% (y=334) */}
           <svg
             viewBox="0 0 853 411"
@@ -62,12 +62,12 @@ export function RegisterForm() {
           </svg>
 
           {/* Form Fields: 2-Column Grid */}
-          <div className="px-5 sm:px-7 md:px-8 pt-4 sm:pt-4.5 grid grid-cols-2 gap-x-3 sm:gap-x-4 md:gap-x-5 gap-y-2 sm:gap-y-2.5">
+          <div className="px-6 sm:px-8 md:px-9 pt-4 sm:pt-5 md:pt-6 grid grid-cols-2 gap-x-4 sm:gap-x-6 md:gap-x-8 gap-y-3.5 sm:gap-y-4.5 md:gap-y-5.5">
             {/* FIRST NAME */}
             <div className="min-w-0">
               <label
                 htmlFor="register-first-name"
-                className="block text-black font-extrabold text-[9.5px] min-[360px]:text-[11px] sm:text-xs md:text-sm tracking-wider uppercase mb-0.5 sm:mb-1 truncate"
+                className="block text-black font-extrabold text-[10px] min-[360px]:text-xs sm:text-xs md:text-sm tracking-wider uppercase mb-1 sm:mb-1.5 truncate"
                 style={{ fontFamily: "var(--font-futura)" }}
               >
                 FIRST NAME
@@ -80,7 +80,7 @@ export function RegisterForm() {
                 autoComplete="given-name"
                 value={formData.firstName}
                 onChange={handleChange}
-                className="w-full min-w-0 h-8 sm:h-9 px-2.5 sm:px-3 rounded-lg bg-[#FFFF1A] border-2 border-[#E7137D] text-black font-bold text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#E7137D]/50 transition-all placeholder:text-black/50"
+                className="w-full min-w-0 h-8.5 sm:h-9.5 md:h-10 px-3 sm:px-3.5 rounded-lg bg-[#FFFF1A] border-2 border-[#E7137D] text-black font-bold text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#E7137D]/50 transition-all placeholder:text-black/50"
               />
             </div>
 
@@ -88,7 +88,7 @@ export function RegisterForm() {
             <div className="min-w-0">
               <label
                 htmlFor="register-last-name"
-                className="block text-black font-extrabold text-[9.5px] min-[360px]:text-[11px] sm:text-xs md:text-sm tracking-wider uppercase mb-0.5 sm:mb-1 truncate"
+                className="block text-black font-extrabold text-[10px] min-[360px]:text-xs sm:text-xs md:text-sm tracking-wider uppercase mb-1 sm:mb-1.5 truncate"
                 style={{ fontFamily: "var(--font-futura)" }}
               >
                 LAST NAME
@@ -101,7 +101,7 @@ export function RegisterForm() {
                 autoComplete="family-name"
                 value={formData.lastName}
                 onChange={handleChange}
-                className="w-full min-w-0 h-8 sm:h-9 px-2.5 sm:px-3 rounded-lg bg-[#FFFF1A] border-2 border-[#E7137D] text-black font-bold text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#E7137D]/50 transition-all placeholder:text-black/50"
+                className="w-full min-w-0 h-8.5 sm:h-9.5 md:h-10 px-3 sm:px-3.5 rounded-lg bg-[#FFFF1A] border-2 border-[#E7137D] text-black font-bold text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#E7137D]/50 transition-all placeholder:text-black/50"
               />
             </div>
 
@@ -109,7 +109,7 @@ export function RegisterForm() {
             <div className="min-w-0">
               <label
                 htmlFor="register-email"
-                className="block text-black font-extrabold text-[9.5px] min-[360px]:text-[11px] sm:text-xs md:text-sm tracking-wider uppercase mb-0.5 sm:mb-1 truncate"
+                className="block text-black font-extrabold text-[10px] min-[360px]:text-xs sm:text-xs md:text-sm tracking-wider uppercase mb-1 sm:mb-1.5 truncate"
                 style={{ fontFamily: "var(--font-futura)" }}
               >
                 EMAIL
@@ -122,7 +122,7 @@ export function RegisterForm() {
                 autoComplete="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full min-w-0 h-8 sm:h-9 px-2.5 sm:px-3 rounded-lg bg-[#FFFF1A] border-2 border-[#E7137D] text-black font-bold text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#E7137D]/50 transition-all placeholder:text-black/50"
+                className="w-full min-w-0 h-8.5 sm:h-9.5 md:h-10 px-3 sm:px-3.5 rounded-lg bg-[#FFFF1A] border-2 border-[#E7137D] text-black font-bold text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#E7137D]/50 transition-all placeholder:text-black/50"
               />
             </div>
 
@@ -130,7 +130,7 @@ export function RegisterForm() {
             <div className="min-w-0">
               <label
                 htmlFor="register-password"
-                className="block text-black font-extrabold text-[9.5px] min-[360px]:text-[11px] sm:text-xs md:text-sm tracking-wider uppercase mb-0.5 sm:mb-1 truncate"
+                className="block text-black font-extrabold text-[10px] min-[360px]:text-xs sm:text-xs md:text-sm tracking-wider uppercase mb-1 sm:mb-1.5 truncate"
                 style={{ fontFamily: "var(--font-futura)" }}
               >
                 PASSWORD
@@ -145,7 +145,7 @@ export function RegisterForm() {
                 placeholder="(MINIMUM 6 CHARACTERS)"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full min-w-0 h-8 sm:h-9 px-2.5 sm:px-3 rounded-lg bg-[#FFFF1A] border-2 border-[#E7137D] text-black font-bold text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#E7137D]/50 transition-all placeholder:text-black/75 placeholder:text-[8.5px] min-[360px]:placeholder:text-[9.5px] sm:placeholder:text-[10px] placeholder:font-bold placeholder:tracking-wider"
+                className="w-full min-w-0 h-8.5 sm:h-9.5 md:h-10 px-3 sm:px-3.5 rounded-lg bg-[#FFFF1A] border-2 border-[#E7137D] text-black font-bold text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#E7137D]/50 transition-all placeholder:text-black/75 placeholder:text-[9px] min-[360px]:placeholder:text-[10px] sm:placeholder:text-[11px] placeholder:font-bold placeholder:tracking-wider"
               />
             </div>
 
@@ -153,7 +153,7 @@ export function RegisterForm() {
             <div className="min-w-0">
               <label
                 htmlFor="register-college"
-                className="block text-black font-extrabold text-[9px] min-[360px]:text-[10px] sm:text-xs md:text-sm tracking-wider uppercase mb-0.5 sm:mb-1 truncate"
+                className="block text-black font-extrabold text-[9.5px] min-[360px]:text-[11px] sm:text-xs md:text-sm tracking-wider uppercase mb-1 sm:mb-1.5 truncate"
                 style={{ fontFamily: "var(--font-futura)" }}
               >
                 COLLEGE / UNIVERSITY
@@ -165,7 +165,7 @@ export function RegisterForm() {
                 required
                 value={formData.college}
                 onChange={handleChange}
-                className="w-full min-w-0 h-8 sm:h-9 px-2.5 sm:px-3 rounded-lg bg-[#FFFF1A] border-2 border-[#E7137D] text-black font-bold text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#E7137D]/50 transition-all placeholder:text-black/50"
+                className="w-full min-w-0 h-8.5 sm:h-9.5 md:h-10 px-3 sm:px-3.5 rounded-lg bg-[#FFFF1A] border-2 border-[#E7137D] text-black font-bold text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#E7137D]/50 transition-all placeholder:text-black/50"
               />
             </div>
 
@@ -173,7 +173,7 @@ export function RegisterForm() {
             <div className="min-w-0">
               <label
                 htmlFor="register-phone"
-                className="block text-black font-extrabold text-[9.5px] min-[360px]:text-[11px] sm:text-xs md:text-sm tracking-wider uppercase mb-0.5 sm:mb-1 truncate"
+                className="block text-black font-extrabold text-[10px] min-[360px]:text-xs sm:text-xs md:text-sm tracking-wider uppercase mb-1 sm:mb-1.5 truncate"
                 style={{ fontFamily: "var(--font-futura)" }}
               >
                 PHONE NUMBER
@@ -186,33 +186,44 @@ export function RegisterForm() {
                 autoComplete="tel"
                 value={formData.phone}
                 onChange={handleChange}
-                className="w-full min-w-0 h-8 sm:h-9 px-2.5 sm:px-3 rounded-lg bg-[#FFFF1A] border-2 border-[#E7137D] text-black font-bold text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#E7137D]/50 transition-all placeholder:text-black/50"
+                className="w-full min-w-0 h-8.5 sm:h-9.5 md:h-10 px-3 sm:px-3.5 rounded-lg bg-[#FFFF1A] border-2 border-[#E7137D] text-black font-bold text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#E7137D]/50 transition-all placeholder:text-black/50"
               />
             </div>
           </div>
 
           {/* Action Button Row: Pink Register button in lower left, open notch on right */}
-          <div className="pb-3.5 sm:pb-4 pl-3.5 sm:pl-5 pr-0 flex items-center justify-between">
+          <div className="pb-2.5 sm:pb-3 md:pb-3.5 pl-4 sm:pl-6 pr-0 flex items-center justify-between">
             {/* Pink Primary Button with 3D bottom bevel */}
-            <div className="relative w-[40%] sm:w-[42%] h-11 sm:h-12 shrink-0">
+            <div className="relative w-[40%] sm:w-[42%] h-11 sm:h-12 md:h-12.5 shrink-0">
               <div
                 className="absolute inset-0 bg-[#730E40] rounded-l-md"
                 style={{
-                  clipPath: "polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%)",
+                  clipPath: "polygon(0 0, 100% 0, calc(100% - 15px) 100%, 0 100%)",
                   transform: "translateY(5px)",
                 }}
               />
               <button
                 type="submit"
                 disabled={isLoading}
-                className="relative w-full h-full bg-[#E7137D] text-white font-extrabold tracking-wider text-[11px] min-[360px]:text-xs sm:text-sm md:text-base uppercase flex items-center justify-center gap-1 sm:gap-2 rounded-l-md transition-all duration-150 hover:brightness-105 active:translate-y-1 disabled:opacity-70 cursor-pointer"
+                className="relative w-full h-full bg-[#E7137D] text-white font-extrabold tracking-wider text-[11px] min-[360px]:text-xs sm:text-sm md:text-base uppercase flex items-center justify-center gap-1.5 sm:gap-2 rounded-l-md transition-all duration-150 hover:brightness-105 active:translate-y-1 disabled:opacity-70 cursor-pointer"
                 style={{
                   fontFamily: "var(--font-futura)",
-                  clipPath: "polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%)",
+                  clipPath: "polygon(0 0, 100% 0, calc(100% - 15px) 100%, 0 100%)",
                 }}
               >
                 <span>{isLoading ? "..." : "REGISTER"}</span>
-                <span className="text-sm sm:text-base md:text-lg leading-none">↗</span>
+                <svg
+                  className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 text-white shrink-0"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M7 17L17 7M7 7h10v10" />
+                </svg>
               </button>
             </div>
 
@@ -224,7 +235,7 @@ export function RegisterForm() {
 
       {/* Switch Link below the card */}
       <div
-        className="mt-4 sm:mt-5 text-[11px] sm:text-xs md:text-sm uppercase tracking-wider text-[#A49FBD] font-bold text-left"
+        className="mt-3.5 sm:mt-4 text-[11px] sm:text-xs md:text-sm uppercase tracking-wider text-[#A49FBD] font-bold text-left"
         style={{ fontFamily: "var(--font-futura)" }}
       >
         <span>ALREADY HAVE AN ACCOUNT? </span>

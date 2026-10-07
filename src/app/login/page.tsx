@@ -30,12 +30,12 @@ export default function LoginPage() {
       <Navbar currentPath="/login" />
 
       {/* Main Content Area */}
-      <main className="flex-1 w-full max-w-[1240px] mx-auto px-4 sm:px-8 lg:px-12 pt-4 sm:pt-8 md:pt-10 pb-12 sm:pb-16 flex flex-col justify-center">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center lg:items-end">
+      <main className="flex-1 w-full max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-12 pt-2 sm:pt-4 md:pt-6 pb-6 sm:pb-10 flex flex-col justify-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-12 items-center lg:items-center">
           {/* Left Column: Title + Form */}
-          <div className="lg:col-span-7 flex flex-col items-start w-full">
+          <div className="lg:col-span-7 flex flex-col items-start w-full lg:-translate-y-4 xl:-translate-y-6">
             <h1
-              className="text-3xl min-[380px]:text-4xl sm:text-5xl md:text-6xl font-extrabold uppercase tracking-wider text-white mb-4 sm:mb-6 md:mb-7"
+              className="text-3xl min-[380px]:text-4xl sm:text-5xl md:text-6xl font-extrabold uppercase tracking-wider text-white mb-3 sm:mb-4 md:mb-5"
               style={{ fontFamily: "var(--font-futura)" }}
             >
               LOGIN
@@ -45,7 +45,7 @@ export default function LoginPage() {
           </div>
 
           {/* Right Column: Robot Mascot Graphic */}
-          <div className="lg:col-span-5 flex justify-center lg:justify-end items-end mt-6 lg:mt-0">
+          <div className="lg:col-span-5 flex justify-center lg:justify-end items-end mt-4 lg:mt-0">
             <div className="relative w-[220px] min-[380px]:w-[260px] sm:w-[320px] md:w-[360px] lg:w-[375px] max-w-full drop-shadow-[0_20px_35px_rgba(0,0,0,0.5)]">
               <Image
                 src="/assets/robot.png"
