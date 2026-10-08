@@ -1,24 +1,32 @@
 /* ============================================================
    SponsorCard — themed clip-shaped frame card
-   White thick border, fully transparent fill, no hover effect
+   The sponsor image fills the whole shape. On hover/focus a black
+   curtain slides down over it and the tier label fades in.
    ============================================================ */
 
 .card {
   position: relative;
+  display: block;
   width: 100%;
   /* aspect-ratio drives height so cards are always proportional */
   aspect-ratio: 208 / 224;
-  isolation: isolate;
   border-radius: 6px;
+  text-decoration: none;
+  isolation: isolate;
 }
 
-/* ── SVG outline frame ── */
+.card:focus-visible {
+  outline: 2px solid #ffe43b;
+  outline-offset: 10px;
+}
+
+/* ── SVG outline frame — sits above the fill ── */
 .frame {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
 }
 
@@ -29,24 +37,81 @@
   stroke-linejoin: round;
   stroke-linecap: round;
   vector-effect: non-scaling-stroke;
+  transition: stroke 320ms ease;
 }
 
-/* ── Sponsor logo, centered inside the frame ── */
-.inner {
+.card:hover .frameStroke,
+.card:focus-visible .frameStroke {
+  stroke: #ffe43b;
+}
+
+/* ── Fill: clipped to the card shape by an inline clip-path ── */
+.fill {
   position: absolute;
   inset: 0;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* padding keeps logo away from the shaped border edges */
-  padding: 18%;
+  z-index: 1;
+  overflow: hidden;
 }
 
 .logo {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  /* fills the block edge to edge */
+  object-fit: cover;
+}
+
+/* ── Black curtain, parked above the card until hover ── */
+.curtain {
+  position: absolute;
+  inset: 0;
+  background: #07060f;
+  transform: translateY(-100%);
+  transition: transform 460ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform;
+}
+
+.card:hover .curtain,
+.card:focus-visible .curtain {
+  transform: translateY(0);
+}
+
+/* ── Tier label, revealed on the curtain ── */
+.label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+  margin: 0;
+  padding: 0 10%;
+  font-family: var(--font-futura);
+  font-size: clamp(13px, 1.65vw, 22px);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  text-align: center;
+  color: #ffffff;
+  opacity: 0;
+  /* waits for the curtain to cover the card before fading in */
+  transition: opacity 240ms ease 200ms;
+}
+
+.card:hover .label,
+.card:focus-visible .label {
   opacity: 1;
 }
 
+.labelAccent {
+  color: #ffe43b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .curtain,
+  .label,
+  .frameStroke {
+    transition: none;
+  }
+}

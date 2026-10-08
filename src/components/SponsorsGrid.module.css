@@ -46,12 +46,14 @@
   align-items: start;
 }
 
-/* Each column stacks cards vertically */
+/* Each column stacks cards vertically.
+   Overflow stays visible so a focused card's outline ring is not clipped;
+   the SVG viewBox already carries 4px of padding around the stroke. */
 .col {
   display: flex;
   flex-direction: column;
   gap: clamp(16px, 2.5vw, 32px);
-  overflow: clip; /* prevents SVG stroke bleed from leaking outside column */
+  overflow: visible;
 }
 
 /* Middle column is pushed down to create the stagger from the mockup */
