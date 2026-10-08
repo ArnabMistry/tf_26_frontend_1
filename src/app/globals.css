@@ -103,3 +103,10 @@ body {
 .animate-fall-to-bottom {
   animation: fallToBottom 1.8s forwards;
 }
+
+/* Mobile bottom nav spacing — prevents fixed nav from covering content */
+@media (max-width: 767px) {
+  body {
+    padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+  }
+}
