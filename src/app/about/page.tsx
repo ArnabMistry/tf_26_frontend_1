@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import type { Metadata } from "next";
 import { siteConfig } from "@/lib/site";
 import Link from "next/link";
+import { HistoryTimeline } from "@/components/HistoryTimeline";
 
 export const metadata: Metadata = {
   title: "About | History of TF",
@@ -48,11 +49,14 @@ const timelineData = [
 
 export default function AboutPage() {
   return (
-    <main className="flex-1 min-h-[100svh] w-full bg-[#1A1344] text-white flex flex-col relative overflow-x-hidden">
-      <Navbar currentPath="/about" />
+    <div className="relative min-h-[100svh] flex flex-col text-white isolate bg-[#241A4C] overflow-x-hidden">
+      {/* Fixed background layer covering viewport */}
+      <div
+        className="fixed inset-0 -z-10 bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat pointer-events-none"
+        aria-hidden="true"
+      />
 
-      {/* Pattern background */}
-      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none mix-blend-overlay bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat" />
+      <Navbar currentPath="/about" />
 
       {/* === THE ORIGIN SECTION === */}
       <div className="relative z-10 flex flex-col items-center w-full px-4 md:px-8 pt-12 pb-16 max-w-5xl mx-auto">
@@ -130,7 +134,7 @@ export default function AboutPage() {
 
       {/* === HISTORY OF TF SECTION === */}
       <div className="relative z-10 flex flex-col items-center w-full pt-16 pb-32">
-        <div className="flex flex-col items-center justify-center pb-10 px-6 max-w-3xl text-center">
+        <div className="relative z-20 flex flex-col items-center justify-center pb-10 px-6 max-w-3xl text-center">
           <h1 className="font-tantra text-5xl md:text-7xl mb-6 tracking-wide drop-shadow-lg uppercase text-white">
             HISTORY OF TF
           </h1>
@@ -140,82 +144,7 @@ export default function AboutPage() {
         </div>
 
         {/* Timeline Section */}
-        <div className="relative w-full overflow-hidden mt-10">
-          
-          {/* Path Image Layer */}
-          <div className="absolute left-1/2 -translate-x-1/2 top-0 w-[1536px] max-w-none h-full pointer-events-none z-0 flex flex-col items-center">
-             
-             {/* 1. Original Image */}
-             <div className="relative w-full flex-shrink-0 leading-none">
-               <img src="/assets/path.png" alt="Path" className="w-full h-auto block" />
-               
-               {/* Right Branch Drones */}
-               <div className="absolute top-[29%] left-[70%] w-20 h-20 md:w-28 md:h-28 rotate-[-40deg] -translate-x-1/2 -translate-y-1/2 z-20">
-                 <Image src="/assets/drone.png" alt="Drone" fill className="object-contain drop-shadow-[0_0_15px_rgba(231,19,125,0.6)]" />
-               </div>
-               <div className="absolute top-[13%] left-[90%] w-20 h-20 md:w-28 md:h-28 rotate-[-25deg] -translate-x-1/2 -translate-y-1/2 z-20">
-                 <Image src="/assets/drone.png" alt="Drone" fill className="object-contain drop-shadow-[0_0_15px_rgba(231,19,125,0.6)]" />
-               </div>
-             </div>
-
-             {/* 2. Mirrored Extension (Connects perfectly to the bottom of the original) */}
-             <div className="relative w-full h-[600px] flex-shrink-0 overflow-hidden -mt-[1px]">
-               <img src="/assets/path.png" alt="" className="absolute left-0 w-full h-auto max-w-none" style={{ bottom: '100%', transform: 'scaleY(-1)', transformOrigin: 'bottom' }} />
-             </div>
-
-             {/* 3. Normal Extension (Connects perfectly to the mirrored bottom) */}
-             <div className="relative w-full h-[600px] flex-shrink-0 overflow-hidden -mt-[1px]">
-               <img src="/assets/path.png" alt="" className="absolute left-0 w-full h-auto max-w-none" style={{ bottom: '0' }} />
-             </div>
-             
-             {/* 4. Mirrored Extension */}
-             <div className="relative w-full h-[600px] flex-shrink-0 overflow-hidden -mt-[1px]">
-               <img src="/assets/path.png" alt="" className="absolute left-0 w-full h-auto max-w-none" style={{ bottom: '100%', transform: 'scaleY(-1)', transformOrigin: 'bottom' }} />
-             </div>
-          </div>
-
-          <div className="relative z-10 flex flex-col items-center w-full max-w-[1200px] mx-auto gap-16 md:gap-24 pt-[700px] md:pt-[750px] pb-32 md:pb-64">
-            {timelineData.map((item, index) => (
-              <div 
-                key={item.year}
-                className="relative flex items-center justify-center w-full px-4"
-              >
-                {/* Drone */}
-                <div className="absolute left-1/2 -translate-x-1/2 z-20 top-1/2 -translate-y-1/2">
-                  <div className="relative w-20 h-20 md:w-28 md:h-28 -rotate-90">
-                    <Image
-                      src="/assets/drone.png"
-                      alt="Drone"
-                      fill
-                      className="object-contain drop-shadow-[0_0_15px_rgba(231,19,125,0.6)]"
-                    />
-                  </div>
-                </div>
-
-                {/* Left and Right columns */}
-                <div className="w-full flex justify-between items-center">
-                  {/* Left Side */}
-                  <div className="w-[calc(50%-120px)] md:w-[calc(50%-180px)] lg:w-[calc(50%-240px)] flex justify-end">
-                    {item.alignment === 'left' ? (
-                      <TimelineContent item={item} align="left" />
-                    ) : (
-                      <TimelineLogo item={item} />
-                    )}
-                  </div>
-                  
-                  {/* Right Side */}
-                  <div className="w-[calc(50%-120px)] md:w-[calc(50%-180px)] lg:w-[calc(50%-240px)] flex justify-start">
-                    {item.alignment === 'right' ? (
-                      <TimelineContent item={item} align="right" />
-                    ) : (
-                      <TimelineLogo item={item} />
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <HistoryTimeline timelineData={timelineData} />
       </div>
       
       {/* === HIGHLIGHTS SECTION === */}
@@ -274,57 +203,11 @@ export default function AboutPage() {
       </div>
 
       {/* === FOOTER === */}
-      <div className="relative z-20 bg-[#0c0822]">
+      <div className="relative z-20">
         <Footer />
       </div>
-    </main>
-  );
-}
-
-function TimelineContent({ item, align = 'left' }: { item: typeof timelineData[0], align?: 'left' | 'right' }) {
-  const isLeft = align === 'left';
-  return (
-    <div className={`flex flex-col gap-2 md:gap-3 max-w-[280px] md:max-w-[320px] ${isLeft ? 'items-end text-right' : 'items-start text-left'}`}>
-      <h4 className="text-[9px] md:text-[10px] text-zinc-400 uppercase tracking-widest font-sans font-bold">
-        {item.theme}
-      </h4>
-      <h3 className="text-xl md:text-3xl font-bold font-sans text-white tracking-wide">
-        {item.title}
-      </h3>
-      <p className="text-xs md:text-[13px] text-zinc-200 leading-relaxed font-sans mb-4">
-        {item.description}
-      </p>
-      <div>
-        <Link 
-          href={item.link}
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-[#E7137D] text-[#E7137D] text-xs font-semibold rounded-md hover:bg-[#E7137D]/10 transition-colors uppercase tracking-widest"
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-            <polyline points="15 3 21 3 21 9"></polyline>
-            <line x1="10" y1="14" x2="21" y2="3"></line>
-          </svg>
-          Visit Website
-        </Link>
-      </div>
     </div>
   );
 }
 
-function TimelineLogo({ item }: { item: typeof timelineData[0] }) {
-  return (
-    <div className="flex flex-col items-center justify-center gap-2 opacity-90">
-      <div className="relative w-20 h-20 md:w-24 md:h-24 flex items-center justify-center bg-transparent rounded-full border-2 border-white/80 p-2">
-        <Image
-          src="/assets/tf_history.png"
-          alt="TF Logo"
-          fill
-          className="object-contain p-2 drop-shadow-md"
-        />
-      </div>
-      <span className="text-[#E7137D] font-bold text-3xl md:text-5xl tracking-wide font-sans mt-2">
-        {item.year}
-      </span>
-    </div>
-  );
-}
+

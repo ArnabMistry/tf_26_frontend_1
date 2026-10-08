@@ -17,6 +17,7 @@ export function PhysicsText({ startTrigger = true }: PhysicsTextProps) {
 
   useEffect(() => {
     if (!startTrigger || !containerRef.current || hasStarted.current) return;
+    if (window.innerWidth < 768) return; // Do not run on mobile
     hasStarted.current = true;
 
     const Engine = Matter.Engine,
@@ -24,121 +25,118 @@ export function PhysicsText({ startTrigger = true }: PhysicsTextProps) {
       Bodies = Matter.Bodies,
       Composite = Matter.Composite;
 
-    const timeoutId = setTimeout(() => {
-      const engine = Engine.create();
-      engineRef.current = engine;
+    const engine = Engine.create();
+    engineRef.current = engine;
 
-      const container = containerRef.current;
-      if (!container) return;
+    const container = containerRef.current;
+    if (!container) return;
+    
+    const footerContainer = container.closest(".footer-bounds") as HTMLElement || document.body;
+    const footerRect = footerContainer.getBoundingClientRect();
+
+    const letterEls = Array.from(container.querySelectorAll(".physics-letter")) as HTMLImageElement[];
+    
+    const letterBodies: { body: Matter.Body; el: HTMLImageElement; w: number; h: number }[] = [];
+
+    const initialPositions = letterEls.map(el => {
+      const rect = el.getBoundingClientRect();
+      return {
+        x: rect.left - footerRect.left + rect.width / 2,
+        y: 0, // Fall from the very top of the blue box
+        w: rect.width,
+        h: rect.height
+      };
+    });
+
+    letterEls.forEach((el, i) => {
+      const pos = initialPositions[i];
+      const clone = el.cloneNode(true) as HTMLImageElement;
+      clone.style.position = "absolute";
+      clone.style.left = "0px";
+      clone.style.top = "0px";
+      clone.style.transform = `translate(${pos.x - pos.w / 2}px, ${pos.y - pos.h / 2}px)`;
+      clone.style.zIndex = "10";
       
-      const footerContainer = container.closest(".footer-bounds") as HTMLElement || document.body;
-      const footerRect = footerContainer.getBoundingClientRect();
-
-      const letterEls = Array.from(container.querySelectorAll(".physics-letter")) as HTMLImageElement[];
+      el.style.opacity = "0";
       
-      const letterBodies: { body: Matter.Body; el: HTMLImageElement; w: number; h: number }[] = [];
+      footerContainer.appendChild(clone);
 
-      const initialPositions = letterEls.map(el => {
-        const rect = el.getBoundingClientRect();
-        return {
-          x: rect.left - footerRect.left + rect.width / 2,
-          y: rect.top - footerRect.top + rect.height / 2,
-          w: rect.width,
-          h: rect.height
-        };
+      const w = pos.w || (window.innerWidth < 768 ? 32 : 48);
+      const h = pos.h || (window.innerWidth < 768 ? 32 : 48);
+
+      const body = Bodies.rectangle(pos.x, pos.y, w * 0.8, h * 0.8, {
+        restitution: 0.6,
+        friction: 0.1,
+        density: 0.05,
       });
 
-      letterEls.forEach((el, i) => {
-        const pos = initialPositions[i];
-        const clone = el.cloneNode(true) as HTMLImageElement;
-        clone.style.position = "absolute";
-        clone.style.left = "0px";
-        clone.style.top = "0px";
-        clone.style.transform = `translate(${pos.x - pos.w / 2}px, ${pos.y - pos.h / 2}px)`;
-        clone.style.zIndex = "10";
-        
-        el.style.opacity = "0";
-        
-        footerContainer.appendChild(clone);
-
-        const w = pos.w || (window.innerWidth < 768 ? 32 : 48);
-        const h = pos.h || (window.innerWidth < 768 ? 32 : 48);
-
-        const body = Bodies.rectangle(pos.x, pos.y, w * 0.8, h * 0.8, {
-          restitution: 0.6,
-          friction: 0.1,
-          density: 0.05,
-        });
-
-        Matter.Body.applyForce(body, body.position, {
-          x: (Math.random() - 0.5) * 0.05,
-          y: -Math.random() * 0.05
-        });
-        Matter.Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.2);
-
-        Composite.add(engine.world, body);
-        letterBodies.push({ body, el: clone, w, h });
+      Matter.Body.applyForce(body, body.position, {
+        x: (Math.random() - 0.5) * 0.05,
+        y: -Math.random() * 0.05
       });
+      Matter.Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.2);
 
-      const width = footerRect.width;
-      const height = footerRect.height;
+      Composite.add(engine.world, body);
+      letterBodies.push({ body, el: clone, w, h });
+    });
+
+    const width = footerRect.width;
+    const height = footerRect.height;
+    
+    const ground = Bodies.rectangle(width / 2, height + 50, width * 2, 100, { isStatic: true });
+    const leftWall = Bodies.rectangle(-50, height / 2, 100, height * 2, { isStatic: true });
+    const rightWall = Bodies.rectangle(width + 50, height / 2, 100, height * 2, { isStatic: true });
+    
+    // Invisible physical ramps to match the yellow SVG corner cutouts so letters slide into the center
+    const leftChamfer = Bodies.rectangle(0, height, 300, 150, { isStatic: true, angle: Math.PI / 5 });
+    const rightChamfer = Bodies.rectangle(width, height, 300, 150, { isStatic: true, angle: -Math.PI / 5 });
+
+    const statics = [ground, leftWall, rightWall, leftChamfer, rightChamfer];
+
+    // Character mascot physical boundaries
+    const charImage = footerContainer.querySelector('img[src*="distorted_gurl"]');
+    if (charImage) {
+      const charRect = charImage.getBoundingClientRect();
+      const cx = charRect.left - footerRect.left + charRect.width / 2;
+      const cy = charRect.top - footerRect.top + charRect.height / 2;
       
-      const ground = Bodies.rectangle(width / 2, height + 50, width * 2, 100, { isStatic: true });
-      const leftWall = Bodies.rectangle(-50, height / 2, 100, height * 2, { isStatic: true });
-      const rightWall = Bodies.rectangle(width + 50, height / 2, 100, height * 2, { isStatic: true });
+      // Head (approximate circle)
+      const head = Bodies.circle(cx, cy - charRect.height * 0.2, charRect.width * 0.25, { isStatic: true });
       
-      // Invisible physical ramps to match the yellow SVG corner cutouts so letters slide into the center
-      const leftChamfer = Bodies.rectangle(0, height, 300, 150, { isStatic: true, angle: Math.PI / 5 });
-      const rightChamfer = Bodies.rectangle(width, height, 300, 150, { isStatic: true, angle: -Math.PI / 5 });
+      // Body (shoulders and torso - trapezoid narrower at top, wider at bottom)
+      const torso = Bodies.trapezoid(cx, cy + charRect.height * 0.15, charRect.width * 0.7, charRect.height * 0.6, 0.4, { isStatic: true });
+      
+      statics.push(head, torso);
+    }
 
-      const statics = [ground, leftWall, rightWall, leftChamfer, rightChamfer];
+    Composite.add(engine.world, statics);
 
-      // Character mascot physical boundaries
-      const charImage = footerContainer.querySelector('img[src*="distorted_gurl"]');
-      if (charImage) {
-        const charRect = charImage.getBoundingClientRect();
-        const cx = charRect.left - footerRect.left + charRect.width / 2;
-        const cy = charRect.top - footerRect.top + charRect.height / 2;
-        
-        // Head (approximate circle)
-        const head = Bodies.circle(cx, cy - charRect.height * 0.2, charRect.width * 0.25, { isStatic: true });
-        
-        // Body (shoulders and torso - trapezoid narrower at top, wider at bottom)
-        const torso = Bodies.trapezoid(cx, cy + charRect.height * 0.15, charRect.width * 0.7, charRect.height * 0.6, 0.4, { isStatic: true });
-        
-        statics.push(head, torso);
-      }
+    const runner = Runner.create();
+    runnerRef.current = runner;
+    Runner.run(runner, engine);
 
-      Composite.add(engine.world, statics);
+    let animationFrame: number;
+    const update = () => {
+      letterBodies.forEach(({ body, el, w, h }) => {
+        el.style.transform = `translate(${body.position.x - w / 2}px, ${
+          body.position.y - h / 2
+        }px) rotate(${body.angle}rad)`;
+      });
+      animationFrame = requestAnimationFrame(update);
+    };
+    update();
 
-      const runner = Runner.create();
-      runnerRef.current = runner;
-      Runner.run(runner, engine);
-
-      let animationFrame: number;
-      const update = () => {
-        letterBodies.forEach(({ body, el, w, h }) => {
-          el.style.transform = `translate(${body.position.x - w / 2}px, ${
-            body.position.y - h / 2
-          }px) rotate(${body.angle}rad)`;
-        });
-        animationFrame = requestAnimationFrame(update);
-      };
-      update();
-
-      // Store a cleanup callback on the engineRef itself to avoid weird scope issues
-      (engine as any).cleanup = () => {
-        cancelAnimationFrame(animationFrame);
-        Runner.stop(runner);
-        Engine.clear(engine);
-        letterBodies.forEach(({ el }) => {
-          if (el.parentNode) el.parentNode.removeChild(el);
-        });
-      };
-    }, 400);
+    // Store a cleanup callback on the engineRef itself to avoid weird scope issues
+    (engine as any).cleanup = () => {
+      cancelAnimationFrame(animationFrame);
+      Runner.stop(runner);
+      Engine.clear(engine);
+      letterBodies.forEach(({ el }) => {
+        if (el.parentNode) el.parentNode.removeChild(el);
+      });
+    };
 
     return () => {
-      clearTimeout(timeoutId);
       if (engineRef.current) {
         const engine = engineRef.current as any;
         if (engine.cleanup) engine.cleanup();

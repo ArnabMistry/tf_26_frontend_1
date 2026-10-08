@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { PhysicsText } from "./PhysicsText";
+import { HoverTilt } from "./HoverTilt";
 
 interface FooterProps {
   variant?: "purple" | "yellow";
@@ -90,66 +91,76 @@ export function Footer({ variant = "purple" }: FooterProps) {
             <path d="M 0 60 C 10 60 15 55 20 50 L 45 25 C 50 20 55 20 65 20 L 80 20 C 95 20 100 10 100 0 L 100 60 Z" />
           </svg>
 
+          {/* Top Center PhysicsText Spawn Point */}
+          <div className="absolute top-16 left-1/2 -translate-x-1/2 z-50 pointer-events-none hidden md:flex justify-center w-full">
+            <div ref={headingRef}>
+              <PhysicsText startTrigger={isVisible} />
+            </div>
+          </div>
+
           {/* Content Layout */}
           <div className="relative z-10 flex flex-col md:flex-row justify-between w-full h-full text-black">
             {/* Left Column */}
-            <div className="flex flex-col gap-10 md:w-1/3">
+            <div className="flex flex-col md:w-1/2">
               <div>
-                <div ref={headingRef} className="relative z-50 min-h-[48px]">
-                  <PhysicsText startTrigger={isVisible} />
-                </div>
-                <p className="text-xs md:text-sm font-medium mt-1 relative z-10 text-[#F44383]">
-                  ANANTA: Surpassing the Possible
+                <h2 className="font-tantra text-3xl md:text-4xl lg:text-5xl tracking-widest uppercase mb-2">TANTRAFIESTA 2026</h2>
+                <p className="text-sm md:text-base font-bold text-[#F44383]">
+                  ANANTA: SURPASSING THE POSSIBLE
                 </p>
+                <div className="h-[1px] bg-black/20 w-full md:max-w-md mt-6 mb-8"></div>
               </div>
 
               <div>
-                <h3 className="text-sm md:text-base font-bold text-black mb-3">Quick Links</h3>
-                <div className="flex flex-wrap gap-4 text-xs md:text-sm font-semibold text-black">
-                  <Link href="/" className="hover:underline">Home</Link>
-                  <Link href="/about" className="hover:underline">About</Link>
-                  <Link href="/events" className="hover:underline">Events</Link>
-                  <Link href="/contact" className="hover:underline">How to reach?</Link>
+                <h3 className="text-xs md:text-sm font-black text-black mb-4 tracking-[0.2em] uppercase">Explore</h3>
+                <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-sm font-semibold max-w-[250px]">
+                  <Link href="/" className="hover:underline border border-black/30 px-3 py-1 -ml-3">Home</Link>
+                  <Link href="/about" className="hover:underline py-1">About</Link>
+                  <Link href="/events" className="hover:underline py-1 -ml-3">Events</Link>
+                  <Link href="/gallery" className="hover:underline py-1">Gallery</Link>
                 </div>
               </div>
             </div>
 
             {/* Right Column */}
-            <div className="flex flex-col gap-10 md:w-1/3 md:items-end mt-12 md:mt-0">
-              {/* Social Icons */}
-              <div className="flex gap-2">
-                <a
-                  href="#"
-                  className="w-6 h-6 md:w-8 md:h-8 bg-[#8B4513] rounded flex items-center justify-center text-white hover:bg-[#A0522D] transition-colors"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                </a>
-                <a
-                  href="#"
-                  className="w-6 h-6 md:w-8 md:h-8 bg-[#8B4513] rounded flex items-center justify-center text-white hover:bg-[#A0522D] transition-colors"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                </a>
-                <a
-                  href="#"
-                  className="w-6 h-6 md:w-8 md:h-8 bg-[#8B4513] rounded flex items-center justify-center text-white hover:bg-[#A0522D] transition-colors"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-                </a>
-              </div>
-
-              <div className="md:text-right">
-                <h3 className="text-sm md:text-base font-bold text-black mb-3">Contact Us</h3>
-                <div className="flex flex-col gap-1 text-xs md:text-sm font-semibold text-black">
+            <div className="flex flex-col w-full md:w-1/3 items-start md:items-end mt-12 md:mt-0 text-left md:text-right">
+              {/* Mobile Separator */}
+              <div className="h-[1px] bg-black/20 w-full mb-8 md:hidden"></div>
+              
+              <div className="w-full md:w-auto">
+                <h3 className="text-xs md:text-sm font-black text-black mb-4 tracking-[0.2em] uppercase">Get in touch</h3>
+                <div className="flex flex-col gap-2 text-sm font-bold">
                   <a href="mailto:support@tantrafiesta.in" className="hover:underline">support@tantrafiesta.in</a>
-                  <a href="tel:+919992233445" className="hover:underline">+91 99922-33445</a>
+                  <a href="tel:+918604551326" className="hover:underline">+91 86045 51326</a>
+                </div>
+              </div>
+              
+              {/* Social and Button Container */}
+              <div className="flex flex-row justify-between md:flex-col items-center md:items-end w-full md:w-auto mt-8 md:mt-6">
+                {/* Social Icons */}
+                <div className="flex gap-3 justify-start md:justify-end">
+                  <a href="#" className="w-8 h-8 border border-black/30 rounded flex items-center justify-center hover:bg-black/5 transition-colors group">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black group-hover:scale-110 transition-transform"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                  </a>
+                  <a href="#" className="w-8 h-8 border border-black/30 rounded flex items-center justify-center hover:bg-black/5 transition-colors group">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black group-hover:scale-110 transition-transform"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                  </a>
+                </div>
+  
+                {/* Meet Our Developers Button */}
+                <div className="z-30 pointer-events-auto mt-0 md:mt-24">
+                  <Link 
+                    href="/developers" 
+                    className="inline-block bg-transparent border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-xs md:text-sm px-6 py-2.5 rounded-[12px] hover:bg-[#db3d79]/20 hover:border-[#f7b2c9] transition-all duration-200"
+                  >
+                    Meet Our Developers
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Center Character Image */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[240px] sm:w-[300px] md:w-[400px] z-20 pointer-events-none flex flex-col items-center">
+          <HoverTilt className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[150px] sm:w-[240px] md:w-[350px] lg:w-[400px] z-20 pointer-events-auto flex flex-col items-center" rotationIntensity={10} scaleIntensity={1.03}>
             <Image
               src="/assets/distorted_gurl.png"
               alt="Cyberpunk Mascot"
@@ -158,16 +169,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
               className="w-full h-auto object-contain drop-shadow-2xl"
               priority
             />
-          </div>
-
-          {/* Meet Our Developers Button */}
-          <Link 
-            href="/developers" 
-            className="absolute bottom-8 right-8 md:bottom-12 md:right-16 z-30 pointer-events-auto bg-[#F44383] text-white font-bold text-[10px] md:text-xs px-4 md:px-6 py-2 md:py-2.5 rounded-md shadow-lg hover:bg-[#d8356f] hover:scale-105 transition-transform tracking-wide"
-            style={{ fontFamily: '"Futura PT", sans-serif', wordSpacing: "0.15em" }}
-          >
-            Meet Our Developers
-          </Link>
+          </HoverTilt>
         </div>
       </section>
     );
@@ -203,51 +205,70 @@ export function Footer({ variant = "purple" }: FooterProps) {
             <path d="M 0 60 C 10 60 15 55 20 50 L 45 25 C 50 20 55 20 65 20 L 80 20 C 95 20 100 10 100 0 L 100 60 Z" />
           </svg>
 
+          {/* Top Center PhysicsText Spawn Point */}
+          <div className="absolute top-16 left-1/2 -translate-x-1/2 z-50 pointer-events-none hidden md:flex justify-center w-full">
+            <div ref={headingRef}>
+              <PhysicsText startTrigger={isVisible} />
+            </div>
+          </div>
+
           {/* Content Layout */}
           <div className="relative z-10 flex flex-col md:flex-row justify-between w-full h-full text-white">
             
             {/* Left Column */}
-            <div className="flex flex-col gap-10 md:w-1/3">
+            <div className="flex flex-col md:w-1/2">
               <div>
-                <div ref={headingRef} className="relative z-50 min-h-[48px]">
-                  <PhysicsText startTrigger={isVisible} />
-                </div>
-                <p className="text-xs md:text-sm font-medium mt-1 relative z-10 text-[#F44383]">
-                  ANANTA: Surpassing the Possible
+                <h2 className="font-tantra text-3xl md:text-4xl lg:text-5xl tracking-widest uppercase mb-2">TANTRAFIESTA 2026</h2>
+                <p className="text-sm md:text-base font-bold text-[#F44383]">
+                  ANANTA: SURPASSING THE POSSIBLE
                 </p>
+                <div className="h-[1px] bg-white/20 w-full md:max-w-md mt-6 mb-8"></div>
               </div>
 
               <div>
-                <h3 className="text-sm md:text-base font-bold text-[#FFFF1A] mb-3">Quick Links</h3>
-                <div className="flex flex-wrap gap-4 text-xs md:text-sm font-semibold">
-                  <Link href="/" className="hover:underline">Home</Link>
-                  <Link href="/about" className="hover:underline">About</Link>
-                  <Link href="/events" className="hover:underline">Events</Link>
-                  <Link href="/contact" className="hover:underline">How to reach?</Link>
+                <h3 className="text-xs md:text-sm font-black text-[#FFFF1A] mb-4 tracking-[0.2em] uppercase">Explore</h3>
+                <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-sm font-semibold max-w-[250px]">
+                  <Link href="/" className="hover:underline border border-white/40 px-3 py-1 -ml-3">Home</Link>
+                  <Link href="/about" className="hover:underline py-1">About</Link>
+                  <Link href="/events" className="hover:underline py-1 -ml-3">Events</Link>
+                  <Link href="/gallery" className="hover:underline py-1">Gallery</Link>
                 </div>
               </div>
             </div>
 
             {/* Right Column */}
-            <div className="flex flex-col gap-10 md:w-1/3 md:items-end mt-12 md:mt-0">
-              {/* Social Icons */}
-              <div className="flex gap-2">
-                <a href="#" className="w-6 h-6 md:w-8 md:h-8 bg-[#8B4513] rounded flex items-center justify-center text-white hover:bg-[#A0522D] transition-colors">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                </a>
-                <a href="#" className="w-6 h-6 md:w-8 md:h-8 bg-[#8B4513] rounded flex items-center justify-center text-white hover:bg-[#A0522D] transition-colors">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                </a>
-                <a href="#" className="w-6 h-6 md:w-8 md:h-8 bg-[#8B4513] rounded flex items-center justify-center text-white hover:bg-[#A0522D] transition-colors">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-                </a>
-              </div>
-
-              <div className="md:text-right">
-                <h3 className="text-sm md:text-base font-bold text-[#FFFF1A] mb-3">Contact Us</h3>
-                <div className="flex flex-col gap-1 text-xs md:text-sm font-semibold">
+            <div className="flex flex-col w-full md:w-1/3 items-start md:items-end mt-12 md:mt-0 text-left md:text-right">
+              {/* Mobile Separator */}
+              <div className="h-[1px] bg-white/20 w-full mb-8 md:hidden"></div>
+              
+              <div className="w-full md:w-auto">
+                <h3 className="text-xs md:text-sm font-black text-[#FFFF1A] mb-4 tracking-[0.2em] uppercase">Get in touch</h3>
+                <div className="flex flex-col gap-2 text-sm font-bold">
                   <a href="mailto:support@tantrafiesta.in" className="hover:underline">support@tantrafiesta.in</a>
-                  <a href="tel:+919992233445" className="hover:underline">+91 99922-33445</a>
+                  <a href="tel:+918604551326" className="hover:underline">+91 86045 51326</a>
+                </div>
+              </div>
+              
+              {/* Social and Button Container */}
+              <div className="flex flex-row justify-between md:flex-col items-center md:items-end w-full md:w-auto mt-8 md:mt-6">
+                {/* Social Icons */}
+                <div className="flex gap-3 justify-start md:justify-end">
+                  <a href="#" className="w-8 h-8 border border-white/30 rounded flex items-center justify-center hover:bg-white/10 transition-colors group">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#FFFF1A] group-hover:scale-110 transition-transform"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                  </a>
+                  <a href="#" className="w-8 h-8 border border-white/30 rounded flex items-center justify-center hover:bg-white/10 transition-colors group">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#FFFF1A] group-hover:scale-110 transition-transform"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                  </a>
+                </div>
+  
+                {/* Meet Our Developers Button */}
+                <div className="z-30 pointer-events-auto mt-0 md:mt-24">
+                  <Link 
+                    href="/developers" 
+                    className="inline-block bg-transparent border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-xs md:text-sm px-6 py-2.5 rounded-[12px] hover:bg-[#db3d79]/20 hover:border-[#f7b2c9] transition-all duration-200"
+                  >
+                    Meet Our Developers
+                  </Link>
                 </div>
               </div>
             </div>
@@ -255,7 +276,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
           </div>
 
           {/* Center Character Image */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[240px] sm:w-[300px] md:w-[400px] z-20 pointer-events-none flex flex-col items-center">
+          <HoverTilt className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[150px] sm:w-[240px] md:w-[350px] lg:w-[400px] z-20 pointer-events-auto flex flex-col items-center" rotationIntensity={10} scaleIntensity={1.03}>
             <Image
               src="/assets/distorted_gurl.png"
               alt="Cyberpunk Mascot"
@@ -264,16 +285,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
               className="w-full h-auto object-contain drop-shadow-2xl"
               priority
             />
-          </div>
-
-          {/* Meet Our Developers Button */}
-          <Link 
-            href="/developers" 
-            className="absolute bottom-8 right-8 md:bottom-12 md:right-16 z-30 pointer-events-auto bg-[#F44383] text-white font-bold text-[10px] md:text-xs px-4 md:px-6 py-2 md:py-2.5 rounded-md shadow-lg hover:bg-[#d8356f] hover:scale-105 transition-transform tracking-wide"
-            style={{ fontFamily: '"Futura PT", sans-serif', wordSpacing: "0.15em" }}
-          >
-            Meet Our Developers
-          </Link>
+          </HoverTilt>
 
         </div>
       </div>

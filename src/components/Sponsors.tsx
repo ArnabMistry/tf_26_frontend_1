@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { HoverTilt } from "./HoverTilt";
 
 const SponsorCard = () => (
   <div className="relative aspect-[4/5] w-full">
@@ -36,7 +37,7 @@ export function Sponsors() {
       <div className="w-full max-w-[1600px] bg-[#FFFF1A] rounded-t-[32px] md:rounded-t-[48px] px-4 md:px-16 pt-16 md:pt-24 pb-8 relative shadow-2xl">
         
         {/* Hovercar Image Box */}
-        <div className="absolute -top-12 md:-top-20 left-4 md:left-12 w-48 md:w-80 z-20">
+        <HoverTilt className="absolute -top-12 md:-top-20 left-4 md:left-12 w-48 md:w-80 z-20" rotationIntensity={10} scaleIntensity={1.03}>
           <Image
             src="/assets/hovercar.png"
             alt="Hovercar"
@@ -44,7 +45,7 @@ export function Sponsors() {
             height={240}
             className="w-full h-auto object-contain drop-shadow-xl"
           />
-        </div>
+        </HoverTilt>
 
         {/* Heading */}
         <h2 className="font-tantra text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-black uppercase tracking-tight mb-16 md:mb-24 text-center mt-8 md:mt-0 relative z-10">
