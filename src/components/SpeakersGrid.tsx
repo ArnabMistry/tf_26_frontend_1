@@ -1,5 +1,3 @@
-import Image from "next/image";
-import Link from "next/link";
 import { SpeakerCard, type SpeakerData } from "@/components/SpeakerCard";
 import styles from "./SpeakersGrid.module.css";
 
@@ -69,24 +67,6 @@ export function SpeakersGrid({ speakers = defaultSpeakers }: SpeakersGridProps) 
         </div>
       </section>
 
-      {/* ── Divider & Big TantraFiesta wordmark at the bottom ── */}
-      <div className={styles.wordmarkSection}>
-        <hr className={styles.bottomDivider} />
-        <Link
-          href="/"
-          aria-label="TantraFiesta home"
-          className={styles.wordmark}
-        >
-          <Image
-            src="/assets/tf_nav.png"
-            alt="TantraFiesta"
-            width={4096}
-            height={514}
-            sizes="100vw"
-            className={styles.wordmarkImage}
-          />
-        </Link>
-      </div>
     </main>
   );
 }

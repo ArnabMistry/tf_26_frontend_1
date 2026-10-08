@@ -1,5 +1,3 @@
-import Image from "next/image";
-import Link from "next/link";
 import { SponsorCard, type SponsorData } from "@/components/SponsorCard";
 import styles from "./SponsorsGrid.module.css";
 
@@ -70,21 +68,6 @@ export function SponsorsGrid({ sponsors = defaultSponsors }: SponsorsGridProps) 
         </div>
       </section>
 
-      {/* ── Big TantraFiesta wordmark at the bottom ── */}
-      <Link
-        href="/"
-        aria-label="TantraFiesta home"
-        className={styles.wordmark}
-      >
-        <Image
-          src="/assets/tf_nav.png"
-          alt="TantraFiesta"
-          width={4096}
-          height={514}
-          sizes="100vw"
-          className={styles.wordmarkImage}
-        />
-      </Link>
     </main>
   );
 }

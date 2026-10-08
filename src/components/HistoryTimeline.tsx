@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from "motion/react";
+import { getHistoryRoadPosition } from "@/lib/historyRoad";
 
 export interface TimelineItem {
   year: string;
@@ -20,36 +21,46 @@ interface HistoryTimelineProps {
 
 export function HistoryTimeline({ timelineData }: HistoryTimelineProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const dimensions = useMotionValue({ width: 1278, height: 2000, mobile: false });
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const desktop = window.matchMedia("(min-width: 768px)");
+    const measure = () => dimensions.set({ width: container.clientWidth, height: container.clientHeight, mobile: !desktop.matches });
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(container);
+    desktop.addEventListener("change", measure);
+    return () => {
+      observer.disconnect();
+      desktop.removeEventListener("change", measure);
+    };
+  }, [dimensions]);
   
   // Track scroll within the timeline container
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start center", "end center"]
+    offset: ["start 65%", "end 75%"]
   });
 
-  // Calculate car position based on scroll progress
-  // The car moves vertically down the container
-  const carY = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
-  
-  // Custom keyframes to perfectly track the painted road from the absolute top
-  // The physical road merges much further down the scroll (around 28% instead of 21%).
-  // This keeps the drone on the right branch significantly longer, preventing it from cutting the corner.
-  const carLeft = useTransform(
-    scrollYProgress,
-    [0, 0.08, 0.16, 0.24, 0.28],
-    ["112%", "96%", "79%", "62%", "52.5%"]
-  );
-  
-  // Rotate smoothly as it merges:
-  // We hold the angled rotation (-30deg to -40deg) for much longer since the branch extends further down.
-  const carRotate = useTransform(
-    scrollYProgress,
-    [0, 0.08, 0.16, 0.24, 0.28],
-    ["-25deg", "-30deg", "-40deg", "-60deg", "-90deg"]
-  );
+  // Smooth out mouse wheel / trackpad scroll steps for buttery fluid animation
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 80,
+    damping: 26,
+    restDelta: 0.001
+  });
+
+  const carPosition = useTransform(() => {
+    const { width, height, mobile } = dimensions.get();
+    return getHistoryRoadPosition(smoothProgress.get(), width, height, mobile);
+  });
+  const carY = useTransform(carPosition, (position) => position.y);
+  const carLeft = useTransform(carPosition, (position) => position.x);
+  const carRotate = useTransform(carPosition, (position) => position.rotate);
 
   return (
-    <div ref={containerRef} className="relative w-full overflow-hidden mt-8 md:-mt-32">
+    <div ref={containerRef} className="relative w-full overflow-hidden mt-8 md:mt-0">
       {/* Mobile Straight Road (Seamless Repeating, No V-fork) */}
       <div 
         className="md:hidden absolute left-0 top-0 w-[88px] h-full pointer-events-none z-0 opacity-80"
@@ -62,67 +73,61 @@ export function HistoryTimeline({ timelineData }: HistoryTimelineProps) {
         }}
       />
 
-      {/* Desktop Path Image Layer (Original Curved V-Fork) */}
-      <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 top-0 w-full min-w-[1536px] h-full pointer-events-none z-0 flex-col items-center">
-        {/* 1. Original Image (V-shape) */}
+      {/* Desktop Path Image Layer (V-Fork + Seamless Straight Road, NO mirrored distortions) */}
+      <div className="hidden md:flex absolute inset-0 w-full h-full pointer-events-none z-0 flex-col items-center" aria-hidden="true">
+        {/* 1. Original Image (V-shape fork) */}
         <div className="relative w-full flex-shrink-0 leading-none">
-          <img src="/assets/path.png" alt="Path" className="w-full h-auto block" />
+          <Image src="/assets/path.png" alt="" width={1278} height={1230} sizes="100vw" className="w-full h-auto block" />
         </div>
-        {/* 2. Mirrored Extension */}
-        <div className="relative w-full h-[600px] flex-shrink-0 overflow-hidden md:-mt-[1px]">
-          <img src="/assets/path.png" alt="" className="absolute left-0 w-full h-auto max-w-none" style={{ bottom: '100%', transform: 'scaleY(-1)', transformOrigin: 'bottom' }} />
-        </div>
-        {/* 3. Normal Extension */}
-        <div className="relative w-full h-[600px] flex-shrink-0 overflow-hidden -mt-[1px]">
-          <img src="/assets/path.png" alt="" className="absolute left-0 w-full h-auto max-w-none" style={{ bottom: '0' }} />
-        </div>
-        {/* 4. Mirrored Extension */}
-        <div className="relative w-full h-[600px] flex-shrink-0 overflow-hidden -mt-[1px]">
-          <img src="/assets/path.png" alt="" className="absolute left-0 w-full h-auto max-w-none" style={{ bottom: '100%', transform: 'scaleY(-1)', transformOrigin: 'bottom' }} />
+        {/* 2. Seamless Straight Continuation (matching exact 261/1278 road width with smooth bottom fade) */}
+        <div 
+          className="relative flex-1 w-full flex justify-center -mt-[1px]"
+          style={{
+            maskImage: "linear-gradient(to bottom, black 80%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to bottom, black 80%, transparent 100%)"
+          }}
+        >
+          <div 
+            className="h-full"
+            style={{
+              width: "calc(100% * 261 / 1278)",
+              backgroundImage: "url('/assets/path_straight.png')",
+              backgroundRepeat: "repeat-y",
+              backgroundSize: "100% auto",
+              backgroundPosition: "top center"
+            }}
+          />
         </div>
       </div>
 
-      {/* Mobile Car (Straight Down along center line x=44px) */}
-      <motion.div 
-        className="md:hidden absolute z-30 pointer-events-none"
-        style={{ top: carY, left: "44px", rotate: "-90deg", x: "-50%" }}
-      >
-        <div className="relative w-12 h-12 -translate-y-1/2">
-          <Image
-            src="/assets/drone.png"
-            alt="Drone"
-            fill
-            className="object-contain drop-shadow-[0_0_10px_rgba(231,19,125,0.6)]"
-          />
-        </div>
-      </motion.div>
-
-      {/* Desktop Car (Tracks Curve) */}
-      <motion.div 
-        className="hidden md:block absolute z-30"
-        style={{ top: carY, left: carLeft, rotate: carRotate, x: "-50%" }}
-      >
-        <div className="relative w-20 h-20 md:w-28 md:h-28 -translate-y-1/2">
-          <Image
-            src="/assets/drone.png"
-            alt="Drone"
-            fill
-            className="object-contain drop-shadow-[0_0_15px_rgba(231,19,125,0.6)]"
-          />
-        </div>
-      </motion.div>
+      {/* The road and auto share the same responsive coordinate system. */}
+      <div className="absolute inset-0 w-full h-full pointer-events-none z-30" aria-hidden="true">
+        <motion.div 
+          className="absolute pointer-events-none"
+          style={{ top: carY, left: carLeft, rotate: carRotate, x: "-50%", y: "-50%" }}
+        >
+          <div className="relative w-12 h-12 md:w-[clamp(48px,8vw,112px)] md:h-[clamp(48px,8vw,112px)]">
+            <Image
+              src="/assets/drone.png"
+              alt=""
+              fill
+              className="object-contain drop-shadow-[0_0_15px_rgba(231,19,125,0.6)]"
+            />
+          </div>
+        </motion.div>
+      </div>
 
       {/* Checkpoints / Timeline Items */}
-      <div className="relative z-10 flex flex-col items-center w-full max-w-[1200px] mx-auto gap-20 md:gap-24 pt-[180px] md:pt-[600px] pb-32 md:pb-64">
-        {timelineData.map((item, index) => (
-          <Checkpoint key={item.year} item={item} index={index} />
+      <div className="relative z-10 flex flex-col items-center w-full max-w-[1600px] mx-auto gap-20 md:gap-24 pt-[180px] md:pt-[64.2vw] pb-32 md:pb-64">
+        {timelineData.map((item) => (
+          <Checkpoint key={item.year} item={item} />
         ))}
       </div>
     </div>
   );
 }
 
-function Checkpoint({ item, index }: { item: TimelineItem; index: number }) {
+function Checkpoint({ item }: { item: TimelineItem }) {
   const itemRef = useRef<HTMLDivElement>(null);
   
   // Track scroll specifically for this checkpoint
@@ -149,7 +154,7 @@ function Checkpoint({ item, index }: { item: TimelineItem; index: number }) {
         </div>
 
         {/* Desktop View: Left Side */}
-        <div className="hidden md:flex w-[calc(50%-180px)] lg:w-[calc(50%-240px)] justify-end">
+        <div className="hidden md:flex w-[calc(50%-13vw)] justify-end">
           {item.alignment === 'left' ? (
             <TimelineContent item={item} align="left" />
           ) : (
@@ -158,7 +163,7 @@ function Checkpoint({ item, index }: { item: TimelineItem; index: number }) {
         </div>
         
         {/* Desktop View: Right Side */}
-        <div className="hidden md:flex w-[calc(50%-180px)] lg:w-[calc(50%-240px)] justify-start">
+        <div className="hidden md:flex w-[calc(50%-13vw)] justify-start">
           {item.alignment === 'right' ? (
             <TimelineContent item={item} align="right" />
           ) : (

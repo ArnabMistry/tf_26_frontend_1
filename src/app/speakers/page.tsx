@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 import { SpeakersGrid } from "@/components/SpeakersGrid";
 import { siteConfig } from "@/lib/site";
 import styles from "./page.module.css";
@@ -32,6 +33,7 @@ export default function SpeakersPage() {
       </a>
       <Navbar currentPath="/speakers" />
       <SpeakersGrid />
+      <Footer variant="yellow" />
     </div>
   );
 }

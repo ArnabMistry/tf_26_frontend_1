@@ -29,7 +29,13 @@
   gap: 1cqw;
 }
 
+.lowerWing .content {
+  /* Keep the heading below the raised inner corner of the lower card. */
+  padding-top: 5.8cqw;
+}
+
 .title {
+  min-width: 0;
   font-family: var(--font-futura, "Futura PT", "Century Gothic", sans-serif);
   font-size: clamp(2rem, 4.78cqw, 64px);
   font-weight: 600;
@@ -41,7 +47,7 @@
 
 .prize {
   flex-shrink: 0;
-  max-width: 42%;
+  max-width: 100%;
   font-family: var(--font-futura, "Futura PT", "Century Gothic", sans-serif);
   font-size: clamp(1.5rem, 3cqw, 40px);
   font-weight: 450;
@@ -49,6 +55,10 @@
   letter-spacing: 0px;
   text-transform: uppercase;
   overflow-wrap: anywhere;
+}
+
+.compactTitle {
+  font-size: clamp(1rem, 3.6cqw, 48px);
 }
 
 .description {
@@ -70,6 +80,8 @@
 }
 
 .action {
+  position: relative;
+  isolation: isolate;
   display: inline-flex;
   min-height: 2.95cqw;
   width: 48%;
@@ -77,8 +89,8 @@
   gap: 0.3em;
   border: 0;
   border-radius: 7px;
-  background: #ff2485;
-  padding: 0.35em 0.65em;
+  background: transparent;
+  padding: 0;
   color: white;
   font-family: var(--font-futura, "Futura PT", "Century Gothic", sans-serif);
   font-size: clamp(0.8rem, 1.45cqw, 1.25rem);
@@ -88,14 +100,41 @@
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  transition: background 160ms ease, box-shadow 160ms ease;
+}
+
+.action::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: #a61a61;
+  clip-path: var(--action-shape, none);
+  transform: translateY(6px);
+}
+
+.actionFace {
+  display: flex;
+  width: 100%;
+  min-height: inherit;
+  align-items: center;
+  justify-content: inherit;
+  gap: 0.3em;
+  border-radius: inherit;
+  background: #ff2485;
+  padding: 0.35em 0.65em;
+  clip-path: var(--action-shape, none);
+  transition: transform 160ms ease;
+}
+
+.actionIcon {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
 }
 
 .left .action {
-  clip-path: polygon(0 0, 100% 0, 100% 28%, 92% 100%, 0 100%);
-  /* inset pink shadow gives depth; drop-shadow adds yellow+dark outside the clip */
-  box-shadow: inset 0 -4px #a61a61;
-  filter: drop-shadow(2px 4px 0 #FFDD00) drop-shadow(2px 7px 0 #1e1250);
+  --action-shape: polygon(0 0, 100% 0, 100% 28%, 92% 100%, 0 100%);
 }
 
 .right .heading {
@@ -113,9 +152,7 @@
 
 .right .action {
   justify-content: flex-end;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 8% 100%, 0 28%);
-  box-shadow: inset 0 -4px #a61a61;
-  filter: drop-shadow(2px 4px 0 #FFDD00) drop-shadow(2px 7px 0 #1e1250);
+  --action-shape: polygon(0 0, 100% 0, 100% 100%, 8% 100%, 0 28%);
 }
 
 .center {
@@ -155,12 +192,10 @@
   width: auto;
   min-width: 16.6cqw;
   justify-content: center;
-  /* inset pink depth + small yellow bottom only — no overflow */
-  box-shadow: inset 0 -4px #a61a61, 0 5px 0 0 #FFDD00;
 }
 
-.action:hover {
-  background: #df096d;
+.action:hover:not(:disabled) .actionFace {
+  transform: translateY(-4px);
 }
 
 .action:focus-visible {
@@ -182,14 +217,21 @@
     padding: 16px 18px 14px;
   }
 
+  .lowerWing .content {
+    padding-top: max(64px, 19%);
+  }
+
   .heading {
     gap: 12px;
-    flex-wrap: wrap;
   }
 
   .title {
     font-size: clamp(1.75rem, 8cqw, 2.75rem);
     line-height: 1.15;
+  }
+
+  .compactTitle {
+    font-size: clamp(1.25rem, 6cqw, 2rem);
   }
 
   .prize {
@@ -208,8 +250,11 @@
   .action {
     min-height: 40px;
     width: 48%;
-    padding-inline: 8px;
     font-size: 0.75rem;
+  }
+
+  .actionFace {
+    padding-inline: 8px;
   }
 
   .center {
@@ -242,7 +287,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .action {
+  .actionFace {
     transition: none;
+  }
+
+  .action:hover:not(:disabled) .actionFace {
+    transform: none;
   }
 }

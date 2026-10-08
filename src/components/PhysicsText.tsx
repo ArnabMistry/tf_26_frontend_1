@@ -83,13 +83,15 @@ export function PhysicsText({ startTrigger = true }: PhysicsTextProps) {
     const width = footerRect.width;
     const height = footerRect.height;
     
-    const ground = Bodies.rectangle(width / 2, height + 50, width * 2, 100, { isStatic: true });
-    const leftWall = Bodies.rectangle(-50, height / 2, 100, height * 2, { isStatic: true });
-    const rightWall = Bodies.rectangle(width + 50, height / 2, 100, height * 2, { isStatic: true });
+    // Elevate the ground surface so the letters land inside the footer rather than protruding past the bottom edge
+    const groundY = height - 35;
+    const ground = Bodies.rectangle(width / 2, groundY + 100, width * 3, 200, { isStatic: true });
+    const leftWall = Bodies.rectangle(-50, height / 2, 100, height * 3, { isStatic: true });
+    const rightWall = Bodies.rectangle(width + 50, height / 2, 100, height * 3, { isStatic: true });
     
-    // Invisible physical ramps to match the yellow SVG corner cutouts so letters slide into the center
-    const leftChamfer = Bodies.rectangle(0, height, 300, 150, { isStatic: true, angle: Math.PI / 5 });
-    const rightChamfer = Bodies.rectangle(width, height, 300, 150, { isStatic: true, angle: -Math.PI / 5 });
+    // Physical ramps matching the corner cutouts so letters smoothly slide toward center
+    const leftChamfer = Bodies.rectangle(40, groundY, 260, 120, { isStatic: true, angle: Math.PI / 6 });
+    const rightChamfer = Bodies.rectangle(width - 40, groundY, 260, 120, { isStatic: true, angle: -Math.PI / 6 });
 
     const statics = [ground, leftWall, rightWall, leftChamfer, rightChamfer];
 

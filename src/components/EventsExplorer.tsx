@@ -2,7 +2,7 @@
 
 import { useRef, useState, type FormEvent } from "react";
 import { EventCard } from "@/components/EventCard";
-import { eventCategories, type EventListing } from "@/lib/events";
+import { eventCategories, groupEventsForLayout, type EventListing } from "@/lib/events";
 import styles from "./EventsExplorer.module.css";
 
 interface EventsExplorerProps {
@@ -23,6 +23,7 @@ export function EventsExplorer({ events, referenceContent = false }: EventsExplo
     const matchesSearch = `${event.name} ${event.description}`.toLocaleLowerCase().includes(normalizedSearch);
     return matchesSearch && (!category || event.category === category);
   });
+  const eventGroups = groupEventsForLayout(visibleEvents);
   const heading = normalizedSearch
     ? "Search Results"
     : eventCategories.find((item) => item.id === category)?.heading || (referenceContent ? "Hackathons" : "All Events");
@@ -75,8 +76,8 @@ export function EventsExplorer({ events, referenceContent = false }: EventsExplo
       </div>
 
       <div className={styles.categories} role="group" aria-label="Event categories">
-        {eventCategories.map((item, index) => (
-          <button key={`${item.id}-${index}`} type="button" className={styles.category} aria-pressed={category === item.id} onClick={() => setCategory(category === item.id ? null : item.id)}>
+        {eventCategories.map((item) => (
+          <button key={item.id} type="button" className={styles.category} aria-pressed={category === item.id} onClick={() => setCategory(category === item.id ? null : item.id)}>
             {item.label}
           </button>
         ))}
@@ -86,9 +87,19 @@ export function EventsExplorer({ events, referenceContent = false }: EventsExplo
         <h2 id="event-results-heading" ref={resultsRef} tabIndex={-1} className={styles.sectionTitle}>{heading}</h2>
         <p className="sr-only" role="status">{visibleEvents.length} {visibleEvents.length === 1 ? "event" : "events"} found{normalizedSearch ? ` for ${search}` : ""}.</p>
         {visibleEvents.length > 0 ? (
-          <div className={styles.cards}>
-            {visibleEvents.map((event, index) => (
-              <EventCard key={event.id} event={event} variant={index % 3 === 0 ? "left" : index % 3 === 1 ? "right" : "center"} onRegister={showRegistration} />
+          <div className={styles.cardGroups}>
+            {eventGroups.map((group) => (
+              <div key={group[0].id} className={`${styles.cards} ${group.length === 4 ? styles.evenCards : ""} ${group.length === 1 ? styles.singleCard : ""}`}>
+                {group.map((event, index) => (
+                  <EventCard
+                    key={event.id}
+                    event={event}
+                    variant={group.length === 1 || (group.length === 3 && index === 2) ? "center" : index % 2 === 0 ? "left" : "right"}
+                    lowerWing={group.length === 4 && index >= 2}
+                    onRegister={showRegistration}
+                  />
+                ))}
+              </div>
             ))}
           </div>
         ) : (

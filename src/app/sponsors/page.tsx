@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 import { SponsorsGrid } from "@/components/SponsorsGrid";
 import { siteConfig } from "@/lib/site";
 import styles from "./page.module.css";
@@ -32,6 +33,7 @@ export default function SponsorsPage() {
       </a>
       <Navbar currentPath="/sponsors" />
       <SponsorsGrid />
+      <Footer variant="yellow" />
     </div>
   );
 }

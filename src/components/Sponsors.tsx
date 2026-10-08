@@ -34,7 +34,7 @@ const SponsorCard = () => (
 export function Sponsors() {
   return (
     <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat pt-12 md:pt-20 flex flex-col items-center px-4 md:px-8">
-      <div className="w-full max-w-[1600px] bg-[#FFFF1A] rounded-t-[32px] md:rounded-t-[48px] px-4 md:px-16 pt-16 md:pt-24 pb-8 relative shadow-2xl">
+      <div className="w-full max-w-[1600px] bg-[#FFFF1A] rounded-t-[32px] md:rounded-t-[48px] px-4 md:px-16 pt-16 md:pt-24 pb-8 relative">
         
         {/* Hovercar Image Box */}
         <HoverTilt className="absolute -top-12 md:-top-20 left-4 md:left-12 w-48 md:w-80 z-20" rotationIntensity={10} scaleIntensity={1.03}>

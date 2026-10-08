@@ -22,14 +22,11 @@ export function StarLoader() {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    if (isVisible) {
-      document.body.style.overflow = "hidden";
-      window.scrollTo(0, 0);
-    } else {
-      document.body.style.overflow = "";
-    }
+    if (!isVisible) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = previousOverflow;
     };
   }, [isVisible]);
 
@@ -43,7 +40,8 @@ export function StarLoader() {
           transition={{ duration: 0.5 }}
         >
           <svg
-            className="w-full h-full absolute inset-0 pointer-events-auto"
+            className="w-full h-full absolute inset-0 pointer-events-none"
+            aria-hidden="true"
             viewBox="-1000 -1000 2000 2000"
             preserveAspectRatio="xMidYMid slice"
           >
@@ -56,6 +54,11 @@ export function StarLoader() {
                   transition={{ 
                     scale: { duration: 2.5, ease: [0.7, 0, 1, 1], delay: 0.2 }, 
                     rotate: { duration: 3.5, ease: "linear" } 
+                  }}
+                  onUpdate={({ scale }) => {
+                    // At 30×, the star's inner radius covers every viewport corner.
+                    // Release scrolling when the reveal finishes, not the longer rotation.
+                    if (typeof scale === "number" && scale >= 30) setIsVisible(false);
                   }}
                   onAnimationComplete={() => setIsVisible(false)}
                 >

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { EventsExplorer } from "@/components/EventsExplorer";
-import { BrandFooter } from "@/components/BrandFooter";
+import { Footer } from "@/components/Footer";
 import { fetchPublicEvents } from "@/lib/api/events";
 import { referenceEvents, toEventListing } from "@/lib/events";
 import styles from "./page.module.css";
@@ -38,7 +38,7 @@ export default async function EventsPage() {
       <a href="#events-content" className={styles.skipLink}>Skip to events</a>
       <Navbar currentPath="/events" registrationHref="/register" />
       <EventsExplorer events={events} referenceContent={!hasBackend} />
-      <BrandFooter />
+      <Footer variant="yellow" />
     </div>
   );
 }

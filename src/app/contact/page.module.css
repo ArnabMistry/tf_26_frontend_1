@@ -1,0 +1,278 @@
+.page {
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  color: #fff;
+  background-color: #241a4c;
+}
+
+.page::before {
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  background: #241a4c url("/assets/bg.png") center / cover no-repeat;
+  pointer-events: none;
+}
+
+.main {
+  width: min(100% - 64px, 1210px);
+  margin-inline: auto;
+  padding-top: 64px;
+  padding-bottom: 260px;
+}
+
+.title {
+  margin: 0 0 76px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: clamp(64px, 7.5vw, 108px);
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.contacts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 60px 14%;
+  padding-inline: 40px;
+  font-family: var(--font-futura);
+}
+
+.contactCard {
+  border-radius: 16px;
+  background: #ec367b;
+  padding: 12px 16px 22px;
+  text-align: center;
+  box-shadow: 6px 8px 0 rgb(0 0 0 / 18%);
+}
+
+.contactCard h2 {
+  font-size: clamp(44px, 5.3vw, 76px);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.role {
+  margin-bottom: 12px;
+  color: #ffd1e3;
+  font-size: 26px;
+  line-height: 1.2;
+}
+
+.phone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 19px;
+}
+
+.phone svg {
+  width: 20px;
+  height: 20px;
+}
+
+.contactCard a {
+  font-size: 19px;
+  overflow-wrap: anywhere;
+}
+
+.page a:focus-visible {
+  outline: 2px solid #ffff1a;
+  outline-offset: 5px;
+}
+
+.contactCard a:hover,
+.autoContact a:hover {
+  text-decoration: underline;
+}
+
+.directions {
+  margin-top: 160px;
+  scroll-margin-top: 32px;
+}
+
+.sectionTitle {
+  margin-bottom: 70px;
+  font-family: var(--font-futura);
+  font-size: clamp(30px, 4.2vw, 60px);
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.directionGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 40px 60px;
+}
+
+.infoCard {
+  border: 1px solid #a73567;
+  border-radius: 16px;
+  background: #000;
+  padding: 24px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #eee;
+}
+
+.infoCard h2,
+.infoCard h3 {
+  margin-bottom: 14px;
+  text-align: center;
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.infoCard ul {
+  padding-left: 21px;
+  list-style-type: disc;
+}
+
+.infoCard li,
+.autoContact p {
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.infoCard li + li {
+  margin-top: 6px;
+}
+
+.timetable {
+  max-width: 896px;
+  margin: 120px auto 0;
+}
+
+.timetable h2 {
+  margin-bottom: 22px;
+}
+
+.timetable table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 17px;
+}
+
+.timetable th,
+.timetable td {
+  height: 45px;
+  border: 1px solid #a0a0a0;
+  padding: 8px;
+}
+
+.timetable thead th {
+  background: #ec367b;
+  font-weight: 700;
+}
+
+.timetable tbody th {
+  font-weight: 400;
+}
+
+.autoContact {
+  max-width: 578px;
+  margin: 96px auto 0;
+  text-align: center;
+  box-shadow: 0 8px 12px rgb(231 19 125 / 25%);
+}
+
+.autoContact h2 {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 767px) {
+  .main {
+    width: min(100% - 40px, 600px);
+    padding-top: 36px;
+    padding-bottom: 140px;
+  }
+
+  .title {
+    margin-bottom: 44px;
+  }
+
+  .contacts {
+    gap: 24px;
+    padding-inline: 0;
+  }
+
+  .contactCard {
+    padding: 18px 12px;
+  }
+
+  .contactCard h2 {
+    font-size: 44px;
+  }
+
+  .role {
+    font-size: 21px;
+  }
+
+  .phone,
+  .contactCard a {
+    font-size: 14px;
+  }
+
+  .directions {
+    margin-top: 80px;
+  }
+
+  .sectionTitle {
+    margin-bottom: 36px;
+  }
+
+  .directionGrid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .infoCard {
+    padding: 22px 18px;
+  }
+
+  .infoCard h2,
+  .infoCard h3 {
+    font-size: 19px;
+  }
+
+  .infoCard li,
+  .autoContact p {
+    font-size: 15px;
+  }
+
+  .timetable {
+    margin-top: 64px;
+    padding: 20px 12px;
+  }
+
+  .timetable table {
+    font-size: 14px;
+  }
+
+  .timetable th,
+  .timetable td {
+    height: 38px;
+    padding: 6px;
+  }
+
+  .autoContact {
+    margin-top: 56px;
+  }
+}
+
+@media (max-width: 479px) {
+  .contacts {
+    grid-template-columns: 1fr;
+  }
+
+  .contactCard {
+    width: 100%;
+    max-width: 360px;
+    margin-inline: auto;
+  }
+}

@@ -117,6 +117,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
                   <Link href="/about" className="hover:underline py-1">About</Link>
                   <Link href="/events" className="hover:underline py-1 -ml-3">Events</Link>
                   <Link href="/gallery" className="hover:underline py-1">Gallery</Link>
+                  <Link href="/contact" className="hover:underline py-1 -ml-3 col-span-2">How to reach?</Link>
                 </div>
               </div>
             </div>
@@ -150,7 +151,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
                 <div className="z-30 pointer-events-auto mt-0 md:mt-24">
                   <Link 
                     href="/developers" 
-                    className="inline-block bg-transparent border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-xs md:text-sm px-6 py-2.5 rounded-[12px] hover:bg-[#db3d79]/20 hover:border-[#f7b2c9] transition-all duration-200"
+                    className="inline-block bg-[#241A4C] border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-xs md:text-sm px-6 py-2.5 rounded-[12px] hover:bg-[#2b1f5e] hover:border-[#f7b2c9] transition-all duration-200 shadow-md"
                   >
                     Meet Our Developers
                   </Link>
@@ -180,7 +181,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
     <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat pt-0 pb-12 md:pb-20 flex flex-col items-center px-4 md:px-8">
       
       {/* Bottom half of Yellow Container */}
-      <div className="relative w-full max-w-[1600px] bg-[#FFFF1A] rounded-b-[32px] md:rounded-b-[48px] px-2 md:px-8 pt-12 md:pt-16 pb-4 md:pb-8 shadow-2xl">
+      <div className="relative w-full max-w-[1600px] bg-[#FFFF1A] rounded-b-[32px] md:rounded-b-[48px] px-2 md:px-8 pt-12 md:pt-16 pb-4 md:pb-8">
 
         {/* Purple Inner Container */}
         <div ref={containerRef} className="footer-bounds relative w-full bg-[#2b1f5e] rounded-[24px] md:rounded-[32px] shadow-inner pt-16 pb-48 md:pt-20 md:pb-64 px-8 md:px-12 mx-auto text-white min-h-[400px] md:min-h-[500px]">
@@ -232,6 +233,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
                   <Link href="/about" className="hover:underline py-1">About</Link>
                   <Link href="/events" className="hover:underline py-1 -ml-3">Events</Link>
                   <Link href="/gallery" className="hover:underline py-1">Gallery</Link>
+                  <Link href="/contact" className="hover:underline py-1 -ml-3 col-span-2">How to reach?</Link>
                 </div>
               </div>
             </div>
@@ -265,7 +267,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
                 <div className="z-30 pointer-events-auto mt-0 md:mt-24">
                   <Link 
                     href="/developers" 
-                    className="inline-block bg-transparent border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-xs md:text-sm px-6 py-2.5 rounded-[12px] hover:bg-[#db3d79]/20 hover:border-[#f7b2c9] transition-all duration-200"
+                    className="inline-block bg-[#241A4C] border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-xs md:text-sm px-6 py-2.5 rounded-[12px] hover:bg-[#2b1f5e] hover:border-[#f7b2c9] transition-all duration-200 shadow-md"
                   >
                     Meet Our Developers
                   </Link>

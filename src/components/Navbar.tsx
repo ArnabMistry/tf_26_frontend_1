@@ -43,12 +43,12 @@ export function Navbar({
             alt="TantraFiesta"
             width={320}
             height={40}
-            className="hidden h-6 w-auto object-contain sm:block md:h-7"
+            className="hidden h-6 w-auto object-contain sm:block lg:h-7"
           />
         </Link>
 
         {/* ── Desktop links ── */}
-        <div className="hidden items-center gap-6 text-sm font-bold uppercase tracking-wider text-white md:flex">
+        <div className="hidden items-center gap-3 text-xs font-bold uppercase tracking-wider text-white md:flex lg:gap-6 lg:text-sm">
           {navigation.map(({ href, label }) => {
             const isActive = currentPath === href;
             return (

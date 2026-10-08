@@ -7,7 +7,8 @@
   width: 100%;
   max-width: 1440px;
   margin-inline: auto;
-  /* no fixed padding-bottom — wordmark fills the bottom */
+  flex: 1 0 auto;
+  padding-bottom: clamp(96px, 10vw, 144px);
 }
 
 /* ── Page title toolbar ── */
@@ -108,9 +109,6 @@
     min-width: 0;
   }
 
-  .explorer {
-    padding-bottom: 48px;
-  }
 }
 
 @media (max-width: 420px) {
@@ -129,26 +127,5 @@
 
   .col:nth-child(3) > * {
     flex: none;
-  }
-}
-
-/* ── Bottom wordmark ── */
-.wordmark {
-  display: block;
-  margin: 200px 8px 0;
-  text-decoration: none;
-  padding-bottom: 48px;
-}
-
-.wordmarkImage {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-@media (max-width: 700px) {
-  .wordmark {
-    margin: 96px 6px 0;
-    padding-bottom: 32px;
   }
 }
