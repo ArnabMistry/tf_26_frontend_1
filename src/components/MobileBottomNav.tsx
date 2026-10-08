@@ -28,9 +28,9 @@ export function MobileBottomNav({
   return (
     <nav
       aria-label="Mobile navigation"
-      className="fixed bottom-0 left-0 right-0 z-[900] md:hidden"
+      className="fixed left-2 right-2 z-[900] mx-auto max-w-[440px] md:hidden min-[360px]:left-4 min-[360px]:right-4"
       style={{
-        paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        bottom: "calc(16px + env(safe-area-inset-bottom, 0px))",
       }}
     >
       {/* Expanded items popover — grows upward from the + button */}
@@ -41,7 +41,7 @@ export function MobileBottomNav({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.95 }}
             transition={{ type: "spring", damping: 24, stiffness: 300, mass: 0.8 }}
-            className="absolute right-4 bottom-[calc(100%+12px)] flex flex-col items-end justify-center gap-5 rounded-2xl px-6 py-5 shadow-2xl"
+            className="absolute right-0 bottom-[calc(100%+12px)] flex flex-col items-end justify-center gap-5 rounded-2xl px-6 py-5 shadow-2xl"
             style={{
               background:
                 "linear-gradient(to top, rgba(26, 18, 80, 0.98), rgba(26, 18, 80, 0.90))",
@@ -87,13 +87,13 @@ export function MobileBottomNav({
 
       {/* Main bottom bar */}
       <div
-        className="flex items-center justify-between gap-1 px-4 py-2.5"
+        className="flex items-center justify-between gap-1 rounded-2xl px-4 py-2.5 shadow-2xl shadow-black/50"
         style={{
           background:
             "linear-gradient(to top, rgba(26, 18, 80, 0.98), rgba(26, 18, 80, 0.92))",
           backdropFilter: "blur(16px)",
           WebkitBackdropFilter: "blur(16px)",
-          borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+          border: "1px solid rgba(255, 255, 255, 0.12)",
         }}
       >
         {/* Register Now CTA */}
