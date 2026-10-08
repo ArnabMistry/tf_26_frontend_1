@@ -9,9 +9,21 @@ import styles from "./SponsorsGrid.module.css";
 --------------------------------------------------------------------------- */
 const referenceSponsor = (id: string): SponsorData => ({ id, name: `Sponsor ${id}` });
 
-const defaultSponsors: SponsorData[] = Array.from({ length: 12 }, (_, i) =>
-  referenceSponsor(String(i + 1))
-);
+/* Demo card showing the filled-in state: logo, tier label, and the
+   hover breakout. `logoUrl` points at a festival asset as a stand-in until a
+   real sponsor logo is supplied. */
+const demoSponsor: SponsorData = {
+  id: "demo",
+  name: "Demo Sponsor",
+  tier: "platinum",
+  logoUrl: "/developers/arnab_mistry_pic.webp",
+  href: "https://example.com",
+};
+
+const defaultSponsors: SponsorData[] = [
+  demoSponsor,
+  ...Array.from({ length: 11 }, (_, i) => referenceSponsor(String(i + 1))),
+];
 
 /** Distributes a flat array across 3 columns in round-robin order */
 function toColumns<T>(items: T[]): [T[], T[], T[]] {
