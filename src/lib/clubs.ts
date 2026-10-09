@@ -42,6 +42,7 @@ export const KNOWN_CLUBS: readonly ClubInfo[] = [
     tagline: "Algorithms & Scientific Computing",
     description:
       "Special interest group exploring computational biology, bioinformatics, and deep algorithmic challenges.",
+    logo: "/assets/club-logos/crispr.png",
   },
   {
     id: "probe",
@@ -86,6 +87,7 @@ export const KNOWN_CLUBS: readonly ClubInfo[] = [
     tagline: "Google Developer Group",
     description:
       "Google Developer Group on Campus IIIT Nagpur, running developer-focused build events and hackathons spanning AI, hardware, and open technologies.",
+    logo: "/assets/club-logos/gdg.png",
   },
   {
     id: "synergy",
@@ -94,6 +96,7 @@ export const KNOWN_CLUBS: readonly ClubInfo[] = [
     tagline: "Esports & Gaming",
     description:
       "Gaming and esports society hosting competitive tournaments across titles including Valorant, BGMI, Free Fire, Call of Duty, Clash Royale, and chess.",
+    logo: "/assets/club-logos/synergy.png",
   },
   {
     id: "iotics",

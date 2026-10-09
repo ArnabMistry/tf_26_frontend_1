@@ -226,6 +226,30 @@
     gap: 12px;
   }
 
+  /* Cards stack in a single column on mobile, so the desktop left/right
+     pairing has nothing to mirror against — render every card the same way. */
+  .right .shape {
+    transform: scaleX(-1);
+  }
+
+  .right .heading {
+    flex-direction: row;
+  }
+
+  .right .title,
+  .right .description {
+    text-align: left;
+  }
+
+  .right .actionRow {
+    justify-content: flex-start;
+  }
+
+  .right .action {
+    justify-content: flex-start;
+    --action-shape: polygon(0 0, 100% 0, 100% 28%, 92% 100%, 0 100%);
+  }
+
   .title {
     font-size: clamp(1.75rem, 8cqw, 2.75rem);
     line-height: 1.15;
