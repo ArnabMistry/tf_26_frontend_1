@@ -73,7 +73,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
             </svg>
           </div>
 
-          {/* Bottom Cutouts (Cyberpunk slanted chamfers cut into yellow container matching #241A4C page bg) */}
+          {/* Bottom Cutouts */}
           <svg
             className="absolute bottom-[-1px] left-[-1px] w-[120px] md:w-[160px] h-[48px] md:h-[64px] text-[#241A4C] z-20 pointer-events-none"
             viewBox="0 0 100 60"
@@ -122,58 +122,44 @@ export function Footer({ variant = "purple" }: FooterProps) {
               </div>
             </div>
 
-            {/* Right Column */}
+            {/* Right Column — always stacked on mobile */}
             <div className="flex flex-col w-full md:w-1/3 items-start md:items-end mt-12 md:mt-0 text-left md:text-right">
               {/* Mobile Separator */}
               <div className="h-[1px] bg-black/20 w-full mb-8 md:hidden"></div>
-              
-              <div className="flex flex-row justify-between items-start w-full md:flex-col md:items-end">
-                <div className="w-auto">
-                  <h3 className="text-xs md:text-sm font-black text-black mb-4 tracking-[0.2em] uppercase">Get in touch</h3>
-                  <div className="flex flex-col gap-2 text-sm font-bold">
-                    <a href="mailto:support@tantrafiesta.in" className="hover:underline">support@tantrafiesta.in</a>
-                    <a href="tel:+918604551326" className="hover:underline">+91 86045 51326</a>
-                  </div>
-                </div>
 
-                {/* Meet Our Developers Button (Mobile: top right) */}
-                <div className="z-30 pointer-events-auto md:hidden">
-                  <Link 
-                    href="/developers" 
-                    className="inline-block bg-[#241A4C] border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-[11px] px-3.5 py-1.5 rounded-[10px] hover:bg-[#2b1f5e] hover:border-[#f7b2c9] transition-all duration-200 shadow-md active:scale-[0.97]"
-                  >
-                    Meet Our Developers
-                  </Link>
+              {/* Get in Touch */}
+              <div className="w-full md:w-auto">
+                <h3 className="text-xs md:text-sm font-black text-black mb-4 tracking-[0.2em] uppercase">Get in touch</h3>
+                <div className="flex flex-col gap-2 text-sm font-bold">
+                  <a href="mailto:support@tantrafiesta.in" className="hover:underline break-all">support@tantrafiesta.in</a>
+                  <a href="tel:+918604551326" className="hover:underline">+91 86045 51326</a>
                 </div>
               </div>
-              
-              {/* Social and Button Container */}
-              <div className="flex flex-row justify-between md:flex-col items-center md:items-end w-full md:w-auto mt-6 md:mt-6">
-                {/* Social Icons */}
-                <div className="flex gap-3 justify-start md:justify-end">
-                  <a href="#" className="w-8 h-8 border border-black/30 rounded flex items-center justify-center hover:bg-black/5 transition-colors group">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black group-hover:scale-110 transition-transform"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                  </a>
-                  <a href="#" className="w-8 h-8 border border-black/30 rounded flex items-center justify-center hover:bg-black/5 transition-colors group">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black group-hover:scale-110 transition-transform"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-                  </a>
-                </div>
-  
-                {/* Meet Our Developers Button (Desktop) */}
-                <div className="z-30 pointer-events-auto hidden md:block md:mt-24">
-                  <Link 
-                    href="/developers" 
-                    className="inline-block bg-[#241A4C] border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-xs px-4 py-2 rounded-[10px] hover:bg-[#2b1f5e] hover:border-[#f7b2c9] transition-all duration-200 shadow-md active:scale-[0.97]"
-                  >
-                    Meet Our Developers
-                  </Link>
-                </div>
+
+              {/* Social Icons */}
+              <div className="flex gap-3 mt-6 justify-start md:justify-end relative z-30">
+                <a href="#" className="w-8 h-8 border border-black/30 rounded flex items-center justify-center hover:bg-black/5 transition-colors group">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black group-hover:scale-110 transition-transform"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                </a>
+                <a href="#" className="w-8 h-8 border border-black/30 rounded flex items-center justify-center hover:bg-black/5 transition-colors group">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black group-hover:scale-110 transition-transform"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                </a>
+              </div>
+
+              {/* Meet Our Developers Button */}
+              <div className="z-30 pointer-events-auto mt-4 md:mt-24">
+                <Link
+                  href="/developers"
+                  className="inline-block bg-[#241A4C] border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-[11px] sm:text-xs px-3.5 py-1.5 rounded-[10px] hover:bg-[#2b1f5e] hover:border-[#f7b2c9] transition-all duration-200 shadow-md active:scale-[0.97] whitespace-nowrap"
+                >
+                  Meet Our Developers
+                </Link>
               </div>
             </div>
           </div>
 
           {/* Center Character Image */}
-          <HoverTilt className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[220px] sm:w-[280px] md:w-[350px] lg:w-[400px] z-20 pointer-events-auto flex flex-col items-center" rotationIntensity={10} scaleIntensity={1.03}>
+          <HoverTilt className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[160px] xs:w-[190px] sm:w-[250px] md:w-[350px] lg:w-[400px] z-10 pointer-events-auto flex flex-col items-center" rotationIntensity={10} scaleIntensity={1.03}>
             <Image
               src="/assets/distorted_gurl.png"
               alt="Cyberpunk Mascot"
@@ -250,59 +236,45 @@ export function Footer({ variant = "purple" }: FooterProps) {
               </div>
             </div>
 
-            {/* Right Column */}
+            {/* Right Column — always stacked, never side-by-side on mobile */}
             <div className="flex flex-col w-full md:w-1/3 items-start md:items-end mt-12 md:mt-0 text-left md:text-right">
               {/* Mobile Separator */}
               <div className="h-[1px] bg-white/20 w-full mb-8 md:hidden"></div>
-              
-              <div className="flex flex-row justify-between items-start w-full md:flex-col md:items-end">
-                <div className="w-auto">
-                  <h3 className="text-xs md:text-sm font-black text-[#FFFF1A] mb-4 tracking-[0.2em] uppercase">Get in touch</h3>
-                  <div className="flex flex-col gap-2 text-sm font-bold">
-                    <a href="mailto:support@tantrafiesta.in" className="hover:underline">support@tantrafiesta.in</a>
-                    <a href="tel:+918604551326" className="hover:underline">+91 86045 51326</a>
-                  </div>
-                </div>
 
-                {/* Meet Our Developers Button (Mobile: top right) */}
-                <div className="z-30 pointer-events-auto md:hidden">
-                  <Link 
-                    href="/developers" 
-                    className="inline-block bg-[#241A4C] border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-[11px] px-3.5 py-1.5 rounded-[10px] hover:bg-[#2b1f5e] hover:border-[#f7b2c9] transition-all duration-200 shadow-md active:scale-[0.97]"
-                  >
-                    Meet Our Developers
-                  </Link>
+              {/* Get in Touch */}
+              <div className="w-full md:w-auto">
+                <h3 className="text-xs md:text-sm font-black text-[#FFFF1A] mb-4 tracking-[0.2em] uppercase">Get in touch</h3>
+                <div className="flex flex-col gap-2 text-sm font-bold">
+                  <a href="mailto:support@tantrafiesta.in" className="hover:underline break-all">support@tantrafiesta.in</a>
+                  <a href="tel:+918604551326" className="hover:underline">+91 86045 51326</a>
                 </div>
               </div>
-              
-              {/* Social and Button Container */}
-              <div className="flex flex-row justify-between md:flex-col items-center md:items-end w-full md:w-auto mt-6 md:mt-6">
-                {/* Social Icons */}
-                <div className="flex gap-3 justify-start md:justify-end">
-                  <a href="#" className="w-8 h-8 border border-white/30 rounded flex items-center justify-center hover:bg-white/10 transition-colors group">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#FFFF1A] group-hover:scale-110 transition-transform"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                  </a>
-                  <a href="#" className="w-8 h-8 border border-white/30 rounded flex items-center justify-center hover:bg-white/10 transition-colors group">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#FFFF1A] group-hover:scale-110 transition-transform"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-                  </a>
-                </div>
-  
-                {/* Meet Our Developers Button (Desktop) */}
-                <div className="z-30 pointer-events-auto hidden md:block md:mt-24">
-                  <Link 
-                    href="/developers" 
-                    className="inline-block bg-[#241A4C] border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-xs px-4 py-2 rounded-[10px] hover:bg-[#2b1f5e] hover:border-[#f7b2c9] transition-all duration-200 shadow-md active:scale-[0.97]"
-                  >
-                    Meet Our Developers
-                  </Link>
-                </div>
+
+              {/* Social Icons — stacked below contact, high z-index to stay above mascot */}
+              <div className="flex gap-3 mt-6 justify-start md:justify-end relative z-30">
+                <a href="#" className="w-8 h-8 border border-white/30 rounded flex items-center justify-center hover:bg-white/10 transition-colors group">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#FFFF1A] group-hover:scale-110 transition-transform"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                </a>
+                <a href="#" className="w-8 h-8 border border-white/30 rounded flex items-center justify-center hover:bg-white/10 transition-colors group">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#FFFF1A] group-hover:scale-110 transition-transform"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                </a>
+              </div>
+
+              {/* Meet Our Developers Button — always on its own row */}
+              <div className="z-30 pointer-events-auto mt-4 md:mt-24">
+                <Link
+                  href="/developers"
+                  className="inline-block bg-[#241A4C] border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-[11px] sm:text-xs px-3.5 py-1.5 rounded-[10px] hover:bg-[#2b1f5e] hover:border-[#f7b2c9] transition-all duration-200 shadow-md active:scale-[0.97] whitespace-nowrap"
+                >
+                  Meet Our Developers
+                </Link>
               </div>
             </div>
 
           </div>
 
-          {/* Center Character Image */}
-          <HoverTilt className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[220px] sm:w-[280px] md:w-[350px] lg:w-[400px] z-20 pointer-events-auto flex flex-col items-center" rotationIntensity={10} scaleIntensity={1.03}>
+          {/* Center Character Image — smaller on xs so it doesn't overflow */}
+          <HoverTilt className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[160px] xs:w-[190px] sm:w-[250px] md:w-[350px] lg:w-[400px] z-10 pointer-events-auto flex flex-col items-center" rotationIntensity={10} scaleIntensity={1.03}>
             <Image
               src="/assets/distorted_gurl.png"
               alt="Cyberpunk Mascot"

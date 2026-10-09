@@ -10,16 +10,18 @@
 
 @font-face {
   font-family: 'TantraFont';
-  src: url('/fonts/font_bold');
+  src: url('/fonts/font_bold') format('opentype');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'TantraRegular';
-  src: url('/fonts/font_regular');
+  src: url('/fonts/font_regular') format('opentype');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 :root {

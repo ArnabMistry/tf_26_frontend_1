@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
 const generateStarPath = (points: number, rOuter: number, rInner: number) => {
@@ -20,6 +20,13 @@ const generateStarPath = (points: number, rOuter: number, rInner: number) => {
 
 export function StarLoader() {
   const [isVisible, setIsVisible] = useState(true);
+
+  // Fallback: force-dismiss after 3.5s in case onAnimationComplete
+  // doesn't fire (e.g. Firefox + SVG motion.g inside <defs>/<mask>)
+  useEffect(() => {
+    const id = setTimeout(() => setIsVisible(false), 3500);
+    return () => clearTimeout(id);
+  }, []);
 
   return (
     <AnimatePresence>
@@ -45,11 +52,6 @@ export function StarLoader() {
                   transition={{ 
                     scale: { duration: 2.5, ease: [0.7, 0, 1, 1], delay: 0.2 }, 
                     rotate: { duration: 3.5, ease: "linear" } 
-                  }}
-                  onUpdate={({ scale }) => {
-                    // At 30×, the star's inner radius covers every viewport corner.
-                    // Release scrolling when the reveal finishes, not the longer rotation.
-                    if (typeof scale === "number" && scale >= 30) setIsVisible(false);
                   }}
                   onAnimationComplete={() => setIsVisible(false)}
                 >

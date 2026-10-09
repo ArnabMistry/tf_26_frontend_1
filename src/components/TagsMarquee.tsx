@@ -37,15 +37,15 @@ const PillCard = ({ item }: { item: typeof row1[0] }) => (
     <div className="relative w-full h-full transition-transform duration-500 ease-in-out [transform-style:preserve-3d] group-hover:[transform:rotateX(180deg)]">
       
       {/* Front Face */}
-      <div className={`${item.bgFront} ${item.fgFront} px-6 md:px-8 py-2 md:py-3 rounded-xl md:rounded-2xl shadow-lg border-b-4 border-black/20 flex items-center justify-center [backface-visibility:hidden]`}>
-        <span className="font-tantra text-4xl sm:text-5xl md:text-6xl lg:text-[72px] tracking-tight uppercase leading-none block [text-shadow:1px_2px_0px_rgba(0,0,0,0.25)]">
+      <div className={`${item.bgFront} ${item.fgFront} px-8 sm:px-10 md:px-12 lg:px-14 py-3 sm:py-4 md:py-5 lg:py-6 rounded-2xl md:rounded-3xl shadow-xl border-b-[5px] md:border-b-8 border-black/20 flex items-center justify-center [backface-visibility:hidden]`}>
+        <span className="font-tantra text-5xl sm:text-6xl md:text-7xl lg:text-[84px] xl:text-[96px] tracking-tight uppercase leading-none block [text-shadow:1px_2px_0px_rgba(0,0,0,0.25)]">
           {item.text}
         </span>
       </div>
 
       {/* Back Face */}
-      <div className={`${item.bgBack} ${item.fgBack} absolute inset-0 px-6 md:px-8 py-2 md:py-3 rounded-xl md:rounded-2xl shadow-lg border-b-4 border-black/20 flex items-center justify-center [backface-visibility:hidden] [transform:rotateX(180deg)]`}>
-        <span className="font-tantra text-4xl sm:text-5xl md:text-6xl lg:text-[72px] tracking-tight uppercase leading-none block [text-shadow:1px_2px_0px_rgba(0,0,0,0.25)]">
+      <div className={`${item.bgBack} ${item.fgBack} absolute inset-0 px-8 sm:px-10 md:px-12 lg:px-14 py-3 sm:py-4 md:py-5 lg:py-6 rounded-2xl md:rounded-3xl shadow-xl border-b-[5px] md:border-b-8 border-black/20 flex items-center justify-center [backface-visibility:hidden] [transform:rotateX(180deg)]`}>
+        <span className="font-tantra text-5xl sm:text-6xl md:text-7xl lg:text-[84px] xl:text-[96px] tracking-tight uppercase leading-none block [text-shadow:1px_2px_0px_rgba(0,0,0,0.25)]">
           {item.text}
         </span>
       </div>
@@ -56,11 +56,14 @@ const PillCard = ({ item }: { item: typeof row1[0] }) => (
 
 export function TagsMarquee() {
   return (
-    <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat py-12 md:py-20 overflow-hidden flex flex-col gap-4 md:gap-6">
+    <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat py-14 md:py-24 overflow-hidden flex flex-col gap-6 md:gap-8">
       
       {/* Row 1 */}
       <div className="flex w-full overflow-hidden select-none">
-        <div className="animate-marquee flex gap-4 md:gap-6 items-center whitespace-nowrap pr-4 md:pr-6">
+        <div 
+          className="animate-marquee flex gap-6 md:gap-8 items-center whitespace-nowrap pr-6 md:pr-8"
+          style={{ animationDuration: "80s" }}
+        >
           {makeSeamlessTrack(row1).map((item, idx) => (
             <PillCard key={idx} item={item} />
           ))}
@@ -70,8 +73,8 @@ export function TagsMarquee() {
       {/* Row 2 (Reverse) */}
       <div className="flex w-full overflow-hidden select-none">
         <div 
-          className="animate-marquee-reverse flex gap-4 md:gap-6 items-center whitespace-nowrap pr-4 md:pr-6"
-          style={{ animationDelay: "-10s" }}
+          className="animate-marquee-reverse flex gap-6 md:gap-8 items-center whitespace-nowrap pr-6 md:pr-8"
+          style={{ animationDuration: "80s", animationDelay: "-25s" }}
         >
           {makeSeamlessTrack(row2).map((item, idx) => (
             <PillCard key={idx} item={item} />
@@ -82,8 +85,8 @@ export function TagsMarquee() {
       {/* Row 3 */}
       <div className="flex w-full overflow-hidden select-none">
         <div 
-          className="animate-marquee flex gap-4 md:gap-6 items-center whitespace-nowrap pr-4 md:pr-6"
-          style={{ animationDelay: "-18s" }}
+          className="animate-marquee flex gap-6 md:gap-8 items-center whitespace-nowrap pr-6 md:pr-8"
+          style={{ animationDuration: "80s", animationDelay: "-45s" }}
         >
           {makeSeamlessTrack(row3).map((item, idx) => (
             <PillCard key={idx} item={item} />

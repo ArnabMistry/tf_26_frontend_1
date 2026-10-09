@@ -10,18 +10,18 @@ export function AboutSection() {
         {/* About TantraFiesta Card */}
         <div className="relative bg-[#FFFF1A] rounded-2xl md:rounded-[28px] p-6 sm:p-8 md:p-12 shadow-2xl border-2 border-black/10">
           {/* Character Illustration */}
-          <HoverTilt className="hidden lg:block absolute -right-6 -top-12 xl:-right-10 xl:-top-16 w-80 xl:w-96 pointer-events-auto z-20" rotationIntensity={10} scaleIntensity={1.03}>
+          <HoverTilt className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 h-full max-h-[105%] pointer-events-auto z-20 items-center justify-center" rotationIntensity={8} scaleIntensity={1.03}>
             <Image
               src="/assets/gurl.png"
               alt="TantraFiesta Mascot"
               width={450}
               height={550}
-              className="w-full h-auto object-contain drop-shadow-xl"
+              className="h-full w-auto object-contain drop-shadow-xl select-none pointer-events-none"
               priority
             />
           </HoverTilt>
 
-          <div className="relative z-10 lg:max-w-[65%] xl:max-w-[70%]">
+          <div className="relative z-10 lg:max-w-[72%] xl:max-w-[76%]">
             <h2 className="font-tantra text-3xl sm:text-5xl md:text-6xl text-black uppercase tracking-tight mb-6">
               ABOUT TANTRAFIESTA
             </h2>
