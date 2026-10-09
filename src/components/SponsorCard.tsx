@@ -131,7 +131,8 @@ export function SponsorCard({ sponsor, variant = "left" }: SponsorCardProps) {
 
           {tierLabel && (
             <p className={styles.label}>
-              {tierLabel} <span className={styles.labelAccent}>Sponsor</span>
+              <span>{tierLabel}</span>
+              <span className={styles.labelAccent}>Sponsor</span>
             </p>
           )}
         </div>
