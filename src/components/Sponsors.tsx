@@ -38,7 +38,7 @@ const SponsorCard = ({ sponsor }: { sponsor: { name: string, image: string, bgCo
     <div className="relative aspect-[4/5] w-full rounded-2xl md:rounded-none group hover:scale-105 transition-transform duration-300">
       {/* Mobile background */}
       <div 
-        className="absolute inset-0 rounded-2xl md:hidden"
+        className="absolute inset-0 rounded-2xl md:hidden border border-black/30"
         style={{ backgroundColor: sponsor.bgColor }}
       />
       {/* Desktop SVG background */}
@@ -46,8 +46,8 @@ const SponsorCard = ({ sponsor }: { sponsor: { name: string, image: string, bgCo
         className="absolute inset-0 w-full h-full hidden md:block" 
         viewBox="0 0 100 125" 
         preserveAspectRatio="none"
-        stroke="rgba(0,0,0,0.85)"
-        strokeWidth="2.5"
+        stroke="rgba(0,0,0,0.3)"
+        strokeWidth="1"
         strokeLinejoin="round"
         strokeLinecap="round"
         vectorEffect="non-scaling-stroke"
