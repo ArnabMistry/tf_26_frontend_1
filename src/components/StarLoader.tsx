@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
 const generateStarPath = (points: number, rOuter: number, rInner: number) => {
@@ -20,15 +20,6 @@ const generateStarPath = (points: number, rOuter: number, rInner: number) => {
 
 export function StarLoader() {
   const [isVisible, setIsVisible] = useState(true);
-
-  useEffect(() => {
-    if (!isVisible) return;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [isVisible]);
 
   return (
     <AnimatePresence>
