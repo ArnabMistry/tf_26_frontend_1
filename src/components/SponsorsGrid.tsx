@@ -42,7 +42,7 @@ export function SponsorsGrid({ sponsors = defaultSponsors }: SponsorsGridProps) 
     <main className={styles.explorer} id="sponsors-content">
       {/* ── Page title ── */}
       <div className={styles.toolbar}>
-        <h1 className={styles.pageTitle}>Sponsors</h1>
+        <h1 className="font-tantra text-[101.489px] text-white uppercase tracking-normal drop-shadow-md leading-none">SPONSORS</h1>
       </div>
 
       {/* ── 3-column staggered sponsor grid ── */}

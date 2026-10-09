@@ -60,10 +60,10 @@ export default function AboutPage() {
 
       {/* === THE ORIGIN SECTION === */}
       <div className="relative z-10 flex flex-col items-center w-full px-4 md:px-8 pt-12 pb-16 max-w-5xl mx-auto">
-        <h2 className="font-tantra text-4xl md:text-6xl text-white uppercase tracking-widest w-full text-left mb-8 drop-shadow-md">
+        <h2 className="font-tantra text-[101.489px] text-white uppercase tracking-normal w-full text-left mb-8 drop-shadow-md leading-none">
           THE ORIGIN
         </h2>
-        
+
         <div className="flex flex-col gap-6 w-full">
           {/* ABOUT IIIT NAGPUR */}
           <div className="bg-[#FFFF1A] text-black rounded-3xl p-6 md:p-10 shadow-lg border-2 border-black/10">
@@ -110,25 +110,25 @@ export default function AboutPage() {
           STATISTICS
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 w-full max-w-3xl mx-auto">
-          
+
           {/* Stat Card 1 */}
           <div className="bg-[#594DD0] rounded-3xl p-8 flex flex-col items-center justify-center border-b-[12px] border-[#403598] shadow-2xl aspect-square md:aspect-auto md:h-[280px] transform transition-transform hover:scale-105">
             <h3 className="font-sans font-black text-6xl text-[#FFC812] drop-shadow-md mb-2">1.3 M</h3>
-            <p className="text-[#FFC812] text-center font-bold tracking-wide text-lg md:text-xl leading-snug">Impressions on<br/>Unstop</p>
+            <p className="text-[#FFC812] text-center font-bold tracking-wide text-lg md:text-xl leading-snug">Impressions on<br />Unstop</p>
           </div>
-          
+
           {/* Stat Card 2 */}
           <div className="bg-[#97D813] rounded-3xl p-8 flex flex-col items-center justify-center border-b-[12px] border-[#6DA20C] shadow-2xl aspect-square md:aspect-auto md:h-[280px] transform transition-transform hover:scale-105">
             <h3 className="font-sans font-black text-6xl text-[#097275] drop-shadow-md mb-2">1.3 M</h3>
-            <p className="text-[#097275] text-center font-bold tracking-wide text-lg md:text-xl leading-snug">Impressions on<br/>Unstop</p>
+            <p className="text-[#097275] text-center font-bold tracking-wide text-lg md:text-xl leading-snug">Impressions on<br />Unstop</p>
           </div>
-          
+
           {/* Stat Card 3 */}
           <div className="bg-[#F06C00] rounded-3xl p-8 flex flex-col items-center justify-center border-b-[12px] border-[#BD5400] shadow-2xl aspect-square md:aspect-auto md:h-[280px] transform transition-transform hover:scale-105">
             <h3 className="font-sans font-black text-6xl text-white drop-shadow-md mb-2">1.3 M</h3>
-            <p className="text-white text-center font-bold tracking-wide text-lg md:text-xl leading-snug">Impressions on<br/>Unstop</p>
+            <p className="text-white text-center font-bold tracking-wide text-lg md:text-xl leading-snug">Impressions on<br />Unstop</p>
           </div>
-          
+
         </div>
       </div>
 
@@ -146,10 +146,10 @@ export default function AboutPage() {
         {/* Timeline Section */}
         <HistoryTimeline timelineData={timelineData} />
       </div>
-      
+
       {/* === HIGHLIGHTS SECTION === */}
       <div className="relative z-10 flex flex-col items-center w-full px-4 md:px-8 py-20 max-w-6xl mx-auto gap-16 md:gap-24">
-        
+
         {/* Row 1 */}
         <div className="flex flex-col md:flex-row items-stretch gap-6 md:gap-12 w-full min-h-[400px]">
           {/* Yellow Card - Left */}
@@ -168,7 +168,7 @@ export default function AboutPage() {
               </Link>
             </div>
           </div>
-          
+
           {/* Green Capsule - Right */}
           <div className="flex-[1.2] bg-[#97D813] rounded-[100px] md:rounded-[200px] min-h-[300px] shadow-xl order-1 md:order-2">
             {/* Placeholder for Video/Image */}
@@ -193,7 +193,7 @@ export default function AboutPage() {
               </Link>
             </div>
           </div>
-          
+
           {/* Green Capsule - Left */}
           <div className="flex-[1.2] bg-[#97D813] rounded-[100px] md:rounded-[200px] min-h-[300px] shadow-xl order-1 md:order-2">
             {/* Placeholder for Video/Image */}

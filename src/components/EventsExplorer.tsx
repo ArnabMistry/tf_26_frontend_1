@@ -48,7 +48,7 @@ export function EventsExplorer({ events, referenceContent = false }: EventsExplo
   return (
     <main className={styles.explorer} id="events-content">
       <div className={styles.toolbar}>
-        <h1 className={styles.pageTitle}>Events</h1>
+        <h1 className="font-tantra text-[101.489px] text-white uppercase tracking-normal drop-shadow-md leading-none">EVENTS</h1>
         <div className={styles.controls}>
           <form role="search" aria-label="Search events" className={styles.searchForm} onSubmit={handleSearch}>
             <label htmlFor="event-search" className="sr-only">Search for an event</label>
