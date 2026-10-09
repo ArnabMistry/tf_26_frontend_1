@@ -64,7 +64,7 @@ export function MobileBottomNav({
                   <Link
                     href={item.href}
                     aria-current={isActive ? "page" : undefined}
-                    className="block rounded-sm px-1 py-1 text-sm font-bold uppercase tracking-wider transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b]"
+                    className="block rounded-sm px-1 py-1 text-[15px] font-bold uppercase tracking-wider transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b]"
                     style={{
                       color: isActive ? "#FFFF1A" : "#e0dce8",
                     }}
@@ -100,7 +100,7 @@ export function MobileBottomNav({
         <Link
           href={registrationHref}
           onClick={() => setIsExpanded(false)}
-          className="shrink-0 rounded-lg bg-[#E7137D] px-4 py-2.5 text-[11px] font-bold uppercase tracking-wider text-white transition-all duration-200 hover:bg-[#c60f69] hover:shadow-lg hover:shadow-[#E7137D]/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b] active:scale-[0.97]"
+          className="shrink-0 rounded-lg bg-[#E7137D] px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-white transition-all duration-200 hover:bg-[#c60f69] hover:shadow-lg hover:shadow-[#E7137D]/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b] active:scale-[0.97]"
         >
           Register Now
         </Link>
@@ -109,7 +109,7 @@ export function MobileBottomNav({
         <Link
           href={primaryItems[0].href}
           aria-current={currentPath === primaryItems[0].href ? "page" : undefined}
-          className="shrink-0 rounded-sm px-1 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b] min-[360px]:text-xs"
+          className="shrink-0 rounded-sm px-1 py-1.5 text-[12px] font-bold uppercase tracking-wider transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b] min-[360px]:text-[13px]"
           style={{
             color: currentPath === primaryItems[0].href ? "#FFFF1A" : "#e0dce8",
           }}
@@ -128,7 +128,7 @@ export function MobileBottomNav({
         <Link
           href={primaryItems[1].href}
           aria-current={currentPath === primaryItems[1].href ? "page" : undefined}
-          className="shrink-0 rounded-sm px-1 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b] min-[360px]:text-xs"
+          className="shrink-0 rounded-sm px-1 py-1.5 text-[12px] font-bold uppercase tracking-wider transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b] min-[360px]:text-[13px]"
           style={{
             color: currentPath === primaryItems[1].href ? "#FFFF1A" : "#e0dce8",
           }}
