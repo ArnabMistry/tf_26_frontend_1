@@ -148,12 +148,12 @@ export default function AboutPage() {
       </div>
 
       {/* === HIGHLIGHTS SECTION === */}
-      <div className="relative z-10 flex flex-col items-center w-full px-4 md:px-8 py-20 max-w-6xl mx-auto gap-16 md:gap-24">
+      <div className="relative z-10 flex flex-col items-center w-full px-4 md:px-10 lg:px-16 pt-8 md:pt-12 pb-24 max-w-[1800px] mx-auto gap-16 md:gap-24">
 
         {/* Row 1 */}
-        <div className="flex flex-col md:flex-row items-stretch gap-6 md:gap-12 w-full min-h-[400px]">
+        <div className="flex flex-col md:flex-row items-stretch gap-6 md:gap-12 lg:gap-16 xl:gap-20 w-full min-h-[400px] md:min-h-[500px] lg:min-h-[600px]">
           {/* Yellow Card - Left */}
-          <div className="flex-1 bg-[#FFFF1A] rounded-[32px] p-8 md:p-12 flex flex-col items-start justify-between text-black shadow-xl order-2 md:order-1">
+          <div className="flex-1 md:flex-[0.6] bg-[#FFFF1A] rounded-[32px] p-8 md:p-12 lg:p-16 flex flex-col items-start justify-between text-black shadow-xl order-2 md:order-1">
             <div>
               <h3 className="font-sans font-black text-5xl md:text-6xl lg:text-[72px] leading-[0.9] tracking-tight mb-8">
                 Last Year<br />Highlight&apos;s
@@ -170,15 +170,15 @@ export default function AboutPage() {
           </div>
 
           {/* Green Capsule - Right */}
-          <div className="flex-[1.2] bg-[#97D813] rounded-[100px] md:rounded-[200px] min-h-[300px] shadow-xl order-1 md:order-2">
+          <div className="flex-1 md:flex-[1.4] bg-[#97D813] rounded-[100px] md:[border-radius:45%_/_50%] min-h-[300px] md:min-h-0 shadow-xl order-1 md:order-2">
             {/* Placeholder for Video/Image */}
           </div>
         </div>
 
         {/* Row 2 */}
-        <div className="flex flex-col md:flex-row-reverse items-stretch gap-6 md:gap-12 w-full min-h-[400px]">
+        <div className="flex flex-col md:flex-row-reverse items-stretch gap-6 md:gap-12 lg:gap-16 xl:gap-20 w-full min-h-[400px] md:min-h-[500px] lg:min-h-[600px]">
           {/* Yellow Card - Right */}
-          <div className="flex-1 bg-[#FFFF1A] rounded-[32px] p-8 md:p-12 flex flex-col items-start justify-between text-black shadow-xl order-2 md:order-1">
+          <div className="flex-1 md:flex-[0.6] bg-[#FFFF1A] rounded-[32px] p-8 md:p-12 lg:p-16 flex flex-col items-start justify-between text-black shadow-xl order-2 md:order-1">
             <div>
               <h3 className="font-sans font-black text-5xl md:text-6xl lg:text-[72px] leading-[0.9] tracking-tight mb-8">
                 Last Year<br />Highlight&apos;s
@@ -195,7 +195,7 @@ export default function AboutPage() {
           </div>
 
           {/* Green Capsule - Left */}
-          <div className="flex-[1.2] bg-[#97D813] rounded-[100px] md:rounded-[200px] min-h-[300px] shadow-xl order-1 md:order-2">
+          <div className="flex-1 md:flex-[1.4] bg-[#97D813] rounded-[100px] md:[border-radius:45%_/_50%] min-h-[300px] md:min-h-0 shadow-xl order-1 md:order-2">
             {/* Placeholder for Video/Image */}
           </div>
         </div>
