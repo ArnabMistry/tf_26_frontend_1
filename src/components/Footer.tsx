@@ -112,12 +112,12 @@ export function Footer({ variant = "purple" }: FooterProps) {
 
               <div>
                 <h3 className="text-xs md:text-sm font-black text-black mb-4 tracking-[0.2em] uppercase">Explore</h3>
-                <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-sm font-semibold max-w-[250px]">
-                  <Link href="/" className="hover:underline border border-black/30 px-3 py-1 -ml-3">Home</Link>
-                  <Link href="/about" className="hover:underline py-1">About</Link>
-                  <Link href="/events" className="hover:underline py-1 -ml-3">Events</Link>
-                  <Link href="/gallery" className="hover:underline py-1">Gallery</Link>
-                  <Link href="/contact" className="hover:underline py-1 -ml-3 col-span-2">How to reach?</Link>
+                <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-sm font-semibold max-w-[250px] text-gray-600">
+                  <Link href="/" className="hover:text-black hover:underline py-1 transition-colors">Home</Link>
+                  <Link href="/about" className="hover:text-black hover:underline py-1 transition-colors">About</Link>
+                  <Link href="/events" className="hover:text-black hover:underline py-1 transition-colors">Events</Link>
+                  <Link href="/gallery" className="hover:text-black hover:underline py-1 transition-colors">Gallery</Link>
+                  <Link href="/contact" className="hover:text-black hover:underline py-1 transition-colors col-span-2">How to reach?</Link>
                 </div>
               </div>
             </div>
@@ -151,7 +151,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
                 <div className="z-30 pointer-events-auto mt-0 md:mt-24">
                   <Link 
                     href="/developers" 
-                    className="inline-block bg-[#241A4C] border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-xs md:text-sm px-6 py-2.5 rounded-[12px] hover:bg-[#2b1f5e] hover:border-[#f7b2c9] transition-all duration-200 shadow-md"
+                    className="inline-block bg-[#241A4C] border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-[11px] md:text-xs px-3.5 md:px-4 py-1.5 md:py-2 rounded-[10px] hover:bg-[#2b1f5e] hover:border-[#f7b2c9] transition-all duration-200 shadow-md active:scale-[0.97]"
                   >
                     Meet Our Developers
                   </Link>
@@ -161,7 +161,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
           </div>
 
           {/* Center Character Image */}
-          <HoverTilt className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[150px] sm:w-[240px] md:w-[350px] lg:w-[400px] z-20 pointer-events-auto flex flex-col items-center" rotationIntensity={10} scaleIntensity={1.03}>
+          <HoverTilt className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[220px] sm:w-[280px] md:w-[350px] lg:w-[400px] z-20 pointer-events-auto flex flex-col items-center" rotationIntensity={10} scaleIntensity={1.03}>
             <Image
               src="/assets/distorted_gurl.png"
               alt="Cyberpunk Mascot"
@@ -228,12 +228,12 @@ export function Footer({ variant = "purple" }: FooterProps) {
 
               <div>
                 <h3 className="text-xs md:text-sm font-black text-[#FFFF1A] mb-4 tracking-[0.2em] uppercase">Explore</h3>
-                <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-sm font-semibold max-w-[250px]">
-                  <Link href="/" className="hover:underline border border-white/40 px-3 py-1 -ml-3">Home</Link>
-                  <Link href="/about" className="hover:underline py-1">About</Link>
-                  <Link href="/events" className="hover:underline py-1 -ml-3">Events</Link>
-                  <Link href="/gallery" className="hover:underline py-1">Gallery</Link>
-                  <Link href="/contact" className="hover:underline py-1 -ml-3 col-span-2">How to reach?</Link>
+                <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-sm font-semibold max-w-[250px] text-gray-300">
+                  <Link href="/" className="hover:text-white hover:underline py-1 transition-colors">Home</Link>
+                  <Link href="/about" className="hover:text-white hover:underline py-1 transition-colors">About</Link>
+                  <Link href="/events" className="hover:text-white hover:underline py-1 transition-colors">Events</Link>
+                  <Link href="/gallery" className="hover:text-white hover:underline py-1 transition-colors">Gallery</Link>
+                  <Link href="/contact" className="hover:text-white hover:underline py-1 transition-colors col-span-2">How to reach?</Link>
                 </div>
               </div>
             </div>
@@ -267,7 +267,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
                 <div className="z-30 pointer-events-auto mt-0 md:mt-24">
                   <Link 
                     href="/developers" 
-                    className="inline-block bg-[#241A4C] border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-xs md:text-sm px-6 py-2.5 rounded-[12px] hover:bg-[#2b1f5e] hover:border-[#f7b2c9] transition-all duration-200 shadow-md"
+                    className="inline-block bg-[#241A4C] border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-[11px] md:text-xs px-3.5 md:px-4 py-1.5 md:py-2 rounded-[10px] hover:bg-[#2b1f5e] hover:border-[#f7b2c9] transition-all duration-200 shadow-md active:scale-[0.97]"
                   >
                     Meet Our Developers
                   </Link>
@@ -278,7 +278,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
           </div>
 
           {/* Center Character Image */}
-          <HoverTilt className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[150px] sm:w-[240px] md:w-[350px] lg:w-[400px] z-20 pointer-events-auto flex flex-col items-center" rotationIntensity={10} scaleIntensity={1.03}>
+          <HoverTilt className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[220px] sm:w-[280px] md:w-[350px] lg:w-[400px] z-20 pointer-events-auto flex flex-col items-center" rotationIntensity={10} scaleIntensity={1.03}>
             <Image
               src="/assets/distorted_gurl.png"
               alt="Cyberpunk Mascot"

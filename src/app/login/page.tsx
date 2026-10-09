@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Navbar } from "@/components/Navbar";
 import { LoginForm } from "@/components/auth/LoginForm";
+import { HoverTilt } from "@/components/HoverTilt";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -46,16 +47,20 @@ export default function LoginPage() {
 
           {/* Right Column: Robot Mascot Graphic */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end items-end mt-4 lg:mt-0">
-            <div className="relative w-[220px] min-[380px]:w-[260px] sm:w-[320px] md:w-[360px] lg:w-[375px] max-w-full drop-shadow-[0_20px_35px_rgba(0,0,0,0.5)]">
+            <HoverTilt
+              className="relative w-[220px] min-[380px]:w-[260px] sm:w-[320px] md:w-[360px] lg:w-[375px] max-w-full drop-shadow-[0_20px_35px_rgba(0,0,0,0.5)] pointer-events-auto"
+              rotationIntensity={10}
+              scaleIntensity={1.03}
+            >
               <Image
                 src="/assets/robot.png"
                 alt="TantraFiesta Mascot Robot"
                 width={375}
                 height={563}
                 priority
-                className="w-full h-auto object-contain select-none pointer-events-none transition-transform duration-300 hover:scale-102"
+                className="w-full h-auto object-contain select-none pointer-events-none"
               />
-            </div>
+            </HoverTilt>
           </div>
         </div>
       </main>

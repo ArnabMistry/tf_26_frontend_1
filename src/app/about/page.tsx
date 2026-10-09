@@ -204,7 +204,7 @@ export default function AboutPage() {
 
       {/* === FOOTER === */}
       <div className="relative z-20">
-        <Footer />
+        <Footer variant="yellow" />
       </div>
     </div>
   );
