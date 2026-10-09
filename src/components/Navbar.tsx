@@ -1,3 +1,6 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { MobileBottomNav } from "./MobileBottomNav";
@@ -19,12 +22,54 @@ export function Navbar({
   currentPath,
   registrationHref = "/register",
 }: NavbarProps) {
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // If at the top, always show
+      if (currentScrollY < 50) {
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY) {
+        // Scrolling down
+        setIsVisible(false);
+      } else {
+        // Scrolling up
+        setIsVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
   return (
     <>
+      {/* Placeholder to preserve layout on desktop when navbar becomes fixed */}
+      <div className="hidden h-[72px] md:block" />
+
       <nav
         aria-label="Main navigation"
-        className="relative z-30 mx-auto flex w-full items-center justify-between gap-4 px-6 py-4 text-white lg:px-12"
+        className={`relative z-30 mx-auto flex w-full items-center justify-between gap-4 px-6 py-4 text-white lg:px-12 md:fixed md:left-0 md:right-0 md:top-0 md:z-50 md:w-full md:rounded-2xl transition-transform duration-300 ${
+          isVisible ? "md:translate-y-0" : "md:-translate-y-[150%]"
+        }`}
       >
+        {/* Desktop/Tablet Background (Hidden on mobile) */}
+        <div
+          className="absolute inset-0 -z-10 hidden rounded-2xl shadow-2xl shadow-black/50 md:block"
+          style={{
+            background:
+              "linear-gradient(to top, rgba(26, 18, 80, 0.98), rgba(26, 18, 80, 0.92))",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            border: "1px solid rgba(255, 255, 255, 0.12)",
+          }}
+        />
+
         {/* ── Logo ── */}
         <Link
           href="/"
