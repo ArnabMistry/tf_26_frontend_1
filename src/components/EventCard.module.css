@@ -282,32 +282,47 @@
     padding-inline: 8px;
   }
 
+  /* The centered/trio variant stands out from a 2-column desktop grid on
+     purpose, but in a single mobile column that just makes it look like a
+     different, broken card — render it exactly like every other card. */
   .center {
     grid-column: auto;
     width: 100%;
-    min-height: 290px;
+    min-height: 265px;
     margin-top: 0;
+    text-align: left;
   }
 
   .center .content {
-    padding: 24px 25px 16px;
+    align-items: flex-start;
+    padding: 16px 18px 14px;
   }
 
-  .center .title {
-    font-size: clamp(1.65rem, 7.5cqw, 2.6rem);
+  .center .heading {
+    justify-content: space-between;
   }
 
   .center .description {
-    margin-top: 12px;
-    padding-bottom: 12px;
+    max-width: 98%;
+    margin-top: 14px;
+    padding-bottom: 24px;
   }
 
   .center .prize {
-    margin-top: 6px;
+    max-width: 100%;
+    margin-top: 0;
+  }
+
+  .center .actionRow {
+    justify-content: flex-start;
+    width: 100%;
   }
 
   .center .action {
-    min-width: 180px;
+    width: 48%;
+    min-width: 0;
+    justify-content: flex-start;
+    --action-shape: polygon(0 0, 100% 0, 100% 28%, 92% 100%, 0 100%);
   }
 }
 
