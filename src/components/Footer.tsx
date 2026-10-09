@@ -127,16 +127,28 @@ export function Footer({ variant = "purple" }: FooterProps) {
               {/* Mobile Separator */}
               <div className="h-[1px] bg-black/20 w-full mb-8 md:hidden"></div>
               
-              <div className="w-full md:w-auto">
-                <h3 className="text-xs md:text-sm font-black text-black mb-4 tracking-[0.2em] uppercase">Get in touch</h3>
-                <div className="flex flex-col gap-2 text-sm font-bold">
-                  <a href="mailto:support@tantrafiesta.in" className="hover:underline">support@tantrafiesta.in</a>
-                  <a href="tel:+918604551326" className="hover:underline">+91 86045 51326</a>
+              <div className="flex flex-row justify-between items-start w-full md:flex-col md:items-end">
+                <div className="w-auto">
+                  <h3 className="text-xs md:text-sm font-black text-black mb-4 tracking-[0.2em] uppercase">Get in touch</h3>
+                  <div className="flex flex-col gap-2 text-sm font-bold">
+                    <a href="mailto:support@tantrafiesta.in" className="hover:underline">support@tantrafiesta.in</a>
+                    <a href="tel:+918604551326" className="hover:underline">+91 86045 51326</a>
+                  </div>
+                </div>
+
+                {/* Meet Our Developers Button (Mobile: top right) */}
+                <div className="z-30 pointer-events-auto md:hidden">
+                  <Link 
+                    href="/developers" 
+                    className="inline-block bg-[#241A4C] border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-[11px] px-3.5 py-1.5 rounded-[10px] hover:bg-[#2b1f5e] hover:border-[#f7b2c9] transition-all duration-200 shadow-md active:scale-[0.97]"
+                  >
+                    Meet Our Developers
+                  </Link>
                 </div>
               </div>
               
               {/* Social and Button Container */}
-              <div className="flex flex-row justify-between md:flex-col items-center md:items-end w-full md:w-auto mt-8 md:mt-6">
+              <div className="flex flex-row justify-between md:flex-col items-center md:items-end w-full md:w-auto mt-6 md:mt-6">
                 {/* Social Icons */}
                 <div className="flex gap-3 justify-start md:justify-end">
                   <a href="#" className="w-8 h-8 border border-black/30 rounded flex items-center justify-center hover:bg-black/5 transition-colors group">
@@ -147,11 +159,11 @@ export function Footer({ variant = "purple" }: FooterProps) {
                   </a>
                 </div>
   
-                {/* Meet Our Developers Button */}
-                <div className="z-30 pointer-events-auto mt-0 md:mt-24">
+                {/* Meet Our Developers Button (Desktop) */}
+                <div className="z-30 pointer-events-auto hidden md:block md:mt-24">
                   <Link 
                     href="/developers" 
-                    className="inline-block bg-[#241A4C] border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-[11px] md:text-xs px-3.5 md:px-4 py-1.5 md:py-2 rounded-[10px] hover:bg-[#2b1f5e] hover:border-[#f7b2c9] transition-all duration-200 shadow-md active:scale-[0.97]"
+                    className="inline-block bg-[#241A4C] border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-xs px-4 py-2 rounded-[10px] hover:bg-[#2b1f5e] hover:border-[#f7b2c9] transition-all duration-200 shadow-md active:scale-[0.97]"
                   >
                     Meet Our Developers
                   </Link>
@@ -243,16 +255,28 @@ export function Footer({ variant = "purple" }: FooterProps) {
               {/* Mobile Separator */}
               <div className="h-[1px] bg-white/20 w-full mb-8 md:hidden"></div>
               
-              <div className="w-full md:w-auto">
-                <h3 className="text-xs md:text-sm font-black text-[#FFFF1A] mb-4 tracking-[0.2em] uppercase">Get in touch</h3>
-                <div className="flex flex-col gap-2 text-sm font-bold">
-                  <a href="mailto:support@tantrafiesta.in" className="hover:underline">support@tantrafiesta.in</a>
-                  <a href="tel:+918604551326" className="hover:underline">+91 86045 51326</a>
+              <div className="flex flex-row justify-between items-start w-full md:flex-col md:items-end">
+                <div className="w-auto">
+                  <h3 className="text-xs md:text-sm font-black text-[#FFFF1A] mb-4 tracking-[0.2em] uppercase">Get in touch</h3>
+                  <div className="flex flex-col gap-2 text-sm font-bold">
+                    <a href="mailto:support@tantrafiesta.in" className="hover:underline">support@tantrafiesta.in</a>
+                    <a href="tel:+918604551326" className="hover:underline">+91 86045 51326</a>
+                  </div>
+                </div>
+
+                {/* Meet Our Developers Button (Mobile: top right) */}
+                <div className="z-30 pointer-events-auto md:hidden">
+                  <Link 
+                    href="/developers" 
+                    className="inline-block bg-[#241A4C] border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-[11px] px-3.5 py-1.5 rounded-[10px] hover:bg-[#2b1f5e] hover:border-[#f7b2c9] transition-all duration-200 shadow-md active:scale-[0.97]"
+                  >
+                    Meet Our Developers
+                  </Link>
                 </div>
               </div>
               
               {/* Social and Button Container */}
-              <div className="flex flex-row justify-between md:flex-col items-center md:items-end w-full md:w-auto mt-8 md:mt-6">
+              <div className="flex flex-row justify-between md:flex-col items-center md:items-end w-full md:w-auto mt-6 md:mt-6">
                 {/* Social Icons */}
                 <div className="flex gap-3 justify-start md:justify-end">
                   <a href="#" className="w-8 h-8 border border-white/30 rounded flex items-center justify-center hover:bg-white/10 transition-colors group">
@@ -263,11 +287,11 @@ export function Footer({ variant = "purple" }: FooterProps) {
                   </a>
                 </div>
   
-                {/* Meet Our Developers Button */}
-                <div className="z-30 pointer-events-auto mt-0 md:mt-24">
+                {/* Meet Our Developers Button (Desktop) */}
+                <div className="z-30 pointer-events-auto hidden md:block md:mt-24">
                   <Link 
                     href="/developers" 
-                    className="inline-block bg-[#241A4C] border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-[11px] md:text-xs px-3.5 md:px-4 py-1.5 md:py-2 rounded-[10px] hover:bg-[#2b1f5e] hover:border-[#f7b2c9] transition-all duration-200 shadow-md active:scale-[0.97]"
+                    className="inline-block bg-[#241A4C] border-[1.5px] border-[#db3d79] text-[#f7b2c9] font-bold text-xs px-4 py-2 rounded-[10px] hover:bg-[#2b1f5e] hover:border-[#f7b2c9] transition-all duration-200 shadow-md active:scale-[0.97]"
                   >
                     Meet Our Developers
                   </Link>

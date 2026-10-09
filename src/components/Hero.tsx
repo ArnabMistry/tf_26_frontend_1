@@ -31,9 +31,9 @@ export function Hero() {
 
         {/* Date and Location */}
         <div className="z-20 flex flex-col items-center justify-center text-center drop-shadow-md pb-10" style={{ fontFamily: '"Futura PT", sans-serif' }}>
-          <div className="text-5xl md:text-8xl lg:text-[128px] font-bold italic leading-none uppercase tracking-tight">
-            <span className="text-[#E7137D]">25-26 </span>
-            <span className="text-white">OCTOBER 2026</span>
+          <div className="text-5xl md:text-8xl lg:text-[128px] font-bold leading-none uppercase tracking-tight">
+            <span className="text-[#E7137D] not-italic">23-24 </span>
+            <span className="text-white italic">OCTOBER</span>
           </div>
           <div className="text-5xl md:text-8xl lg:text-[128px] font-bold italic leading-none uppercase tracking-tight text-[#E7137D] mt-2 md:mt-4">
             IIIT NAGPUR
