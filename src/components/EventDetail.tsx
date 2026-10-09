@@ -3,8 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useId, useRef, useState } from "react";
+import { getClubLogo } from "@/lib/clubs";
 import type { EventDetail as EventDetailData } from "@/lib/eventDetails";
 import styles from "./EventDetail.module.css";
+
+type ClubRef = EventDetailData["clubs"][number];
+
+function joinClubNames(clubs: ClubRef[]): string {
+  return clubs.map((c) => c.name).join(" & ");
+}
 
 const TABS = [
   { id: "descriptions", label: "Descriptions" },
@@ -51,12 +58,21 @@ export function EventDetail({ event }: EventDetailProps) {
           <h1 className={styles.title}>{event.name}</h1>
           <p className={styles.club}>
             <span className="sr-only">Organized by </span>
-            <Link href={`/clubs/${event.club.slug}`} className={styles.clubLink}>
-              {event.club.name}
-            </Link>
+            {event.clubs.map((club, index) => (
+              <span key={club.slug}>
+                {index > 0 && <span aria-hidden="true"> &amp; </span>}
+                <Link href={`/clubs/${club.slug}`} className={styles.clubLink}>
+                  {club.name}
+                </Link>
+              </span>
+            ))}
           </p>
         </div>
-        <ClubMark name={event.club.name} />
+        <div className={styles.marks}>
+          {event.clubs.map((club) => (
+            <ClubMark key={club.slug} club={club} />
+          ))}
+        </div>
       </header>
 
       <div className={styles.tabs} role="tablist" aria-label={`${event.name} information`}>
@@ -97,7 +113,7 @@ export function EventDetail({ event }: EventDetailProps) {
             ) : (
               <Tba
                 title="Details coming soon"
-                text={`${event.club.name} is still putting together the brief for ${event.name}. Check back shortly.`}
+                text={`${joinClubNames(event.clubs)} is still putting together the brief for ${event.name}. Check back shortly.`}
               />
             )}
             <PrizeBox event={event} />
@@ -128,7 +144,7 @@ export function EventDetail({ event }: EventDetailProps) {
         ) : (
           <Tba
             title="Timeline coming soon"
-            text={`${event.club.name} is finalising the round structure and schedule for ${event.name}. Check back shortly.`}
+            text={`${joinClubNames(event.clubs)} is finalising the round structure and schedule for ${event.name}. Check back shortly.`}
           />
         )}
       </section>
@@ -190,9 +206,14 @@ export function EventDetail({ event }: EventDetailProps) {
             text={
               <>
                 Point of contact details for {event.name} have not been published yet. Reach{" "}
-                <Link href={`/clubs/${event.club.slug}`} className={styles.organizerContact}>
-                  {event.club.name}
-                </Link>{" "}
+                {event.clubs.map((club, index) => (
+                  <span key={club.slug}>
+                    {index > 0 && " & "}
+                    <Link href={`/clubs/${club.slug}`} className={styles.organizerContact}>
+                      {club.name}
+                    </Link>
+                  </span>
+                ))}{" "}
                 through the club page in the meantime.
               </>
             }
@@ -271,17 +292,33 @@ function Tba({ title, text }: { title: string; text: React.ReactNode }) {
   );
 }
 
-/** Brand monogram standing in until per-club logo assets are supplied. */
-function ClubMark({ name }: { name: string }) {
+/** Real club logo when one exists; otherwise a generated brand monogram. */
+function ClubMark({ club }: { club: ClubRef }) {
+  const logo = getClubLogo(club.slug);
+
+  if (logo) {
+    return (
+      <span className={styles.mark} title={club.name}>
+        <Image
+          src={logo}
+          alt={`${club.name} logo`}
+          width={160}
+          height={160}
+          className={styles.markImage}
+        />
+      </span>
+    );
+  }
+
   return (
     <svg
       className={styles.mark}
       viewBox="0 0 120 120"
       role="img"
-      aria-label={`${name} logo`}
+      aria-label={`${club.name} logo`}
     >
       <defs>
-        <linearGradient id="club-mark-gradient" x1="0" y1="0" x2="1" y2="1">
+        <linearGradient id={`club-mark-gradient-${club.slug}`} x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stopColor="#ff5aa5" />
           <stop offset="55%" stopColor="#e7137d" />
           <stop offset="100%" stopColor="#8d1bb3" />
@@ -289,7 +326,7 @@ function ClubMark({ name }: { name: string }) {
       </defs>
       <path
         d="M60 4 108 32v56L60 116 12 88V32Z"
-        fill="url(#club-mark-gradient)"
+        fill={`url(#club-mark-gradient-${club.slug})`}
       />
       <text
         x="60"
@@ -300,7 +337,7 @@ function ClubMark({ name }: { name: string }) {
         fontFamily="var(--font-tantra)"
         fontSize="58"
       >
-        {name.charAt(0).toUpperCase()}
+        {club.name.charAt(0).toUpperCase()}
       </text>
     </svg>
   );

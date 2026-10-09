@@ -63,6 +63,7 @@
 
 .description {
   margin-top: 1cqw;
+  min-height: 66px;
   max-width: 98%;
   padding-bottom: 0.8cqw;
   font-family: var(--font-futura, "Futura PT", "Century Gothic", sans-serif);

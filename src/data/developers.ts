@@ -59,7 +59,8 @@ export const team: Developer[] = [
     image: "/developers/Satvik.webp",
   },
   {
-    name: "SARTHAK G.",
-    role: "UI/UX Director",
+    name: "Lakshit Verma",
+    role: "Full Stack Developer",
+    image:"/developers/lakshit.webp"
   },
 ];

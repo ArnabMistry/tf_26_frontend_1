@@ -27,7 +27,9 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
   return {
     slug: event.slug,
     name: event.name,
-    club: { name: event.club.name, slug: event.club.slug },
+    // The backend contract only models a single organizer today; joint events
+    // (multiple clubs) aren't representable until it grows a `clubs` field.
+    clubs: [{ name: event.club.name, slug: event.club.slug }],
     description: event.description || event.shortDescription || "",
     poster: event.image,
     prizePool: event.prizes,
@@ -62,9 +64,10 @@ export async function generateMetadata(
   }
 
   const title = event.name;
+  const organizers = event.clubs.map((c) => c.name).join(" & ");
   const description =
     event.description ||
-    `Join ${event.name} at TantraFiesta 2026, IIIT Nagpur. Organized by ${event.club.name}. Review rules, schedule, prizes, and registration.`;
+    `Join ${event.name} at TantraFiesta 2026, IIIT Nagpur. Organized by ${organizers}. Review rules, schedule, prizes, and registration.`;
   const canonicalUrl = `/events/${event.slug}`;
   const fullUrl = `${siteConfig.url}${canonicalUrl}`;
   const imageUrl = event.poster
@@ -117,7 +120,9 @@ export default async function EventPage(props: PageProps<"/events/[slug]">) {
         slug: event.slug,
         name: event.name,
         description: event.description,
-        club: event.club,
+        // Schema.org Event models a single organizer; joint events are
+        // credited to their first-listed club here.
+        club: event.clubs[0],
         startDate: event.startDate,
         endDate: event.endDate,
         venue: event.venue,

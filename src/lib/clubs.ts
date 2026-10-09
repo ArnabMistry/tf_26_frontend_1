@@ -4,6 +4,8 @@ export interface ClubInfo {
   name: string;
   tagline?: string;
   description: string;
+  /** Path under /public to the club's real logo mark. Omitted when no asset exists yet. */
+  logo?: string;
 }
 
 export const KNOWN_CLUBS: readonly ClubInfo[] = [
@@ -22,6 +24,7 @@ export const KNOWN_CLUBS: readonly ClubInfo[] = [
     tagline: "Development & Hackathons",
     description:
       "Technical society focused on software development, open-source projects, and intense competitive hackathons.",
+    logo: "/assets/club-logos/elevate.png",
   },
   {
     id: "orator",
@@ -30,6 +33,7 @@ export const KNOWN_CLUBS: readonly ClubInfo[] = [
     tagline: "Debating & Public Discourse",
     description:
       "Public speaking and literary community hosting debates, keynote panels, and leadership symposiums.",
+    logo: "/assets/club-logos/orator.png",
   },
   {
     id: "crispr",
@@ -46,6 +50,7 @@ export const KNOWN_CLUBS: readonly ClubInfo[] = [
     tagline: "Electronics & Embedded Systems",
     description:
       "Hardware exploration wing focusing on embedded systems, microcontrollers, VLSI, and circuit challenges.",
+    logo: "/assets/club-logos/probe.png",
   },
   {
     id: "strokes",
@@ -54,6 +59,7 @@ export const KNOWN_CLUBS: readonly ClubInfo[] = [
     tagline: "Design & Creative Arts",
     description:
       "Creative community bringing together UI/UX designers, 2D/3D artists, and visual storytellers.",
+    logo: "/assets/club-logos/strokes.png",
   },
   {
     id: "dimension",
@@ -62,6 +68,7 @@ export const KNOWN_CLUBS: readonly ClubInfo[] = [
     tagline: "Game Dev & XR",
     description:
       "Interactive media society spearheading game development, 3D world building, virtual reality, and spatial computing.",
+    logo: "/assets/club-logos/dimension.png",
   },
   {
     id: "dotslash",
@@ -70,6 +77,7 @@ export const KNOWN_CLUBS: readonly ClubInfo[] = [
     tagline: "Competitive Programming & CyberSec",
     description:
       "Competitive coding and cybersecurity club hosting algorithmic sprints, Capture The Flag (CTF), and security audits.",
+    logo: "/assets/club-logos/dotslash.png",
   },
   {
     id: "gdg",
@@ -94,6 +102,7 @@ export const KNOWN_CLUBS: readonly ClubInfo[] = [
     tagline: "Robotics & Automation",
     description:
       "Premier robotics society building autonomous bots, robowars gladiators, line-followers, and intelligent automation systems.",
+    logo: "/assets/club-logos/iotics.png",
   },
 ] as const;
 
@@ -109,4 +118,9 @@ export function getClubBySlug(slug: string): ClubInfo | null {
 
 export function getAllClubSlugs(): string[] {
   return KNOWN_CLUBS.map((club) => club.slug);
+}
+
+/** Looks up a club's real logo by slug. Returns undefined when none exists yet. */
+export function getClubLogo(slug: string): string | undefined {
+  return getClubBySlug(slug)?.logo;
 }

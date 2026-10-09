@@ -45,7 +45,7 @@ export default function RegisterPage() {
             <RegisterForm />
           </div>
 
-          {/* Right Column: Robot Mascot Graphic */}
+          {/* Right Column: Computer Mascot Graphic */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end items-end mt-4 lg:mt-0">
             <HoverTilt
               className="relative w-[220px] min-[380px]:w-[260px] sm:w-[320px] md:w-[360px] lg:w-[375px] max-w-full drop-shadow-[0_20px_35px_rgba(0,0,0,0.5)] pointer-events-auto"
@@ -53,10 +53,10 @@ export default function RegisterPage() {
               scaleIntensity={1.03}
             >
               <Image
-                src="/assets/robot.png"
-                alt="TantraFiesta Mascot Robot"
+                src="/assets/computer.png"
+                alt="TantraFiesta Mascot Computer"
                 width={375}
-                height={563}
+                height={343}
                 priority
                 className="w-full h-auto object-contain select-none pointer-events-none"
               />

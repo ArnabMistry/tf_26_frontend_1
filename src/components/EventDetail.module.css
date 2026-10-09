@@ -36,9 +36,9 @@
   margin-top: 12px;
   color: #e6e1f7;
   font-family: var(--font-futura);
-  font-size: clamp(1.35rem, 2.3vw, 2.1rem);
+  font-size: clamp(1.1rem, 1.8vw, 1.6rem);
   font-weight: 400;
-  line-height: 1.15;
+  line-height: 1.2;
 }
 
 .clubLink {
@@ -52,10 +52,31 @@
   text-decoration: underline;
 }
 
+.marks {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 16px;
+}
+
 .mark {
   flex-shrink: 0;
-  width: clamp(90px, 12vw, 165px);
-  height: auto;
+  display: block;
+  width: clamp(72px, 9vw, 130px);
+  height: clamp(72px, 9vw, 130px);
+}
+
+/* Real logos sit on a white coin so dark marks (e.g. Probe, DotSlash) stay
+   legible against the page's dark background. */
+.markImage {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #fff;
+  object-fit: contain;
+  padding: 14%;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 30%);
 }
 
 /* ── Tabs ── */
@@ -133,9 +154,9 @@
 .description {
   color: #efecfa;
   font-family: var(--font-futura);
-  font-size: clamp(1.05rem, 1.45vw, 1.45rem);
+  font-size: clamp(0.9rem, 1.05vw, 1.05rem);
   font-weight: 400;
-  line-height: 1.75;
+  line-height: 1.6;
 }
 
 /* ── Poster ── */
@@ -288,9 +309,9 @@
 
 .sectionHeading {
   font-family: var(--font-futura);
-  font-size: clamp(1.4rem, 2vw, 1.9rem);
+  font-size: clamp(1.2rem, 1.6vw, 1.55rem);
   font-weight: 600;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .stageList {
@@ -308,7 +329,7 @@
 
 .stageName {
   font-family: var(--font-futura);
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   font-weight: 600;
   color: #fff;
 }
@@ -316,7 +337,7 @@
 .stageWhen {
   margin-top: 2px;
   font-family: var(--font-futura);
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #ffe43b;
 }
 
@@ -329,18 +350,18 @@
 
 .stageDetail {
   margin-top: 6px;
-  font-size: 1.05rem;
-  line-height: 1.6;
+  font-size: 0.92rem;
+  line-height: 1.5;
 }
 
 .ruleList {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   margin: 0;
   padding-left: 22px;
-  font-size: clamp(1rem, 1.3vw, 1.2rem);
-  line-height: 1.65;
+  font-size: clamp(0.88rem, 1.05vw, 1rem);
+  line-height: 1.55;
 }
 
 .organizerList {
@@ -360,14 +381,14 @@
 
 .organizerName {
   font-family: var(--font-futura);
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   font-weight: 600;
   color: #fff;
 }
 
 .organizerRole {
   margin-top: 2px;
-  font-size: 0.98rem;
+  font-size: 0.88rem;
 }
 
 .organizerContact {
@@ -375,7 +396,7 @@
   margin-top: 8px;
   color: #ffe43b;
   font-family: var(--font-futura);
-  font-size: 1rem;
+  font-size: 0.92rem;
   text-decoration: none;
 }
 
@@ -396,7 +417,7 @@
 
 .tbaTitle {
   font-family: var(--font-futura);
-  font-size: 1.45rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: #ffe43b;
 }
@@ -404,8 +425,8 @@
 .tbaText {
   max-width: 480px;
   font-family: var(--font-futura);
-  font-size: 1.05rem;
-  line-height: 1.6;
+  font-size: 0.92rem;
+  line-height: 1.5;
   color: #d5cfe7;
 }
 
@@ -466,8 +487,13 @@
     padding-bottom: 20px;
   }
 
+  .marks {
+    gap: 10px;
+  }
+
   .mark {
-    width: 72px;
+    width: 56px;
+    height: 56px;
   }
 
   .tabs {

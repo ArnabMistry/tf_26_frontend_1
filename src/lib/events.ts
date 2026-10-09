@@ -1,89 +1,87 @@
 import type { PublicEvent } from "@/lib/api/events";
+import { eventDetails } from "@/lib/eventDetails";
 
 export interface EventListing {
   id: string;
   name: string;
   description: string;
+  /** One entry per organizing club; most events have exactly one, joint events have two. */
+  clubs: { name: string; slug: string }[];
+  /** Category ids, e.g. ["hackathon", "ai-ml"]. An event can belong to more than one. */
+  categories: string[];
   prize?: string;
-  category?: string;
   href?: string;
   registrationUrl?: string;
 }
 
-// Design-reference content, used only until a backend URL is configured.
-// Registration destinations and club assignments have not been provided yet.
-export const referenceEvents: EventListing[] = [
-  {
-    id: "brandx",
-    name: "BrandX",
-    description: "Build a brand that stands out. Turn a bold idea into an identity, craft your story, and pitch your vision.",
-    prize: "₹40,000",
-    category: "hackathon",
-  },
-  {
-    id: "ragnarok",
-    name: "Ragnarok",
-    description: "Build a brand that stands out. Turn a bold idea into an identity, craft your story, and pitch your vision.",
-    prize: "₹20,000",
-    category: "hackathon",
-  },
-  {
-    id: "designathon",
-    name: "Designathon",
-    description: "Build a brand that stands out. Turn a bold idea into an identity, craft your story, and pitch your vision.",
-    prize: "₹20,000",
-    category: "hackathon",
-  },
-  // Demo entries for previewing the four-card Design layout.
-  {
-    id: "design-brandcraft",
-    name: "Brandcraft",
-    description: "Create a fresh brand identity with a memorable logo, a bold palette, and a story that brings it all together.",
-    prize: "₹20,000",
-    category: "design",
-  },
-  {
-    id: "design-pixeljam",
-    name: "Pixel Jam",
-    description: "Turn an everyday problem into a thoughtful app interface. Design the screens and present your user journey.",
-    prize: "₹15,000",
-    category: "design",
-  },
-  {
-    id: "design-posterlab",
-    name: "Poster Lab",
-    description: "Make a statement through typography, colour, and composition. Create a poster that captures the theme.",
-    prize: "₹10,000",
-    category: "design",
-  },
-  {
-    id: "design-motioncraft",
-    name: "Motioncraft",
-    description: "Bring your ideas to life with motion. Craft a short animated story using shapes, type, and expressive transitions.",
-    prize: "₹15,000",
-    category: "design",
-  },
-];
-
 export const eventCategories = [
   { id: "hackathon", label: "Hackathon", heading: "Hackathons" },
-  { id: "design", label: "Design", heading: "Design" },
+  { id: "coding", label: "Coding", heading: "Coding" },
   { id: "ai-ml", label: "AI/ML", heading: "AI / ML" },
-  { id: "esports", label: "Esports", heading: "Esports" },
-  { id: "photography", label: "Photography", heading: "Photography" },
+  { id: "robotics", label: "Robotics", heading: "Robotics" },
+  { id: "design", label: "Design", heading: "Design" },
+  { id: "gaming", label: "Gaming", heading: "Gaming" },
+  { id: "speaking", label: "Speaking", heading: "Speaking" },
+  { id: "creative", label: "Creative", heading: "Creative" },
 ] as const;
+
+/**
+ * Category assignments from the organizing team's event/category breakdown.
+ * Keyed by the slug in `eventDetails.ts` — the single source of truth for an
+ * event's name, club, and description. An event can carry more than one
+ * category (Ragnarok and Cascade are both Hackathon and AI/ML).
+ *
+ * "edge-case-26" wasn't in that breakdown; it's filed under Hackathon here as
+ * a reasonable read of its own "Physical AI hackathon" description pending
+ * confirmation from GDG.
+ */
+const CATEGORIES_BY_SLUG: Record<string, string[]> = {
+  algorithmia: ["coding"],
+  flashcode: ["coding"],
+  bugwars: ["coding"],
+  "last-man-standing": ["coding"],
+  ragnarok: ["hackathon", "ai-ml"],
+  cascade: ["hackathon", "ai-ml"],
+  "the-game-jam": ["hackathon"],
+  "edge-case-26": ["hackathon"],
+  "line-o-mania": ["robotics"],
+  "the-lost-pathways": ["robotics"],
+  "rann-bhoomi": ["robotics"],
+  "design-a-thon": ["design"],
+  brandxperience: ["design"],
+  "firestorm-rampage": ["gaming"],
+  "combat-carnage": ["gaming"],
+  "phoenix-cup": ["gaming"],
+  "critical-ops": ["gaming"],
+  "royale-legends": ["gaming"],
+  "rc-24": ["gaming"],
+  "knights-legacy": ["gaming"],
+  yuvaan: ["speaking"],
+  "pitch-please": ["creative"],
+  "keep-alive-26": ["creative"],
+};
+
+// Derived from eventDetails.ts so the listing page and the event detail pages
+// can never drift apart on name, club, or description — only category and
+// routing are added here.
+export const referenceEvents: EventListing[] = eventDetails.map((event) => ({
+  id: event.slug,
+  name: event.name,
+  description:
+    event.description ||
+    `Full details for ${event.name} will be announced soon by ${event.clubs.map((c) => c.name).join(" & ")}.`,
+  clubs: event.clubs,
+  categories: CATEGORIES_BY_SLUG[event.slug] ?? [],
+  href: `/events/${event.slug}`,
+}));
 
 export function groupEventsForLayout(events: EventListing[]): EventListing[][] {
   const groups: EventListing[][] = [];
 
-  for (let offset = 0; offset < events.length;) {
-    const remaining = events.length - offset;
-    // Lead with paired groups; reserve a final trio instead of leaving one card.
-    const size = remaining === 5 || remaining === 6
-      ? remaining - 3
-      : Math.min(4, remaining);
-    groups.push(events.slice(offset, offset + size));
-    offset += size;
+  // Repeating pair + centered-card units (not long runs of stacked pairs) so
+  // a long list reads as organized clusters instead of one unbroken column.
+  for (let offset = 0; offset < events.length; offset += 3) {
+    groups.push(events.slice(offset, offset + 3));
   }
 
   return groups;
@@ -94,9 +92,12 @@ export function toEventListing(event: PublicEvent): EventListing {
     id: event.id,
     name: event.name,
     description: event.shortDescription || event.description,
+    // The backend contract only models a single organizer today; joint events
+    // (multiple clubs) aren't representable until it grows a `clubs` field.
+    clubs: [{ name: event.club.name, slug: event.club.slug }],
+    categories: event.categories ?? [],
     prize: event.prizes,
     href: `/events/${encodeURIComponent(event.slug)}`,
     registrationUrl: event.registrationUrl,
-    // The current API contract has no category field. Do not guess from a club.
   };
 }

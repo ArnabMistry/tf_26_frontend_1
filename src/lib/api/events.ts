@@ -34,6 +34,8 @@ export interface PublicEvent {
   rules?: string[];
   eligibility?: string;
   prizes?: string;
+  /** Category ids matching `eventCategories` in `@/lib/events` (e.g. "hackathon", "ai-ml"). */
+  categories?: string[];
   registrationUrl?: string;
   registrationDeadline?: string;
   image?: string;

@@ -95,12 +95,20 @@
   gap: 9px;
   padding: 0 21px;
   font-size: 16px;
+  white-space: nowrap;
+}
+
+.filterButtonActive {
+  border-color: #ffe43b;
+  background: rgb(255 228 59 / 14%);
+  color: #ffe43b;
 }
 
 .filterNotice {
   position: fixed;
   inset: 0;
-  width: min(320px, calc(100vw - 40px));
+  width: min(420px, calc(100vw - 40px));
+  max-height: calc(100svh - 40px);
   margin: auto;
   border: 1px solid rgb(255 255 255 / 35%);
   border-radius: 20px;
@@ -108,6 +116,7 @@
   padding: 24px;
   color: white;
   box-shadow: 0 20px 70px #100b38;
+  overflow-y: auto;
 }
 
 .filterNotice::backdrop {
@@ -118,22 +127,96 @@
   font-size: 20px;
 }
 
-.filterNotice p {
-  margin-top: 8px;
-  color: #d5cfe7;
+.clubList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
 }
 
-.filterNotice button {
-  margin-top: 20px;
+.clubChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid rgb(255 255 255 / 40%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 8%);
+  padding: 6px 18px 6px 8px;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.clubChip:hover {
+  border-color: #fff;
+  background: rgb(255 255 255 / 18%);
+}
+
+.clubChip[aria-pressed="true"] {
+  border-color: #ffe43b;
+  background: rgb(255 228 59 / 16%);
+  color: #ffe43b;
+}
+
+/* Logos sit on a white coin so dark marks (e.g. Probe, DotSlash) stay
+   legible against the pill's translucent background. */
+.clubChipLogo {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  object-fit: contain;
+  padding: 3px;
+  box-sizing: border-box;
+}
+
+.clubChipMonogram {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff5aa5, #8d1bb3);
+  color: #fff;
+  font-family: var(--font-tantra);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.filterActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.filterActions button {
+  margin-top: 0;
   border-radius: 6px;
-  background: #ff2485;
   padding: 8px 20px;
   cursor: pointer;
 }
 
+.filterActions button:last-child {
+  background: #ff2485;
+}
+
+.filterClear {
+  background: transparent;
+  border: 1px solid rgb(255 255 255 / 45%);
+  color: #fff;
+}
+
 .categories {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: center;
+  row-gap: 16px;
   gap: 20px;
   margin: 36px 70px 0;
 }
@@ -191,6 +274,7 @@
 .cards {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   column-gap: 40px;
   row-gap: 0;
   container-type: inline-size;

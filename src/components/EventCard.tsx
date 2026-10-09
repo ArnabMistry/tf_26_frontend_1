@@ -13,6 +13,19 @@ const wingShape = "M16 0H590Q606 0 606 16V221Q606 237 590 237H337Q321 237 310 25
 const centerShape = "M64 0H624Q640 0 650 13L681 51Q688 60 688 71V302Q688 318 672 318H16Q0 318 0 302V71Q0 60 7 51L38 13Q48 0 64 0Z";
 const lowerWingShape = "M16 55H263Q275 55 283 45L310 13Q321 0 337 0H590Q606 0 606 16V276Q606 292 590 292H16Q0 292 0 276V71Q0 55 16 55Z";
 
+// Real descriptions range from one sentence to a full paragraph. CSS line-clamp
+// doesn't reliably apply here (the grid ancestor uses container queries), so
+// the text itself is capped to a fixed length instead — every card shows
+// roughly the same amount of copy regardless of source length.
+const MAX_DESCRIPTION_CHARS = 150;
+
+function truncate(text: string, max: number): string {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max);
+  const lastSpace = cut.lastIndexOf(" ");
+  return `${cut.slice(0, lastSpace > 0 ? lastSpace : max).trimEnd()}…`;
+}
+
 export function EventCard({ event, variant = "left", lowerWing = false, onRegister }: EventCardProps) {
   const centered = variant === "center";
   const destination = event.href || event.registrationUrl;
@@ -36,7 +49,7 @@ export function EventCard({ event, variant = "left", lowerWing = false, onRegist
           <h3 className={`${styles.title} ${!centered && event.prize && event.name.length > 10 ? styles.compactTitle : ""}`}>{event.name}</h3>
           {!centered && event.prize && <p className={styles.prize}><span className="sr-only">Prize pool: </span>{event.prize}</p>}
         </div>
-        <p className={styles.description}>{event.description}</p>
+        <p className={styles.description}>{truncate(event.description, MAX_DESCRIPTION_CHARS)}</p>
         {centered && event.prize && <p className={styles.prize}><span className="sr-only">Prize pool: </span>{event.prize}</p>}
         <div className={styles.actionRow}>
           {destination ? (
