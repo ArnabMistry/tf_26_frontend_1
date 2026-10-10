@@ -170,8 +170,19 @@ export default function AboutPage() {
           </div>
 
           {/* Green Capsule - Right */}
-          <div className="flex-1 md:flex-[1.4] bg-[#97D813] rounded-full min-h-[300px] md:min-h-0 shadow-xl order-1 md:order-2">
-            {/* Placeholder for Video/Image */}
+          <div className="flex-1 md:flex-[1.4] bg-[#97D813] rounded-full min-h-[300px] md:min-h-0 shadow-xl order-1 md:order-2 overflow-hidden relative">
+            <video
+              className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-label="TantraFiesta Highlights 1"
+            >
+              <source src="/highlights-1.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           </div>
         </div>
 
@@ -195,8 +206,19 @@ export default function AboutPage() {
           </div>
 
           {/* Green Capsule - Left */}
-          <div className="flex-1 md:flex-[1.4] bg-[#97D813] rounded-full min-h-[300px] md:min-h-0 shadow-xl order-1 md:order-2">
-            {/* Placeholder for Video/Image */}
+          <div className="flex-1 md:flex-[1.4] bg-[#97D813] rounded-full min-h-[300px] md:min-h-0 shadow-xl order-1 md:order-2 overflow-hidden relative">
+            <video
+              className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-label="TantraFiesta Highlights 2"
+            >
+              <source src="/highlights-2.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           </div>
         </div>
 
