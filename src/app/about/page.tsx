@@ -170,7 +170,7 @@ export default function AboutPage() {
           </div>
 
           {/* Green Capsule - Right */}
-          <div className="flex-1 md:flex-[1.4] bg-[#97D813] rounded-[100px] md:[border-radius:45%_/_50%] min-h-[300px] md:min-h-0 shadow-xl order-1 md:order-2">
+          <div className="flex-1 md:flex-[1.4] bg-[#97D813] rounded-full min-h-[300px] md:min-h-0 shadow-xl order-1 md:order-2">
             {/* Placeholder for Video/Image */}
           </div>
         </div>
@@ -195,7 +195,7 @@ export default function AboutPage() {
           </div>
 
           {/* Green Capsule - Left */}
-          <div className="flex-1 md:flex-[1.4] bg-[#97D813] rounded-[100px] md:[border-radius:45%_/_50%] min-h-[300px] md:min-h-0 shadow-xl order-1 md:order-2">
+          <div className="flex-1 md:flex-[1.4] bg-[#97D813] rounded-full min-h-[300px] md:min-h-0 shadow-xl order-1 md:order-2">
             {/* Placeholder for Video/Image */}
           </div>
         </div>
