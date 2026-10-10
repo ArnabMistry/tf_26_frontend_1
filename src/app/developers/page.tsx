@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { DeveloperCard } from "@/components/DeveloperCard";
 import { heads, team } from "@/data/developers";
 import { siteConfig } from "@/lib/site";
+import styles from "./developers.module.css";
 
 export const metadata: Metadata = {
   title: "Meet the Developers",
@@ -33,18 +34,10 @@ export default function DevelopersPage() {
       <Navbar />
 
       {/* Main Content Area */}
-      <main className="flex-1 w-full max-w-[1160px] mx-auto px-6 sm:px-8 pt-8 sm:pt-12 pb-20 md:pb-28">
+      <main className="flex-1 w-full max-w-[1160px] mx-auto px-4 min-[360px]:px-6 sm:px-8 pt-8 sm:pt-12 pb-20 md:pb-28">
         {/* Page Header */}
         <header className="mb-14 sm:mb-20">
-          <h1
-            className="font-tantra font-normal uppercase text-white leading-none tracking-normal drop-shadow-md origin-left inline-block max-w-full"
-            style={{
-              fontSize: "clamp(4rem, 8.34vw, 7.5rem)",
-              transform: "scaleX(1.17)",
-              transformOrigin: "left center",
-              lineHeight: 1,
-            }}
-          >
+          <h1 className={`${styles.heading} drop-shadow-md`}>
             MEET THE DEVELOPERS
           </h1>
           <p

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -25,14 +25,39 @@ export function MobileBottomNav({
 }: MobileBottomNavProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  useEffect(() => {
+    if (!isExpanded) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsExpanded(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isExpanded]);
+
   return (
     <nav
       aria-label="Mobile navigation"
       className="fixed left-2 right-2 z-[900] mx-auto max-w-[440px] md:hidden min-[360px]:left-4 min-[360px]:right-4"
       style={{
-        bottom: "calc(16px + env(safe-area-inset-bottom, 0px))",
+        bottom: "calc(12px + env(safe-area-inset-bottom, 0px))",
       }}
     >
+      {/* Backdrop overlay to dismiss when tapping outside */}
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="fixed inset-0 z-[-1] bg-black/40 backdrop-blur-[2px]"
+            onClick={() => setIsExpanded(false)}
+            aria-hidden="true"
+          />
+        )}
+      </AnimatePresence>
       {/* Expanded items popover — grows upward from the + button */}
       <AnimatePresence>
         {isExpanded && (
@@ -87,7 +112,7 @@ export function MobileBottomNav({
 
       {/* Main bottom bar */}
       <div
-        className="flex items-center justify-between gap-1 rounded-2xl px-4 py-2.5 shadow-2xl shadow-black/50"
+        className="flex items-center justify-between gap-1 rounded-2xl px-2.5 min-[360px]:px-4 py-2 min-[360px]:py-2.5 shadow-2xl shadow-black/50"
         style={{
           background:
             "linear-gradient(to top, rgba(26, 18, 80, 0.98), rgba(26, 18, 80, 0.92))",
@@ -100,7 +125,7 @@ export function MobileBottomNav({
         <Link
           href={registrationHref}
           onClick={() => setIsExpanded(false)}
-          className="shrink-0 rounded-lg bg-[#E7137D] px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-white transition-all duration-200 hover:bg-[#c60f69] hover:shadow-lg hover:shadow-[#E7137D]/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b] active:scale-[0.97]"
+          className="shrink-0 rounded-lg bg-[#E7137D] px-2.5 min-[360px]:px-4 py-2 min-[360px]:py-2.5 text-[11px] min-[360px]:text-[12px] font-bold uppercase tracking-wider text-white transition-all duration-200 hover:bg-[#c60f69] hover:shadow-lg hover:shadow-[#E7137D]/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b] active:scale-[0.97]"
         >
           Register Now
         </Link>
@@ -109,7 +134,7 @@ export function MobileBottomNav({
         <Link
           href={primaryItems[0].href}
           aria-current={currentPath === primaryItems[0].href ? "page" : undefined}
-          className="shrink-0 rounded-sm px-1 py-1.5 text-[12px] font-bold uppercase tracking-wider transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b] min-[360px]:text-[13px]"
+          className="shrink-0 rounded-sm px-1 py-1.5 text-[11px] min-[360px]:text-[13px] font-bold uppercase tracking-wider transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b]"
           style={{
             color: currentPath === primaryItems[0].href ? "#FFFF1A" : "#e0dce8",
           }}
@@ -128,7 +153,7 @@ export function MobileBottomNav({
         <Link
           href={primaryItems[1].href}
           aria-current={currentPath === primaryItems[1].href ? "page" : undefined}
-          className="shrink-0 rounded-sm px-1 py-1.5 text-[12px] font-bold uppercase tracking-wider transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b] min-[360px]:text-[13px]"
+          className="shrink-0 rounded-sm px-1 py-1.5 text-[11px] min-[360px]:text-[13px] font-bold uppercase tracking-wider transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b]"
           style={{
             color: currentPath === primaryItems[1].href ? "#FFFF1A" : "#e0dce8",
           }}
@@ -149,7 +174,7 @@ export function MobileBottomNav({
           onClick={() => setIsExpanded((prev) => !prev)}
           aria-label={isExpanded ? "Close navigation" : "Open navigation"}
           aria-expanded={isExpanded}
-          className="flex size-10 shrink-0 items-center justify-center rounded-full text-white transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b]"
+          className="flex size-8 min-[360px]:size-10 shrink-0 items-center justify-center rounded-full text-white transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b]"
           style={{
             background: "linear-gradient(135deg, rgba(43, 31, 94, 0.95), rgba(26, 18, 80, 0.95))",
             border: "1px solid rgba(231, 19, 125, 0.4)",

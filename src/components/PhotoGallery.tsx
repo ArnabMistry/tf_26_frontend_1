@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 
 const photos = [
@@ -44,9 +44,27 @@ const MOBILE_POSITIONS = [
   { x: 8, y: 4, rotation: 21, scale: 0.7756, zIndex: 1 },
 ];
 
+const subscribeHover = (callback: () => void) => {
+  const mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+  mediaQuery.addEventListener("change", callback);
+  return () => mediaQuery.removeEventListener("change", callback);
+};
+
+const getHoverSnapshot = () => {
+  return window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+};
+
+const getServerHoverSnapshot = () => false;
+
 export function PhotoGallery() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [screenType, setScreenType] = useState<"desktop" | "tablet" | "mobile">("desktop");
+  const canHover = React.useSyncExternalStore(
+    subscribeHover,
+    getHoverSnapshot,
+    getServerHoverSnapshot
+  );
+  const shouldReduceMotion = useReducedMotion();
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -66,7 +84,10 @@ export function PhotoGallery() {
     MOBILE_POSITIONS;
 
   return (
-    <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat py-12 sm:py-16 md:py-24 px-4 flex flex-col items-center justify-center overflow-hidden">
+    <section
+      onClick={() => setHoveredIndex(null)}
+      className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat py-12 sm:py-16 md:py-24 px-4 flex flex-col items-center justify-center overflow-hidden"
+    >
       <h2 className="font-tantra text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-white uppercase tracking-tight text-center drop-shadow-lg mb-8 sm:mb-16 md:mb-24 relative z-20">
         PHOTO GALLERY
       </h2>
@@ -100,7 +121,11 @@ export function PhotoGallery() {
           return (
             <motion.div
               key={index}
-              className="absolute w-[11rem] h-[19rem] sm:w-[15rem] sm:h-[26rem] md:w-[20rem] md:h-[35rem] rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[3.31625rem] overflow-hidden shadow-2xl border-[4px] border-[#241A4C]/50 cursor-pointer"
+              role="button"
+              tabIndex={0}
+              aria-label={`Gallery photo ${index + 1} of ${photos.length}`}
+              aria-pressed={hoveredIndex === index}
+              className="absolute w-[11rem] h-[19rem] sm:w-[15rem] sm:h-[26rem] md:w-[20rem] md:h-[35rem] rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[3.31625rem] overflow-hidden shadow-2xl border-[4px] border-[#241A4C]/50 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ffe43b]"
               style={{ 
                 transformOrigin: "50% 50%",
                 zIndex: currentZ 
@@ -120,15 +145,29 @@ export function PhotoGallery() {
                 scale: currentScale,
               }}
               viewport={{ once: true, margin: "-10%" }}
-              transition={{
-                type: "spring",
-                stiffness: 350,
-                damping: 25,
-                mass: 0.8,
+              transition={
+                shouldReduceMotion
+                  ? { duration: 0.1 }
+                  : {
+                      type: "spring",
+                      stiffness: 350,
+                      damping: 25,
+                      mass: 0.8,
+                    }
+              }
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setHoveredIndex((prev) => (prev === index ? null : index));
+                }
               }}
-              onHoverStart={() => setHoveredIndex(index)}
-              onHoverEnd={() => setHoveredIndex(null)}
-              onClick={() => setHoveredIndex(hoveredIndex === index ? null : index)}
+              onHoverStart={canHover ? () => setHoveredIndex(index) : undefined}
+              onHoverEnd={canHover ? () => setHoveredIndex(null) : undefined}
+              onClick={(e) => {
+                e.stopPropagation();
+                setHoveredIndex((prev) => (prev === index ? null : index));
+              }}
             >
               <Image 
                 src={src} 

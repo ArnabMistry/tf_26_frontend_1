@@ -36,7 +36,7 @@ export function RegisterForm() {
     <div className="w-full max-w-[700px]">
       <form onSubmit={handleSubmit} className="w-full">
         {/* Unified Yellow Card Shell: Matches Login card size and height identically */}
-        <div className="relative w-full h-[355px] sm:h-[370px] md:h-[385px] flex flex-col justify-between">
+        <div className="relative w-full min-h-[355px] sm:min-h-[370px] md:min-h-[385px] h-auto flex flex-col justify-between">
           {/* Continuous SVG Background: Exact Figma Contour with shelf at 81.2% (y=334) */}
           <svg
             viewBox="0 0 853 411"
@@ -66,7 +66,7 @@ export function RegisterForm() {
           </svg>
 
           {/* Form Fields: 2-Column Grid */}
-          <div className="px-6 sm:px-8 md:px-9 pt-4 sm:pt-5 md:pt-6 grid grid-cols-2 gap-x-4 sm:gap-x-6 md:gap-x-8 gap-y-3.5 sm:gap-y-4.5 md:gap-y-5.5">
+          <div className="px-4 min-[360px]:px-6 sm:px-8 md:px-9 pt-4 sm:pt-5 md:pt-6 grid grid-cols-2 gap-x-4 sm:gap-x-6 md:gap-x-8 gap-y-3.5 sm:gap-y-4.5 md:gap-y-5.5">
             {/* FIRST NAME */}
             <div className="min-w-0">
               <label
@@ -196,7 +196,7 @@ export function RegisterForm() {
           </div>
 
           {/* Action Button Row: Pink Register button in lower left, open notch on right */}
-          <div className="pb-2.5 sm:pb-3 md:pb-3.5 pl-4 sm:pl-6 pr-0 flex items-center justify-between">
+          <div className="pb-2.5 sm:pb-3 md:pb-3.5 pl-3 sm:pl-6 pr-0 flex items-center justify-between mt-auto pt-3">
             {/* Pink Primary Button with 3D bottom bevel */}
             <div className="relative w-[42%] sm:w-[43%] h-11 sm:h-12 md:h-12.5 shrink-0">
               {/* 3D Bottom Shadow */}

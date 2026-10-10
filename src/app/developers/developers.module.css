@@ -1,0 +1,30 @@
+.heading {
+  font-family: var(--font-tantra);
+  font-weight: 400;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: normal;
+  display: inline-block;
+  max-width: 100%;
+  transform-origin: left center;
+  font-size: clamp(3.75rem, 7vw, 6.343rem);
+  transform: scaleX(1.17);
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+  .heading {
+    font-size: clamp(3.5rem, 8.5vw, 4.5rem);
+    transform: scaleX(1.04);
+    line-height: 1.05;
+  }
+}
+
+@media (max-width: 480px) {
+  .heading {
+    font-size: clamp(3.125rem, 14vw, 3.625rem);
+    transform: none;
+    line-height: 1.05;
+  }
+}

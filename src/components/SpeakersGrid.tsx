@@ -55,7 +55,7 @@ export function SpeakersGrid({ speakers = defaultSpeakers }: SpeakersGridProps) 
     <main className={styles.explorer} id="speakers-content">
       {/* ── Page title toolbar ── */}
       <div className={styles.toolbar}>
-        <h1 className="font-tantra text-[101.489px] text-white uppercase tracking-normal drop-shadow-md leading-none">SPEAKERS</h1>
+        <h1 className={`${styles.pageTitle} drop-shadow-md`}>SPEAKERS</h1>
       </div>
 
       {/* ── 2-column speaker grid ── */}

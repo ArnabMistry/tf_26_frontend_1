@@ -112,3 +112,30 @@ body {
     padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
   }
 }
+
+/* ==========================================================================
+   Shared Main Page Title Typography System
+   ========================================================================== */
+.page-title {
+  font-family: var(--font-tantra);
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: normal;
+  font-size: clamp(3.75rem, 7vw, 6.343rem);
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    font-size: clamp(3.5rem, 8.5vw, 4.5rem);
+    line-height: 1.05;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: clamp(3.125rem, 14vw, 3.625rem);
+    line-height: 1.05;
+  }
+}

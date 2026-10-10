@@ -25,9 +25,10 @@
 }
 
 .pageTitle {
-  font-size: clamp(4rem, 8.34vw, 7.5rem);
+  font-size: clamp(3.75rem, 7vw, 6.343rem);
   transform: scaleX(1.17);
   transform-origin: left center;
+  overflow-wrap: break-word;
 }
 
 .controls,
@@ -394,7 +395,9 @@
   }
 
   .pageTitle {
-    font-size: clamp(4.5rem, 15vw, 6rem);
+    font-size: clamp(3.5rem, 8.5vw, 4.5rem);
+    transform: scaleX(1.04);
+    line-height: 1.05;
   }
 
   .controls {
@@ -460,6 +463,14 @@
 
   .dialogContent {
     padding: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pageTitle {
+    font-size: clamp(3.125rem, 14vw, 3.625rem);
+    transform: none;
+    line-height: 1.05;
   }
 }
 

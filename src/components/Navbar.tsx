@@ -54,7 +54,7 @@ export function Navbar({
 
       <nav
         aria-label="Main navigation"
-        className={`relative z-30 mx-auto flex w-full items-center justify-between gap-4 px-6 py-4 text-white lg:px-12 md:fixed md:left-0 md:right-0 md:top-0 md:z-50 md:w-full md:rounded-2xl transition-transform duration-300 ${
+        className={`relative z-30 mx-auto flex w-full items-center justify-between gap-4 px-4 min-[360px]:px-6 py-4 text-white lg:px-12 md:fixed md:left-0 md:right-0 md:top-0 md:z-50 md:w-full md:rounded-2xl transition-transform duration-300 ${
           isVisible ? "md:translate-y-0" : "md:-translate-y-[150%]"
         }`}
       >

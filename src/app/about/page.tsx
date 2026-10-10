@@ -1,9 +1,7 @@
 import React from "react";
-import Image from "next/image";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import type { Metadata } from "next";
-import { siteConfig } from "@/lib/site";
 import Link from "next/link";
 import { HistoryTimeline } from "@/components/HistoryTimeline";
 
@@ -60,7 +58,7 @@ export default function AboutPage() {
 
       {/* === THE ORIGIN SECTION === */}
       <div className="relative z-10 flex flex-col items-center w-full px-4 md:px-8 pt-12 pb-16 max-w-5xl mx-auto">
-        <h2 className="font-tantra text-[101.489px] text-white uppercase tracking-normal w-full text-left mb-8 drop-shadow-md leading-none">
+        <h2 className="page-title text-white w-full text-left mb-8 drop-shadow-md">
           THE ORIGIN
         </h2>
 
@@ -133,7 +131,7 @@ export default function AboutPage() {
       {/* === HISTORY OF TF SECTION === */}
       <div className="relative z-10 flex flex-col items-center w-full pt-16 pb-32">
         <div className="relative z-20 flex flex-col items-center justify-center pb-10 px-6 max-w-3xl text-center">
-          <h1 className="font-tantra text-5xl md:text-7xl mb-6 tracking-wide drop-shadow-lg uppercase text-white">
+          <h1 className="page-title text-white mb-6 tracking-wide drop-shadow-lg text-center">
             HISTORY OF TF
           </h1>
           <p className="text-zinc-200 text-sm md:text-base lg:text-lg leading-relaxed max-w-2xl font-futura tracking-wider">
