@@ -71,6 +71,17 @@ body {
   width: max-content;
   animation: marquee-reverse 35s linear infinite;
 }
+
+/* Pausing on hover so a pill can be hovered long enough for its flip to show.
+ * A Tailwind utility (group-hover/row:[animation-play-state:paused]) can't do
+ * this: Tailwind's utilities live inside @layer utilities, and any rule
+ * outside a layer — like .animate-marquee above — always wins over a layered
+ * one regardless of specificity, so the utility would be silently ignored.
+ */
+.marquee-row:hover .animate-marquee,
+.marquee-row:hover .animate-marquee-reverse {
+  animation-play-state: paused;
+}
 @keyframes fallToBottom {
   0% {
     transform: translateY(0) rotate(0deg);

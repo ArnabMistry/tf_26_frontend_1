@@ -59,8 +59,11 @@ export function TagsMarquee() {
     <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat py-14 md:py-24 overflow-hidden flex flex-col gap-6 md:gap-8">
       
       {/* Row 1 */}
-      <div className="flex w-full overflow-hidden select-none">
-        <div 
+      {/* marquee-row pauses the track below on hover (see globals.css) —
+          without this the pill is always sliding, so the cursor can never
+          hold a stable hover long enough to see its flip. */}
+      <div className="marquee-row flex w-full overflow-hidden select-none">
+        <div
           className="animate-marquee flex gap-3 sm:gap-6 md:gap-8 items-center whitespace-nowrap pr-3 sm:pr-6 md:pr-8"
           style={{ animationDuration: "80s" }}
         >
@@ -71,8 +74,8 @@ export function TagsMarquee() {
       </div>
 
       {/* Row 2 (Reverse) */}
-      <div className="flex w-full overflow-hidden select-none">
-        <div 
+      <div className="marquee-row flex w-full overflow-hidden select-none">
+        <div
           className="animate-marquee-reverse flex gap-3 sm:gap-6 md:gap-8 items-center whitespace-nowrap pr-3 sm:pr-6 md:pr-8"
           style={{ animationDuration: "80s", animationDelay: "-25s" }}
         >
@@ -83,8 +86,8 @@ export function TagsMarquee() {
       </div>
 
       {/* Row 3 */}
-      <div className="flex w-full overflow-hidden select-none">
-        <div 
+      <div className="marquee-row flex w-full overflow-hidden select-none">
+        <div
           className="animate-marquee flex gap-3 sm:gap-6 md:gap-8 items-center whitespace-nowrap pr-3 sm:pr-6 md:pr-8"
           style={{ animationDuration: "80s", animationDelay: "-45s" }}
         >
