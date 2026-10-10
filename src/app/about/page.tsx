@@ -109,26 +109,24 @@ export default function AboutPage() {
         <h2 className="font-tantra text-4xl md:text-6xl text-white uppercase tracking-widest text-center mb-12 drop-shadow-md">
           STATISTICS
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 w-full max-w-3xl mx-auto">
-
+        <div className="grid grid-cols-3 gap-3 sm:gap-6 md:gap-12 w-full max-w-4xl mx-auto">
           {/* Stat Card 1 */}
-          <div className="bg-[#594DD0] rounded-3xl p-8 flex flex-col items-center justify-center border-b-[12px] border-[#403598] shadow-2xl aspect-square md:aspect-auto md:h-[280px] transform transition-transform hover:scale-105">
-            <h3 className="font-sans font-black text-6xl text-[#FFC812] drop-shadow-md mb-2">1.3 M</h3>
-            <p className="text-[#FFC812] text-center font-bold tracking-wide text-lg md:text-xl leading-snug">Impressions on<br />Unstop</p>
+          <div className="bg-[#594DD0] rounded-xl sm:rounded-3xl p-3 sm:p-8 flex flex-col items-center justify-center border-b-[6px] sm:border-b-[12px] border-[#403598] shadow-2xl aspect-square md:aspect-auto md:h-[280px] transform transition-transform hover:scale-105">
+            <h3 className="font-sans font-black text-xl sm:text-4xl md:text-6xl text-[#FFC812] drop-shadow-md mb-1 sm:mb-2">1.3 M</h3>
+            <p className="text-[#FFC812] text-center font-bold tracking-tight sm:tracking-wide text-[10px] sm:text-base md:text-xl leading-tight sm:leading-snug">Impressions on<br />Unstop</p>
           </div>
 
           {/* Stat Card 2 */}
-          <div className="bg-[#97D813] rounded-3xl p-8 flex flex-col items-center justify-center border-b-[12px] border-[#6DA20C] shadow-2xl aspect-square md:aspect-auto md:h-[280px] transform transition-transform hover:scale-105">
-            <h3 className="font-sans font-black text-6xl text-[#097275] drop-shadow-md mb-2">1.3 M</h3>
-            <p className="text-[#097275] text-center font-bold tracking-wide text-lg md:text-xl leading-snug">Impressions on<br />Unstop</p>
+          <div className="bg-[#97D813] rounded-xl sm:rounded-3xl p-3 sm:p-8 flex flex-col items-center justify-center border-b-[6px] sm:border-b-[12px] border-[#6DA20C] shadow-2xl aspect-square md:aspect-auto md:h-[280px] transform transition-transform hover:scale-105">
+            <h3 className="font-sans font-black text-xl sm:text-4xl md:text-6xl text-[#097275] drop-shadow-md mb-1 sm:mb-2">1.3 M</h3>
+            <p className="text-[#097275] text-center font-bold tracking-tight sm:tracking-wide text-[10px] sm:text-base md:text-xl leading-tight sm:leading-snug">Impressions on<br />Unstop</p>
           </div>
 
           {/* Stat Card 3 */}
-          <div className="bg-[#F06C00] rounded-3xl p-8 flex flex-col items-center justify-center border-b-[12px] border-[#BD5400] shadow-2xl aspect-square md:aspect-auto md:h-[280px] transform transition-transform hover:scale-105">
-            <h3 className="font-sans font-black text-6xl text-white drop-shadow-md mb-2">1.3 M</h3>
-            <p className="text-white text-center font-bold tracking-wide text-lg md:text-xl leading-snug">Impressions on<br />Unstop</p>
+          <div className="bg-[#F06C00] rounded-xl sm:rounded-3xl p-3 sm:p-8 flex flex-col items-center justify-center border-b-[6px] sm:border-b-[12px] border-[#BD5400] shadow-2xl aspect-square md:aspect-auto md:h-[280px] transform transition-transform hover:scale-105">
+            <h3 className="font-sans font-black text-xl sm:text-4xl md:text-6xl text-white drop-shadow-md mb-1 sm:mb-2">1.3 M</h3>
+            <p className="text-white text-center font-bold tracking-tight sm:tracking-wide text-[10px] sm:text-base md:text-xl leading-tight sm:leading-snug">Impressions on<br />Unstop</p>
           </div>
-
         </div>
       </div>
 
