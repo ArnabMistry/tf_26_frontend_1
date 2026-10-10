@@ -39,8 +39,8 @@ export const team: Developer[] = [
     image: "/developers/Tushar Agarwal.webp",
   },
   {
-    name: "SHIVAM",
-    role: "UI/UX Director",
+    name: "SHIVAM SINGH",
+    role: "Full Stack Developer",
     image: "/developers/Shivam.webp",
   },
   {

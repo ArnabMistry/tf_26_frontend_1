@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { SponsorsGrid } from "@/components/SponsorsGrid";
+import { ComingSoon } from "@/components/ComingSoon";
 import { siteConfig } from "@/lib/site";
 import styles from "./page.module.css";
 
@@ -32,7 +32,9 @@ export default function SponsorsPage() {
         Skip to sponsors
       </a>
       <Navbar currentPath="/sponsors" />
-      <SponsorsGrid />
+      <div id="sponsors-content" className="flex-1 flex flex-col justify-center">
+        <ComingSoon />
+      </div>
       <Footer variant="yellow" />
     </div>
   );
