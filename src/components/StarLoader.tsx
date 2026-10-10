@@ -3,14 +3,16 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
+const round = (val: number) => Math.round(val * 1000) / 1000 + 0;
+
 const generateStarPath = (points: number, rOuter: number, rInner: number) => {
   let path = '';
   const angleStep = Math.PI / points;
   for (let i = 0; i < 2 * points; i++) {
     const r = i % 2 === 0 ? rOuter : rInner;
     const a = i * angleStep - Math.PI / 2;
-    const x = r * Math.cos(a);
-    const y = r * Math.sin(a);
+    const x = round(r * Math.cos(a));
+    const y = round(r * Math.sin(a));
     if (i === 0) path += `M ${x} ${y} `;
     else path += `L ${x} ${y} `;
   }
