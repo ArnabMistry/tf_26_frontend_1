@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 
 export function ComingSoon() {
   return (
-    <div className="flex-1 flex flex-col items-center justify-center min-h-[65vh] w-full px-4">
+    <div className="flex-1 flex flex-col items-center justify-center min-h-[85vh] w-full px-4">
       <motion.h1
         className="font-tantra text-6xl sm:text-7xl md:text-[100px] lg:text-[120px] text-[#FFFF1A] uppercase tracking-widest text-center leading-none drop-shadow-md z-10"
         initial={{ opacity: 0, scale: 0.9 }}
