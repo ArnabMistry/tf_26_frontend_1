@@ -78,7 +78,7 @@ const SponsorCard = ({ sponsor }: { sponsor: { name: string, image: string, bgCo
 };
 
 export function Sponsors() {
-  const columns: { name: string, image: string }[][] = [[], [], [], []];
+  const columns: { name: string, image: string, bgColor: string }[][] = [[], [], [], []];
   sponsorsData.forEach((s, i) => columns[i % 4].push(s));
 
   return (
