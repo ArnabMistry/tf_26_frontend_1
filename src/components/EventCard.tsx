@@ -41,9 +41,18 @@ export function EventCard({ event, variant = "left", lowerWing = false, onRegist
 
   return (
     <article className={`${styles.card} ${styles[variant]} ${lowerWing ? styles.lowerWing : ""}`} aria-label={event.name}>
-      <svg className={styles.shape} aria-hidden="true" viewBox={centered ? "0 0 688 318" : "0 0 606 292"} preserveAspectRatio="none">
+      <svg className={`${styles.shape} ${centered ? styles.shapeDesktopOnly : ""}`} aria-hidden="true" viewBox={centered ? "0 0 688 318" : "0 0 606 292"} preserveAspectRatio="none">
         <path d={centered ? centerShape : lowerWing ? lowerWingShape : wingShape} transform={variant === "right" ? "translate(606 0) scale(-1 1)" : undefined} />
       </svg>
+      {/* On mobile every card stacks in one column, so the centered variant's
+          desktop-only pennant shape (diagonal-cut top corners) just looks like
+          a different, broken card next to the plain ones — swap in the same
+          plain shape the other cards use. */}
+      {centered && (
+        <svg className={`${styles.shape} ${styles.shapeMobileOnly}`} aria-hidden="true" viewBox="0 0 606 292" preserveAspectRatio="none">
+          <path d={wingShape} />
+        </svg>
+      )}
       <div className={styles.content}>
         <div className={styles.heading}>
           <h3 className={`${styles.title} ${!centered && event.prize && event.name.length > 10 ? styles.compactTitle : ""}`}>{event.name}</h3>

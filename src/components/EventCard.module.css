@@ -15,6 +15,12 @@
   fill: #ffdd3e;
 }
 
+/* The centered variant swaps its pennant shape for the plain one on mobile —
+   see the shapeDesktopOnly/shapeMobileOnly toggle in the @media block below. */
+.shapeMobileOnly {
+  display: none;
+}
+
 .content {
   display: flex;
   height: 100%;
@@ -285,6 +291,14 @@
   /* The centered/trio variant stands out from a 2-column desktop grid on
      purpose, but in a single mobile column that just makes it look like a
      different, broken card — render it exactly like every other card. */
+  .shapeDesktopOnly {
+    display: none;
+  }
+
+  .shapeMobileOnly {
+    display: block;
+  }
+
   .center {
     grid-column: auto;
     width: 100%;
