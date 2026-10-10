@@ -37,14 +37,14 @@ const PillCard = ({ item }: { item: typeof row1[0] }) => (
     <div className="relative w-full h-full transition-transform duration-500 ease-in-out [transform-style:preserve-3d] group-hover:[transform:rotateX(180deg)]">
       
       {/* Front Face */}
-      <div className={`${item.bgFront} ${item.fgFront} px-8 sm:px-10 md:px-12 lg:px-14 py-3 sm:py-4 md:py-5 lg:py-6 rounded-2xl md:rounded-3xl shadow-xl border-b-[5px] md:border-b-8 border-black/20 flex items-center justify-center [backface-visibility:hidden]`}>
+      <div className={`${item.bgFront} ${item.fgFront} px-4 sm:px-8 md:px-12 lg:px-14 py-3 sm:py-4 md:py-5 lg:py-6 rounded-2xl md:rounded-3xl shadow-xl border-b-[5px] md:border-b-8 border-black/20 flex items-center justify-center [backface-visibility:hidden]`}>
         <span className="font-tantra text-5xl sm:text-6xl md:text-7xl lg:text-[84px] xl:text-[96px] tracking-tight uppercase leading-none block [text-shadow:1px_2px_0px_rgba(0,0,0,0.25)]">
           {item.text}
         </span>
       </div>
 
       {/* Back Face */}
-      <div className={`${item.bgBack} ${item.fgBack} absolute inset-0 px-8 sm:px-10 md:px-12 lg:px-14 py-3 sm:py-4 md:py-5 lg:py-6 rounded-2xl md:rounded-3xl shadow-xl border-b-[5px] md:border-b-8 border-black/20 flex items-center justify-center [backface-visibility:hidden] [transform:rotateX(180deg)]`}>
+      <div className={`${item.bgBack} ${item.fgBack} absolute inset-0 px-4 sm:px-8 md:px-12 lg:px-14 py-3 sm:py-4 md:py-5 lg:py-6 rounded-2xl md:rounded-3xl shadow-xl border-b-[5px] md:border-b-8 border-black/20 flex items-center justify-center [backface-visibility:hidden] [transform:rotateX(180deg)]`}>
         <span className="font-tantra text-5xl sm:text-6xl md:text-7xl lg:text-[84px] xl:text-[96px] tracking-tight uppercase leading-none block [text-shadow:1px_2px_0px_rgba(0,0,0,0.25)]">
           {item.text}
         </span>
@@ -61,7 +61,7 @@ export function TagsMarquee() {
       {/* Row 1 */}
       <div className="flex w-full overflow-hidden select-none">
         <div 
-          className="animate-marquee flex gap-6 md:gap-8 items-center whitespace-nowrap pr-6 md:pr-8"
+          className="animate-marquee flex gap-3 sm:gap-6 md:gap-8 items-center whitespace-nowrap pr-3 sm:pr-6 md:pr-8"
           style={{ animationDuration: "80s" }}
         >
           {makeSeamlessTrack(row1).map((item, idx) => (
@@ -73,7 +73,7 @@ export function TagsMarquee() {
       {/* Row 2 (Reverse) */}
       <div className="flex w-full overflow-hidden select-none">
         <div 
-          className="animate-marquee-reverse flex gap-6 md:gap-8 items-center whitespace-nowrap pr-6 md:pr-8"
+          className="animate-marquee-reverse flex gap-3 sm:gap-6 md:gap-8 items-center whitespace-nowrap pr-3 sm:pr-6 md:pr-8"
           style={{ animationDuration: "80s", animationDelay: "-25s" }}
         >
           {makeSeamlessTrack(row2).map((item, idx) => (
@@ -85,7 +85,7 @@ export function TagsMarquee() {
       {/* Row 3 */}
       <div className="flex w-full overflow-hidden select-none">
         <div 
-          className="animate-marquee flex gap-6 md:gap-8 items-center whitespace-nowrap pr-6 md:pr-8"
+          className="animate-marquee flex gap-3 sm:gap-6 md:gap-8 items-center whitespace-nowrap pr-3 sm:pr-6 md:pr-8"
           style={{ animationDuration: "80s", animationDelay: "-45s" }}
         >
           {makeSeamlessTrack(row3).map((item, idx) => (
