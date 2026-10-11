@@ -20,8 +20,7 @@ export function PortalNav() {
     document.addEventListener('visibilitychange', update);
     return () => { active = false; clearInterval(timer); window.removeEventListener('tf-inbox-change', update); document.removeEventListener('visibilitychange', update); };
   }, [user]);
-  if (loading) return <div className="w-20" />;
-  if (!user) return <Link href="/login" aria-label="Log in" className="shrink-0 rounded-full border border-pink-400/40 px-3 py-2 text-xs font-bold">Log in</Link>;
+  if (loading || !user) return null;
   return <div className="flex shrink-0 items-center gap-2">
     <Link href="/profile?tab=notifications" aria-label={`Notifications${unread ? `, ${unread} unread` : ''}`} className="relative rounded-full border border-white/20 p-2.5 hover:bg-white/10">
       <svg aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" /></svg>

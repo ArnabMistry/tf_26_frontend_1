@@ -33,25 +33,7 @@ function AdminGate({ superAdmin = false, eventId }: { superAdmin?: boolean; even
     });
     return () => { active = false; };
   }, [superAdmin, eventId, router]);
-  if (!user || error) return (
-    <main className="admin-workspace">
-      <div className="admin-card" style={{ maxWidth: 480, margin: '60px auto', textAlign: 'center' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/assets/tf_logo.png" alt="TantraFiesta" width={48} height={48} style={{ objectFit: 'contain' }} />
-        </div>
-        <h2 style={{ color: '#FFFF1A', margin: '0 0 12px' }}>Admin Control Center</h2>
-        <LoadState loading={!error} error={error} />
-        <div className="admin-actions" style={{ justifyContent: 'center', marginTop: 20 }}>
-          <Link href="/admin" className="admin-link">My admin panel</Link>
-          <span>·</span>
-          <Link href="/login" className="admin-link">Log in</Link>
-          <span>·</span>
-          <Link href="/" className="admin-link">Website Homepage</Link>
-        </div>
-      </div>
-    </main>
-  );
+  if (!user || error) return <main className="admin-workspace"><LoadState loading={!error} error={error} /><Link href="/admin">My admin panel</Link> · <Link href="/login">Log in</Link></main>;
   return <Workspace key={`${user.id}-${eventId || 'all'}`} user={user} eventId={eventId} />;
 }
 function Workspace({ user, eventId }: { user: AuthUser; eventId?: string }) {
