@@ -3,9 +3,12 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useParticipant } from "@/components/auth/ParticipantSession";
+import { PortalNav } from "@/components/portal/PortalNav";
 import { MobileBottomNav } from "./MobileBottomNav";
 
 const navigation = [
+  { href: "/admin", label: "Admin" },
   { href: "/about", label: "About" },
   { href: "/sponsors", label: "Sponsors" },
   { href: "/events", label: "Events" },
@@ -24,6 +27,8 @@ export function Navbar({
 }: NavbarProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const { user } = useParticipant();
+  const isAdmin = user?.role === 'super' || user?.role === 'event_admin';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -88,13 +93,13 @@ export function Navbar({
             alt="TantraFiesta"
             width={320}
             height={40}
-            className="hidden h-6 w-auto object-contain sm:block lg:h-7"
+            className="hidden h-6 w-auto object-contain xl:block lg:h-7"
           />
         </Link>
 
         {/* ── Desktop links ── */}
-        <div className="hidden items-center gap-3 text-xs font-bold uppercase tracking-wider text-white md:flex lg:gap-6 lg:text-sm">
-          {navigation.map(({ href, label }) => {
+        <div className="hidden items-center gap-3 text-xs font-bold uppercase tracking-wider text-white md:flex lg:gap-4 lg:text-sm">
+          {navigation.filter(({ href }) => href !== "/admin" || isAdmin).map(({ href, label }) => {
             const isActive = currentPath === href;
             return (
               <Link
@@ -116,10 +121,12 @@ export function Navbar({
             Register Now
           </Link>
         </div>
+        <PortalNav />
       </nav>
 
       {/* ── Mobile bottom navigation (replaces old hamburger) ── */}
       <MobileBottomNav
+        isAdmin={isAdmin}
         currentPath={currentPath}
         registrationHref={registrationHref}
       />

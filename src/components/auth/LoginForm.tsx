@@ -1,28 +1,79 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useSyncExternalStore, useEffect } from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { authRequest, destination, safeReturnPath } from "@/lib/auth";
+import { logout, saveAuthToken, startGoogleLogin } from "@/lib/supabase";
+const subscribeNotice = () => () => {};
 
 export function LoginForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [error, setError] = useState('');
+  const notice = useSyncExternalStore(subscribeNotice, () => sessionStorage.getItem('tf_signup_notice') || '', () => '');
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Pre-fill email from URL params (set by email confirmation redirect)
+  // ?email=user@example.com&confirmed=1
+  useEffect(() => {
+    const urlEmail = searchParams.get('email');
+    const isConfirmed = searchParams.get('confirmed') === '1';
+
+    if (urlEmail) {
+      // Decode and sanitize — only allow valid email chars
+      const decoded = decodeURIComponent(urlEmail).trim().toLowerCase();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (emailRegex.test(decoded)) {
+        setEmail(decoded);
+      }
+    }
+
+    if (isConfirmed) {
+      setConfirmed(true);
+      // Clear the query params from URL without reload (clean URL)
+      const clean = window.location.pathname;
+      window.history.replaceState({}, '', clean);
+    }
+  }, [searchParams]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      alert("Login feature will be connected to authentication backend.");
-    }, 600);
+    setError('');
+    try {
+      const result = await authRequest('/api/auth/login', { email, password });
+      const token = result.data.accessToken;
+      const profile = await authRequest('/api/auth/me', undefined, token);
+      await logout();
+      saveAuthToken(token);
+      sessionStorage.removeItem('tf_signup_notice');
+      router.replace(safeReturnPath(searchParams.get('next')) || safeReturnPath(sessionStorage.getItem('tf_return_to')) || destination(profile.data.user));
+      sessionStorage.removeItem('tf_return_to');
+    } catch (err) { setError(err instanceof Error ? err.message : 'Login failed.'); }
+    finally { setIsLoading(false); }
   };
 
-  const handleGoogleLogin = () => {
-    alert("Google OAuth will be connected to authentication backend.");
+  const handleGoogleLogin = async () => {
+    setError('');
+    setIsLoading(true);
+    try { const next = safeReturnPath(searchParams.get('next')); if (next) sessionStorage.setItem('tf_return_to', next); await startGoogleLogin(); }
+    catch (err) { setError(err instanceof Error ? err.message : 'Google sign-in failed.'); setIsLoading(false); }
   };
 
   return (
     <div className="w-full max-w-[700px]">
+      {/* Email confirmed banner — shown after clicking email verification link */}
+      {confirmed && (
+        <p role="status" className="mb-3 text-green-400 font-bold">
+          ✅ Email confirmed! Enter your password to log in.
+        </p>
+      )}
+      {notice && !confirmed && <p role="status" className="mb-3 text-[#FFFF1A]">{notice}</p>}
+      {error && <p role="alert" className="mb-3 text-pink-300">{error}</p>}
       <form onSubmit={handleSubmit} className="w-full">
         {/* Unified Yellow Card Shell: Matches Register card size and height identically */}
         <div className="relative w-full h-[355px] sm:h-[370px] md:h-[385px] flex flex-col justify-between">
@@ -96,6 +147,8 @@ export function LoginForm() {
                 placeholder="(MINIMUM 6 CHARACTERS)"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                // Auto-focus password when email is pre-filled via confirmation redirect
+                autoFocus={!!email}
                 className="w-full h-10.5 sm:h-11 md:h-12 px-3.5 sm:px-4 rounded-lg bg-[#FFFF1A] border-2 border-[#E7137D] text-black font-bold text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#E7137D]/50 transition-all placeholder:text-black/75 placeholder:text-[9.5px] min-[360px]:placeholder:text-[10.5px] sm:placeholder:text-xs placeholder:font-bold placeholder:tracking-wider"
               />
             </div>
@@ -153,6 +206,7 @@ export function LoginForm() {
               <button
                 type="button"
                 onClick={handleGoogleLogin}
+                disabled={isLoading}
                 className="group relative w-full h-full flex items-center justify-center cursor-pointer transition-transform duration-150 active:scale-[0.99]"
               >
                 <svg
@@ -184,6 +238,7 @@ export function LoginForm() {
         </div>
       </form>
 
+      <div className="mt-5 flex flex-wrap gap-4 text-sm text-[#FFFF1A]"><Link href="/register/admin">Register as admin</Link></div>
       {/* Switch Link below the card */}
       <div
         className="mt-3.5 sm:mt-4 text-[11px] sm:text-xs md:text-sm uppercase tracking-wider text-[#A49FBD] font-bold text-left"
@@ -191,7 +246,7 @@ export function LoginForm() {
       >
         <span>DON&apos;T HAVE AN ACCOUNT? </span>
         <Link
-          href="/register"
+          href={safeReturnPath(searchParams.get('next')) ? `/register?next=${encodeURIComponent(searchParams.get('next')!)}` : '/register'}
           className="text-[#E7137D] hover:underline underline-offset-4 ml-1 font-extrabold transition-colors hover:text-[#fa2773]"
         >
           REGISTER HERE

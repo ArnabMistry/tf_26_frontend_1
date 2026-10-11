@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
-import { Dashboard } from "@/components/Dashboard";
+import { Suspense } from "react";
+import { UserPortal } from "@/components/portal/UserPortal";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Profile",
-  description: "View your registered events, qualification rounds, team, invitations, and meal passes for TantraFiesta 2026.",
+  description: "Your TantraFiesta events, teams, invitations and participant profile.",
   alternates: {
     canonical: "/profile",
   },
   openGraph: {
     title: `Profile | ${siteConfig.fullName} | ${siteConfig.institute}`,
-    description: "View your registered events, qualification rounds, team, invitations, and meal passes.",
+    description: "View your events, teams, invitations and participant profile.",
     url: `${siteConfig.url}/profile`,
   },
   robots: {
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
 
 export default function ProfilePage() {
   return (
-    <div className="relative min-h-[100svh] flex flex-col text-white isolate overflow-x-hidden">
+    <div className="relative min-h-[100svh] flex flex-col bg-[#241A4C] text-white isolate overflow-x-hidden">
       <div
         className="fixed inset-0 -z-10 bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat pointer-events-none"
         aria-hidden="true"
@@ -30,15 +31,7 @@ export default function ProfilePage() {
 
       <Navbar currentPath="/profile" />
 
-      <main className="flex-1 w-full max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-12 pt-2 sm:pt-4 pb-10 sm:pb-16">
-        <h1
-          className="font-tantra text-4xl min-[380px]:text-5xl sm:text-6xl uppercase tracking-widest text-white mb-6 sm:mb-8 drop-shadow-md"
-        >
-          Profile
-        </h1>
-
-        <Dashboard />
-      </main>
+      <Suspense fallback={<p className="p-8">Loading your portal…</p>}><UserPortal /></Suspense>
     </div>
   );
 }

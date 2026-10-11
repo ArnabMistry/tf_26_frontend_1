@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 
 interface MobileBottomNavProps {
+  isAdmin?: boolean;
   currentPath?: string;
   registrationHref?: string;
 }
@@ -15,11 +16,14 @@ const primaryItems = [
 ];
 
 const expandedItems = [
+  { href: "/admin", label: "Admin panel" },
+  { href: "/login", label: "Login" },
   { href: "/sponsors", label: "Sponsors" },
   { href: "/speakers", label: "Speakers" },
 ];
 
 export function MobileBottomNav({
+  isAdmin = false,
   currentPath,
   registrationHref = "/register",
 }: MobileBottomNavProps) {
@@ -76,7 +80,7 @@ export function MobileBottomNav({
               transformOrigin: "bottom right",
             }}
           >
-            {expandedItems.map((item, i) => {
+            {expandedItems.filter(({ href }) => href !== "/admin" || isAdmin).map((item, i) => {
               const isActive = currentPath === item.href;
               return (
                 <motion.div

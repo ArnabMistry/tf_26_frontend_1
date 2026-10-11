@@ -94,8 +94,10 @@ export function toEventListing(event: PublicEvent): EventListing {
     description: event.shortDescription || event.description,
     // The backend contract only models a single organizer today; joint events
     // (multiple clubs) aren't representable until it grows a `clubs` field.
-    clubs: [{ name: event.club.name, slug: event.club.slug }],
-    categories: event.categories ?? [],
+    clubs: event.clubs || [event.club],
+    // Backend doesn't store categories — fall back to the static map keyed by
+    // event id (which equals the slug, e.g. "algorithmia", "cascade").
+    categories: event.categories?.length ? event.categories : (CATEGORIES_BY_SLUG[event.slug] ?? []),
     prize: event.prizes,
     href: `/events/${encodeURIComponent(event.slug)}`,
     registrationUrl: event.registrationUrl,

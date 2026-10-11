@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { Suspense } from "react";
 import { Navbar } from "@/components/Navbar";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { HoverTilt } from "@/components/HoverTilt";
@@ -42,7 +43,9 @@ export default function LoginPage() {
               LOGIN
             </h1>
 
-            <LoginForm />
+            <Suspense fallback={null}>
+              <LoginForm />
+            </Suspense>
           </div>
 
           {/* Right Column: Robot Mascot Graphic */}

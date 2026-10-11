@@ -24,18 +24,19 @@ export async function generateStaticParams() {
 
 /** Maps the backend contract onto the shape the detail page renders. */
 function fromPublicEvent(event: PublicEvent): EventDetailData {
+  const local = getEventDetail(event.slug);
   return {
     slug: event.slug,
     name: event.name,
     // The backend contract only models a single organizer today; joint events
     // (multiple clubs) aren't representable until it grows a `clubs` field.
-    clubs: [{ name: event.club.name, slug: event.club.slug }],
+    clubs: event.clubs || [event.club],
     description: event.description || event.shortDescription || "",
-    poster: event.image,
+    poster: event.image || local?.poster,
     prizePool: event.prizes,
     prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
     stages: [],
-    rules: event.rules ?? [],
+    rules: event.rules ?? local?.rules ?? [],
     organizers: [],
     registrationUrl: event.registrationUrl,
     startDate: event.startDate,

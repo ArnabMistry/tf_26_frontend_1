@@ -27,6 +27,12 @@ export interface PublicEvent {
   description: string;
   shortDescription?: string;
   club: EventClubReference;
+  clubs?: EventClubReference[];
+  isTeamEvent?: boolean;
+  minTeamSize?: number | null;
+  maxTeamSize?: number | null;
+  price?: number;
+  paymentTrigger?: string;
   date?: string;
   startDate: string;
   endDate?: string;
@@ -42,6 +48,74 @@ export interface PublicEvent {
   faqs?: EventFAQ[];
 }
 
+/**
+ * Raw shape returned by the backend's `GET /api/events` and `GET /api/events/:id`.
+ * The backend wraps all responses in `{ success, data }` and uses a plain
+ * `club` string instead of the `{ name, slug }` object this frontend expects.
+ */
+interface BackendEvent {
+  id: string;
+  slug?: string;
+  paymentTrigger?: string;
+  name: string;
+  club: string;           // plain string e.g. "DotSlash"
+  description?: string | null;
+  venue?: string | null;
+  registrationEndTime?: string;
+  paymentPageLink?: string | null;
+  price?: number;
+  isTeamEvent?: boolean;
+  minTeamSize?: number | null;
+  maxTeamSize?: number | null;
+  rounds?: { roundNumber: number; name?: string; roundEndTime?: string }[];
+  _count?: { registrations: number; teams: number };
+}
+
+/**
+ * Derives a URL-safe slug from a club's display name.
+ * "DotSlash" → "dotslash", "GDG IIIT Nagpur" → "gdg-iiit-nagpur"
+ */
+function clubNameToSlug(name: string): string {
+  const aliases: Record<string, string> = { 'gdg': 'gdg', 'gdg on campus': 'gdg', 'dimensions': 'dimension', 'the orator club': 'orator' };
+  if (aliases[name.toLowerCase().trim()]) return aliases[name.toLowerCase().trim()];
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+/**
+ * Normalises a raw backend event record into the `PublicEvent` contract this
+ * frontend consumes. Static content (categories, prize strings, rules) is not
+ * sent by the backend — callers merge it from `eventDetails.ts` separately.
+ */
+function normaliseBackendEvent(raw: BackendEvent): PublicEvent {
+  const clubName = raw.club ?? "TantraFiesta";
+  const clubs = clubName.split(/\s+[xX&]\s+/).map(name => ({ name: name.trim(), slug: clubNameToSlug(name) }));
+  return {
+    id: raw.id,
+    // Backend has no slug column; derive it from the event id which is already
+    // a dash-separated identifier (e.g. "algorithmia", "cascade").
+    slug: raw.slug || raw.id,
+    name: raw.name,
+    description: raw.description ?? "",
+    club: clubs[0],
+    clubs,
+    isTeamEvent: raw.isTeamEvent,
+    minTeamSize: raw.minTeamSize,
+    maxTeamSize: raw.maxTeamSize,
+    price: raw.price,
+    paymentTrigger: raw.paymentTrigger,
+    venue: raw.venue ?? undefined,
+    registrationDeadline: raw.registrationEndTime,
+    registrationUrl: `${raw.isTeamEvent ? '/register/team' : '/register/event'}?eventId=${encodeURIComponent(raw.id)}`,
+    // startDate / endDate not stored on the backend yet — leave undefined so
+    // the detail page falls back gracefully to its "TBA" state.
+    startDate: "",
+  };
+}
+
 const BACKEND_API_BASE =
   process.env.BACKEND_API_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
@@ -49,7 +123,9 @@ const BACKEND_API_BASE =
 
 /**
  * Fetches all public events.
- * Returns an empty array gracefully if the backend API is not yet reachable.
+ * Unwraps the backend's `{ success, data: { events } }` envelope and
+ * normalises each record into the `PublicEvent` shape this frontend uses.
+ * Returns an empty array gracefully if the backend is not reachable.
  */
 export async function fetchPublicEvents(): Promise<PublicEvent[]> {
   if (!BACKEND_API_BASE) {
@@ -57,23 +133,33 @@ export async function fetchPublicEvents(): Promise<PublicEvent[]> {
   }
 
   try {
-    const res = await fetch(`${BACKEND_API_BASE}/api/events`, {
+    const events: PublicEvent[] = [];
+    let page = 1;
+    let totalPages = 1;
+    do {
+    const res = await fetch(`${BACKEND_API_BASE}/api/events?page=${page}&limit=100`, {
       next: { revalidate: 60 },
     });
 
-    if (!res.ok) {
-      return [];
-    }
+    if (!res.ok) return [];
 
-    return (await res.json()) as PublicEvent[];
+    // Backend shape: { success: true, data: { events: BackendEvent[], pagination: {...} } }
+    const json = await res.json() as { success?: boolean; data?: { events?: BackendEvent[]; pagination?: { totalPages: number } } };
+    const raw = json?.data?.events ?? [];
+    if (!Array.isArray(raw)) return [];
+    events.push(...raw.map(normaliseBackendEvent));
+    totalPages = json.data?.pagination?.totalPages || 1;
+    page++;
+    } while (page <= totalPages);
+    return events;
   } catch {
     return [];
   }
 }
 
 /**
- * Fetches a single public event by slug.
- * Returns null if not found or if the backend API is not yet reachable.
+ * Fetches a single public event by its id / slug.
+ * Returns null if not found or if the backend is not reachable.
  */
 export async function fetchPublicEventBySlug(
   slug: string
@@ -87,11 +173,12 @@ export async function fetchPublicEventBySlug(
       next: { revalidate: 60 },
     });
 
-    if (!res.ok) {
-      return null;
-    }
+    if (!res.ok) return null;
 
-    return (await res.json()) as PublicEvent;
+    // Backend shape: { success: true, data: { ...BackendEvent } }
+    const json = await res.json() as { success?: boolean; data?: BackendEvent };
+    const raw = json?.data;
+    return raw ? normaliseBackendEvent(raw) : null;
   } catch {
     return null;
   }
@@ -104,7 +191,7 @@ export async function fetchEventsByClubSlug(
   clubSlug: string
 ): Promise<PublicEvent[]> {
   const allEvents = await fetchPublicEvents();
-  return allEvents.filter((event) => event.club.slug === clubSlug);
+  return allEvents.filter((event) => (event.clubs || [event.club]).some(club => club.slug === clubSlug));
 }
 
 /**

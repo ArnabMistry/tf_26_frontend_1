@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { siteConfig } from "@/lib/site";
 import { PageOpeningAnimation } from "@/components/PageOpeningAnimation";
 import "./globals.css";
+import { SessionSync } from "@/components/auth/SessionSync";
+import { ParticipantSession } from "@/components/auth/ParticipantSession";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -81,7 +83,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <PageOpeningAnimation />
-        {children}
+        <ParticipantSession><SessionSync />{children}</ParticipantSession>
       </body>
     </html>
   );

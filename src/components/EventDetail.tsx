@@ -273,7 +273,7 @@ function PrizeBox({ event }: { event: EventDetailData }) {
       </ul>
 
       <Link
-        href="/register"
+        href={event.registrationUrl || `/register/event?eventId=${encodeURIComponent(event.slug)}`}
         className={styles.register}
         aria-label={`Register now for ${event.name}`}
       >

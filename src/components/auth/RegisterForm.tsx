@@ -2,8 +2,13 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { authRequest, safeReturnPath } from "@/lib/auth";
+import { startGoogleLogin } from "@/lib/supabase";
 
-export function RegisterForm() {
+export function RegisterForm({ admin = false }: { admin?: boolean }) {
+  const router = useRouter();
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -11,6 +16,7 @@ export function RegisterForm() {
     password: "",
     college: "",
     phone: "",
+    eventCode: "",
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -19,21 +25,34 @@ export function RegisterForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      alert("Registration submitted! Connecting to backend registration endpoint.");
-    }, 600);
+    setError('');
+    try {
+      const { eventCode, ...details } = formData;
+      const result = await authRequest('/api/auth/register', { ...details, ...(admin ? { eventCode } : {}) });
+      sessionStorage.setItem('tf_signup_notice', result.data.confirmationRequired
+        ? 'Account created. Check your email to confirm your account, then log in.' : 'Account created. Please log in.');
+      const next = safeReturnPath(new URLSearchParams(window.location.search).get('next'));
+      if (next) sessionStorage.setItem('tf_return_to', next);
+      router.replace(next ? `/login?next=${encodeURIComponent(next)}` : '/login');
+    } catch (err) { setError(err instanceof Error ? err.message : 'Registration failed.'); }
+    finally { setIsLoading(false); }
   };
 
-  const handleGoogleRegister = () => {
-    alert("Google OAuth will be connected to authentication backend.");
+  const handleGoogleRegister = async () => {
+    setError('');
+    if (admin) { setError('Use the admin registration form and access code. Google sign-in does not grant admin access.'); return; }
+    setIsLoading(true);
+    try { const next = safeReturnPath(new URLSearchParams(window.location.search).get('next')); if (next) sessionStorage.setItem('tf_return_to', next); await startGoogleLogin(); }
+    catch (err) { setError(err instanceof Error ? err.message : 'Google sign-in failed.'); setIsLoading(false); }
   };
 
   return (
     <div className="w-full max-w-[700px]">
+      <div className="flex justify-end mb-3"><Link className="text-sm text-[#FFFF1A] underline" href={admin ? '/register' : '/register/admin'}>{admin ? 'Participant registration' : 'Admin ?'}</Link></div>
+      {error && <p role="alert" className="mb-3 text-pink-300">{error}</p>}
       <form onSubmit={handleSubmit} className="w-full">
         {/* Unified Yellow Card Shell: Matches Login card size and height identically */}
         <div className="relative w-full min-h-[355px] sm:min-h-[370px] md:min-h-[385px] h-auto flex flex-col justify-between">
@@ -195,6 +214,7 @@ export function RegisterForm() {
             </div>
           </div>
 
+          {admin && <div className="px-6 py-4"><label htmlFor="register-code" className="block text-black font-bold mb-1">CODE</label><input id="register-code" name="eventCode" type="password" autoComplete="off" required value={formData.eventCode} onChange={handleChange} className="w-full rounded-lg border-2 border-[#E7137D] p-2 text-black" /></div>}
           {/* Action Button Row: Pink Register button in lower left, open notch on right */}
           <div className="pb-2.5 sm:pb-3 md:pb-3.5 pl-3 sm:pl-6 pr-0 flex items-center justify-between mt-auto pt-3">
             {/* Pink Primary Button with 3D bottom bevel */}
@@ -247,6 +267,7 @@ export function RegisterForm() {
               <button
                 type="button"
                 onClick={handleGoogleRegister}
+                disabled={isLoading}
                 className="group relative w-full h-full flex items-center justify-center cursor-pointer transition-transform duration-150 active:scale-[0.99]"
               >
                 <svg
