@@ -154,7 +154,7 @@ export default function AboutPage() {
               <h3 className="font-sans font-black text-5xl md:text-6xl lg:text-[72px] leading-[0.9] tracking-tight mb-8">
                 Last Year<br />Highlight&apos;s
               </h3>
-              <p className="font-sans font-semibold text-xs md:text-sm leading-relaxed max-w-md">
+              <div className="font-sans font-semibold text-xs md:text-sm leading-relaxed max-w-md">
                 <div className="space-y-4">
                   <p>
                     From 9–11 October 2025, IIIT Nagpur hosted TantraFiesta’25 —
@@ -167,7 +167,7 @@ export default function AboutPage() {
                     technology to life through coding, robotics, and innovation.
                   </p>
                 </div>
-              </p>
+              </div>
             </div>
             <div className="mt-8">
               <Link href="#" className="inline-flex items-center justify-center gap-2 bg-[#E7137D] text-white px-8 py-3 rounded-md font-bold text-sm tracking-widest uppercase hover:bg-[#c60f69] transition-colors">
@@ -201,8 +201,7 @@ export default function AboutPage() {
               <h3 className="font-sans font-black text-5xl md:text-6xl lg:text-[72px] leading-[0.9] tracking-tight mb-8">
                 Last Year<br />Highlight&apos;s
               </h3>
-              <p className="font-sans font-semibold text-xs md:text-sm leading-relaxed max-w-md">
-
+              <div className="font-sans font-semibold text-xs md:text-sm leading-relaxed max-w-md">
                 <div className="space-y-4">
                   <p>
                     TantraFiesta’25 transformed IIIT Nagpur into a celebration
@@ -217,7 +216,7 @@ export default function AboutPage() {
                     memories, and a legacy that will inspire future editions.
                   </p>
                 </div>
-              </p>
+              </div>
             </div>
             <div className="mt-8">
               <Link href="#" className="inline-flex items-center justify-center gap-2 bg-[#E7137D] text-white px-8 py-3 rounded-md font-bold text-sm tracking-widest uppercase hover:bg-[#c60f69] transition-colors">
