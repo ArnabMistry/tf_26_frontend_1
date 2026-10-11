@@ -33,7 +33,8 @@ export const eventCategories = [
  *
  * "edge-case-26" wasn't in that breakdown; it's filed under Hackathon here as
  * a reasonable read of its own "Physical AI hackathon" description pending
- * confirmation from GDG.
+ * confirmation from GDG. "digital-time-capsule" is the photography and
+ * videography challenge listed on Unstop but absent from the sheet.
  */
 const CATEGORIES_BY_SLUG: Record<string, string[]> = {
   algorithmia: ["coding"],
@@ -53,12 +54,13 @@ const CATEGORIES_BY_SLUG: Record<string, string[]> = {
   "combat-carnage": ["gaming"],
   "phoenix-cup": ["gaming"],
   "critical-ops": ["gaming"],
-  "royale-legends": ["gaming"],
+  "crown-clash": ["gaming"],
   "rc-24": ["gaming"],
   "knights-legacy": ["gaming"],
   yuvaan: ["speaking"],
   "pitch-please": ["creative"],
   "keep-alive-26": ["creative"],
+  "digital-time-capsule": ["creative"],
 };
 
 // Derived from eventDetails.ts so the listing page and the event detail pages

@@ -36,8 +36,13 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
     prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
     stages: [],
     rules: event.rules ?? [],
+    // The backend contract has no highlights field yet, and models eligibility
+    // as one free-text string rather than the bullet list the page renders.
+    highlights: [],
+    eligibility: event.eligibility ? [event.eligibility] : [],
     organizers: [],
     registrationUrl: event.registrationUrl,
+    registrationDeadline: event.registrationDeadline,
     startDate: event.startDate,
     endDate: event.endDate,
     venue: event.venue,
