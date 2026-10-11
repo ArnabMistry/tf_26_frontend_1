@@ -61,9 +61,7 @@ export function EventDetail({ event }: EventDetailProps) {
             {event.clubs.map((club, index) => (
               <span key={club.slug}>
                 {index > 0 && <span aria-hidden="true"> &amp; </span>}
-                <Link href={`/clubs/${club.slug}`} className={styles.clubLink}>
-                  {club.name}
-                </Link>
+                {club.name}
               </span>
             ))}
           </p>
@@ -209,12 +207,10 @@ export function EventDetail({ event }: EventDetailProps) {
                 {event.clubs.map((club, index) => (
                   <span key={club.slug}>
                     {index > 0 && " & "}
-                    <Link href={`/clubs/${club.slug}`} className={styles.organizerContact}>
-                      {club.name}
-                    </Link>
+                    {club.name}
                   </span>
                 ))}{" "}
-                through the club page in the meantime.
+                in the meantime.
               </>
             }
           />
