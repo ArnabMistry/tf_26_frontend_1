@@ -168,7 +168,7 @@ export function UserPortal() {
         <div className={s.stack}>
           {tab === 'notifications' ? (
             <section className={s.card} id="notifications">
-              <div className={s.row}><h2>Your inbox</h2><span className={s.badge}>Updates every 30 seconds</span></div>
+              <div className={s.row}><h2>Your inbox</h2><span className={s.badge}>Live Sync</span></div>
               {!inbox?.notifications.length && <p className={s.empty}>All caught up. Team invitations and responses will appear here.</p>}
               {inbox?.notifications.map(item => (
                 <article className={s.entry} key={item.id}>
@@ -243,8 +243,7 @@ export function UserPortal() {
                           Redeemed {pass.scannedAt ? `at ${formatDate(pass.scannedAt)} IST` : 'at counter'}
                         </p>
                       )}
-                      <p className={s.fine}>Token: {pass.personalPassToken ? pass.personalPassToken.slice(0, 16) + '...' : 'N/A'}</p>
-                    </div>
+                      </div>
                   </article>
                 ))
               )}
@@ -291,11 +290,11 @@ export function UserPortal() {
           <section className={`${s.card} ${s.identity}`}>
             <div className={s.row}>
               <div className={s.avatar}>{profile.user.firstName?.[0]}{profile.user.lastName?.[0]}</div>
-              <span className={s.badge}>{profile.user.role.replaceAll('_',' ')}</span>
+              
             </div>
             <h2 className="mt-5">{fullName(profile.user)}</h2>
             <p className={s.muted}>{profile.user.collegeName || 'Add your college in Edit profile'}</p>
-            <p className={`${s.eyebrow} mt-6`}>Your invitation ID</p>
+            <p className={`${s.eyebrow} mt-6`}>TF ID</p>
             <p className={s.id}>{profile.user.festId || 'Not assigned'}</p>
             <button disabled={!profile.user.festId} className={s.secondary} onClick={async () => { try { await navigator.clipboard.writeText(profile.user.festId || ''); setNotice('TF ID copied. Share it with your team leader.'); } catch { setError('Copy unavailable. Select your TF ID and copy it manually.'); } }}>Copy TF ID</button>
             </section>
@@ -375,9 +374,7 @@ export function UserPortal() {
             <p className={`${s.muted} text-xs mb-4`}>Present this personal QR code to counter staff</p>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={qrModal.image} alt={qrModal.title} className="mx-auto rounded-2xl border-2 border-[#E7137D] p-3 bg-white shadow-2xl" width={260} height={260} />
-            <p className="font-mono text-xs text-[#faff52] mt-3 break-all bg-black/40 p-2 rounded-lg">{qrModal.token}</p>
-            <div className="flex gap-2 justify-center mt-4">
-              <button className={s.secondary} onClick={async () => { try { await navigator.clipboard.writeText(qrModal.token); setNotice('Pass token copied.'); } catch {} }}>Copy token</button>
+            <div className="flex justify-center mt-5">
               <button className={s.button} onClick={() => setQrModal(null)}>Close</button>
             </div>
           </div>
