@@ -1,14 +1,15 @@
 import React from "react";
 import Image from "next/image";
 import { HoverTilt } from "./HoverTilt";
+import { Reveal } from "./Reveal";
 
 export function AboutSection() {
   return (
-    <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat py-12 md:py-20 px-4 sm:px-6 lg:px-12 text-black overflow-hidden">
+    <section className="relative w-full py-12 md:py-20 px-4 sm:px-6 lg:px-12 text-black overflow-hidden">
       <div className="max-w-6xl mx-auto flex flex-col gap-8 md:gap-10">
         
         {/* About TantraFiesta Card */}
-        <div className="relative bg-[#FFFF1A] rounded-2xl md:rounded-[28px] p-6 sm:p-8 md:p-12 shadow-2xl border-2 border-black/10">
+        <Reveal variant="scale" className="relative bg-[#FFFF1A] rounded-2xl md:rounded-[28px] p-6 sm:p-8 md:p-12 shadow-2xl border-2 border-black/10">
           {/* Character Illustration */}
           <HoverTilt className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 h-full max-h-[105%] pointer-events-auto z-20 items-center justify-center" rotationIntensity={8} scaleIntensity={1.03}>
             <Image
@@ -35,10 +36,10 @@ export function AboutSection() {
               </p>
             </div>
           </div>
-        </div>
+        </Reveal>
 
         {/* Theme Card */}
-        <div className="relative bg-[#FFFF1A] rounded-2xl md:rounded-[28px] p-6 sm:p-8 md:p-12 shadow-2xl border-2 border-black/10">
+        <Reveal variant="right" className="relative bg-[#FFFF1A] rounded-2xl md:rounded-[28px] p-6 sm:p-8 md:p-12 shadow-2xl border-2 border-black/10">
           <div className="relative z-10">
             <p className="text-xs sm:text-sm md:text-base font-bold uppercase tracking-widest text-black/70 mb-1">
               THEME
@@ -59,7 +60,7 @@ export function AboutSection() {
               </p>
             </div>
           </div>
-        </div>
+        </Reveal>
 
       </div>
     </section>

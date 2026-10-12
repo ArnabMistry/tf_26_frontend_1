@@ -1,4 +1,5 @@
 import React from "react";
+import { Reveal } from "./Reveal";
 
 const row1 = [
   { text: "REGISTRATIONS", bgFront: "bg-[#F44383]", fgFront: "text-white", bgBack: "bg-white", fgBack: "text-[#F44383]" },
@@ -56,13 +57,10 @@ const PillCard = ({ item }: { item: typeof row1[0] }) => (
 
 export function TagsMarquee() {
   return (
-    <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat bg-fixed py-14 md:py-24 overflow-hidden flex flex-col gap-6 md:gap-8">
+    <section className="relative w-full py-14 md:py-24 overflow-hidden flex flex-col gap-6 md:gap-8">
       
       {/* Row 1 */}
-      {/* marquee-row pauses the track below on hover (see globals.css) —
-          without this the pill is always sliding, so the cursor can never
-          hold a stable hover long enough to see its flip. */}
-      <div className="marquee-row flex w-full overflow-hidden select-none">
+      <Reveal variant="left" className="marquee-row flex w-full overflow-hidden select-none">
         <div
           className="animate-marquee flex gap-3 sm:gap-6 md:gap-8 items-center whitespace-nowrap pr-3 sm:pr-6 md:pr-8"
           style={{ animationDuration: "80s" }}
@@ -71,10 +69,10 @@ export function TagsMarquee() {
             <PillCard key={idx} item={item} />
           ))}
         </div>
-      </div>
+      </Reveal>
 
       {/* Row 2 (Reverse) */}
-      <div className="marquee-row flex w-full overflow-hidden select-none">
+      <Reveal variant="right" className="marquee-row flex w-full overflow-hidden select-none">
         <div
           className="animate-marquee-reverse flex gap-3 sm:gap-6 md:gap-8 items-center whitespace-nowrap pr-3 sm:pr-6 md:pr-8"
           style={{ animationDuration: "80s", animationDelay: "-25s" }}
@@ -83,10 +81,10 @@ export function TagsMarquee() {
             <PillCard key={idx} item={item} />
           ))}
         </div>
-      </div>
+      </Reveal>
 
       {/* Row 3 */}
-      <div className="marquee-row flex w-full overflow-hidden select-none">
+      <Reveal variant="left" className="marquee-row flex w-full overflow-hidden select-none">
         <div
           className="animate-marquee flex gap-3 sm:gap-6 md:gap-8 items-center whitespace-nowrap pr-3 sm:pr-6 md:pr-8"
           style={{ animationDuration: "80s", animationDelay: "-45s" }}
@@ -95,7 +93,7 @@ export function TagsMarquee() {
             <PillCard key={idx} item={item} />
           ))}
         </div>
-      </div>
+      </Reveal>
       
     </section>
   );

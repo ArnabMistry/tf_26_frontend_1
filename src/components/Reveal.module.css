@@ -1,0 +1,82 @@
+.reveal {
+  --reveal-x: 0px;
+  --reveal-y: 48px;
+  --reveal-scale: 1;
+  --reveal-rotate: 0deg;
+}
+
+.reveal[data-variant="left"] { --reveal-x: -90px; --reveal-y: 0px; }
+.reveal[data-variant="right"] { --reveal-x: 90px; --reveal-y: 0px; }
+.reveal[data-variant="scale"] { --reveal-y: 24px; --reveal-scale: 0.94; --reveal-rotate: -1deg; }
+.reveal[data-variant="fade"] { --reveal-y: 0px; }
+.reveal[data-variant="sponsor-left"] { --reveal-x: -36px; --reveal-y: 56px; --reveal-scale: 0.82; --reveal-rotate: -9deg; }
+.reveal[data-variant="sponsor-right"] { --reveal-x: 36px; --reveal-y: 56px; --reveal-scale: 0.82; --reveal-rotate: 9deg; }
+
+/* One observer starts both halves of each highlight row together. */
+.reveal > [data-reveal-item="left"] { --reveal-x: -100px; --reveal-y: 12px; }
+.reveal > [data-reveal-item="right"] { --reveal-x: 100px; --reveal-y: 12px; }
+.reveal[data-variant="stagger"] > [data-reveal-item] {
+  --reveal-y: 38px;
+  --reveal-scale: 0.88;
+  --reveal-rotate: -4deg;
+}
+.reveal[data-variant="stagger"] > :nth-child(2) { --reveal-delay: 110ms; --reveal-rotate: 3deg; }
+.reveal[data-variant="stagger"] > :nth-child(3) { --reveal-delay: 220ms; --reveal-rotate: -2deg; }
+
+.reveal[data-state="pending"]:not([data-variant="split"]):not([data-variant="stagger"]),
+.reveal[data-state="pending"] > [data-reveal-item] {
+  opacity: 0;
+  translate: var(--reveal-x) var(--reveal-y);
+  scale: var(--reveal-scale);
+  rotate: var(--reveal-rotate);
+}
+
+.reveal[data-state="revealed"]:not([data-variant="split"]):not([data-variant="stagger"]),
+.reveal[data-state="revealed"] > [data-reveal-item] {
+  animation: arrive 850ms cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms) backwards;
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+    translate: var(--reveal-x) var(--reveal-y);
+    scale: var(--reveal-scale);
+    rotate: var(--reveal-rotate);
+  }
+  to { opacity: 1; translate: 0 0; scale: 1; rotate: 0deg; }
+}
+
+/* Sponsor tickets land with a small overshoot, then settle into their grid. */
+.reveal[data-state="revealed"][data-variant^="sponsor-"] {
+  animation-name: ticket-arrive;
+  animation-duration: 950ms;
+}
+
+@keyframes ticket-arrive {
+  from {
+    opacity: 0;
+    translate: var(--reveal-x) var(--reveal-y);
+    scale: var(--reveal-scale);
+    rotate: var(--reveal-rotate);
+  }
+  65% { opacity: 1; translate: 0 -5px; scale: 1.025; rotate: 0deg; }
+  to { opacity: 1; translate: 0 0; scale: 1; rotate: 0deg; }
+}
+
+@media (max-width: 767px) {
+  .reveal[data-variant^="sponsor-"] { --reveal-y: 32px; --reveal-scale: 0.9; }
+  .reveal[data-variant="sponsor-left"] { --reveal-x: -18px; --reveal-rotate: -5deg; }
+  .reveal[data-variant="sponsor-right"] { --reveal-x: 18px; --reveal-rotate: 5deg; }
+  .reveal[data-variant="left"], .reveal > [data-reveal-item="left"] { --reveal-x: -28px; }
+  .reveal[data-variant="right"], .reveal > [data-reveal-item="right"] { --reveal-x: 28px; }
+}
+
+@media (prefers-reduced-motion: reduce), print {
+  .reveal[data-state], .reveal[data-state] > [data-reveal-item] {
+    opacity: 1 !important;
+    translate: none !important;
+    scale: none !important;
+    rotate: none !important;
+    animation: none !important;
+  }
+}

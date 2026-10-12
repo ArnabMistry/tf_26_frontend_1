@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import { Hero } from "@/components/Hero";
 import { AboutSection } from "@/components/AboutSection";
 import { AboutContent } from "@/components/AboutContent";
+import { Reveal } from "@/components/Reveal";
 
 const PhotoGallery = dynamic(() => import("@/components/PhotoGallery").then(m => m.PhotoGallery), {
   loading: () => <section aria-label="Photo Gallery" className="min-h-[400px] flex items-center justify-center text-zinc-500 py-16">Loading gallery…</section>,
@@ -14,26 +15,16 @@ const Footer = dynamic(() => import("@/components/Footer").then(m => m.Footer));
 
 export default function Home() {
   return (
-    <main className="flex-1 bg-zinc-950 text-white">
+    <main className="flex-1 bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat bg-fixed text-white">
       <Hero />
       <AboutSection />
       <TagsMarquee />
       <PhotoGallery />
-      <section
-        className="relative isolate w-full overflow-hidden"
-        style={{
-          backgroundColor: "#241A4C",
-          backgroundImage: "url('/assets/bg.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundAttachment: "fixed",
-        }}
-      >
+      <section className="relative isolate w-full overflow-hidden">
         <AboutContent />
       </section>
       <Sponsors />
-      <Footer />
+      <Reveal variant="fade"><Footer /></Reveal>
     </main>
   );
 }

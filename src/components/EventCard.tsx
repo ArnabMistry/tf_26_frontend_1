@@ -7,6 +7,7 @@ interface EventCardProps {
   variant?: "left" | "right" | "center";
   lowerWing?: boolean;
   onRegister?: (event: EventListing) => void;
+  reveal?: boolean;
 }
 
 const wingShape = "M16 0H590Q606 0 606 16V221Q606 237 590 237H337Q321 237 310 250L283 282Q275 292 263 292H16Q0 292 0 276V16Q0 0 16 0Z";
@@ -26,7 +27,7 @@ function truncate(text: string, max: number): string {
   return `${cut.slice(0, lastSpace > 0 ? lastSpace : max).trimEnd()}…`;
 }
 
-export function EventCard({ event, variant = "left", lowerWing = false, onRegister }: EventCardProps) {
+export function EventCard({ event, variant = "left", lowerWing = false, onRegister, reveal = false }: EventCardProps) {
   const centered = variant === "center";
   const destination = event.href || event.registrationUrl;
   const actionLabel = "More Info";
@@ -40,7 +41,10 @@ export function EventCard({ event, variant = "left", lowerWing = false, onRegist
   );
 
   return (
-    <article className={`${styles.card} ${styles[variant]} ${lowerWing ? styles.lowerWing : ""}`} aria-label={event.name}>
+    <article data-reveal-item={reveal ? variant : undefined} className={`${styles.card} ${styles[variant]} ${lowerWing ? styles.lowerWing : ""}`} aria-label={event.name}>
+      <svg className={`${styles.backing} ${centered ? styles.shapeDesktopOnly : ""}`} aria-hidden="true" viewBox={centered ? "0 0 688 318" : "0 0 606 292"} preserveAspectRatio="none">
+        <path d={centered ? centerShape : lowerWing ? lowerWingShape : wingShape} transform={variant === "right" ? "translate(606 0) scale(-1 1)" : undefined} />
+      </svg>
       <svg className={`${styles.shape} ${centered ? styles.shapeDesktopOnly : ""}`} aria-hidden="true" viewBox={centered ? "0 0 688 318" : "0 0 606 292"} preserveAspectRatio="none">
         <path d={centered ? centerShape : lowerWing ? lowerWingShape : wingShape} transform={variant === "right" ? "translate(606 0) scale(-1 1)" : undefined} />
       </svg>
@@ -48,6 +52,11 @@ export function EventCard({ event, variant = "left", lowerWing = false, onRegist
           desktop-only pennant shape (diagonal-cut top corners) just looks like
           a different, broken card next to the plain ones — swap in the same
           plain shape the other cards use. */}
+      {centered && (
+        <svg className={`${styles.backing} ${styles.shapeMobileOnly}`} aria-hidden="true" viewBox="0 0 606 292" preserveAspectRatio="none">
+          <path d={wingShape} />
+        </svg>
+      )}
       {centered && (
         <svg className={`${styles.shape} ${styles.shapeMobileOnly}`} aria-hidden="true" viewBox="0 0 606 292" preserveAspectRatio="none">
           <path d={wingShape} />

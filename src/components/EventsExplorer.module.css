@@ -6,6 +6,16 @@
   margin-inline: auto;
 }
 
+/* Paired wings slide together; the center card follows with a small pop. */
+.eventEntrance > [data-reveal-item="left"] { --reveal-rotate: -3deg; }
+.eventEntrance > [data-reveal-item="right"] { --reveal-rotate: 3deg; }
+.eventEntrance > [data-reveal-item="center"] {
+  --reveal-x: 0px;
+  --reveal-y: 55px;
+  --reveal-scale: 0.9;
+  --reveal-delay: 120ms;
+}
+
 .toolbar {
   display: flex;
   align-items: center;

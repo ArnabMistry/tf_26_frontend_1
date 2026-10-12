@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState, type FormEvent } from "react";
 import Image from "next/image";
 import { EventCard } from "@/components/EventCard";
+import { Reveal } from "@/components/Reveal";
 import { getClubLogo } from "@/lib/clubs";
 import { eventCategories, groupEventsForLayout, type EventListing } from "@/lib/events";
 import styles from "./EventsExplorer.module.css";
@@ -139,17 +140,18 @@ export function EventsExplorer({ events }: EventsExplorerProps) {
         {visibleEvents.length > 0 ? (
           <div className={styles.cardGroups}>
             {eventGroups.map((group) => (
-              <div key={group[0].id} className={`${styles.cards} ${group.length === 4 ? styles.evenCards : ""} ${group.length === 1 ? styles.singleCard : ""}`}>
+              <Reveal variant="split" key={group.map((event) => event.id).join(":")} className={`${styles.cards} ${styles.eventEntrance} ${group.length === 4 ? styles.evenCards : ""} ${group.length === 1 ? styles.singleCard : ""}`}>
                 {group.map((event, index) => (
                   <EventCard
                     key={event.id}
                     event={event}
+                    reveal
                     variant={group.length === 1 || (group.length === 3 && index === 2) ? "center" : index % 2 === 0 ? "left" : "right"}
                     lowerWing={group.length === 4 && index >= 2}
                     onRegister={showRegistration}
                   />
                 ))}
-              </div>
+              </Reveal>
             ))}
           </div>
         ) : (

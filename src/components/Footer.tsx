@@ -179,7 +179,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
 
   // Original Purple Variant for Landing Page
   return (
-    <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat bg-fixed pt-0 pb-12 md:pb-20 flex flex-col items-center px-4 md:px-8">
+    <section className="relative w-full pt-0 pb-12 md:pb-20 flex flex-col items-center px-4 md:px-8">
 
       {/* Bottom half of Yellow Container */}
       <div className="relative w-full max-w-[1600px] bg-[#FFFF1A] rounded-b-[32px] md:rounded-b-[48px] px-2 md:px-8 pt-12 md:pt-16 pb-4 md:pb-8">

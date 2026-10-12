@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { HoverTilt } from "./HoverTilt";
+import { Reveal } from "./Reveal";
 
 const sponsorsData = [
   { name: "Abhibus", image: "/assets/sponsors/abhibus-Iuz0rWX0.webp", bgColor: "#FFFFFF" },
@@ -82,24 +83,28 @@ export function Sponsors() {
   sponsorsData.forEach((s, i) => columns[i % 4].push(s));
 
   return (
-    <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat bg-fixed pt-12 md:pt-20 flex flex-col items-center px-4 md:px-8">
+    <section className="relative w-full pt-12 md:pt-20 flex flex-col items-center px-4 md:px-8">
       <div className="w-full max-w-[1600px] bg-[#FFFF1A] rounded-t-[32px] md:rounded-t-[48px] px-4 md:px-16 pt-16 md:pt-24 pb-16 md:pb-32 relative">
 
         {/* Hovercar Image Box */}
-        <HoverTilt className="absolute -top-12 md:-top-20 left-4 md:left-12 w-48 md:w-80 z-20" rotationIntensity={10} scaleIntensity={1.03}>
-          <Image
-            src="/assets/hovercar.png"
-            alt="Hovercar"
-            width={320}
-            height={240}
-            className="w-full h-auto object-contain drop-shadow-xl"
-          />
-        </HoverTilt>
+        <Reveal variant="left" className="absolute -top-12 md:-top-20 left-4 md:left-12 w-48 md:w-80 z-20">
+          <HoverTilt className="w-full" rotationIntensity={10} scaleIntensity={1.03}>
+            <Image
+              src="/assets/hovercar.png"
+              alt="Hovercar"
+              width={320}
+              height={240}
+              className="w-full h-auto object-contain drop-shadow-xl"
+            />
+          </HoverTilt>
+        </Reveal>
 
         {/* Heading */}
-        <h2 className="font-regular font-semibold text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-black uppercase tracking-normal mb-16 md:mb-24 text-center mt-8 md:mt-0 relative z-10">
-          PA<span className="ml-[0.02em]">S</span><span className="ml-[0.02em]">T</span> SPONSORS
-        </h2>
+        <Reveal variant="scale" delay={100}>
+          <h2 className="font-regular font-semibold text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-black uppercase tracking-normal mb-16 md:mb-24 text-center mt-8 md:mt-0 relative z-10">
+            PA<span className="ml-[0.02em]">S</span><span className="ml-[0.02em]">T</span> SPONSORS
+          </h2>
+        </Reveal>
 
         {/* Grid */}
         <div className="w-full max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 relative z-10">
@@ -111,7 +116,9 @@ export function Sponsors() {
                 }`}
             >
               {col.map((sponsor, idx) => (
-                <SponsorCard key={idx} sponsor={sponsor} />
+                <Reveal key={sponsor.name} variant={(colIndex + idx) % 2 === 0 ? "sponsor-left" : "sponsor-right"} delay={colIndex * 65}>
+                  <SponsorCard sponsor={sponsor} />
+                </Reveal>
               ))}
             </div>
           ))}

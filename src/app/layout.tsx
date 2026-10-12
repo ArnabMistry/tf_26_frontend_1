@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { siteConfig } from "@/lib/site";
 import { PageOpeningAnimation } from "@/components/PageOpeningAnimation";
+import { SmoothScroll } from "@/components/SmoothScroll";
 import "./globals.css";
+import "lenis/dist/lenis.css";
 import { SessionSync } from "@/components/auth/SessionSync";
 import { ParticipantSession } from "@/components/auth/ParticipantSession";
 
@@ -82,6 +84,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <SmoothScroll />
         <PageOpeningAnimation />
         <ParticipantSession><SessionSync />{children}</ParticipantSession>
       </body>
