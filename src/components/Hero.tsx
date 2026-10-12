@@ -5,26 +5,29 @@ import { ThemeTeaser } from "./ThemeTeaser";
 
 export function Hero() {
   return (
-    <section className="relative min-h-[100svh] w-full overflow-hidden flex flex-col">
-      <Navbar />
+    <>
+      <section className="relative min-h-[100svh] w-full overflow-hidden flex flex-col">
+        <Navbar />
 
-      {/* Main Hero Content */}
-      <div className="relative flex-1 flex flex-col items-center justify-center w-full py-10 overflow-hidden">
-        
-      {/* Visually hidden h1 for screen readers and SEO — the visual title is the tf_hero.png image */}
-        <h1 className="sr-only">TantraFiesta 2026 — Annual National Technical Festival, IIIT Nagpur</h1>
+        {/* Main Hero Content */}
+        <div className="relative flex-1 flex flex-col items-center justify-center w-full py-8 md:py-10 overflow-hidden">
+          {/* Visually hidden h1 for screen readers and SEO — the visual title is the tf_hero.png image */}
+          <h1 className="sr-only">TantraFiesta 2026 — Annual National Technical Festival, IIIT Nagpur</h1>
 
-        {/* Hero Text */}
-        <div className="relative z-20 flex flex-col items-center justify-center pointer-events-none drop-shadow-2xl px-4 w-full">
-          <Image src="/assets/tf_hero.png" alt="Tantra Fiesta" width={800} height={400} className="w-full max-w-md sm:max-w-xl md:max-w-2xl lg:max-w-3xl h-auto object-contain" />
-          <p className="mt-6 md:mt-8 text-white text-xl md:text-3xl lg:text-4xl tracking-widest font-regular drop-shadow-lg text-center uppercase">
-            {/* THEME REVEAL: Replace this silhouette with the official theme copy. */}
-            <ThemeTeaser />
-          </p>
+          {/* Hero Text */}
+          <div className="relative z-20 flex flex-col items-center justify-center pointer-events-none drop-shadow-2xl px-4 w-full">
+            <Image src="/assets/tf_hero.png" alt="Tantra Fiesta" width={800} height={400} className="w-full max-w-md sm:max-w-xl md:max-w-2xl lg:max-w-3xl h-auto object-contain" />
+            <p className="mt-6 md:mt-8 text-white text-xl md:text-3xl lg:text-4xl tracking-widest font-regular drop-shadow-lg text-center uppercase">
+              {/* THEME REVEAL: Replace this silhouette with the official theme copy. */}
+              <ThemeTeaser />
+            </p>
+          </div>
         </div>
+      </section>
 
+      <div className="relative w-full flex flex-col items-center overflow-x-clip">
         {/* Yellow Tape */}
-        <div className="relative w-[120vw] left-1/2 -translate-x-1/2 rotate-[2deg] bg-[#F2A900] py-1.5 md:py-2.5 z-10 shadow-lg border-y-[3px] border-black my-12 md:my-16">
+        <div className="relative w-[120vw] left-1/2 -translate-x-1/2 -translate-y-[clamp(5rem,17svh,7.5rem)] rotate-[2deg] bg-[#F2A900] py-1.5 md:py-2.5 z-10 shadow-lg border-y-[3px] border-black my-12 md:my-16">
           <div className="flex w-full whitespace-nowrap overflow-hidden">
             <div className="animate-marquee flex gap-10 md:gap-16 text-black font-tantra text-2xl md:text-4xl uppercase tracking-tighter shrink-0">
               {Array.from({ length: 30 }).map((_, i) => (
@@ -45,6 +48,6 @@ export function Hero() {
           </div>
         </div>
       </div>
-    </section>
+    </>
   );
 }
