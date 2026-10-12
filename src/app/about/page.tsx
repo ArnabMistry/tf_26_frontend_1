@@ -127,7 +127,7 @@ export default function AboutPage() {
           {/* Stat Card 3 */}
           <div className="bg-[#F06C00] rounded-xl sm:rounded-3xl p-3 sm:p-8 flex flex-col items-center justify-center border-b-[6px] sm:border-b-[12px] border-[#BD5400] shadow-2xl aspect-square md:aspect-auto md:h-[280px] transform transition-transform hover:scale-105">
             <h3 className="font-sans font-black text-xl sm:text-4xl md:text-6xl text-white drop-shadow-md mb-1 sm:mb-2">33+</h3>
-            <p className="text-white text-center font-bold tracking-tight sm:tracking-wide text-[10px] sm:text-base md:text-xl leading-tight sm:leading-snug">Coutries Represented</p>
+            <p className="text-white text-center font-bold tracking-tight sm:tracking-wide text-[10px] sm:text-base md:text-xl leading-tight sm:leading-snug">Countries Represented</p>
           </div>
         </div>
       </div>

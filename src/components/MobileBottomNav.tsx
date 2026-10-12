@@ -18,7 +18,6 @@ const primaryItems = [
 
 const expandedItems = [
   { href: "/admin", label: "Admin panel" },
-  { href: "/login", label: "Login" },
   { href: "/sponsors", label: "Sponsors" },
   { href: "/speakers", label: "Speakers" },
 ];
@@ -84,7 +83,6 @@ export function MobileBottomNav({
           >
             {expandedItems
               .filter(({ href }) => href !== "/admin" || isAdmin)
-              .map(item => item.href === '/login' && isLoggedIn ? { href: '/profile', label: 'My Portal' } : item)
               .map((item, i) => {
               const isActive = currentPath === item.href;
               return (
