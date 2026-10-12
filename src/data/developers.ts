@@ -7,28 +7,18 @@ export interface Developer {
 export const heads: Developer[] = [
   {
     name: "SARTHAK G.",
-    role: "UI/UX Director",
+    role: "Creative Director",
+    image: "/developers/sarthak.webp",
   },
   {
     name: "SAMBODHI B.",
-    role: "UI/UX Director",
+    role: "Web Mastermind",
+    image: "/developers/sambodhi.webp",
   },
   {
     name: "ARNAB",
     role: "UI/UX Director",
     image: "/developers/arnab_mistry_pic.webp",
-  },
-  {
-    name: "SARTHAK G.",
-    role: "UI/UX Director",
-  },
-  {
-    name: "SARTHAK G.",
-    role: "UI/UX Director",
-  },
-  {
-    name: "SARTHAK G.",
-    role: "UI/UX Director",
   },
 ];
 
