@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useParticipant } from '@/components/auth/ParticipantSession';
 import { ApiError } from '@/lib/auth';
-import { logout } from '@/lib/supabase';
+import { getAuthToken, logout } from '@/lib/supabase';
 import { participantRequest, fullName, formatDate, type Profile, type Inbox, type Notification } from '@/lib/participant';
 import s from './Portal.module.css';
 
@@ -18,10 +18,10 @@ export function UserPortal() {
   const [error, setError] = useState(''), [notice, setNotice] = useState(''), [busy, setBusy] = useState('');
   const load = useCallback(async () => {
     if (!user) return;
-    const token = localStorage.getItem('tf_auth_token');
+    const token = getAuthToken();
     try {
       const [nextProfile, nextInbox] = await Promise.all([participantRequest<Profile>('/api/user/profile'), participantRequest<Inbox>(`/api/user/notifications?page=${page}`)]);
-      if (localStorage.getItem('tf_auth_token') !== token) return;
+      if (getAuthToken() !== token) return;
       setProfile(nextProfile); setInbox(nextInbox); setError('');
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) router.replace('/login?next=%2Fprofile');

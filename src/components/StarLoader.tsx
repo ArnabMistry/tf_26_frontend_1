@@ -23,10 +23,10 @@ const generateStarPath = (points: number, rOuter: number, rInner: number) => {
 export function StarLoader() {
   const [isVisible, setIsVisible] = useState(true);
 
-  // Fallback: force-dismiss after 3.5s in case onAnimationComplete
+  // Fallback: force-dismiss after 1.2s in case onAnimationComplete
   // doesn't fire (e.g. Firefox + SVG motion.g inside <defs>/<mask>)
   useEffect(() => {
-    const id = setTimeout(() => setIsVisible(false), 3500);
+    const id = setTimeout(() => setIsVisible(false), 1200);
     return () => clearTimeout(id);
   }, []);
 
@@ -52,8 +52,8 @@ export function StarLoader() {
                   initial={{ scale: 0, rotate: 0 }}
                   animate={{ scale: 40, rotate: 360 }}
                   transition={{ 
-                    scale: { duration: 2.5, ease: [0.7, 0, 1, 1], delay: 0.2 }, 
-                    rotate: { duration: 3.5, ease: "linear" } 
+                    scale: { duration: 0.7, ease: [0.7, 0, 1, 1], delay: 0.05 }, 
+                    rotate: { duration: 1.0, ease: "linear" } 
                   }}
                   onAnimationComplete={() => setIsVisible(false)}
                 >
@@ -70,8 +70,8 @@ export function StarLoader() {
                 initial={{ scale: 0, rotate: 0 }}
                 animate={{ scale: 40, rotate: 360 }}
                 transition={{ 
-                  scale: { duration: 2.8, ease: [0.7, 0, 1, 1], delay: 0.2 }, 
-                  rotate: { duration: 3.5, ease: "linear" } 
+                  scale: { duration: 0.8, ease: [0.7, 0, 1, 1], delay: 0.05 }, 
+                  rotate: { duration: 1.0, ease: "linear" } 
                 }}
               >
                 <path d={generateStarPath(12, 500, 250)} fill="#564BE3" />

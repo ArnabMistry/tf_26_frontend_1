@@ -31,7 +31,7 @@ export function SpeakerCard({ speaker }: SpeakerCardProps) {
             width={340}
             height={340}
             className={styles.speakerImage}
-            priority
+            loading="lazy"
           />
         </div>
       </div>

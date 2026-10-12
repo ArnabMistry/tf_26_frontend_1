@@ -1,4 +1,5 @@
 import { ApiError, authRequest, type AuthUser } from './auth';
+import { getAuthToken } from './supabase';
 
 export type Person = AuthUser & { firstName: string; lastName: string; email: string; festId: string | null; collegeName?: string | null; phoneNumber?: string | null };
 export type EventInfo = { id: string; slug?: string; name: string; club: string; isTeamEvent: boolean; minTeamSize: number | null; maxTeamSize: number | null; price: number; paymentTrigger: string; registrationEndTime: string; venue?: string };
@@ -10,7 +11,7 @@ export type Notification = { id: number; senderId: string; recipientId: string; 
 export type Inbox = { notifications: Notification[]; unreadCount: number; page: number; totalPages: number };
 
 export async function participantRequest<T>(path: string, body?: unknown, method?: string): Promise<T> {
-  const token = localStorage.getItem('tf_auth_token');
+  const token = getAuthToken();
   if (!token) throw new ApiError('Please log in to continue.', 401);
   return (await authRequest(path, body, token, method)).data as T;
 }

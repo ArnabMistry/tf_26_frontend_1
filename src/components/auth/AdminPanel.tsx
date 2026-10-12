@@ -3,11 +3,29 @@ import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ApiError, authRequest, destination, type AuthUser } from '@/lib/auth';
+import { getAuthToken, saveAuthTokens } from '@/lib/supabase';
+import dynamic from 'next/dynamic';
 import { enc, person, record, text, type Dashboard } from '@/lib/admin';
-import { EventTools, Promotion, Registrations } from '@/components/admin/EventTools';
-import { Coordinators, Users } from '@/components/admin/Governance';
-import { Meals } from '@/components/admin/Meals';
 import { LoadState, Table, useAdminData } from '@/components/admin/AdminUI';
+
+const EventTools = dynamic(() => import('@/components/admin/EventTools').then(m => m.EventTools), {
+  loading: () => <p className="admin-loading-card">Loading event tools…</p>,
+});
+const Promotion = dynamic(() => import('@/components/admin/EventTools').then(m => m.Promotion), {
+  loading: () => <p className="admin-loading-card">Loading round promotion…</p>,
+});
+const Registrations = dynamic(() => import('@/components/admin/EventTools').then(m => m.Registrations), {
+  loading: () => <p className="admin-loading-card">Loading registrations…</p>,
+});
+const Coordinators = dynamic(() => import('@/components/admin/Governance').then(m => m.Coordinators), {
+  loading: () => <p className="admin-loading-card">Loading coordinators…</p>,
+});
+const Users = dynamic(() => import('@/components/admin/Governance').then(m => m.Users), {
+  loading: () => <p className="admin-loading-card">Loading user governance…</p>,
+});
+const Meals = dynamic(() => import('@/components/admin/Meals').then(m => m.Meals), {
+  loading: () => <p className="admin-loading-card">Loading meal counter…</p>,
+});
 import '@/components/admin/admin.css';
 import { logout } from '@/lib/supabase';
 
@@ -18,7 +36,7 @@ function AdminGate({ superAdmin = false, eventId }: { superAdmin?: boolean; even
   const router = useRouter(); const [user, setUser] = useState<AuthUser | null>(null); const [error, setError] = useState('');
   useEffect(() => {
     let active = true;
-    const token = localStorage.getItem('tf_auth_token');
+    const token = getAuthToken();
     if (!token) { router.replace('/login'); return; }
     authRequest('/api/auth/me', undefined, token).then(({ data }) => {
       if (!active) return;
@@ -28,7 +46,7 @@ function AdminGate({ superAdmin = false, eventId }: { superAdmin?: boolean; even
       setUser(profile);
     }).catch(err => {
       if (!active) return;
-      if (err instanceof ApiError && err.status === 401) { localStorage.removeItem('tf_auth_token'); router.replace('/login'); return; }
+      if (err instanceof ApiError && err.status === 401) { saveAuthTokens({ accessToken: null, refreshToken: null }); router.replace('/login'); return; }
       setError(err instanceof Error ? err.message : 'Unable to verify access.');
     });
     return () => { active = false; };
@@ -53,7 +71,7 @@ function Workspace({ user, eventId }: { user: AuthUser; eventId?: string }) {
         <Link className="admin-brand" href="/" title="Go to TantraFiesta Website Homepage">
           <div className="admin-brand-icon-wrap">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/assets/tf_logo.png" alt="TantraFiesta" className="admin-brand-icon" width="28" height="28" />
+            <img src="/assets/tf_logo.png" alt="TantraFiesta" className="admin-brand-icon" width="28" height="28" loading="lazy" />
           </div>
           <div className="admin-brand-text">
             <span className="admin-brand-title">TANTRAFIESTA</span>

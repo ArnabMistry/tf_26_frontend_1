@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { adminRequest, record, text, type Row } from '@/lib/admin';
 import { ApiError } from '@/lib/auth';
+import { saveAuthTokens } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 
 export function useAdminData(path: string | null) {
@@ -14,7 +15,7 @@ export function useAdminData(path: string | null) {
     if (!path) return;
     adminRequest(path).then(value => { if (active) setSnapshot({ key: requestKey, data: value, error: '' }); }).catch(err => {
       if (!active) return;
-      if (err instanceof ApiError && err.status === 401) { localStorage.removeItem('tf_auth_token'); router.replace('/login'); }
+      if (err instanceof ApiError && err.status === 401) { saveAuthTokens({ accessToken: null, refreshToken: null }); router.replace('/login'); }
       setSnapshot({ key: requestKey, data: null, error: err instanceof Error ? err.message : 'Unable to load data.' });
     });
     return () => { active = false; };

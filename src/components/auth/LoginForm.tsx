@@ -47,9 +47,9 @@ export function LoginForm() {
     try {
       const result = await authRequest('/api/auth/login', { email, password });
       const token = result.data.accessToken;
+      const refreshToken = result.data.refreshToken;
       const profile = await authRequest('/api/auth/me', undefined, token);
-      await logout();
-      saveAuthToken(token);
+      saveAuthToken(token, refreshToken);
       sessionStorage.removeItem('tf_signup_notice');
       router.replace(safeReturnPath(searchParams.get('next')) || safeReturnPath(sessionStorage.getItem('tf_return_to')) || destination(profile.data.user));
       sessionStorage.removeItem('tf_return_to');

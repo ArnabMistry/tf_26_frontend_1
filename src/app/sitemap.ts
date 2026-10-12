@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { fetchAllEventSlugs } from "@/lib/api/events";
 import { getAllClubSlugs } from "@/lib/clubs";
+import { getAllEventDetailSlugs } from "@/lib/eventDetails";
 import { siteConfig } from "@/lib/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -50,6 +51,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.6,
     },
+    {
+      url: `${siteConfig.url}/developers`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
   ];
 
   // 2. Organizing Club routes
@@ -61,8 +68,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // 3. Dynamic actual event URLs fetched from backend API
-  const eventSlugs = await fetchAllEventSlugs();
+  // 3. Event routes — prefer live backend, fall back to static event detail records
+  //    so all 23 pre-rendered event pages always appear in the sitemap even when
+  //    BACKEND_API_URL is not set at build time.
+  const apiSlugs = await fetchAllEventSlugs();
+  const eventSlugs = apiSlugs.length > 0 ? apiSlugs : getAllEventDetailSlugs();
   const eventRoutes: MetadataRoute.Sitemap = eventSlugs.map((slug) => ({
     url: `${siteConfig.url}/events/${slug}`,
     lastModified: currentDate,

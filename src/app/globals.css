@@ -11,7 +11,7 @@
 @font-face {
   font-family: 'TantraFont';
   src: url('/fonts/font_bold') format('opentype');
-  font-weight: normal;
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
@@ -19,7 +19,7 @@
 @font-face {
   font-family: 'TantraRegular';
   src: url('/fonts/font_regular') format('opentype');
-  font-weight: normal;
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
@@ -146,7 +146,7 @@ body {
 
 @media (max-width: 480px) {
   .page-title {
-    font-size: clamp(3.125rem, 14vw, 3.625rem);
+    font-size: clamp(2.25rem, 11vw, 3.625rem);
     line-height: 1.05;
   }
 }

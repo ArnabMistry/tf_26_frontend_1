@@ -176,6 +176,7 @@ export function PhotoGallery() {
                 className="object-cover pointer-events-none select-none"
                 sizes="(max-width: 640px) 11rem, (max-width: 991px) 15rem, 20rem"
                 draggable={false}
+                loading="lazy"
               />
             </motion.div>
           );

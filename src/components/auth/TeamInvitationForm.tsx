@@ -61,13 +61,15 @@ export function TeamInvitationForm() {
           {tfIds.map((id, index) => (
             <div key={index}>
               <label
+                htmlFor={`tf-id-${index}`}
                 className="block text-white font-extrabold text-xs md:text-sm tracking-wider uppercase mb-2"
                 style={{ fontFamily: "var(--font-futura)" }}
               >
-                TF ID&apos;S
+                TF ID {index + 1}
               </label>
               <div className="flex gap-4 items-center h-10 md:h-12">
                 <input
+                  id={`tf-id-${index}`}
                   type="text"
                   value={id}
                   onChange={(e) => updateTfId(index, e.target.value)}

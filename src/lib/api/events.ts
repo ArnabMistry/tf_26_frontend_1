@@ -76,11 +76,20 @@ interface BackendEvent {
  * "DotSlash" → "dotslash", "GDG IIIT Nagpur" → "gdg-iiit-nagpur"
  */
 function clubNameToSlug(name: string): string {
-  const aliases: Record<string, string> = { 'gdg': 'gdg', 'gdg on campus': 'gdg', 'dimensions': 'dimension', 'the orator club': 'orator' };
-  if (aliases[name.toLowerCase().trim()]) return aliases[name.toLowerCase().trim()];
-  return name
-    .toLowerCase()
-    .trim()
+  const aliases: Record<string, string> = {
+    'gdg': 'gdg',
+    'gdg on campus': 'gdg',
+    'dimension': 'dimension',
+    'dimensions': 'dimension',
+    'the orator club': 'orator',
+    'orator': 'orator',
+    'iotics': 'iotics',
+    'elevate': 'elevate',
+    'the orator club x probe': 'orator',
+  };
+  const lower = name.toLowerCase().trim();
+  if (aliases[lower]) return aliases[lower];
+  return lower
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 }

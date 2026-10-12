@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useParticipant } from '@/components/auth/ParticipantSession';
 import { authRequest, ApiError } from '@/lib/auth';
+import { getAuthToken } from '@/lib/supabase';
 import { participantRequest, formatDate, fullName, type EventInfo, type Team, type Registration } from '@/lib/participant';
 import s from './Portal.module.css';
 
@@ -17,7 +18,7 @@ export function EventRegistration() {
   const [error, setError] = useState(''), [notice, setNotice] = useState(''), [busy, setBusy] = useState(false);
   const refresh = useCallback(async () => {
     if (!user || !requestedEvent) return;
-    const token = localStorage.getItem('tf_auth_token');
+    const token = getAuthToken();
     try {
       const result = await authRequest(`/api/events/${encodeURIComponent(requestedEvent)}`);
       const current: EventInfo = result.data;
@@ -29,7 +30,7 @@ export function EventRegistration() {
       ]);
       const existing = teams.teams.find(item => item.eventId === current.id);
       const live = existing ? await participantRequest<Team>(`/api/user/teams/${existing.id}/live-status`) : null;
-      if (localStorage.getItem('tf_auth_token') !== token) return;
+      if (getAuthToken() !== token) return;
       setEvent(current); setTeam(live); setRegistered(registrations.registrations.some(item => item.eventId === current.id && item.status !== 'cancelled'));
       setReady(true); setError('');
     } catch (err) {
@@ -74,6 +75,7 @@ export function EventRegistration() {
           <p className={s.muted}>{team.members.length} accepted · {team.stats.pendingCount} pending · {event.minTeamSize}–{event.maxTeamSize} members required</p>
           {team.members.map(member => <div className={s.entry} key={member.id}><div className={s.row}><div><h3>{fullName(member)}</h3><p className={s.fine}>{member.festId}</p></div><span className={`${s.badge} ${s.accepted}`}>{member.isLeader ? 'Leader' : 'Accepted'}</span>{team.isLeader && !member.isLeader && !team.stats.isRegistered && <button disabled={busy} className={s.secondary} onClick={() => mutate(() => participantRequest(`/api/user/teams/${team.id}/members`, { userId: member.id }, 'DELETE'), 'Member removed.')}>Remove</button>}</div></div>)}
           {team.invites.filter(invite => invite.status !== 'ACCEPTED').map(invite => <div className={s.entry} key={invite.id}><div className={s.row}><div><h3>{invite.user ? fullName(invite.user) : invite.email}</h3><p className={s.fine}>{invite.user?.festId}</p></div><span className={`${s.badge} ${invite.status === 'PENDING' ? s.pending : ''}`}>{invite.status}</span>{team.isLeader && invite.status === 'PENDING' && !team.stats.isRegistered && <button className={s.secondary} disabled={busy} onClick={() => mutate(() => participantRequest(`/api/user/teams/${team.id}/members`, { inviteId: invite.id }, 'DELETE'), 'Invitation cancelled.')}>Cancel invite</button>}</div></div>)}
+          {team.isLeader && !team.stats.isRegistered && team.stats.isReadyForRegistration && <div className="mt-4 p-4 rounded-xl bg-[#faff52]/15 border border-[#faff52]/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"><div><h4 className="font-bold text-[#faff52]">Team is ready!</h4><p className={s.fine}>Minimum team size reached. Finalize your registration below.</p></div><button disabled={busy} className={s.button} onClick={() => mutate(() => participantRequest('/api/user/registrations', { eventId: event.id, teamId: team.id }), 'Registration confirmed!')}>{busy ? 'Registering…' : 'Register team now'}</button></div>}
         </section>
         {team.isLeader && !team.stats.isRegistered && <section className={s.card}><h2>Invite a teammate</h2><p className={`${s.muted} mb-4`}>Ask for their TF ID from their profile. They’ll receive an invitation in their portal.</p><form className={s.form} onSubmit={e => { e.preventDefault(); void mutate(async () => { await participantRequest(`/api/user/teams/${team.id}/invites`, { identifier: identifier.trim().toUpperCase() }); setIdentifier(''); }, 'Invitation sent. Your teammate can accept or decline in their inbox.'); }}><label>Teammate’s TF ID<input required pattern="[Tt][Ff][0-9]{6}" placeholder="TF123456" value={identifier} onChange={e => setIdentifier(e.target.value.toUpperCase())}/></label><button className={s.button} disabled={busy || closed || team.members.length + team.stats.pendingCount >= (event.maxTeamSize || 4)}>Send invitation</button></form></section>}
       </> : <section className={s.card}><h2>Your participant details</h2><h3>{fullName(user)}</h3><p className={s.muted}>{user.email}</p><p className={s.id}>{user.festId}</p><p className={s.muted}>{user.collegeName || 'You can add your college in your profile.'}</p></section>}

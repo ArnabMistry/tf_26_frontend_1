@@ -88,22 +88,17 @@ export default function ContactPage() {
         <h1 className={`font-tantra ${styles.title}`}>Contact Us</h1>
 
         <section aria-label="Organizing team contacts" className={styles.contacts}>
-          {/* Contact names, roles and phone numbers are placeholders from the design. */}
-          {Array.from({ length: 4 }, (_, index) => (
-            <article className={styles.contactCard} key={index}>
-              <h2>Name</h2>
-              <p className={styles.role}>X Lead</p>
-              <p className={styles.phone}>
-                <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="m6.6 10.8 2.8-2.1a1 1 0 0 0 .3-1.2L7.4 2.7a1 1 0 0 0-1.1-.5L2.8 3A1 1 0 0 0 2 4c0 9.9 8.1 18 18 18a1 1 0 0 0 1-.8l.8-3.5a1 1 0 0 0-.5-1.1l-4.8-2.3a1 1 0 0 0-1.2.3l-2.1 2.8a15.2 15.2 0 0 1-6.6-6.6Z" />
-                </svg>
-                +91 XXXXXXXXXX
-              </p>
-              <a href="mailto:tantrafiesta.marketing@iiitn.ac.in">
-                tantrafiesta.marketing@iiitn.ac.in
-              </a>
-            </article>
-          ))}
+          {/* TODO: Replace with real coordinator details before launch */}
+          <p className="text-zinc-400 text-sm col-span-full">
+            Coordinator contact details will be published shortly. For urgent queries, reach us at{" "}
+            <a href="mailto:support@tantrafiesta.in" className="underline hover:text-white transition-colors">
+              support@tantrafiesta.in
+            </a>{" "}
+            or call{" "}
+            <a href="tel:+918604551326" className="underline hover:text-white transition-colors">
+              +91 86045 51326
+            </a>.
+          </p>
         </section>
 
         <section id="how-to-reach" aria-labelledby="directions-heading" className={styles.directions}>

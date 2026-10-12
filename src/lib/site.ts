@@ -6,7 +6,7 @@ export const siteConfig = {
   description:
     "TantraFiesta 2026 is the annual national technical festival of Indian Institute of Information Technology, Nagpur (IIITN), celebrating technology, innovation, robotics, coding, AI, and leadership.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://tantrafiesta.in",
-  ogImage: "/og-image.jpg",
+  ogImage: "/assets/tf_hero.png",
   locale: "en_US",
   socials: {
     twitter: "https://twitter.com/tantrafiesta",

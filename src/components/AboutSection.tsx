@@ -17,7 +17,7 @@ export function AboutSection() {
               width={450}
               height={550}
               className="h-full w-auto object-contain drop-shadow-xl select-none pointer-events-none"
-              priority
+              loading="lazy"
             />
           </HoverTilt>
 

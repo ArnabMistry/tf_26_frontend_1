@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import Matter from "matter-js";
 
 const LETTERS = ["T", "A", "N", "T", "R", "A", "F", "I", "E", "S", "T", "A"];
@@ -9,9 +9,14 @@ interface PhysicsTextProps {
   startTrigger?: boolean;
 }
 
+// Extended type to attach a cleanup callback without using `any`
+interface EngineWithCleanup extends Matter.Engine {
+  cleanup?: () => void;
+}
+
 export function PhysicsText({ startTrigger = true }: PhysicsTextProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const engineRef = useRef<Matter.Engine | null>(null);
+  const engineRef = useRef<EngineWithCleanup | null>(null);
   const runnerRef = useRef<Matter.Runner | null>(null);
   const hasStarted = useRef(false);
 
@@ -25,7 +30,7 @@ export function PhysicsText({ startTrigger = true }: PhysicsTextProps) {
       Bodies = Matter.Bodies,
       Composite = Matter.Composite;
 
-    const engine = Engine.create();
+    const engine = Engine.create() as EngineWithCleanup;
     engineRef.current = engine;
 
     const container = containerRef.current;
@@ -124,12 +129,22 @@ export function PhysicsText({ startTrigger = true }: PhysicsTextProps) {
           body.position.y - h / 2
         }px) rotate(${body.angle}rad)`;
       });
+
+      // Stop the loop once all bodies have settled (velocity < threshold)
+      const allSettled = letterBodies.every(
+        ({ body }) => body.speed < 0.5 && Math.abs(body.angularVelocity) < 0.01
+      );
+      if (allSettled) {
+        Runner.stop(runner);
+        return;
+      }
+
       animationFrame = requestAnimationFrame(update);
     };
     update();
 
-    // Store a cleanup callback on the engineRef itself to avoid weird scope issues
-    (engine as any).cleanup = () => {
+    // Store cleanup callback on the engine instance (typed via EngineWithCleanup)
+    engine.cleanup = () => {
       cancelAnimationFrame(animationFrame);
       Runner.stop(runner);
       Engine.clear(engine);
@@ -139,9 +154,8 @@ export function PhysicsText({ startTrigger = true }: PhysicsTextProps) {
     };
 
     return () => {
-      if (engineRef.current) {
-        const engine = engineRef.current as any;
-        if (engine.cleanup) engine.cleanup();
+      if (engineRef.current?.cleanup) {
+        engineRef.current.cleanup();
       }
     };
   }, [startTrigger]);
@@ -149,6 +163,7 @@ export function PhysicsText({ startTrigger = true }: PhysicsTextProps) {
   return (
     <div ref={containerRef} className="flex flex-wrap gap-1 md:gap-2">
       {LETTERS.map((char, idx) => (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
           key={idx}
           src={`/assets/tf_letters/${char}.png`}

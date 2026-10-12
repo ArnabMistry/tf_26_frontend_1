@@ -144,7 +144,7 @@ export default async function EventPage(props: PageProps<"/events/[slug]">) {
       {jsonLd && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
         />
       )}
       <a href="#event-content" className={styles.skipLink}>

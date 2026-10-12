@@ -3,8 +3,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { PhysicsText } from "./PhysicsText";
+import dynamic from "next/dynamic";
 import { HoverTilt } from "./HoverTilt";
+
+const PhysicsText = dynamic(() => import("./PhysicsText").then((m) => m.PhysicsText), { ssr: false });
 
 interface FooterProps {
   variant?: "purple" | "yellow";
@@ -12,20 +14,11 @@ interface FooterProps {
 
 export function Footer({ variant = "purple" }: FooterProps) {
   const isYellow = variant === "yellow";
-  const headingText = "TANTRAFIESTA 2026";
   const [isVisible, setIsVisible] = useState(false);
-  const [fallDistance, setFallDistance] = useState(300);
   const containerRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    if (containerRef.current && headingRef.current) {
-      const containerRect = containerRef.current.getBoundingClientRect();
-      const headingRect = headingRef.current.getBoundingClientRect();
-      const dist = containerRect.bottom - headingRect.bottom - 48; 
-      setFallDistance(dist);
-    }
-
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -104,7 +97,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
             <div className="flex flex-col md:w-1/2">
               <div>
                 <h2 className="font-tantra text-3xl md:text-4xl lg:text-5xl tracking-widest uppercase mb-2">TANTRAFIESTA 2026</h2>
-                <p className="text-sm md:text-base font-bold text-[#F44383]">
+                <p className="text-sm md:text-base font-bold text-[#B81163]">
                   ANANTA: SURPASSING THE POSSIBLE
                 </p>
                 <div className="h-[1px] bg-black/20 w-full md:max-w-md mt-6 mb-8"></div>
@@ -166,7 +159,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
               width={500}
               height={500}
               className="w-full h-auto object-contain drop-shadow-2xl"
-              priority
+              loading="lazy"
             />
           </HoverTilt>
         </div>
@@ -281,7 +274,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
               width={500}
               height={500}
               className="w-full h-auto object-contain drop-shadow-2xl"
-              priority
+              loading="lazy"
             />
           </HoverTilt>
 

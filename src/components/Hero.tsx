@@ -10,6 +10,9 @@ export function Hero() {
       {/* Main Hero Content */}
       <div className="relative flex-1 flex flex-col items-center justify-center w-full py-10 overflow-hidden">
         
+      {/* Visually hidden h1 for screen readers and SEO — the visual title is the tf_hero.png image */}
+        <h1 className="sr-only">TantraFiesta 2026 — Annual National Technical Festival, IIIT Nagpur</h1>
+
         {/* Hero Text */}
         <div className="relative z-20 flex flex-col items-center justify-center pointer-events-none drop-shadow-2xl px-4 w-full">
           <Image src="/assets/tf_hero.png" alt="Tantra Fiesta" width={800} height={400} className="w-full max-w-md sm:max-w-xl md:max-w-2xl lg:max-w-3xl h-auto object-contain" />
