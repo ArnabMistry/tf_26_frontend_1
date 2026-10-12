@@ -80,19 +80,20 @@ export function Registrations({ eventId }: { eventId: string }) {
   const [details, setDetails] = useState<unknown>(null); const [error, setError] = useState(''); const [busy, setBusy] = useState(false);
   const path = `/api/admin/events/${enc(eventId)}/registrations`;
   const resource = useAdminData(`${path}?page=${page}&limit=20&status=${enc(status)}`);
-  const data = record(resource.data); const list = rows(data.registrations); const pagination = record(data.pagination);
+  const data = record(resource.data); const list = rows(data.registrations); const pagination = record(data.pagination); const feeRequired = Boolean(data.feeRequired);
   async function exportAll() {
     setBusy(true); setError('');
     try {
       const all: Row[] = []; let current = 1; let pages = 1;
       do { const result = await adminRequest(`${path}?page=${current}&limit=100&status=${enc(status)}`); all.push(...rows(result.registrations)); pages = result.pagination.totalPages; current++; } while (current <= pages);
-      downloadCsv(`${eventId}-registrations.csv`, [['ID', 'Participant / Team', 'Email', 'Status', 'Created'], ...all.map(r => [r.id, record(r.team).name || person(r.user), record(r.user).email, r.status, r.createdAt])]);
+      downloadCsv(`${eventId}-registrations.csv`, [['ID', 'Participant / Team', 'Email', 'Status', 'Entry fee', 'Paid at', 'Payment ID', 'Created'], ...all.map(r => { const p = record(r.payment); return [r.id, record(r.team).name || person(r.user), record(r.user).email, r.status, paymentLabel(p).label, p.paidAt, p.paymentId, r.createdAt]; })]);
     } catch (err) { setError(err instanceof Error ? err.message : 'Export failed.'); } finally { setBusy(false); }
   }
   return <section><div className="admin-section-heading"><h2>Registrations</h2><button disabled={busy || resource.loading} onClick={exportAll}>Export all filtered rows</button></div>
     <label>Status<select value={status} onChange={e => { setStatus(e.target.value); setPage(1); setDetails(null); }}><option value="">All statuses</option>{options(['registered', 'in_round', 'shortlisted', 'eliminated', 'confirmed', 'cancelled']).map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select></label>
     <LoadState {...resource} />{error && <p role="alert" className="admin-error">{error}</p>}
-    <Table headings={['ID', 'Participant / Team', 'Email', 'Status', 'Details']} empty={!list.length}>{list.map(r => <tr key={text(r.id)}><td>{text(r.id)}</td><td>{text(record(r.team).name || person(r.user))}</td><td>{text(record(r.user).email)}</td><td><span className="admin-badge">{text(r.status)}</span></td><td><button onClick={async () => { setError(''); try { setDetails(await adminRequest(`/api/admin/registrations/${enc(r.id)}`)); } catch (err) { setError(err instanceof Error ? err.message : 'Unable to load details.'); } }}>View</button></td></tr>)}</Table>
+    {feeRequired && <p>Entry fee ₹{text(data.feeAmount)} · {text(list.filter(r => record(r.payment).status === 'PAID').length)} of {list.length} on this page have paid.</p>}
+    <Table headings={['ID', 'Participant / Team', 'Email', 'Status', ...(feeRequired ? ['Entry fee'] : []), 'Details']} empty={!list.length}>{list.map(r => { const p = record(r.payment); const fee = paymentLabel(p); return <tr key={text(r.id)}><td>{text(r.id)}</td><td>{text(record(r.team).name || person(r.user))}</td><td>{text(record(r.user).email)}</td><td><span className="admin-badge">{text(r.status)}</span></td>{feeRequired && <td><span className={`admin-badge ${fee.tone}`} title={p.paidAt ? `Paid ${new Date(String(p.paidAt)).toLocaleString()}${p.paymentId ? ` · ${text(p.paymentId)}` : ''}` : undefined}>{fee.label}</span></td>}<td><button onClick={async () => { setError(''); try { setDetails(await adminRequest(`/api/admin/registrations/${enc(r.id)}`)); } catch (err) { setError(err instanceof Error ? err.message : 'Unable to load details.'); } }}>View</button></td></tr>; })}</Table>
     <div className="admin-actions"><button disabled={page === 1 || resource.loading} onClick={() => setPage(p => p - 1)}>Previous</button><span>Page {page} of {Number(pagination.totalPages) || 1} · {text(pagination.total)} records</span><button disabled={resource.loading || page >= (Number(pagination.totalPages) || 1)} onClick={() => setPage(p => p + 1)}>Next</button></div>
     {!!details && <article className="admin-card"><button onClick={() => setDetails(null)}>Close details</button><Details value={details} /></article>}
   </section>;
@@ -109,24 +110,59 @@ export function Promotion({ eventId }: { eventId: string }) {
   </section>;
 }
 
+// How each participant's entry fee reads in the table.
+const paymentLabel = (payment: Row) => {
+  const amount = Number(payment.amount) || 0;
+  if (payment.status === 'PAID') return { label: `Paid ₹${amount}`, tone: 'admin-paid' };
+  if (payment.status === 'STARTED') return { label: 'Checkout started', tone: 'admin-unpaid' };
+  if (payment.status === 'UNPAID') return { label: `Unpaid ₹${amount}`, tone: 'admin-unpaid' };
+  return { label: '—', tone: '' };
+};
+
 function RoundParticipants({ eventId, round }: { eventId: string; round: string }) {
   const resource = useAdminData(`/api/admin/events/${enc(eventId)}/rounds/${enc(round)}/participants`);
-  const list = rows(record(resource.data).participants ?? resource.data);
+  const data = record(resource.data);
+  const list = rows(data.participants ?? resource.data);
+  const feeRequired = Boolean(data.feeRequired);
   const [selected, setSelected] = useState<string[]>([]); const [busy, setBusy] = useState(false); const [message, setMessage] = useState(''); const [error, setError] = useState('');
   const key = (row: Row) => row.teamId ? `team:${row.teamId}` : `user:${row.userId}`;
-  async function promote() {
-    if (!window.confirm(`Promote ${selected.length} selected participants/teams? All other eligible participants/teams in this round will be rejected.`)) return;
+  const chosen = () => list.filter(r => selected.includes(key(r)));
+  const ids = (picked: Row[]) => ({ userIds: picked.filter(r => !r.teamId).map(r => r.userId), teamIds: picked.filter(r => r.teamId).map(r => Number(r.teamId)) });
+  // Only entries currently in the round can be taken back out of it.
+  const promotedSelection = () => chosen().filter(r => r.status === 'QUALIFIED');
+
+  async function act(path: string, body: Row, warning: string, describe: (result: Row) => string) {
+    if (!window.confirm(warning)) return;
     setBusy(true); setError(''); setMessage('');
     try {
-      const chosen = list.filter(r => selected.includes(key(r)));
-      const result = await adminRequest(`/api/admin/events/${enc(eventId)}/rounds/${enc(round)}/promote`, { userIds: chosen.filter(r => !r.teamId).map(r => r.userId), teamIds: chosen.filter(r => r.teamId).map(r => Number(r.teamId)) });
-      setMessage(`Promoted: ${result.promotedCount ?? chosen.length}. Rejected: ${result.rejectedCount ?? 0}.`); setSelected([]); resource.reload();
-    } catch (err) { setError(err instanceof Error ? err.message : 'Promotion failed.'); } finally { setBusy(false); }
+      const result = record(await adminRequest(`/api/admin/events/${enc(eventId)}/rounds/${enc(round)}/${path}`, body));
+      setMessage(describe(result)); setSelected([]); resource.reload();
+    } catch (err) { setError(err instanceof Error ? err.message : 'Update failed.'); } finally { setBusy(false); }
   }
-  return <><LoadState {...resource} /><p>Choose the participants or teams who qualify. Unselected eligible entries will be rejected when you promote.</p>
+
+  const promote = () => act('promote', ids(chosen()),
+    `Promote ${selected.length} selected participants/teams? All other eligible participants/teams in this round will be rejected.`,
+    result => `Promoted: ${result.promotedCount ?? chosen().length}. Rejected: ${result.rejectedCount ?? 0}.`);
+
+  const demote = () => {
+    const picked = promotedSelection();
+    const paid = picked.filter(r => record(r.payment).status === 'PAID');
+    return act('demote', ids(picked),
+      `Take ${picked.length} selected participants/teams back out of round ${round}? Their results in any later round are cleared too, and they are told they are no longer in this round.`
+      + (paid.length ? `\n\nWarning: ${paid.length} of them have already paid the entry fee. Demoting does NOT refund them — issue any refund in Razorpay.` : '')
+      + `\n\nEveryone you have not selected keeps their current result.`,
+      result => `Demoted: ${result.demotedCount ?? picked.length}.${Number(result.clearedLaterRounds) ? ` Cleared ${result.clearedLaterRounds} later round(s).` : ''}`);
+  };
+
+  const headings = ['Select', 'Participant / Team', 'ID', 'Status', ...(feeRequired ? ['Entry fee'] : []), 'Score'];
+  return <><LoadState {...resource} /><p>Choose the participants or teams who qualify. Unselected eligible entries will be rejected when you promote. To reverse a promotion, select those entries and use Demote — that only affects who you select.</p>
     {error && <p role="alert" className="admin-error">{error}</p>}{message && <p role="status" className="admin-success">{message}</p>}
-    <div className="admin-actions"><button disabled={busy || !list.length} onClick={() => setSelected(selected.length === list.length ? [] : list.map(key))}>Select / clear all</button><button disabled={!list.length} onClick={() => downloadCsv(`${eventId}-round-${round}.csv`, [['ID', 'Name', 'Status', 'Score'], ...list.map(r => [r.teamId || r.userId, r.teamName || r.name, r.status, r.score])])}>Export results</button></div>
-    <Table headings={['Select', 'Participant / Team', 'ID', 'Status', 'Score']} empty={!list.length}>{list.map(r => <tr key={key(r)}><td><input type="checkbox" aria-label={`Select ${text(r.teamName || r.name)}`} disabled={busy} checked={selected.includes(key(r))} onChange={e => setSelected(previous => e.target.checked ? [...previous, key(r)] : previous.filter(id => id !== key(r)))} /></td><td>{text(r.teamName || r.name)}</td><td>{text(r.teamId || r.userId)}</td><td>{text(r.status)}</td><td>{text(r.score)}</td></tr>)}</Table>
-    <button className="primary" disabled={busy || !selected.length || resource.loading} onClick={promote}>{busy ? 'Updating…' : 'Promote selected'}</button>
+    {feeRequired && <p>Entry fee ₹{text(data.feeAmount)} · {text(data.paidCount)} of {list.length} have paid.</p>}
+    <div className="admin-actions"><button disabled={busy || !list.length} onClick={() => setSelected(selected.length === list.length ? [] : list.map(key))}>Select / clear all</button><button disabled={!list.length} onClick={() => downloadCsv(`${eventId}-round-${round}.csv`, [['ID', 'Name', 'Status', 'Entry fee', 'Paid at', 'Payment ID', 'Score'], ...list.map(r => { const p = record(r.payment); return [r.teamId || r.userId, r.teamName || r.name, r.status, paymentLabel(p).label, p.paidAt, p.paymentId, r.score]; })])}>Export results</button></div>
+    <Table headings={headings} empty={!list.length}>{list.map(r => { const p = record(r.payment); const fee = paymentLabel(p); return <tr key={key(r)}><td><input type="checkbox" aria-label={`Select ${text(r.teamName || r.name)}`} disabled={busy} checked={selected.includes(key(r))} onChange={e => setSelected(previous => e.target.checked ? [...previous, key(r)] : previous.filter(id => id !== key(r)))} /></td><td>{text(r.teamName || r.name)}</td><td>{text(r.teamId || r.userId)}</td><td><span className="admin-badge">{text(r.status)}</span></td>{feeRequired && <td><span className={`admin-badge ${fee.tone}`} title={p.paidAt ? `Paid ${new Date(String(p.paidAt)).toLocaleString()}${p.paymentId ? ` · ${text(p.paymentId)}` : ''}` : undefined}>{fee.label}</span></td>}<td>{text(r.score)}</td></tr>; })}</Table>
+    <div className="admin-actions">
+      <button className="primary" disabled={busy || !selected.length || resource.loading} onClick={promote}>{busy ? 'Updating…' : 'Promote selected'}</button>
+      <button className="danger" disabled={busy || !promotedSelection().length || resource.loading} onClick={demote}>{busy ? 'Updating…' : `Demote selected${selected.length && promotedSelection().length !== selected.length ? ` (${promotedSelection().length} promoted)` : ''}`}</button>
+    </div>
   </>;
 }
