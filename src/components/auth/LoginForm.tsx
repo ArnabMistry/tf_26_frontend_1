@@ -238,7 +238,6 @@ export function LoginForm() {
         </div>
       </form>
 
-      <div className="mt-5 flex flex-wrap gap-4 text-sm text-[#FFFF1A]"><Link href="/register/admin">Register as admin</Link></div>
       {/* Switch Link below the card */}
       <div
         className="mt-3.5 sm:mt-4 text-[11px] sm:text-xs md:text-sm uppercase tracking-wider text-[#A49FBD] font-bold text-left"
