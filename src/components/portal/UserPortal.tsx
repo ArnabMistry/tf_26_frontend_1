@@ -16,8 +16,7 @@ export function UserPortal() {
   const [inbox, setInbox] = useState<Inbox | null>(null);
   const [meals, setMeals] = useState<MealPass[] | null>(null);
   const [qrModal, setQrModal] = useState<{ title: string; image: string; token: string } | null>(null);
-  const [counterCode, setCounterCode] = useState('');
-  const [page, setPage] = useState(1);
+    const [page, setPage] = useState(1);
   const [error, setError] = useState(''), [notice, setNotice] = useState(''), [busy, setBusy] = useState('');
 
   const load = useCallback(async () => {
@@ -76,15 +75,6 @@ export function UserPortal() {
     } catch {
       setError('Failed to generate pass QR code.');
     }
-  }
-
-  async function claimCounterQr(e: React.FormEvent) {
-    e.preventDefault();
-    if (!counterCode.trim()) return;
-    await mutate('claim-meal', async () => {
-      await participantRequest('/api/user/meals/claim', { qrToken: counterCode.trim() });
-      setCounterCode('');
-    }, 'Meal claimed successfully! Enjoy your meal.');
   }
 
   if (loading || !user) return <main className={s.shell}><p role="status">Loading your account...</p></main>;
@@ -177,25 +167,7 @@ export function UserPortal() {
                 <span className={s.badge}>{availableMealsCount} Available</span>
               </div>
 
-              {/* Counter QR code redemption form */}
-              <form className="mt-4 mb-5 p-4 rounded-xl border border-white/10 bg-black/20" onSubmit={claimCounterQr}>
-                <label className="text-xs font-bold text-[#c2b6d3] block mb-1">
-                  Claim using Counter QR Token
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    placeholder="Enter or paste counter token"
-                    className="w-full bg-[#150e25] border border-[#786088] text-white rounded-lg p-2.5 text-sm"
-                    value={counterCode}
-                    onChange={e => setCounterCode(e.target.value)}
-                    disabled={busy === 'claim-meal'}
-                  />
-                  <button className={s.button} disabled={busy === 'claim-meal' || !counterCode.trim()}>
-                    {busy === 'claim-meal' ? '...' : 'Claim'}
-                  </button>
-                </div>
-                <p className={`${s.fine} mt-1.5`}>If a food counter displays a session QR code, paste its token here to claim.</p>
-              </form>
+              
 
               {!meals?.length ? (
                 <p className={s.empty}>No meal passes assigned yet. Meal entitlements are automatically linked when you participate in multi-hour competitions or hackathons.</p>
