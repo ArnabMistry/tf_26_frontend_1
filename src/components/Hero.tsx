@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { Navbar } from "@/components/Navbar";
+import { ThemeTeaser } from "./ThemeTeaser";
 
 export function Hero() {
   return (
@@ -17,7 +18,8 @@ export function Hero() {
         <div className="relative z-20 flex flex-col items-center justify-center pointer-events-none drop-shadow-2xl px-4 w-full">
           <Image src="/assets/tf_hero.png" alt="Tantra Fiesta" width={800} height={400} className="w-full max-w-md sm:max-w-xl md:max-w-2xl lg:max-w-3xl h-auto object-contain" />
           <p className="mt-6 md:mt-8 text-white text-xl md:text-3xl lg:text-4xl tracking-widest font-regular drop-shadow-lg text-center uppercase">
-            ANANTA: SURPASSING THE POSSIBLE
+            {/* THEME REVEAL: Replace this silhouette with the official theme copy. */}
+            <ThemeTeaser />
           </p>
         </div>
 

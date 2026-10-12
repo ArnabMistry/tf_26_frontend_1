@@ -1,0 +1,91 @@
+.trigger {
+  display: inline-flex;
+  width: 31ch;
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  text-align: inherit;
+  cursor: help;
+  pointer-events: auto;
+  border-radius: 4px;
+}
+
+.trigger:focus-visible {
+  outline: 2px dashed currentColor;
+  outline-offset: 6px;
+}
+
+.secret {
+  display: inline-block;
+  width: 100%;
+  height: 0.78em;
+  background: linear-gradient(
+    90deg,
+    currentColor 0 19%,
+    transparent 19% 23%,
+    currentColor 23% 55%,
+    transparent 55% 59%,
+    currentColor 59% 68%,
+    transparent 68% 72%,
+    currentColor 72% 100%
+  );
+  filter: blur(6px);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.compact {
+  background: currentColor;
+}
+
+.compactTrigger {
+  width: 6ch;
+}
+
+.popup {
+  position: fixed;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(280px, calc(100vw - 24px));
+  height: 150px;
+  padding: 6px 16px 6px 8px;
+  border: 2px solid #ff2485;
+  border-radius: 20px 20px 20px 5px;
+  background: #241a4c;
+  box-shadow: 5px 6px 0 #e7137d, 0 12px 30px #100b3866;
+  animation: peek 180ms ease-out;
+}
+
+.mascot {
+  width: 108px;
+  height: 138px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.message {
+  color: #ffff1a;
+  font-family: var(--font-futura, sans-serif);
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: 0;
+  text-align: left;
+  text-transform: none;
+}
+
+@keyframes peek {
+  from { opacity: 0; transform: translateY(5px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popup { animation: none; }
+}

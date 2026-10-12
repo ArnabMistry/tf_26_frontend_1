@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { HoverTilt } from "./HoverTilt";
 import { Reveal } from "./Reveal";
+import { ThemeTeaser } from "./ThemeTeaser";
 
 export function AboutSection() {
   return (
@@ -45,18 +46,19 @@ export function AboutSection() {
               THEME
             </p>
             <h2 className="font-tantra text-3xl sm:text-5xl md:text-6xl text-black uppercase tracking-tight mb-6">
-              INDIAN MAXIMALISM
+              {/* THEME REVEAL: Replace this silhouette with the official theme copy. */}
+              <ThemeTeaser />
             </h2>
 
             <div className="space-y-4 text-black text-sm sm:text-base md:text-lg font-medium leading-relaxed">
               <p>
-                TantraFiesta 2026 introduces <span className="font-bold">ANANTA: Surpassing the Possible</span>—a theme inspired by the idea of the infinite and technology’s ability to continually redefine its own limits.
+                TantraFiesta 2026 introduces {/* THEME REVEAL: Replace this silhouette with the official theme copy. */}<span className="font-bold"><ThemeTeaser /></span>—a theme inspired by the idea of the infinite and technology’s ability to continually redefine its own limits.
               </p>
               <p>
                 Its visual identity takes shape through <span className="font-bold">Indian Maximalism</span>, where the richness of Indian aesthetics is reinterpreted through a contemporary technological lens. Bold contrasts, intricate forms, layered compositions, and expressive details create a language that feels distinctly Indian yet futuristic.
               </p>
               <p>
-                <span className="font-bold">ANANTA</span> represents a mindset where boundaries are not endpoints, but starting points for what can exist next.
+                {/* THEME REVEAL: Replace this compact silhouette with the official theme name. */}<span className="font-bold"><ThemeTeaser compact /></span> represents a mindset where boundaries are not endpoints, but starting points for what can exist next.
               </p>
             </div>
           </div>

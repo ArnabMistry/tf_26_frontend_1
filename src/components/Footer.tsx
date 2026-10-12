@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { HoverTilt } from "./HoverTilt";
+import { ThemeTeaser } from "./ThemeTeaser";
 
 const PhysicsText = dynamic(() => import("./PhysicsText").then((m) => m.PhysicsText), { ssr: false });
 
@@ -98,7 +99,8 @@ export function Footer({ variant = "purple" }: FooterProps) {
               <div>
                 <h2 className="font-tantra text-3xl md:text-4xl lg:text-5xl tracking-widest uppercase mb-2">TANTRAFIESTA 2026</h2>
                 <p className="text-sm md:text-base font-bold text-[#B81163]">
-                  ANANTA: SURPASSING THE POSSIBLE
+                  {/* THEME REVEAL: Replace this silhouette with the official theme copy. */}
+                  <ThemeTeaser />
                 </p>
                 <div className="h-[1px] bg-black/20 w-full md:max-w-md mt-6 mb-8"></div>
               </div>
@@ -222,7 +224,8 @@ export function Footer({ variant = "purple" }: FooterProps) {
               <div>
                 <h2 className="font-tantra text-3xl md:text-4xl lg:text-5xl tracking-widest uppercase mb-2">TANTRAFIESTA 2026</h2>
                 <p className="text-sm md:text-base font-bold text-[#F44383]">
-                  ANANTA: SURPASSING THE POSSIBLE
+                  {/* THEME REVEAL: Replace this silhouette with the official theme copy. */}
+                  <ThemeTeaser />
                 </p>
                 <div className="h-[1px] bg-white/20 w-full md:max-w-md mt-6 mb-8"></div>
               </div>
