@@ -16,6 +16,7 @@ export function EventRegistration() {
   const [registered, setRegistered] = useState(false), [ready, setReady] = useState(false);
   const [teamName, setTeamName] = useState(''), [identifier, setIdentifier] = useState('');
   const [error, setError] = useState(''), [notice, setNotice] = useState(''), [busy, setBusy] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const refresh = useCallback(async () => {
     if (!user || !requestedEvent) return;
     const token = getAuthToken();
@@ -55,11 +56,68 @@ export function EventRegistration() {
     catch (err) { setError(err instanceof Error ? err.message : 'Please try again.'); }
     finally { setBusy(false); }
   }
-  if (!requestedEvent) return <main className={s.shell}><h1 className="text-3xl font-bold">Choose your event first</h1><p className={s.empty}>Team size and registration rules depend on the event.</p><Link className={s.button} href="/events">Explore events</Link></main>;
+  if (!requestedEvent) return <main className={s.shell}><h1 className="text-3xl font-bold">Choose your event first</h1><p className={s.empty}>Team size and registration rules depend on the event.</p><Link className={s.button} href="/events">Explore events</Link>{/* Complete Profile Modal */}
+      {showProfileModal && user && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md" onClick={() => setShowProfileModal(false)}>
+          <div className={`${s.card} max-w-md w-full relative border border-[#FFFF1A]/50`} onClick={e => e.stopPropagation()}>
+            <span className={s.eyebrow}>Account Setup</span>
+            <h2 className="mt-2 text-xl font-bold text-white">Complete Your Profile</h2>
+            <p className={`${s.muted} text-xs mb-5`}>
+              Please provide your college name and WhatsApp/phone number before registering for events.
+            </p>
+            <form className={s.form} onSubmit={async e => {
+              e.preventDefault();
+              const fd = new FormData(e.currentTarget);
+              const college = (fd.get('collegeName') as string || '').trim();
+              const phone = (fd.get('phoneNumber') as string || '').trim();
+              if (!college || !phone) {
+                setError('Both college name and phone number are required.');
+                return;
+              }
+              setBusy(true);
+              setError('');
+              try {
+                await participantRequest('/api/user/profile', {
+                  firstName: user.firstName,
+                  lastName: user.lastName,
+                  collegeName: college,
+                  phoneNumber: phone,
+                }, 'PATCH');
+                window.dispatchEvent(new Event('tf-auth-change'));
+                setShowProfileModal(false);
+                setNotice('Profile updated! You can now register for the event.');
+                await refresh();
+              } catch (err) {
+                setError(err instanceof Error ? err.message : 'Failed to update profile.');
+              } finally {
+                setBusy(false);
+              }
+            }}>
+              <label>
+                College / Institute Name
+                <input name="collegeName" required defaultValue={user.collegeName || ''} maxLength={160} placeholder="e.g. IIIT Nagpur" />
+              </label>
+              <label>
+                Phone Number (WhatsApp)
+                <input name="phoneNumber" type="tel" required defaultValue={user.phoneNumber || ''} maxLength={20} placeholder="e.g. +91 9876543210" pattern="^[+\d ()-]{7,20}$" />
+              </label>
+              {error && <p className={s.error} role="alert">{error}</p>}
+              <div className="flex gap-2 justify-end mt-4">
+                <button type="button" className={s.secondary} onClick={() => setShowProfileModal(false)}>Cancel</button>
+                <button type="submit" disabled={busy} className={s.button}>
+                  {busy ? 'Saving...' : 'Save & Continue'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+  </main>;
   if (loading || !user) return <main className={s.shell}><p role="status">Checking your account…</p></main>;
   const closed = !!event && new Date(event.registrationEndTime) <= new Date();
   const paymentRequired = !!event && event.price > 0 && event.paymentTrigger === 'before_registration';
-  const canRegister = !!event && !registered && !closed && !paymentRequired && (!event.isTeamEvent || (!!team?.isLeader && team.stats.isReadyForRegistration && !team.stats.isRegistered));
+  const isProfileIncomplete = Boolean(user && (!user.collegeName?.trim() || !user.phoneNumber?.trim()));
+  const canRegister = !!event && !registered && !closed && !paymentRequired && !isProfileIncomplete && (!event.isTeamEvent || (!!team?.isLeader && team.stats.isReadyForRegistration && !team.stats.isRegistered));
   return <main className={s.shell}>
     <Link className={s.eyebrow} href="/events">← All events</Link>
     <header className={s.hero}><div><p className={`${s.eyebrow} mt-5`}>{event?.club || 'TantraFiesta 2026'}</p><h1>{event?.name || 'Your next challenge'}</h1><p className={s.muted}>{event?.isTeamEvent ? 'Build your squad. Invite with TF IDs. Register together.' : 'One participant. One challenge. Your next achievement.'}</p></div><Link className={s.secondary} href="/profile">My portal ↗</Link></header>
@@ -83,7 +141,15 @@ export function EventRegistration() {
       {closed && <p className={s.error}>Registration is closed.</p>}
       {paymentRequired && !registered && <p className={s.error}>Payment is required before registration. Contact the event organizer for checkout assistance.</p>}
       {event.isTeamEvent && !registered && <p className={`${s.muted} mb-4`}>{!team ? 'Create a team first.' : !team.isLeader ? 'Your team leader completes registration for everyone.' : !team.stats.isReadyForRegistration ? 'Meet the minimum team size and resolve all pending invitations before registering.' : 'Your team is ready to register.'}</p>}
-      <button className={`${s.button} w-full`} disabled={busy || !canRegister} onClick={() => mutate(() => participantRequest('/api/user/registrations', { eventId: event.id, ...(team ? { teamId: team.id } : {}) }), 'Registration confirmed!')}>{busy ? 'Please wait…' : registered ? 'Registered' : event.isTeamEvent ? 'Register team' : 'Confirm registration'}</button>
+      {isProfileIncomplete ? (
+        <div className="p-4 rounded-xl bg-[#FFFF1A]/10 border border-[#FFFF1A]/40 mb-3 text-left">
+          <h4 className="font-bold text-[#FFFF1A] text-sm">Action Required</h4>
+          <p className={`${s.fine} mt-1 mb-3`}>Please provide your college name and phone number to unlock registration.</p>
+          <button type="button" className={`${s.button} w-full`} onClick={() => setShowProfileModal(true)}>Complete Profile</button>
+        </div>
+      ) : (
+        <button className={`${s.button} w-full`} disabled={busy || !canRegister} onClick={() => mutate(() => participantRequest('/api/user/registrations', { eventId: event.id, ...(team ? { teamId: team.id } : {}) }), 'Registration confirmed!')}>{busy ? 'Please wait…' : registered ? 'Registered' : event.isTeamEvent ? 'Register team' : 'Confirm registration'}</button>
+      )}
       <p className={`${s.fine} mt-4`}>Event ID: {event.id}</p><p className={s.fine}>Joining a team does not register it. The leader confirms registration once everyone is ready.</p>
     </aside></div>}
   </main>;

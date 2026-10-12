@@ -16,6 +16,7 @@ export function UserPortal() {
   const [inbox, setInbox] = useState<Inbox | null>(null);
   const [meals, setMeals] = useState<MealPass[] | null>(null);
   const [qrModal, setQrModal] = useState<{ title: string; image: string; token: string } | null>(null);
+  const [profileDismissed, setProfileDismissed] = useState(false);
     const [page, setPage] = useState(1);
   const [error, setError] = useState(''), [notice, setNotice] = useState(''), [busy, setBusy] = useState('');
 
@@ -83,7 +84,16 @@ export function UserPortal() {
 
   return <main className={s.shell}>
     <p className={s.eyebrow}>TantraFiesta 2026 • Participant portal</p>
-    <header className={s.hero}>
+    {profile?.user && (!profile.user.collegeName?.trim() || !profile.user.phoneNumber?.trim()) && profileDismissed && (
+          <div className="mb-6 p-4 rounded-2xl bg-[#FFFF1A]/10 border border-[#FFFF1A]/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div>
+              <h3 className="font-bold text-[#FFFF1A]">Your profile is incomplete</h3>
+              <p className={`${s.fine} mt-0.5`}>Add your college name and phone number to unlock event registration and festival passes.</p>
+            </div>
+            <button className={s.button} onClick={() => setProfileDismissed(false)}>Complete profile</button>
+          </div>
+        )}
+      <header className={s.hero}>
       <div>
         <h1>Your fest. Your space.</h1>
         <p className={s.muted}>Welcome back, {profile?.user.firstName || user.firstName}. Build your team and make your next move.</p>
@@ -266,6 +276,62 @@ export function UserPortal() {
           <button className={s.secondary} onClick={async () => { await logout(); router.replace('/login'); }}>Log out</button>
         </aside>
       </div>
+
+      {/* Complete Profile Modal for Google OAuth or missing info */}
+      {profile?.user && (!profile.user.collegeName?.trim() || !profile.user.phoneNumber?.trim()) && !profileDismissed && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md">
+          <div className={`${s.card} max-w-md w-full relative border border-[#FFFF1A]/50`} onClick={e => e.stopPropagation()}>
+            <span className={s.eyebrow}>Account Setup</span>
+            <h2 className="mt-2 text-xl font-bold text-white">Complete Your Profile</h2>
+            <p className={`${s.muted} text-xs mb-5`}>
+              Welcome to TantraFiesta! Please provide your college name and WhatsApp/phone number to enable event registrations and festival passes.
+            </p>
+            <form className={s.form} onSubmit={async e => {
+              e.preventDefault();
+              const fd = new FormData(e.currentTarget);
+              const college = (fd.get('collegeName') as string || '').trim();
+              const phone = (fd.get('phoneNumber') as string || '').trim();
+              if (!college || !phone) {
+                setError('Both college name and phone number are required.');
+                return;
+              }
+              setBusy('profile-setup');
+              setError('');
+              try {
+                await participantRequest('/api/user/profile', {
+                  firstName: profile.user.firstName,
+                  lastName: profile.user.lastName,
+                  collegeName: college,
+                  phoneNumber: phone,
+                }, 'PATCH');
+                window.dispatchEvent(new Event('tf-auth-change'));
+                await load();
+                setNotice('Profile updated! You can now register for events.');
+              } catch (err) {
+                setError(err instanceof Error ? err.message : 'Failed to update profile.');
+              } finally {
+                setBusy('');
+              }
+            }}>
+              <label>
+                College / Institute Name
+                <input name="collegeName" required defaultValue={profile.user.collegeName || ''} maxLength={160} placeholder="e.g. IIIT Nagpur" />
+              </label>
+              <label>
+                Phone Number (WhatsApp)
+                <input name="phoneNumber" type="tel" required defaultValue={profile.user.phoneNumber || ''} maxLength={20} placeholder="e.g. +91 9876543210" pattern="^[+\d ()-]{7,20}$" />
+              </label>
+              {error && <p className={s.error} role="alert">{error}</p>}
+              <div className="flex gap-2 justify-end mt-4">
+                <button type="button" className={s.secondary} onClick={() => setProfileDismissed(true)}>Dismiss for now</button>
+                <button type="submit" disabled={busy === 'profile-setup'} className={s.button}>
+                  {busy === 'profile-setup' ? 'Saving...' : 'Save & Continue'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Personal QR Pass Modal */}
       {qrModal && (
