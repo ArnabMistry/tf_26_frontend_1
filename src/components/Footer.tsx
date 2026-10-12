@@ -130,10 +130,20 @@ export function Footer({ variant = "purple" }: FooterProps) {
 
               {/* Social Icons */}
               <div className="flex gap-3 mt-6 justify-start md:justify-end relative z-30">
-                <a href="#" className="w-8 h-8 border border-black/30 rounded flex items-center justify-center hover:bg-black/5 transition-colors group">
+                <a
+                  href="https://www.instagram.com/tantrafiesta"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 border border-black/30 rounded flex items-center justify-center hover:bg-black/5 transition-colors group"
+                >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black group-hover:scale-110 transition-transform"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                 </a>
-                <a href="#" className="w-8 h-8 border border-black/30 rounded flex items-center justify-center hover:bg-black/5 transition-colors group">
+                <a
+                  href="https://www.linkedin.com/company/tantrafiesta-iiitn/home/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 border border-black/30 rounded flex items-center justify-center hover:bg-black/5 transition-colors group"
+                >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black group-hover:scale-110 transition-transform"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
                 </a>
               </div>
@@ -170,13 +180,13 @@ export function Footer({ variant = "purple" }: FooterProps) {
   // Original Purple Variant for Landing Page
   return (
     <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat pt-0 pb-12 md:pb-20 flex flex-col items-center px-4 md:px-8">
-      
+
       {/* Bottom half of Yellow Container */}
       <div className="relative w-full max-w-[1600px] bg-[#FFFF1A] rounded-b-[32px] md:rounded-b-[48px] px-2 md:px-8 pt-12 md:pt-16 pb-4 md:pb-8">
 
         {/* Purple Inner Container */}
         <div ref={containerRef} className="footer-bounds relative w-full bg-[#2b1f5e] rounded-[24px] md:rounded-[32px] shadow-inner pt-16 pb-48 md:pt-20 md:pb-64 px-8 md:px-12 mx-auto text-white min-h-[400px] md:min-h-[500px]">
-          
+
           {/* Top Center Tab */}
           <div className="absolute -top-8 md:-top-10 left-1/2 -translate-x-1/2 w-48 md:w-64 h-8 md:h-10 bg-[#2b1f5e] flex items-center justify-center">
             {/* Left slanted wing */}
@@ -206,7 +216,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
 
           {/* Content Layout */}
           <div className="relative z-10 flex flex-col md:flex-row justify-between w-full h-full text-white">
-            
+
             {/* Left Column */}
             <div className="flex flex-col md:w-1/2">
               <div>
@@ -244,10 +254,20 @@ export function Footer({ variant = "purple" }: FooterProps) {
 
               {/* Social Icons — stacked below contact, high z-index to stay above mascot */}
               <div className="flex gap-3 mt-6 justify-start md:justify-end relative z-30">
-                <a href="#" className="w-8 h-8 border border-white/30 rounded flex items-center justify-center hover:bg-white/10 transition-colors group">
+                <a
+                  href="https://www.instagram.com/tantrafiesta"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 border border-white/30 rounded flex items-center justify-center hover:bg-white/10 transition-colors group"
+                >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#FFFF1A] group-hover:scale-110 transition-transform"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                 </a>
-                <a href="#" className="w-8 h-8 border border-white/30 rounded flex items-center justify-center hover:bg-white/10 transition-colors group">
+                <a
+                  href="https://www.linkedin.com/company/tantrafiesta-iiitn/home/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 border border-white/30 rounded flex items-center justify-center hover:bg-white/10 transition-colors group"
+                >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#FFFF1A] group-hover:scale-110 transition-transform"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
                 </a>
               </div>
