@@ -11,8 +11,10 @@ const eventFields: Field[] = [
   { name: 'isTeamEvent', label: 'Team event', type: 'checkbox' },
   { name: 'minTeamSize', label: 'Minimum team size', type: 'number', min: 1 }, { name: 'maxTeamSize', label: 'Maximum team size', type: 'number', min: 1 },
   { name: 'price', label: 'Fee', type: 'number', min: 0, value: 0, required: true }, { name: 'isPaid', label: 'Paid event', type: 'checkbox' },
+  // No "payment round" here on purpose: an `after_round` fee falls due on the
+  // first promotion, whichever round that is, so there is nothing to pick.
   { name: 'paymentTrigger', label: 'Payment trigger', options: options(['free', 'before_registration', 'after_round']) },
-  { name: 'paymentRound', label: 'Payment round', options: options(['ROUND_1', 'ROUND_2']) }, { name: 'paymentPageLink', label: 'Payment page URL', type: 'url' },
+  { name: 'paymentPageLink', label: 'Payment page URL', type: 'url' },
 ];
 
 export function EventTools({ eventId, superAdmin, changed }: { eventId: string; superAdmin: boolean; changed: () => void }) {
@@ -21,13 +23,21 @@ export function EventTools({ eventId, superAdmin, changed }: { eventId: string; 
   const [editor, setEditor] = useState<Editor | null>(null);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [deleted, setDeleted] = useState<Row | null>(null);
   const event = record(resource.data);
   const roundsList = rows(record(roundsResource.data).rounds ?? roundsResource.data);
   const refresh = () => { resource.reload(); roundsResource.reload(); changed(); };
-  async function remove(path: string, warning: string) {
+  async function remove(path: string, warning: string, after?: (result: Row) => void) {
     if (!window.confirm(warning)) return;
     setBusy(true); setError('');
-    try { await adminRequest(path, undefined, 'DELETE'); refresh(); } catch (err) { setError(err instanceof Error ? err.message : 'Delete failed.'); } finally { setBusy(false); }
+    try { const result = record(await adminRequest(path, undefined, 'DELETE')); if (after) after(result); else refresh(); } catch (err) { setError(err instanceof Error ? err.message : 'Delete failed.'); } finally { setBusy(false); }
+  }
+  // Deleting an event takes its registrations, teams, results and payment
+  // records with it, so spell out exactly what is about to go.
+  function deleteEventWarning() {
+    const counts = record(event._count);
+    const parts = [`${text(counts.registrations)} registration(s)`, `${text(counts.teams)} team(s)`, `${roundsList.length} round(s) and their results`];
+    return `Delete ${text(event.name)}?\n\nThis permanently removes the event along with:\n· ${parts.join('\n· ')}\n· every order and payment record for this event\n\nPayments already collected are reconciled in Razorpay, not here — this only erases our copy. This cannot be undone.`;
   }
   function editEvent(create: boolean) {
     setEditor({ title: create ? 'Create event' : 'Edit event', path: create ? '/api/admin/events' : `/api/admin/events/${enc(eventId)}`, method: create ? 'POST' : 'PATCH', initial: create ? {} : event,
@@ -44,10 +54,21 @@ export function EventTools({ eventId, superAdmin, changed }: { eventId: string; 
     });
   }
   return <section><div className="admin-section-heading"><h2>Event management</h2>{superAdmin && <button className="primary" onClick={() => editEvent(true)}>Create event</button>}</div>
-    <LoadState {...resource} />{error && <p role="alert" className="admin-error">{error}</p>}
-    {!eventId && <p>Select an event to manage its settings and rounds.</p>}
-    {!!resource.data && <><article className="admin-card"><h3>{text(event.name)}</h3><p>{text(event.description)}</p><p>{text(event.club)} · {text(event.venue)}</p><p>Fee: {text(event.price)} · Registration closes: {new Date(String(event.registrationEndTime)).toLocaleString()}</p>
-      <div className="admin-actions"><button onClick={() => editEvent(false)}>Edit event</button>{superAdmin && <button disabled={busy} className="danger" onClick={() => remove(`/api/admin/events/${enc(eventId)}`, `Delete ${text(event.name)}? Its related event records may also be removed. This cannot be undone.`)}>Delete event</button>}</div></article>
+    {!deleted && <LoadState {...resource} />}{error && <p role="alert" className="admin-error">{error}</p>}
+    {!eventId && !deleted && <p>Select an event to manage its settings and rounds.</p>}
+    {deleted && <article className="admin-card"><h3>Deleted {text(deleted.name)}</h3>
+      <p className="admin-success">The event and everything attached to it has been removed.</p>
+      {(() => {
+        const removed = record(deleted.removed);
+        const amount = Number(removed.capturedAmount) || 0;
+        return <><p>Removed: {text(removed.registrations)} registration(s), {text(removed.teams)} team(s), {text(removed.rounds)} round(s), {text(removed.orders)} order(s).</p>
+          {amount > 0 && <p className="admin-error">{text(removed.capturedPayments)} collected payment(s) totalling ₹{amount} were also removed. Those transactions still exist in Razorpay — reconcile any refunds there.</p>}</>;
+      })()}
+      {/* The event list is only refreshed on the way out, so this summary is
+          not torn down by the re-render that drops the deleted event. */}
+      <div className="admin-actions"><button className="primary" onClick={() => { setDeleted(null); changed(); }}>Back to events</button></div></article>}
+    {!deleted && !!resource.data && <><article className="admin-card"><h3>{text(event.name)}</h3><p>{text(event.description)}</p><p>{text(event.club)} · {text(event.venue)}</p><p>Fee: {text(event.price)} · Registration closes: {new Date(String(event.registrationEndTime)).toLocaleString()}</p>
+      <div className="admin-actions"><button onClick={() => editEvent(false)}>Edit event</button>{superAdmin && <button disabled={busy} className="danger" onClick={() => remove(`/api/admin/events/${enc(eventId)}`, deleteEventWarning(), setDeleted)}>Delete event</button>}</div></article>
       <div className="admin-section-heading"><h3>Rounds</h3><button onClick={() => editRound()}>Add round</button></div><LoadState {...roundsResource} />
       <Table headings={['Round', 'Name', 'Deadline', 'Actions']} empty={!roundsList.length}>{roundsList.map(round => <tr key={text(round.id)}><td>{text(round.roundNumber)}</td><td>{text(round.name)}</td><td>{new Date(String(round.roundEndTime)).toLocaleString()}</td><td><div className="admin-actions"><button onClick={() => editRound(round)}>Edit</button><button className="danger" disabled={busy} onClick={() => remove(`/api/admin/events/${enc(eventId)}/rounds/${enc(round.roundNumber)}`, 'Delete this round and its participant results? This cannot be undone.')}>Delete</button></div></td></tr>)}</Table>
     </>}{editor && <EditorDialog editor={editor} close={() => setEditor(null)} saved={refresh} />}

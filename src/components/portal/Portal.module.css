@@ -1,4 +1,8 @@
-.shell { max-width:1200px; margin:auto; padding:40px 24px 110px; color:#f8f5ff; }
+/* width:100% is load-bearing. The shell is a flex item in a `flex-col` page
+   wrapper, and `margin:auto` on the cross axis cancels the default stretch, so
+   without an explicit width it sizes to its content — making the whole portal
+   visibly change width and shift sideways between tabs. */
+.shell { width:100%; max-width:1200px; margin:auto; padding:40px 24px 110px; color:#f8f5ff; }
 .eyebrow { color:#faff52; font-size:11px; letter-spacing:.2em; text-transform:uppercase; font-weight:800; }
 .hero { display:flex; justify-content:space-between; align-items:center; gap:24px; margin:12px 0 28px; }
 .hero h1 { font-size:clamp(30px,5vw,52px); font-weight:800; line-height:1.1; margin:8px 0; letter-spacing:-.035em; }
