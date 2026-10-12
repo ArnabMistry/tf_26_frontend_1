@@ -32,7 +32,8 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
     // (multiple clubs) aren't representable until it grows a `clubs` field.
     clubs: event.clubs || [event.club],
     description: event.description || event.shortDescription || "",
-    poster: event.image || local?.poster,
+    poster: event.image || local?.image || local?.poster,
+    image: event.image || local?.image,
     prizePool: event.prizes,
     prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
     stages: local?.stages ?? [],
@@ -76,10 +77,11 @@ export async function generateMetadata(
     `Join ${event.name} at TantraFiesta 2026, IIIT Nagpur. Organized by ${organizers}. Review rules, schedule, prizes, and registration.`;
   const canonicalUrl = `/events/${event.slug}`;
   const fullUrl = `${siteConfig.url}${canonicalUrl}`;
-  const imageUrl = event.poster
-    ? event.poster.startsWith("http")
-      ? event.poster
-      : `${siteConfig.url}${event.poster}`
+  const posterSrc = event.image || event.poster;
+  const imageUrl = posterSrc
+    ? posterSrc.startsWith("http")
+      ? posterSrc
+      : `${siteConfig.url}${posterSrc}`
     : `${siteConfig.url}${siteConfig.ogImage}`;
 
   return {
@@ -135,7 +137,7 @@ export default async function EventPage(props: PageProps<"/events/[slug]">) {
         rules: event.rules,
         prizes: event.prizePool,
         registrationUrl: event.registrationUrl,
-        image: event.poster,
+        image: event.image || event.poster,
       })
     : null;
 

@@ -57,6 +57,7 @@ export interface EventDetail {
   description: string;
   /** Path under /public. Falls back to a branded placeholder when absent. */
   poster?: string;
+  image?: string;
   /** Total prize pool, e.g. "₹40,000". */
   prizePool?: string;
   /** Qualifier on the pool, e.g. how it splits across themes or mini games. */
@@ -390,6 +391,7 @@ export const eventDetails: EventDetail[] = [
     slug: "firestorm-rampage",
     name: "Firestorm Rampage",
     tagline: "Free Fire — Battle Royale squads",
+    image: "/event-posters/firstom-rampage.png",
     clubs: [{ name: "Synergy", slug: "synergy" }],
     description:
       "Firestorm Rampage is the official Free Fire battle-royale tournament of TantraFiesta'26, hosted by Synergy Club, IIIT Nagpur. Squads of four (plus one substitute) fight through online preliminaries before the top twelve meet for an offline final on campus — a fast-paced digital battleground that tests reflexes, strategy, and courage, where every decision can turn the tide.",
@@ -449,6 +451,7 @@ export const eventDetails: EventDetail[] = [
     slug: "combat-carnage",
     name: "Combat Carnage",
     tagline: "BGMI — Squad TPP",
+    image: "/event-posters/combact-carnage.png",
     clubs: [{ name: "Synergy", slug: "synergy" }],
     description:
       "Combat Carnage is the official Battlegrounds Mobile India tournament of TantraFiesta'26 at IIIT Nagpur. Squads play third-person perspective matches in custom rooms across Erangel, Miramar and Rondo, qualifying online before the top sixteen meet offline for the championship — a tactical battle of survival that demands strategy, teamwork and composure.",
@@ -502,6 +505,7 @@ export const eventDetails: EventDetail[] = [
     slug: "crown-clash",
     name: "Crown Clash",
     tagline: "Clash Royale — 1v1 knockout",
+    image: "/event-posters/crown-clash.png",
     clubs: [{ name: "Synergy", slug: "synergy" }],
     description:
       "Crown Clash is the official Clash Royale esports tournament of TantraFiesta, hosted by Synergy Club at IIIT Nagpur. Players from across colleges battle through knockout rounds and an offline final to prove their deck management, timing, and strategic gameplay, competing for the championship title and prizes.",
@@ -554,6 +558,7 @@ export const eventDetails: EventDetail[] = [
     slug: "phoenix-cup",
     name: "Phoenix Cup",
     tagline: "Valorant — 5v5",
+    image: "/event-posters/phoenix-cup.png",
     clubs: [{ name: "Synergy", slug: "synergy" }],
     description:
       "Phoenix Cup is the Valorant tournament of TantraFiesta'26 at IIIT Nagpur — a competitive 5v5 arena demanding focus, strategy, reflexes and teamwork. Teams fight through two online qualifying stages on the Mumbai server before four survivors meet for the offline final. Lock. Load. Dominate.",
@@ -668,6 +673,7 @@ export const eventDetails: EventDetail[] = [
     slug: "knights-legacy",
     name: "Knights Legacy",
     tagline: "Chess — Blitz qualifiers, Rapid final",
+    image: "/event-posters/knights-legacy.png",
     clubs: [{ name: "Synergy", slug: "synergy" }],
     description:
       "Knights Legacy is a three-stage chess tournament conducted at IIIT Nagpur. It begins with a first online Blitz qualification round on 22 October 2026, followed by a second online Blitz round on 23 October. The top 8 players advance to the final offline Rapid round on 25 October at the Academic Building, IIIT Nagpur. The tournament gives players a structured competitive environment to demonstrate strategic thinking, consistency and sportsmanship.",
@@ -721,6 +727,7 @@ export const eventDetails: EventDetail[] = [
     slug: "critical-ops",
     name: "Critical Ops",
     tagline: "Call of Duty: Mobile — 5v5",
+    image: "/event-posters/critical-ops.png",
     clubs: [{ name: "Synergy", slug: "synergy" }],
     description:
       "Critical Ops is a competitive Call of Duty: Mobile 5v5 esports tournament designed to test team coordination, mechanical skill, strategy, communication, objective control, and composure under match pressure. Teams progress through structured competitive rounds before an offline playoff and final stage, with matches administered under consistent settings and an evidence-based dispute process.",
@@ -1293,6 +1300,7 @@ export const eventDetails: EventDetail[] = [
     slug: "yuvaan",
     name: "Yuvaan: Youth Conclave",
     tagline: "Structured debate and discussion",
+    image: "/event-posters/yuvaan.png",
     clubs: [{ name: "Orator", slug: "orator" }],
     description:
       "Yuvaan is a youth conclave designed to encourage structured discussion, critical thinking, public speaking, questioning and constructive disagreement. The format combines prepared individual speeches with direct questioning and open interactive discussion, treating the committee as an intellectual discussion rather than a personal confrontation.",
@@ -1431,6 +1439,7 @@ export const eventDetails: EventDetail[] = [
     slug: "digital-time-capsule",
     name: "Digital Time Capsule",
     tagline: "Photography & videography challenge",
+    image: "/event-posters/digital-timecapsule.png",
     clubs: [{ name: "Probe", slug: "probe" }],
     description:
       "The Digital Time Capsule gives participants a platform to document and interpret the vibrant spirit of TantraFiesta through photography and videography. It encourages original visual storytelling, creative observation and thoughtful curation of festival moments, preserving them as a digital archive that future audiences can revisit — a curated visual record of the festival, captured from the perspectives of the people in it.",

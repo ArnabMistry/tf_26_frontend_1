@@ -12,6 +12,7 @@ export interface EventListing {
   prize?: string;
   href?: string;
   registrationUrl?: string;
+  image?: string;
 }
 
 export const eventCategories = [
@@ -75,6 +76,7 @@ export const referenceEvents: EventListing[] = eventDetails.map((event) => ({
   clubs: event.clubs,
   categories: CATEGORIES_BY_SLUG[event.slug] ?? [],
   href: `/events/${event.slug}`,
+  image: event.image,
 }));
 
 export function groupEventsForLayout(events: EventListing[]): EventListing[][] {
@@ -103,5 +105,6 @@ export function toEventListing(event: PublicEvent): EventListing {
     prize: event.prizes,
     href: `/events/${encodeURIComponent(event.slug)}`,
     registrationUrl: event.registrationUrl,
+    image: event.image,
   };
 }
