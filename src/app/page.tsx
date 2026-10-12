@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/Hero";
-import { AboutSection } from "@/components/AboutSection";
+import { AboutContent } from "@/components/AboutContent";
 
 const PhotoGallery = dynamic(() => import("@/components/PhotoGallery").then(m => m.PhotoGallery), {
   loading: () => <section aria-label="Photo Gallery" className="min-h-[400px] flex items-center justify-center text-zinc-500 py-16">Loading gallery…</section>,
@@ -15,9 +15,11 @@ export default function Home() {
   return (
     <main className="flex-1 bg-zinc-950 text-white">
       <Hero />
-      <AboutSection />
       <PhotoGallery />
       <TagsMarquee />
+      <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat overflow-hidden">
+        <AboutContent />
+      </section>
       <Sponsors />
       <Footer />
     </main>
