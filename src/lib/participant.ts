@@ -1,13 +1,15 @@
 import { ApiError, authRequest, type AuthUser } from './auth';
+import type { PaymentState } from './payments';
 import { getAuthToken } from './supabase';
 
 export type Person = AuthUser & { firstName: string; lastName: string; email: string; festId: string | null; collegeName?: string | null; phoneNumber?: string | null; verified?: boolean };
-export type EventInfo = { id: string; slug?: string; name: string; club: string; isTeamEvent: boolean; minTeamSize: number | null; maxTeamSize: number | null; price: number; paymentTrigger: string; registrationEndTime: string; venue?: string };
+export type EventInfo = { id: string; slug?: string; name: string; club: string; isTeamEvent: boolean; minTeamSize: number | null; maxTeamSize: number | null; price: number; paymentTrigger: string; paymentRound?: string; registrationEndTime: string; venue?: string };
 export type Invite = { id: number; status: string; user?: Person; email: string; createdAt: string };
 export type Team = { id: number; eventId: string; name: string; teamCode: string; isLeader: boolean; event: EventInfo; leader: Person; members: (Person & { isLeader?: boolean })[]; invites: Invite[]; stats: { isReadyForRegistration: boolean; isRegistered: boolean; totalAccepted: number; pendingCount: number; minTeamSize: number; maxTeamSize: number } };
-export type Registration = { id: number; eventId: string; status: string; createdAt: string; event: EventInfo; team?: { name: string }; roundProgress: { roundId: number; name: string; status: string }[] };
+export type RoundProgress = { roundId: number; roundNumber: number; name: string; roundEndTime: string; status: 'QUALIFIED' | 'ELIMINATED' | 'PENDING'; notes: string | null; decidedAt: string | null };
+export type Registration = { id: number; eventId: string; userId: string | null; teamId: number | null; status: string; createdAt: string; event: EventInfo; team?: { id: number; name: string; leaderId: string }; isQualified: boolean; isRejected: boolean; roundProgress: RoundProgress[]; payment: PaymentState | null };
 export type Profile = { user: Person; registeredEvents: Registration[]; teams: Team[]; stats: { totalRegisteredEvents: number; totalTeams: number; totalQualifiedRounds: number }; activities: { id: string; title: string; subtitle: string; timestamp: string }[] };
-export type Notification = { id: number; senderId: string; recipientId: string; senderName: string; eventName: string; eventId: string; teamId: number; teamName: string; inviteId: number | null; kind: 'TEAM_INVITE' | 'INVITE_RESPONSE'; status: string; createdAt: string; updatedAt: string; respondedAt: string | null; readAt: string | null };
+export type Notification = { id: number; senderId: string; recipientId: string; senderName: string; eventName: string; eventId: string; teamId: number | null; teamName: string | null; roundId: number | null; message: string | null; inviteId: number | null; kind: 'TEAM_INVITE' | 'INVITE_RESPONSE' | 'ROUND_PROMOTION'; status: string; createdAt: string; updatedAt: string; respondedAt: string | null; readAt: string | null };
 export type MealPass = { mealId: number; typeOfMeal: 'breakfast' | 'lunch' | 'dinner' | 'snacks'; date: string; status: 'AVAILABLE' | 'CLAIMED'; scannedAt: string | null; personalPassToken: string; isServingNow: boolean; grantedByEvents: { id: string; name: string }[] };
 export type Inbox = { notifications: Notification[]; unreadCount: number; page: number; totalPages: number };
 
