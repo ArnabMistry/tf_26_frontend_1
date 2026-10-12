@@ -322,7 +322,8 @@
 
   /* Cards stack in a single column on mobile, so the desktop left/right
      pairing has nothing to mirror against — render every card the same way. */
-  .right .shape {
+  .right .shape,
+  .right .backing {
     transform: scaleX(-1);
   }
 
