@@ -109,8 +109,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
                   <Link href="/" className="hover:text-black hover:underline py-1 transition-colors">Home</Link>
                   <Link href="/about" className="hover:text-black hover:underline py-1 transition-colors">About</Link>
                   <Link href="/events" className="hover:text-black hover:underline py-1 transition-colors">Events</Link>
-                  <Link href="/gallery" className="hover:text-black hover:underline py-1 transition-colors">Gallery</Link>
-                  <Link href="/contact" className="hover:text-black hover:underline py-1 transition-colors col-span-2">How to reach?</Link>
+                  <Link href="/contact" className="hover:text-black hover:underline py-1 transition-colors">How to reach?</Link>
                 </div>
               </div>
             </div>
@@ -223,8 +222,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
                   <Link href="/" className="hover:text-white hover:underline py-1 transition-colors">Home</Link>
                   <Link href="/about" className="hover:text-white hover:underline py-1 transition-colors">About</Link>
                   <Link href="/events" className="hover:text-white hover:underline py-1 transition-colors">Events</Link>
-                  <Link href="/gallery" className="hover:text-white hover:underline py-1 transition-colors">Gallery</Link>
-                  <Link href="/contact" className="hover:text-white hover:underline py-1 transition-colors col-span-2">How to reach?</Link>
+                  <Link href="/contact" className="hover:text-white hover:underline py-1 transition-colors">How to reach?</Link>
                 </div>
               </div>
             </div>
