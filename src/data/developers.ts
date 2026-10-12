@@ -34,6 +34,21 @@ export const heads: Developer[] = [
 
 export const team: Developer[] = [
   {
+    name: "VINAY KUMRAWAT",
+    role: "Full Stack Developer",
+    image: "/developers/vinay.webp",
+  },
+  {
+    name: "SHARDUL SINGH",
+    role: "Backend Developer",
+    image: "/developers/shardul.webp",
+  },
+  {
+    name: "LAKSHIT VERMA",
+    role: "Full Stack Developer",
+    image: "/developers/lakshit.webp",
+  },
+  {
     name: "TUSHAR AGARWAL",
     role: "Full Stack Developer",
     image: "/developers/Tushar Agarwal.webp",
@@ -44,11 +59,6 @@ export const team: Developer[] = [
     image: "/developers/Shivam.webp",
   },
   {
-    name: "SHARDUL SINGH",
-    role: "Backend Developer",
-    image: "/developers/shardul.webp",
-  },
-  {
     name: "AVIRAL",
     role: "UI/UX Director",
     image: "/developers/aviral.webp",
@@ -57,15 +67,5 @@ export const team: Developer[] = [
     name: "SATVIK",
     role: "Frontend Developer",
     image: "/developers/Satvik.webp",
-  },
-  {
-    name: "Lakshit Verma",
-    role: "Full Stack Developer",
-    image: "/developers/lakshit.webp"
-  },
-  {
-    name: "VINAY KUMRAWAT",
-    role: "Full Stack Developer",
-    image: "/developers/vinay.webp",
   },
 ];
