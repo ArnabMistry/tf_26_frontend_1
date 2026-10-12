@@ -6,6 +6,7 @@ import { useParticipant } from '@/components/auth/ParticipantSession';
 import { authRequest, ApiError } from '@/lib/auth';
 import { getAuthToken } from '@/lib/supabase';
 import { participantRequest, formatDate, fullName, type EventInfo, type Team, type Registration } from '@/lib/participant';
+import { openRazorpayCheckout } from '@/lib/razorpay';
 import s from './Portal.module.css';
 
 export function EventRegistration() {
@@ -118,7 +119,86 @@ export function EventRegistration() {
   const paymentRequired = !!event && event.price > 0 && event.paymentTrigger === 'before_registration';
   const isVerified = Boolean(user && user.verified);
   const isProfileIncomplete = Boolean(user && (!user.collegeName?.trim() || !user.phoneNumber?.trim()));
-  const canRegister = !!event && !registered && !closed && !paymentRequired && !isProfileIncomplete && isVerified && (!event.isTeamEvent || (!!team?.isLeader && team.stats.isReadyForRegistration && !team.stats.isRegistered));
+  const canRegister = !!event && !registered && !closed && !isProfileIncomplete && isVerified && (!event.isTeamEvent || (!!team?.isLeader && team.stats.isReadyForRegistration && !team.stats.isRegistered));
+
+  async function handlePaymentAndRegistration() {
+    if (!event || !user) return;
+    if (!isVerified) {
+      setError('Please verify your email before proceeding with payment.');
+      return;
+    }
+    if (isProfileIncomplete) {
+      setShowProfileModal(true);
+      return;
+    }
+    setBusy(true);
+    setError('');
+    setNotice('Creating secure payment order…');
+    try {
+      const orderRes = await participantRequest<{
+        orderId: string;
+        razorpayOrderId: string;
+        amountInPaise: number;
+        keyId: string;
+        currency?: string;
+      }>('/api/payments/orders', {
+        eventId: event.id,
+        ...(team ? { teamData: { teamId: team.id } } : {}),
+      });
+
+      setNotice('Opening payment gateway…');
+
+      await openRazorpayCheckout({
+        keyId: orderRes.keyId,
+        orderId: orderRes.orderId,
+        razorpayOrderId: orderRes.razorpayOrderId,
+        amountInPaise: orderRes.amountInPaise,
+        currency: orderRes.currency || 'INR',
+        eventName: event.name,
+        userName: fullName(user),
+        userEmail: user.email,
+        userPhone: user.phoneNumber,
+        onSuccess: async (response) => {
+          setNotice('Payment successful! Verifying registration with server…');
+          try {
+            await participantRequest<{
+              orderId: string;
+              registrationId: number;
+              status: string;
+              teamCode?: string;
+            }>('/api/payments/orders/verify', {
+              orderId: orderRes.orderId,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpaySignature: response.razorpay_signature,
+            });
+            setRegistered(true);
+            setNotice(`Payment verified! Registration confirmed for ${event.name}.`);
+            await refresh();
+            window.dispatchEvent(new Event('tf-inbox-change'));
+          } catch (verifyErr) {
+            setError(verifyErr instanceof Error ? verifyErr.message : 'Payment verification failed. Please contact support.');
+          } finally {
+            setBusy(false);
+          }
+        },
+        onFailure: (err) => {
+          setError(err?.description || err?.message || 'Payment failed. Please try again.');
+          setBusy(false);
+          setNotice('');
+        },
+        onDismiss: () => {
+          setBusy(false);
+          setNotice('');
+        },
+      });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create payment order.');
+      setBusy(false);
+      setNotice('');
+    }
+  }
+
+  const handleAction = paymentRequired ? handlePaymentAndRegistration : () => mutate(() => participantRequest('/api/user/registrations', { eventId: event!.id, ...(team ? { teamId: team.id } : {}) }), 'Registration confirmed!');
   return <main className={s.shell}>
     <Link className={s.eyebrow} href="/events">← All events</Link>
     <header className={s.hero}><div><p className={`${s.eyebrow} mt-5`}>{event?.club || 'TantraFiesta 2026'}</p><h1>{event?.name || 'Your next challenge'}</h1><p className={s.muted}>{event?.isTeamEvent ? 'Build your squad. Invite with TF IDs. Register together.' : 'One participant. One challenge. Your next achievement.'}</p></div><Link className={s.secondary} href="/profile">My portal ↗</Link></header>
@@ -135,13 +215,13 @@ export function EventRegistration() {
           <p className={s.muted}>{team.members.length} accepted · {team.stats.pendingCount} pending · {event.minTeamSize}–{event.maxTeamSize} members required</p>
           {team.members.map(member => <div className={s.entry} key={member.id}><div className={s.row}><div><h3>{fullName(member)}</h3><p className={s.fine}>{member.festId}</p></div><span className={`${s.badge} ${s.accepted}`}>{member.isLeader ? 'Leader' : 'Accepted'}</span>{team.isLeader && !member.isLeader && !team.stats.isRegistered && <button disabled={busy} className={s.secondary} onClick={() => mutate(() => participantRequest(`/api/user/teams/${team.id}/members`, { userId: member.id }, 'DELETE'), 'Member removed.')}>Remove</button>}</div></div>)}
           {team.invites.filter(invite => invite.status !== 'ACCEPTED').map(invite => <div className={s.entry} key={invite.id}><div className={s.row}><div><h3>{invite.user ? fullName(invite.user) : invite.email}</h3><p className={s.fine}>{invite.user?.festId}</p></div><span className={`${s.badge} ${invite.status === 'PENDING' ? s.pending : ''}`}>{invite.status}</span>{team.isLeader && invite.status === 'PENDING' && !team.stats.isRegistered && <button className={s.secondary} disabled={busy} onClick={() => mutate(() => participantRequest(`/api/user/teams/${team.id}/members`, { inviteId: invite.id }, 'DELETE'), 'Invitation cancelled.')}>Cancel invite</button>}</div></div>)}
-          {team.isLeader && !team.stats.isRegistered && team.stats.isReadyForRegistration && <div className="mt-4 p-4 rounded-xl bg-[#faff52]/15 border border-[#faff52]/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"><div><h4 className="font-bold text-[#faff52]">Team is ready!</h4><p className={s.fine}>Minimum team size reached. Finalize your registration below.</p></div><button disabled={busy} className={s.button} onClick={() => mutate(() => participantRequest('/api/user/registrations', { eventId: event.id, teamId: team.id }), 'Registration confirmed!')}>{busy ? 'Registering…' : 'Register team now'}</button></div>}
+          {team.isLeader && !team.stats.isRegistered && team.stats.isReadyForRegistration && <div className="mt-4 p-4 rounded-xl bg-[#faff52]/15 border border-[#faff52]/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"><div><h4 className="font-bold text-[#faff52]">Team is ready!</h4><p className={s.fine}>Minimum team size reached. Finalize your registration below.</p></div><button disabled={busy} className={s.button} onClick={handleAction}>{busy ? (paymentRequired ? 'Processing payment…' : 'Registering…') : (paymentRequired ? `Pay ₹${event.price} & Register team` : 'Register team now')}</button></div>}
         </section>
         {team.isLeader && !team.stats.isRegistered && <section className={s.card}><h2>Invite a teammate</h2><p className={`${s.muted} mb-4`}>Ask for their TF ID from their profile. They’ll receive an invitation in their portal.</p><form className={s.form} onSubmit={e => { e.preventDefault(); void mutate(async () => { await participantRequest(`/api/user/teams/${team.id}/invites`, { identifier: identifier.trim().toUpperCase() }); setIdentifier(''); }, 'Invitation sent. Your teammate can accept or decline in their inbox.'); }}><label>Teammate’s TF ID<input required pattern="[Tt][Ff][0-9]{6}" placeholder="TF123456" value={identifier} onChange={e => setIdentifier(e.target.value.toUpperCase())}/></label><button className={s.button} disabled={busy || closed || team.members.length + team.stats.pendingCount >= (event.maxTeamSize || 4)}>Send invitation</button></form></section>}
       </> : <section className={s.card}><h2>Your participant details</h2><h3>{fullName(user)}</h3><p className={s.muted}>{user.email}</p><p className={s.id}>{user.festId}</p><p className={s.muted}>{user.collegeName || 'You can add your college in your profile.'}</p></section>}
     </div><aside className={s.card}><p className={s.eyebrow}>Registration summary</p><h2 className="mt-4">{event.name}</h2><div className={s.entry}><p className={s.muted}>Format</p><h3>{event.isTeamEvent ? `Team · ${event.minTeamSize}–${event.maxTeamSize} members` : 'Individual'}</h3></div><div className={s.entry}><p className={s.muted}>Registration closes</p><h3>{formatDate(event.registrationEndTime)} IST</h3></div><div className={s.entry}><p className={s.muted}>Entry fee</p><h3>{event.price ? `₹${event.price}${event.paymentTrigger === 'after_round' ? ' · after qualification' : ''}` : 'Free registration'}</h3></div>
       {closed && <p className={s.error}>Registration is closed.</p>}
-      {paymentRequired && !registered && <p className={s.error}>Payment is required before registration. Contact the event organizer for checkout assistance.</p>}
+      
       {event.isTeamEvent && !registered && <p className={`${s.muted} mb-4`}>{!team ? 'Create a team first.' : !team.isLeader ? 'Your team leader completes registration for everyone.' : !team.stats.isReadyForRegistration ? 'Meet the minimum team size and resolve all pending invitations before registering.' : 'Your team is ready to register.'}</p>}
       {!isVerified ? (
         <div className="p-4 rounded-xl bg-[#E7137D]/20 border border-[#E7137D] mb-3 text-left">
@@ -155,7 +235,15 @@ export function EventRegistration() {
           <button type="button" className={`${s.button} w-full`} onClick={() => setShowProfileModal(true)}>Complete Profile</button>
         </div>
       ) : (
-        <button className={`${s.button} w-full`} disabled={busy || !canRegister} onClick={() => mutate(() => participantRequest('/api/user/registrations', { eventId: event.id, ...(team ? { teamId: team.id } : {}) }), 'Registration confirmed!')}>{busy ? 'Please wait…' : registered ? 'Registered' : event.isTeamEvent ? 'Register team' : 'Confirm registration'}</button>
+        <button className={`${s.button} w-full`} disabled={busy || !canRegister} onClick={handleAction}>
+          {busy
+            ? paymentRequired ? 'Processing payment…' : 'Please wait…'
+            : registered
+            ? 'Registered'
+            : paymentRequired
+            ? event?.isTeamEvent ? `Pay ₹${event?.price} & Register team` : `Pay ₹${event?.price} & Register`
+            : event?.isTeamEvent ? 'Register team' : 'Confirm registration'}
+        </button>
       )}
       <p className={s.fine}>Joining a team does not register it. The leader confirms registration once everyone is ready.</p>
     </aside></div>}
