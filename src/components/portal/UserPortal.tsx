@@ -62,11 +62,41 @@ export function UserPortal() {
       setError('Please complete your profile (college name and phone number) before accepting team invitations.');
       return;
     }
+    // Optimistically update inbox immediately for instant UI feedback
+    setInbox(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        notifications: prev.notifications.map(n =>
+          n.id === item.id ? { ...n, status: action === 'accept' ? 'ACCEPTED' : 'REJECTED', respondedAt: new Date().toISOString() } : n
+        )
+      };
+    });
     return mutate(`invite-${item.id}`, async () => {
       await participantRequest(`/api/invites/${item.inviteId}/respond`, { action });
       await participantRequest(`/api/user/notifications/${item.id}/read`, {}, 'PATCH');
     }, action === 'accept' ? 'Invitation accepted. Your team is now visible below.' : 'Invitation declined.');
   }
+
+    // Auto-refresh meal status when QR modal is active to immediately mark as stale/redeemed
+  useEffect(() => {
+    if (!qrModal) return;
+    const poll = async () => {
+      try {
+        const res = await participantRequest<{ meals: MealPass[] }>('/api/user/meals');
+        if (res.meals) {
+          setMeals(res.meals);
+          const current = res.meals.find(m => m.personalPassToken === qrModal.token);
+          if (current && current.status === 'CLAIMED') {
+            setNotice('Meal pass redeemed at counter! Enjoy your meal.');
+            setQrModal(null);
+          }
+        }
+      } catch (_) {}
+    };
+    const interval = setInterval(poll, 2500);
+    return () => clearInterval(interval);
+  }, [qrModal]);
 
   async function showPassQr(pass: MealPass) {
     setError('');
@@ -152,7 +182,7 @@ export function UserPortal() {
                   <div className={`${s.row} mt-3`}>
                     {item.kind === 'TEAM_INVITE' && item.status === 'PENDING' && item.inviteId ? (
                       <div className="flex gap-2">
-                        <button className={s.button} disabled={!!busy} onClick={() => respond(item, 'accept')}>Accept invitation</button>
+                        <button className={s.button} disabled={!!busy} onClick={() => respond(item, 'accept')}>{busy === `invite-${item.id}` ? 'Accepting…' : 'Accept invitation'}</button>
                         <button className={s.secondary} disabled={!!busy} onClick={() => respond(item, 'reject')}>Decline</button>
                       </div>
                     ) : (
@@ -226,7 +256,7 @@ export function UserPortal() {
               <form key={profile.user.id} className={s.form} onSubmit={e => { e.preventDefault(); const data = Object.fromEntries(new FormData(e.currentTarget)); void mutate('profile', () => participantRequest('/api/user/profile', data, 'PATCH'), 'Profile updated.'); }}>
                 <div className={s.fields}><label>First name<input name="firstName" defaultValue={profile.user.firstName} required maxLength={80}/></label><label>Last name<input name="lastName" defaultValue={profile.user.lastName} maxLength={80}/></label></div>
                 <label>College<input name="collegeName" defaultValue={profile.user.collegeName || ''} maxLength={160}/></label><label>Phone number<input name="phoneNumber" type="tel" defaultValue={profile.user.phoneNumber || ''} maxLength={20}/></label>
-                <label>Email<input value={profile.user.email} readOnly/></label><p className={s.fine}>Your email, TF ID and account role are managed by the authentication system.</p><button className={s.button} disabled={!!busy}>{busy === 'profile' ? 'Saving...' : 'Save profile'}</button>
+                <label>Email<input value={profile.user.email} readOnly/></label><p className={s.fine}>Your email, TF ID cannot be changed.</p><button className={s.button} disabled={!!busy}>{busy === 'profile' ? 'Saving...' : 'Save profile'}</button>
               </form>
             </section>
           ) : (
@@ -318,11 +348,11 @@ export function UserPortal() {
             }}>
               <label>
                 College / Institute Name
-                <input name="collegeName" required defaultValue={profile.user.collegeName || ''} maxLength={160} placeholder="e.g. IIIT Nagpur" />
+                <input name="collegeName" required defaultValue={profile.user.collegeName || ''} maxLength={160} placeholder="Enter college or institute" />
               </label>
               <label>
                 Phone Number (WhatsApp)
-                <input name="phoneNumber" type="tel" required defaultValue={profile.user.phoneNumber || ''} maxLength={20} placeholder="e.g. +91 9876543210" pattern="^[+\d ()-]{7,20}$" />
+                <input name="phoneNumber" type="tel" required defaultValue={profile.user.phoneNumber || ''} maxLength={20} placeholder="Enter 10-digit mobile number" pattern="^[+\d ()-]{7,20}$" />
               </label>
               {error && <p className={s.error} role="alert">{error}</p>}
               <div className="flex gap-2 justify-end mt-4">

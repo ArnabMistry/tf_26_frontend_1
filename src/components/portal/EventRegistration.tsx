@@ -95,11 +95,11 @@ export function EventRegistration() {
             }}>
               <label>
                 College / Institute Name
-                <input name="collegeName" required defaultValue={user.collegeName || ''} maxLength={160} placeholder="e.g. IIIT Nagpur" />
+                <input name="collegeName" required defaultValue={user.collegeName || ''} maxLength={160} placeholder="Enter college or institute" />
               </label>
               <label>
                 Phone Number (WhatsApp)
-                <input name="phoneNumber" type="tel" required defaultValue={user.phoneNumber || ''} maxLength={20} placeholder="e.g. +91 9876543210" pattern="^[+\d ()-]{7,20}$" />
+                <input name="phoneNumber" type="tel" required defaultValue={user.phoneNumber || ''} maxLength={20} placeholder="Enter 10-digit mobile number" pattern="^[+\d ()-]{7,20}$" />
               </label>
               {error && <p className={s.error} role="alert">{error}</p>}
               <div className="flex gap-2 justify-end mt-4">
