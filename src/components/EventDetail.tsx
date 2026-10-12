@@ -221,11 +221,12 @@ export function EventDetail({ event }: EventDetailProps) {
 }
 
 function Poster({ event }: { event: EventDetailData }) {
+  const posterSrc = event.image || event.poster;
   return (
     <div className={styles.poster}>
-      {event.poster ? (
+      {posterSrc ? (
         <Image
-          src={event.poster}
+          src={posterSrc}
           alt={`${event.name} poster`}
           width={586}
           height={742}
