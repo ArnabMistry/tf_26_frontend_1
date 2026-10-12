@@ -17,8 +17,8 @@ export default function Home() {
     <main className="flex-1 bg-zinc-950 text-white">
       <Hero />
       <AboutSection />
-      <PhotoGallery />
       <TagsMarquee />
+      <PhotoGallery />
       <section
         className="relative isolate w-full overflow-hidden"
         style={{
