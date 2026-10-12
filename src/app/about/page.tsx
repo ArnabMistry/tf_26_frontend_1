@@ -174,7 +174,7 @@ export default function AboutPage() {
               </div>
             </div>
             <div className="mt-8">
-              <Link href="#" className="inline-flex items-center justify-center gap-2 bg-[#E7137D] text-white px-8 py-3 rounded-md font-bold text-sm tracking-widest uppercase hover:bg-[#c60f69] transition-colors">
+              <Link href="https://www.instagram.com/reel/DQRoQQqjHql/?mdxt=MXRoaTd2bDc3YWE0aQ==" className="inline-flex items-center justify-center gap-2 bg-[#E7137D] text-white px-8 py-3 rounded-md font-bold text-sm tracking-widest uppercase hover:bg-[#c60f69] transition-colors">
                 VIEW NOW ↗
               </Link>
             </div>
@@ -224,7 +224,7 @@ export default function AboutPage() {
               </div>
             </div>
             <div className="mt-8">
-              <Link href="#" className="inline-flex items-center justify-center gap-2 bg-[#E7137D] text-white px-8 py-3 rounded-md font-bold text-sm tracking-widest uppercase hover:bg-[#c60f69] transition-colors">
+              <Link href="https://www.instagram.com/reel/DPpvsaeApN5/?mdxt=MTBueHR0MTc1ajd2Zg==" className="inline-flex items-center justify-center gap-2 bg-[#E7137D] text-white px-8 py-3 rounded-md font-bold text-sm tracking-widest uppercase hover:bg-[#c60f69] transition-colors">
                 VIEW NOW ↗
               </Link>
             </div>
