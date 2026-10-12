@@ -1,7 +1,7 @@
 import { ApiError, authRequest, type AuthUser } from './auth';
 import { getAuthToken } from './supabase';
 
-export type Person = AuthUser & { firstName: string; lastName: string; email: string; festId: string | null; collegeName?: string | null; phoneNumber?: string | null };
+export type Person = AuthUser & { firstName: string; lastName: string; email: string; festId: string | null; collegeName?: string | null; phoneNumber?: string | null; verified?: boolean };
 export type EventInfo = { id: string; slug?: string; name: string; club: string; isTeamEvent: boolean; minTeamSize: number | null; maxTeamSize: number | null; price: number; paymentTrigger: string; registrationEndTime: string; venue?: string };
 export type Invite = { id: number; status: string; user?: Person; email: string; createdAt: string };
 export type Team = { id: number; eventId: string; name: string; teamCode: string; isLeader: boolean; event: EventInfo; leader: Person; members: (Person & { isLeader?: boolean })[]; invites: Invite[]; stats: { isReadyForRegistration: boolean; isRegistered: boolean; totalAccepted: number; pendingCount: number; minTeamSize: number; maxTeamSize: number } };
