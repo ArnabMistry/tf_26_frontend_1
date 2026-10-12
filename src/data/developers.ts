@@ -44,7 +44,7 @@ export const team: Developer[] = [
     image: "/developers/Shivam.webp",
   },
   {
-    name: "SHARDUL",
+    name: "SHARDUL SINGH",
     role: "Backend Developer",
     image: "/developers/shardul.webp",
   },
@@ -61,6 +61,6 @@ export const team: Developer[] = [
   {
     name: "Lakshit Verma",
     role: "Full Stack Developer",
-    image:"/developers/lakshit.webp"
+    image: "/developers/lakshit.webp"
   },
 ];

@@ -8,6 +8,7 @@ export type Team = { id: number; eventId: string; name: string; teamCode: string
 export type Registration = { id: number; eventId: string; status: string; createdAt: string; event: EventInfo; team?: { name: string }; roundProgress: { roundId: number; name: string; status: string }[] };
 export type Profile = { user: Person; registeredEvents: Registration[]; teams: Team[]; stats: { totalRegisteredEvents: number; totalTeams: number; totalQualifiedRounds: number }; activities: { id: string; title: string; subtitle: string; timestamp: string }[] };
 export type Notification = { id: number; senderId: string; recipientId: string; senderName: string; eventName: string; eventId: string; teamId: number; teamName: string; inviteId: number | null; kind: 'TEAM_INVITE' | 'INVITE_RESPONSE'; status: string; createdAt: string; updatedAt: string; respondedAt: string | null; readAt: string | null };
+export type MealPass = { mealId: number; typeOfMeal: 'breakfast' | 'lunch' | 'dinner' | 'snacks'; date: string; status: 'AVAILABLE' | 'CLAIMED'; scannedAt: string | null; personalPassToken: string; isServingNow: boolean; grantedByEvents: { id: string; name: string }[] };
 export type Inbox = { notifications: Notification[]; unreadCount: number; page: number; totalPages: number };
 
 export async function participantRequest<T>(path: string, body?: unknown, method?: string): Promise<T> {

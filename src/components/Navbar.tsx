@@ -113,12 +113,14 @@ export function Navbar({
               </Link>
             );
           })}
+          {!user && (
           <Link
             href={registrationHref}
             className="whitespace-nowrap bg-[#E7137D] px-5 py-2 text-white transition-colors hover:bg-[#c60f69] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ffe43b]"
           >
             Register Now
           </Link>
+        )}
         </div>
         <PortalNav />
       </nav>
@@ -126,6 +128,7 @@ export function Navbar({
       {/* ── Mobile bottom navigation (replaces old hamburger) ── */}
       <MobileBottomNav
         isAdmin={isAdmin}
+        isLoggedIn={!!user}
         currentPath={currentPath}
         registrationHref={registrationHref}
       />

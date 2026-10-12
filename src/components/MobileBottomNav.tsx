@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "motion/react";
 
 interface MobileBottomNavProps {
   isAdmin?: boolean;
+  isLoggedIn?: boolean;
   currentPath?: string;
   registrationHref?: string;
 }
@@ -24,6 +25,7 @@ const expandedItems = [
 
 export function MobileBottomNav({
   isAdmin = false,
+  isLoggedIn = false,
   currentPath,
   registrationHref = "/register",
 }: MobileBottomNavProps) {
@@ -80,7 +82,10 @@ export function MobileBottomNav({
               transformOrigin: "bottom right",
             }}
           >
-            {expandedItems.filter(({ href }) => href !== "/admin" || isAdmin).map((item, i) => {
+            {expandedItems
+              .filter(({ href }) => href !== "/admin" || isAdmin)
+              .map(item => item.href === '/login' && isLoggedIn ? { href: '/profile', label: 'My Portal' } : item)
+              .map((item, i) => {
               const isActive = currentPath === item.href;
               return (
                 <motion.div
@@ -125,13 +130,13 @@ export function MobileBottomNav({
           border: "1px solid rgba(255, 255, 255, 0.12)",
         }}
       >
-        {/* Register Now CTA */}
+        {/* Register Now / Portal CTA */}
         <Link
-          href={registrationHref}
+          href={isLoggedIn ? "/profile" : registrationHref}
           onClick={() => setIsExpanded(false)}
           className="shrink-0 rounded-lg bg-[#E7137D] px-2.5 min-[360px]:px-4 py-2 min-[360px]:py-2.5 text-[11px] min-[360px]:text-[12px] font-bold uppercase tracking-wider text-white transition-all duration-200 hover:bg-[#c60f69] hover:shadow-lg hover:shadow-[#E7137D]/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b] active:scale-[0.97]"
         >
-          Register Now
+          {isLoggedIn ? "My Portal" : "Register Now"}
         </Link>
 
         {/* ABOUT Link */}
