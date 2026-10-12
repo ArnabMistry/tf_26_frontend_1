@@ -136,7 +136,7 @@ export function MobileBottomNav({
           {isLoggedIn ? "My Portal" : "Register Now"}
         </Link>
 
-        {/* ABOUT Link */}
+        {/* EVENTS Link */}
         <Link
           href={primaryItems[0].href}
           aria-current={currentPath === primaryItems[0].href ? "page" : undefined}
@@ -153,25 +153,6 @@ export function MobileBottomNav({
           onClick={() => setIsExpanded(false)}
         >
           {primaryItems[0].label}
-        </Link>
-
-        {/* EVENTS Link */}
-        <Link
-          href={primaryItems[1].href}
-          aria-current={currentPath === primaryItems[1].href ? "page" : undefined}
-          className="shrink-0 rounded-sm px-1 py-1.5 text-[11px] min-[360px]:text-[13px] font-bold uppercase tracking-wider transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b]"
-          style={{
-            color: currentPath === primaryItems[1].href ? "#FFFF1A" : "#e0dce8",
-          }}
-          onMouseEnter={(e) => {
-            if (currentPath !== primaryItems[1].href) e.currentTarget.style.color = "#FFFF1A";
-          }}
-          onMouseLeave={(e) => {
-            if (currentPath !== primaryItems[1].href) e.currentTarget.style.color = "#e0dce8";
-          }}
-          onClick={() => setIsExpanded(false)}
-        >
-          {primaryItems[1].label}
         </Link>
 
         {/* Plus / Close button */}
