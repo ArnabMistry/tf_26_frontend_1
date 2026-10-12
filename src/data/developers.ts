@@ -63,4 +63,9 @@ export const team: Developer[] = [
     role: "Full Stack Developer",
     image: "/developers/lakshit.webp"
   },
+  {
+    name: "VINAY KUMRAWAT",
+    role: "Full Stack Developer",
+    image: "/developers/vinay.webp",
+  },
 ];
