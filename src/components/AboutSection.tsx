@@ -6,23 +6,23 @@ import { Reveal } from "./Reveal";
 export function AboutSection() {
   return (
     <section className="relative w-full py-12 md:py-20 px-4 sm:px-6 lg:px-12 text-black overflow-hidden">
-      <div className="max-w-6xl mx-auto flex flex-col gap-8 md:gap-10">
+      <div className="max-w-5xl mx-auto flex flex-col gap-8 md:gap-14">
         
         {/* About TantraFiesta Card */}
-        <Reveal variant="scale" className="relative bg-[#FFFF1A] rounded-2xl md:rounded-[28px] p-6 sm:p-8 md:p-12 shadow-2xl border-2 border-black/10">
+        <Reveal variant="scale" className="relative bg-[#FFFF1A] rounded-2xl md:rounded-[28px] p-6 sm:p-8 md:p-12 lg:min-h-[530px] shadow-2xl border-2 border-black/10">
           {/* Character Illustration */}
-          <HoverTilt className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 h-full max-h-[105%] pointer-events-auto z-20 items-center justify-center" rotationIntensity={8} scaleIntensity={1.03}>
+          <HoverTilt className="hidden lg:flex absolute right-[-15%] top-1/2 -translate-y-1/2 h-[118%] pointer-events-auto z-20 items-center justify-center" rotationIntensity={8} scaleIntensity={1.03}>
             <Image
               src="/assets/gurl.png"
               alt="TantraFiesta Mascot"
-              width={450}
-              height={550}
+              width={600}
+              height={733}
               className="h-full w-auto object-contain drop-shadow-xl select-none pointer-events-none"
               loading="lazy"
             />
           </HoverTilt>
 
-          <div className="relative z-10 lg:max-w-[72%] xl:max-w-[76%]">
+          <div className="relative z-10 lg:max-w-[66%]">
             <h2 className="font-tantra text-3xl sm:text-5xl md:text-6xl text-black uppercase tracking-tight mb-6">
               ABOUT TANTRAFIESTA
             </h2>
@@ -39,7 +39,7 @@ export function AboutSection() {
         </Reveal>
 
         {/* Theme Card */}
-        <Reveal variant="right" className="relative bg-[#FFFF1A] rounded-2xl md:rounded-[28px] p-6 sm:p-8 md:p-12 shadow-2xl border-2 border-black/10">
+        <Reveal variant="right" className="relative bg-[#FFFF1A] rounded-2xl md:rounded-[28px] p-6 sm:p-8 md:p-12 lg:min-h-[480px] shadow-2xl border-2 border-black/10">
           <div className="relative z-10">
             <p className="text-xs sm:text-sm md:text-base font-bold uppercase tracking-widest text-black/70 mb-1">
               THEME
