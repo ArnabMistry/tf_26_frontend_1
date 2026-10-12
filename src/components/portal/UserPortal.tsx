@@ -57,6 +57,11 @@ export function UserPortal() {
   }
 
   function respond(item: Notification, action: 'accept' | 'reject') {
+    if (action === 'accept' && profile?.user && (!profile.user.collegeName?.trim() || !profile.user.phoneNumber?.trim())) {
+      setProfileDismissed(false);
+      setError('Please complete your profile (college name and phone number) before accepting team invitations.');
+      return;
+    }
     return mutate(`invite-${item.id}`, async () => {
       await participantRequest(`/api/invites/${item.inviteId}/respond`, { action });
       await participantRequest(`/api/user/notifications/${item.id}/read`, {}, 'PATCH');
@@ -234,8 +239,7 @@ export function UserPortal() {
                     <div className={s.row}><div><p className={s.eyebrow}>{item.event.club}</p><h3 className="mt-2">{item.event.name}</h3></div><span className={s.badge}>{item.status.replaceAll('_',' ')}</span></div>
                     <p className={s.muted}>{item.team?.name || 'Individual entry'} • {item.event.venue || 'Venue to be announced'}</p>
                     <div className="flex flex-wrap gap-2 mt-3">{item.roundProgress?.map(round => <span key={round.roundId} className={s.badge}>{round.name}: {round.status}</span>)}</div>
-                    <p className={`${s.fine} mt-3`}>Event ID: {item.eventId}</p>
-                  </article>
+                    </article>
                 ))}
               </section>
               <section className={s.card}>
@@ -264,8 +268,7 @@ export function UserPortal() {
             <p className={`${s.eyebrow} mt-6`}>Your invitation ID</p>
             <p className={s.id}>{profile.user.festId || 'Not assigned'}</p>
             <button disabled={!profile.user.festId} className={s.secondary} onClick={async () => { try { await navigator.clipboard.writeText(profile.user.festId || ''); setNotice('TF ID copied. Share it with your team leader.'); } catch { setError('Copy unavailable. Select your TF ID and copy it manually.'); } }}>Copy TF ID</button>
-            <p className={`${s.fine} mt-4`}>User ID: {profile.user.id}</p>
-          </section>
+            </section>
           <section className={s.card}>
             <h2>Recent activity</h2>
             {!profile.activities.length && <p className={s.empty}>Your fest journey starts here.</p>}

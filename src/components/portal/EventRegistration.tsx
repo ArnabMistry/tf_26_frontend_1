@@ -116,8 +116,9 @@ export function EventRegistration() {
   if (loading || !user) return <main className={s.shell}><p role="status">Checking your account…</p></main>;
   const closed = !!event && new Date(event.registrationEndTime) <= new Date();
   const paymentRequired = !!event && event.price > 0 && event.paymentTrigger === 'before_registration';
+  const isVerified = Boolean(user && user.verified);
   const isProfileIncomplete = Boolean(user && (!user.collegeName?.trim() || !user.phoneNumber?.trim()));
-  const canRegister = !!event && !registered && !closed && !paymentRequired && !isProfileIncomplete && (!event.isTeamEvent || (!!team?.isLeader && team.stats.isReadyForRegistration && !team.stats.isRegistered));
+  const canRegister = !!event && !registered && !closed && !paymentRequired && !isProfileIncomplete && isVerified && (!event.isTeamEvent || (!!team?.isLeader && team.stats.isReadyForRegistration && !team.stats.isRegistered));
   return <main className={s.shell}>
     <Link className={s.eyebrow} href="/events">← All events</Link>
     <header className={s.hero}><div><p className={`${s.eyebrow} mt-5`}>{event?.club || 'TantraFiesta 2026'}</p><h1>{event?.name || 'Your next challenge'}</h1><p className={s.muted}>{event?.isTeamEvent ? 'Build your squad. Invite with TF IDs. Register together.' : 'One participant. One challenge. Your next achievement.'}</p></div><Link className={s.secondary} href="/profile">My portal ↗</Link></header>
@@ -126,7 +127,8 @@ export function EventRegistration() {
     {!ready || !event ? <p role="status">Loading registration details…</p> : <div className={s.grid}><div className={s.stack}>
       {registered || team?.stats.isRegistered ? <section className={s.card}><span className={`${s.badge} ${s.accepted}`}>Registered</span><h2 className="mt-4">You’re on the list.</h2><p className={s.muted}>Your registration is saved for {event.name}. Track your events and rounds in your portal.</p><Link className={`${s.button} mt-5`} href="/profile">Go to my portal</Link></section> : null}
       {event.isTeamEvent ? !team ? <section className={s.card}><h2>Create your team</h2><p className={`${s.muted} mb-5`}>You’ll be the leader. Invite teammates after creating your draft.</p><form className={s.form} onSubmit={e => { e.preventDefault(); void mutate(() => participantRequest('/api/user/teams', { eventId: event.id, name: teamName, members: [] }), 'Team created. Invite your teammates below.'); }}>
-        <label>Team name<input required maxLength={80} value={teamName} onChange={e => setTeamName(e.target.value)} placeholder="Give your squad a name"/></label><label>Team leader<input readOnly value={`${fullName(user)} · ${user.festId || user.email}`}/></label><button disabled={busy || closed || registered} className={s.button}>{busy ? 'Creating…' : 'Create team'}</button>
+        <label>Team name<input required maxLength={80} value={teamName} onChange={e => setTeamName(e.target.value)} placeholder="Give your squad a name"/></label><label>Team leader<input readOnly value={`${fullName(user)} · ${user.festId || user.email}`}/></label><button disabled={busy || closed || registered || !isVerified || isProfileIncomplete} className={s.button}>{busy ? 'Creating…' : 'Create team'}</button>
+        {!isVerified && <p className={`${s.fine} text-pink-300 mt-2`}>Please verify your email before creating a team.</p>}
       </form></section> : <>
         <section className={s.card}><div className={s.row}><div><p className={s.eyebrow}>{team.teamCode}</p><h2 className="mt-2">{team.name}</h2></div><span className={s.badge}>{team.isLeader ? 'Team leader' : 'Team member'}</span></div>
           <div className={s.progress} aria-label={`${team.members.length} of ${event.maxTeamSize || 4} slots filled`}>{Array.from({length: Math.min(event.maxTeamSize || 4, 20)}, (_,i) => <span key={i} className={i < team.members.length ? s.filled : ''}/>)}</div>
@@ -141,7 +143,12 @@ export function EventRegistration() {
       {closed && <p className={s.error}>Registration is closed.</p>}
       {paymentRequired && !registered && <p className={s.error}>Payment is required before registration. Contact the event organizer for checkout assistance.</p>}
       {event.isTeamEvent && !registered && <p className={`${s.muted} mb-4`}>{!team ? 'Create a team first.' : !team.isLeader ? 'Your team leader completes registration for everyone.' : !team.stats.isReadyForRegistration ? 'Meet the minimum team size and resolve all pending invitations before registering.' : 'Your team is ready to register.'}</p>}
-      {isProfileIncomplete ? (
+      {!isVerified ? (
+        <div className="p-4 rounded-xl bg-[#E7137D]/20 border border-[#E7137D] mb-3 text-left">
+          <h4 className="font-bold text-[#FFFF1A] text-sm">Email Verification Required</h4>
+          <p className={`${s.fine} mt-1 mb-2`}>Your account is not verified. Please verify your email before registering for events.</p>
+        </div>
+      ) : isProfileIncomplete ? (
         <div className="p-4 rounded-xl bg-[#FFFF1A]/10 border border-[#FFFF1A]/40 mb-3 text-left">
           <h4 className="font-bold text-[#FFFF1A] text-sm">Action Required</h4>
           <p className={`${s.fine} mt-1 mb-3`}>Please provide your college name and phone number to unlock registration.</p>
@@ -150,7 +157,7 @@ export function EventRegistration() {
       ) : (
         <button className={`${s.button} w-full`} disabled={busy || !canRegister} onClick={() => mutate(() => participantRequest('/api/user/registrations', { eventId: event.id, ...(team ? { teamId: team.id } : {}) }), 'Registration confirmed!')}>{busy ? 'Please wait…' : registered ? 'Registered' : event.isTeamEvent ? 'Register team' : 'Confirm registration'}</button>
       )}
-      <p className={`${s.fine} mt-4`}>Event ID: {event.id}</p><p className={s.fine}>Joining a team does not register it. The leader confirms registration once everyone is ready.</p>
+      <p className={s.fine}>Joining a team does not register it. The leader confirms registration once everyone is ready.</p>
     </aside></div>}
   </main>;
 }
