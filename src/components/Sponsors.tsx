@@ -82,7 +82,7 @@ export function Sponsors() {
   sponsorsData.forEach((s, i) => columns[i % 4].push(s));
 
   return (
-    <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat pt-12 md:pt-20 flex flex-col items-center px-4 md:px-8">
+    <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat bg-fixed pt-12 md:pt-20 flex flex-col items-center px-4 md:px-8">
       <div className="w-full max-w-[1600px] bg-[#FFFF1A] rounded-t-[32px] md:rounded-t-[48px] px-4 md:px-16 pt-16 md:pt-24 pb-16 md:pb-32 relative">
 
         {/* Hovercar Image Box */}

@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/Hero";
+import { AboutSection } from "@/components/AboutSection";
 import { AboutContent } from "@/components/AboutContent";
 
 const PhotoGallery = dynamic(() => import("@/components/PhotoGallery").then(m => m.PhotoGallery), {
@@ -15,9 +16,20 @@ export default function Home() {
   return (
     <main className="flex-1 bg-zinc-950 text-white">
       <Hero />
+      <AboutSection />
       <PhotoGallery />
       <TagsMarquee />
-      <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat overflow-hidden">
+      <section
+        className="relative isolate w-full overflow-hidden"
+        style={{
+          backgroundColor: "#241A4C",
+          backgroundImage: "url('/assets/bg.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundAttachment: "fixed",
+        }}
+      >
         <AboutContent />
       </section>
       <Sponsors />

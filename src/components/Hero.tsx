@@ -4,7 +4,7 @@ import { Navbar } from "@/components/Navbar";
 
 export function Hero() {
   return (
-    <section className="relative min-h-[100svh] w-full overflow-hidden bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat flex flex-col">
+    <section className="relative min-h-[100svh] w-full overflow-hidden bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat bg-fixed flex flex-col">
       <Navbar />
 
       {/* Main Hero Content */}

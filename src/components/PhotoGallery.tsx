@@ -86,7 +86,7 @@ export function PhotoGallery() {
   return (
     <section
       onClick={() => setHoveredIndex(null)}
-      className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat py-12 sm:py-16 md:py-24 px-4 flex flex-col items-center justify-center overflow-hidden"
+      className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat bg-fixed py-12 sm:py-16 md:py-24 px-4 flex flex-col items-center justify-center overflow-hidden"
     >
       <h2 className="font-tantra text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-white uppercase tracking-tight text-center drop-shadow-lg mb-8 sm:mb-16 md:mb-24 relative z-20">
         PHOTO GALLERY

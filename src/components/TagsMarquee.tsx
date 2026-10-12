@@ -56,7 +56,7 @@ const PillCard = ({ item }: { item: typeof row1[0] }) => (
 
 export function TagsMarquee() {
   return (
-    <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat py-14 md:py-24 overflow-hidden flex flex-col gap-6 md:gap-8">
+    <section className="relative w-full bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat bg-fixed py-14 md:py-24 overflow-hidden flex flex-col gap-6 md:gap-8">
       
       {/* Row 1 */}
       {/* marquee-row pauses the track below on hover (see globals.css) —

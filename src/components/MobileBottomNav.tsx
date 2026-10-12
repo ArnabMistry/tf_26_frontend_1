@@ -12,7 +12,6 @@ interface MobileBottomNavProps {
 }
 
 const primaryItems = [
-  { href: "/about", label: "About" },
   { href: "/events", label: "Events" },
 ];
 
