@@ -589,6 +589,20 @@
   white-space: nowrap;
 }
 
+/* Entry fee outcome, so a settled payment reads at a glance against the
+   default pink badge used for round status. */
+.admin-badge.admin-paid {
+  background: rgba(60, 220, 150, 0.14);
+  border-color: rgba(60, 220, 150, 0.4);
+  color: #86f0c2;
+}
+
+.admin-badge.admin-unpaid {
+  background: rgba(255, 255, 26, 0.12);
+  border-color: rgba(255, 255, 26, 0.38);
+  color: #faff52;
+}
+
 /* ── Actions & Status ── */
 .admin-actions {
   display: flex;
