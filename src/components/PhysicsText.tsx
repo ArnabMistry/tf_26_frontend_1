@@ -100,8 +100,10 @@ export function PhysicsText({ startTrigger = true }: PhysicsTextProps) {
 
     const statics = [ground, leftWall, rightWall, leftChamfer, rightChamfer];
 
-    // Character mascot physical boundaries
-    const charImage = footerContainer.querySelector('img[src*="distorted_gurl"]');
+    // Character mascot physical boundaries. Matched on data-mascot rather than
+    // the file name so swapping the artwork cannot silently drop the colliders
+    // and let the letters fall straight through it.
+    const charImage = footerContainer.querySelector('img[data-mascot]');
     if (charImage) {
       const charRect = charImage.getBoundingClientRect();
       const cx = charRect.left - footerRect.left + charRect.width / 2;
