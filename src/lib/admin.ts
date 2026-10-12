@@ -1,5 +1,4 @@
 import { authRequest } from './auth';
-import { getAuthToken } from './supabase';
 
 export type Row = Record<string, unknown>;
 export type EventSummary = { id: string; name: string; club: string; isTeamEvent: boolean; _count: { registrations: number; teams: number; rounds: number } };
@@ -10,7 +9,7 @@ export const text = (value: unknown): string => value == null ? '—' : String(v
 export const person = (value: unknown): string => { const user = record(value); return user.email ? text(user.email) : [user.firstName, user.lastName].filter(Boolean).join(' ') || '—'; };
 export const enc = (value: unknown) => encodeURIComponent(String(value));
 export async function adminRequest(path: string, body?: unknown, method?: string) {
-  return (await authRequest(path, body, getAuthToken() || '', method)).data;
+  return (await authRequest(path, body, undefined, method)).data;
 }
 export function downloadCsv(filename: string, values: unknown[][]) {
   const escaped = values.map(row => row.map(value => {

@@ -4,7 +4,7 @@ import React, { useState, useSyncExternalStore, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authRequest, destination, safeReturnPath } from "@/lib/auth";
-import { logout, saveAuthToken, startGoogleLogin } from "@/lib/supabase";
+import { markSignedIn, startGoogleLogin } from "@/lib/session";
 const subscribeNotice = () => () => {};
 
 export function LoginForm() {
@@ -45,11 +45,11 @@ export function LoginForm() {
     setIsLoading(true);
     setError('');
     try {
-      const result = await authRequest('/api/auth/login', { email, password });
-      const token = result.data.accessToken;
-      const refreshToken = result.data.refreshToken;
-      const profile = await authRequest('/api/auth/me', undefined, token);
-      saveAuthToken(token, refreshToken);
+      // The backend sets the session cookie on this response; there is no
+      // token to capture or store.
+      await authRequest('/api/auth/login', { email, password });
+      markSignedIn();
+      const profile = await authRequest('/api/auth/me');
       sessionStorage.removeItem('tf_signup_notice');
       router.replace(safeReturnPath(searchParams.get('next')) || safeReturnPath(sessionStorage.getItem('tf_return_to')) || destination(profile.data.user));
       sessionStorage.removeItem('tf_return_to');
@@ -60,13 +60,18 @@ export function LoginForm() {
   const handleGoogleLogin = async () => {
     setError('');
     setIsLoading(true);
-    try { const next = safeReturnPath(searchParams.get('next')); if (next) sessionStorage.setItem('tf_return_to', next); await startGoogleLogin(); }
+    try { await startGoogleLogin(safeReturnPath(searchParams.get('next'))); }
     catch (err) { setError(err instanceof Error ? err.message : 'Google sign-in failed.'); setIsLoading(false); }
   };
 
   return (
     <div className="w-full max-w-[700px]">
       {/* Email confirmed banner — shown after clicking email verification link */}
+      {searchParams.get('reset') === '1' && (
+        <p role="status" className="mb-3 text-green-400 font-bold">
+          ✅ Password updated. Log in with your new password.
+        </p>
+      )}
       {confirmed && (
         <p role="status" className="mb-3 text-green-400 font-bold">
           ✅ Email confirmed! Enter your password to log in.
@@ -241,6 +246,17 @@ export function LoginForm() {
       {/* Switch Link below the card */}
       <div
         className="mt-3.5 sm:mt-4 text-[11px] sm:text-xs md:text-sm uppercase tracking-wider text-[#A49FBD] font-bold text-left"
+        style={{ fontFamily: "var(--font-futura)" }}
+      >
+        <Link
+          href="/forgot-password"
+          className="text-[#E7137D] hover:underline underline-offset-4 font-extrabold transition-colors hover:text-[#fa2773]"
+        >
+          FORGOT PASSWORD?
+        </Link>
+      </div>
+      <div
+        className="mt-2 text-[11px] sm:text-xs md:text-sm uppercase tracking-wider text-[#A49FBD] font-bold text-left"
         style={{ fontFamily: "var(--font-futura)" }}
       >
         <span>DON&apos;T HAVE AN ACCOUNT? </span>

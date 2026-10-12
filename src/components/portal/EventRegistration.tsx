@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useParticipant } from '@/components/auth/ParticipantSession';
 import { authRequest, ApiError } from '@/lib/auth';
-import { getAuthToken } from '@/lib/supabase';
+import { hasSessionHint } from '@/lib/session';
 import { participantRequest, formatDate, fullName, type EventInfo, type Team, type Registration, type Person, type Profile } from '@/lib/participant';
 import { payForEvent } from '@/lib/payments';
 import s from './Portal.module.css';
@@ -24,7 +24,7 @@ export function EventRegistration() {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const refresh = useCallback(async () => {
     if (!user || !requestedEvent) return;
-    const token = getAuthToken();
+    const token = hasSessionHint() ? 'session' : null;
     try {
       const result = await authRequest(`/api/events/${encodeURIComponent(requestedEvent)}`);
       const current: EventInfo = result.data;
@@ -37,7 +37,7 @@ export function EventRegistration() {
       ]);
       const existing = teams.teams.find(item => item.eventId === current.id);
       const live = existing ? await participantRequest<Team>(`/api/user/teams/${existing.id}/live-status`) : null;
-      if (getAuthToken() !== token) return;
+      if ((hasSessionHint() ? 'session' : null) !== token) return;
       const mine = registrations.registrations.find(item => item.eventId === current.id && item.status !== 'cancelled') || null;
       setEvent(current); setTeam(live); setRegistration(mine); setRegistered(!!mine); setProfileUser(profile.user);
       setReady(true); setError('');

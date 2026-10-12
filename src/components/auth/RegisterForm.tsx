@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { authRequest, safeReturnPath } from "@/lib/auth";
-import { startGoogleLogin } from "@/lib/supabase";
+import { markSignedIn, startGoogleLogin } from "@/lib/session";
 
 export function RegisterForm({ admin = false }: { admin?: boolean }) {
   const router = useRouter();
@@ -31,12 +31,13 @@ export function RegisterForm({ admin = false }: { admin?: boolean }) {
     setError('');
     try {
       const { eventCode, ...details } = formData;
-      const result = await authRequest('/api/auth/register', { ...details, ...(admin ? { eventCode } : {}) });
-      sessionStorage.setItem('tf_signup_notice', result.data.confirmationRequired
-        ? 'Account created. Check your email to confirm your account, then log in.' : 'Account created. Please log in.');
+      // Registration signs the user straight in and emails a verification code.
+      await authRequest('/api/auth/register', { ...details, ...(admin ? { eventCode } : {}) });
+      markSignedIn();
+      sessionStorage.setItem('tf_signup_notice', 'Account created. We emailed you a 6-digit code to verify your address.');
       const next = safeReturnPath(new URLSearchParams(window.location.search).get('next'));
       if (next) sessionStorage.setItem('tf_return_to', next);
-      router.replace(next ? `/login?next=${encodeURIComponent(next)}` : '/login');
+      router.replace(`/verify-email?email=${encodeURIComponent(details.email)}`);
     } catch (err) { setError(err instanceof Error ? err.message : 'Registration failed.'); }
     finally { setIsLoading(false); }
   };
@@ -45,7 +46,7 @@ export function RegisterForm({ admin = false }: { admin?: boolean }) {
     setError('');
     if (admin) { setError('Use the admin registration form and access code. Google sign-in does not grant admin access.'); return; }
     setIsLoading(true);
-    try { const next = safeReturnPath(new URLSearchParams(window.location.search).get('next')); if (next) sessionStorage.setItem('tf_return_to', next); await startGoogleLogin(); }
+    try { await startGoogleLogin(safeReturnPath(new URLSearchParams(window.location.search).get('next'))); }
     catch (err) { setError(err instanceof Error ? err.message : 'Google sign-in failed.'); setIsLoading(false); }
   };
 

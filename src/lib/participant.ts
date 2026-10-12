@@ -1,6 +1,6 @@
 import { ApiError, authRequest, type AuthUser } from './auth';
 import type { PaymentState } from './payments';
-import { getAuthToken } from './supabase';
+import { hasSessionHint } from './session';
 
 export type Person = AuthUser & { firstName: string; lastName: string; email: string; festId: string | null; collegeName?: string | null; phoneNumber?: string | null; verified?: boolean };
 export type EventInfo = { id: string; slug?: string; name: string; club: string; isTeamEvent: boolean; minTeamSize: number | null; maxTeamSize: number | null; price: number; paymentTrigger: string; paymentRound?: string; registrationEndTime: string; venue?: string };
@@ -14,9 +14,10 @@ export type MealPass = { mealId: number; typeOfMeal: 'breakfast' | 'lunch' | 'di
 export type Inbox = { notifications: Notification[]; unreadCount: number; page: number; totalPages: number };
 
 export async function participantRequest<T>(path: string, body?: unknown, method?: string): Promise<T> {
-  const token = getAuthToken();
-  if (!token) throw new ApiError('Please log in to continue.', 401);
-  return (await authRequest(path, body, token, method)).data as T;
+  // Fail fast on a device that has never signed in, so a logged-out visitor
+  // gets a clear message instead of a round-trip that 401s.
+  if (!hasSessionHint()) throw new ApiError('Please log in to continue.', 401);
+  return (await authRequest(path, body, undefined, method)).data as T;
 }
 export const formatDate = (value: string) => new Intl.DateTimeFormat('en-IN', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Kolkata' }).format(new Date(value));
 export const fullName = (user: Pick<Person, 'firstName' | 'lastName'>) => `${user.firstName} ${user.lastName || ''}`.trim();

@@ -3,7 +3,7 @@ import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ApiError, authRequest, destination, type AuthUser } from '@/lib/auth';
-import { getAuthToken, saveAuthTokens } from '@/lib/supabase';
+import { hasSessionHint, clearSignedIn } from '@/lib/session';
 import dynamic from 'next/dynamic';
 import { enc, person, record, text, type Dashboard } from '@/lib/admin';
 import { LoadState, Table, useAdminData } from '@/components/admin/AdminUI';
@@ -27,7 +27,7 @@ const Meals = dynamic(() => import('@/components/admin/Meals').then(m => m.Meals
   loading: () => <p className="admin-loading-card">Loading meal counter…</p>,
 });
 import '@/components/admin/admin.css';
-import { logout } from '@/lib/supabase';
+import { logout } from '@/lib/session';
 
 export function AdminPanel(props: { superAdmin?: boolean; eventId?: string }) {
   return <Suspense fallback={<main className="admin-workspace">Loading admin panel…</main>}><AdminGate key={`${props.superAdmin}-${props.eventId}`} {...props} /></Suspense>;
@@ -36,7 +36,7 @@ function AdminGate({ superAdmin = false, eventId }: { superAdmin?: boolean; even
   const router = useRouter(); const [user, setUser] = useState<AuthUser | null>(null); const [error, setError] = useState('');
   useEffect(() => {
     let active = true;
-    const token = getAuthToken();
+    const token = hasSessionHint() ? 'session' : null;
     if (!token) { router.replace('/login'); return; }
     authRequest('/api/auth/me', undefined, token).then(({ data }) => {
       if (!active) return;
@@ -46,7 +46,7 @@ function AdminGate({ superAdmin = false, eventId }: { superAdmin?: boolean; even
       setUser(profile);
     }).catch(err => {
       if (!active) return;
-      if (err instanceof ApiError && err.status === 401) { saveAuthTokens({ accessToken: null, refreshToken: null }); router.replace('/login'); return; }
+      if (err instanceof ApiError && err.status === 401) { clearSignedIn(); router.replace('/login'); return; }
       setError(err instanceof Error ? err.message : 'Unable to verify access.');
     });
     return () => { active = false; };

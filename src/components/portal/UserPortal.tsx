@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useParticipant } from '@/components/auth/ParticipantSession';
 import { ApiError } from '@/lib/auth';
-import { getAuthToken, logout } from '@/lib/supabase';
+import { hasSessionHint, logout } from '@/lib/session';
 import { participantRequest, fullName, formatDate, type Profile, type Inbox, type Notification, type MealPass, type Registration } from '@/lib/participant';
 import { payForEvent } from '@/lib/payments';
 import s from './Portal.module.css';
@@ -23,14 +23,14 @@ export function UserPortal() {
 
   const load = useCallback(async () => {
     if (!user) return;
-    const token = getAuthToken();
+    const token = hasSessionHint() ? 'session' : null;
     try {
       const [nextProfile, nextInbox, nextMeals] = await Promise.all([
         participantRequest<Profile>('/api/user/profile'),
         participantRequest<Inbox>(`/api/user/notifications?page=${page}`),
         participantRequest<{ meals: MealPass[] }>('/api/user/meals').catch(() => ({ meals: [] as MealPass[] })),
       ]);
-      if (getAuthToken() !== token) return;
+      if ((hasSessionHint() ? 'session' : null) !== token) return;
       setProfile(nextProfile);
       setInbox(nextInbox);
       setMeals(nextMeals.meals || []);

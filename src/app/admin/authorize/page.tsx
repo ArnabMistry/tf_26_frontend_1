@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { authRequest } from '@/lib/auth';
-import { getAuthToken } from '@/lib/supabase';
+import { hasSessionHint } from '@/lib/session';
 
 export default function AuthorizeAdmin() {
   const router = useRouter(); const [code, setCode] = useState(''); const [error, setError] = useState(''); const [busy, setBusy] = useState(false);
@@ -24,7 +24,7 @@ export default function AuthorizeAdmin() {
 
         <h1 className="text-2xl sm:text-3xl font-extrabold mb-2 tracking-wide text-white" style={{ fontFamily: 'var(--font-futura)' }}>Activate admin access</h1>
         <p className="mb-6 text-sm text-purple-200">Log in to your existing account, then enter your assigned code.</p>
-        <form onSubmit={async e => { e.preventDefault(); const token = getAuthToken(); if (!token) { setError('Please log in first, then return to this page.'); return; } setBusy(true); setError(''); try { await authRequest('/api/auth/admin/register', { eventCode: code }, token); router.replace('/admin'); } catch (err) { setError(err instanceof Error ? err.message : 'Unable to authorize.'); } finally { setBusy(false); } }}>
+        <form onSubmit={async e => { e.preventDefault(); if (!hasSessionHint()) { setError('Please log in first, then return to this page.'); return; } setBusy(true); setError(''); try { await authRequest('/api/auth/admin/register', { eventCode: code }); router.replace('/admin'); } catch (err) { setError(err instanceof Error ? err.message : 'Unable to authorize.'); } finally { setBusy(false); } }}>
           <label className="grid gap-2 text-sm font-medium text-purple-100">
             Admin code
             <input className="border border-purple-400/30 rounded-xl p-3.5 bg-[#120c24] text-white focus:outline-2 focus:outline-[#FFFF1A] focus:border-[#FFFF1A] transition-all" type="password" autoComplete="off" required value={code} onChange={e => setCode(e.target.value)} placeholder="Enter code…" />

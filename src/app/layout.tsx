@@ -5,7 +5,6 @@ import { PageOpeningAnimation } from "@/components/PageOpeningAnimation";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import "./globals.css";
 import "lenis/dist/lenis.css";
-import { SessionSync } from "@/components/auth/SessionSync";
 import { ParticipantSession } from "@/components/auth/ParticipantSession";
 
 const geistSans = Geist({
@@ -86,7 +85,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <SmoothScroll />
         <PageOpeningAnimation />
-        <ParticipantSession><SessionSync />{children}</ParticipantSession>
+        <ParticipantSession>{children}</ParticipantSession>
       </body>
     </html>
   );
