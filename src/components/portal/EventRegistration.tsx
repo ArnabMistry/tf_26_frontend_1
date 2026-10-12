@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useParticipant } from '@/components/auth/ParticipantSession';
 import { authRequest, ApiError } from '@/lib/auth';
 import { getAuthToken } from '@/lib/supabase';
-import { participantRequest, formatDate, fullName, type EventInfo, type Team, type Registration } from '@/lib/participant';
+import { participantRequest, formatDate, fullName, type EventInfo, type Team, type Registration, type Person, type Profile } from '@/lib/participant';
 import { payForEvent } from '@/lib/payments';
 import s from './Portal.module.css';
 
@@ -13,6 +13,7 @@ export function EventRegistration() {
   const router = useRouter(), params = useSearchParams();
   const requestedEvent = params.get('eventId');
   const { user, loading } = useParticipant();
+  const [profileUser, setProfileUser] = useState<Person | null>(null);
   const [event, setEvent] = useState<EventInfo | null>(null), [team, setTeam] = useState<Team | null>(null);
   const [registered, setRegistered] = useState(false), [ready, setReady] = useState(false);
   // The participant's own registration row, which carries round progress and
@@ -29,15 +30,16 @@ export function EventRegistration() {
       const current: EventInfo = result.data;
       const expectedPath = current.isTeamEvent ? '/register/team' : '/register/event';
       if (window.location.pathname !== expectedPath) { router.replace(`${expectedPath}?eventId=${encodeURIComponent(current.id)}`); return; }
-      const [teams, registrations] = await Promise.all([
+      const [teams, registrations, profile] = await Promise.all([
         participantRequest<{ teams: { id: number; eventId: string }[] }>('/api/user/teams/my'),
         participantRequest<{ registrations: Registration[] }>('/api/user/registrations'),
+        participantRequest<Profile>('/api/user/profile'),
       ]);
       const existing = teams.teams.find(item => item.eventId === current.id);
       const live = existing ? await participantRequest<Team>(`/api/user/teams/${existing.id}/live-status`) : null;
       if (getAuthToken() !== token) return;
       const mine = registrations.registrations.find(item => item.eventId === current.id && item.status !== 'cancelled') || null;
-      setEvent(current); setTeam(live); setRegistration(mine); setRegistered(!!mine);
+      setEvent(current); setTeam(live); setRegistration(mine); setRegistered(!!mine); setProfileUser(profile.user);
       setReady(true); setError('');
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) router.replace(`/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`);
@@ -57,72 +59,17 @@ export function EventRegistration() {
   }, [user, loading, refresh, router]);
   async function mutate(work: () => Promise<unknown>, message: string) {
     setBusy(true); setError(''); setNotice('');
-    try { await work(); await refresh(); setNotice(message); window.dispatchEvent(new Event('tf-inbox-change')); }
-    catch (err) { setError(err instanceof Error ? err.message : 'Please try again.'); }
+    try { await work(); await refresh(); setNotice(message); window.dispatchEvent(new Event('tf-inbox-change')); return true; }
+    catch (err) { setError(err instanceof Error ? err.message : 'Please try again.'); return false; }
     finally { setBusy(false); }
   }
-  if (!requestedEvent) return <main className={s.shell}><h1 className="text-3xl font-bold">Choose your event first</h1><p className={s.empty}>Team size and registration rules depend on the event.</p><Link className={s.button} href="/events">Explore events</Link>{/* Complete Profile Modal */}
-      {showProfileModal && user && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md" onClick={() => setShowProfileModal(false)}>
-          <div className={`${s.card} max-w-md w-full relative border border-[#FFFF1A]/50`} onClick={e => e.stopPropagation()}>
-            <span className={s.eyebrow}>Account Setup</span>
-            <h2 className="mt-2 text-xl font-bold text-white">Complete Your Profile</h2>
-            <p className={`${s.muted} text-xs mb-5`}>
-              Please provide your college name and WhatsApp/phone number before registering for events.
-            </p>
-            <form className={s.form} onSubmit={async e => {
-              e.preventDefault();
-              const fd = new FormData(e.currentTarget);
-              const college = (fd.get('collegeName') as string || '').trim();
-              const phone = (fd.get('phoneNumber') as string || '').trim();
-              if (!college || !phone) {
-                setError('Both college name and phone number are required.');
-                return;
-              }
-              setBusy(true);
-              setError('');
-              try {
-                await participantRequest('/api/user/profile', {
-                  firstName: user.firstName,
-                  lastName: user.lastName,
-                  collegeName: college,
-                  phoneNumber: phone,
-                }, 'PATCH');
-                window.dispatchEvent(new Event('tf-auth-change'));
-                setShowProfileModal(false);
-                setNotice('Profile updated! You can now register for the event.');
-                await refresh();
-              } catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to update profile.');
-              } finally {
-                setBusy(false);
-              }
-            }}>
-              <label>
-                College / Institute Name
-                <input name="collegeName" required defaultValue={user.collegeName || ''} maxLength={160} placeholder="Enter college or institute" />
-              </label>
-              <label>
-                Phone Number (WhatsApp)
-                <input name="phoneNumber" type="tel" required defaultValue={user.phoneNumber || ''} maxLength={20} placeholder="Enter 10-digit mobile number" pattern="^[+\d ()-]{7,20}$" />
-              </label>
-              {error && <p className={s.error} role="alert">{error}</p>}
-              <div className="flex gap-2 justify-end mt-4">
-                <button type="button" className={s.secondary} onClick={() => setShowProfileModal(false)}>Cancel</button>
-                <button type="submit" disabled={busy} className={s.button}>
-                  {busy ? 'Saving...' : 'Save & Continue'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-  </main>;
+  if (!requestedEvent) return <main className={s.shell}><h1 className="text-3xl font-bold">Choose your event first</h1><p className={s.empty}>Team size and registration rules depend on the event.</p><Link className={s.button} href="/events">Explore events</Link></main>;
   if (loading || !user) return <main className={s.shell}><p role="status">Checking your account…</p></main>;
+  const participant = profileUser?.id === user.id ? profileUser : user;
   const closed = !!event && new Date(event.registrationEndTime) <= new Date();
   const paymentRequired = !!event && event.price > 0 && event.paymentTrigger === 'before_registration';
-  const isVerified = Boolean(user && user.verified);
-  const isProfileIncomplete = Boolean(user && (!user.collegeName?.trim() || !user.phoneNumber?.trim()));
+  const isVerified = Boolean(participant.verified);
+  const isProfileIncomplete = !participant.collegeName?.trim() || !participant.phoneNumber?.trim();
   const canRegister = !!event && !registered && !closed && !isProfileIncomplete && isVerified && (!event.isTeamEvent || (!!team?.isLeader && team.stats.isReadyForRegistration && !team.stats.isRegistered));
 
   // `after_round` events are free to enter; the fee only opens once an admin
@@ -145,7 +92,7 @@ export function EventRegistration() {
    * decides which applies from the event's payment trigger.
    */
   async function runPayment(successMessage: string) {
-    if (!event || !user) return;
+    if (!event) return;
     if (!isVerified) {
       setError('Please verify your email before proceeding with payment.');
       return;
@@ -161,7 +108,7 @@ export function EventRegistration() {
       const completed = await payForEvent({
         eventId: event.id,
         eventName: event.name,
-        user,
+        user: participant,
         teamId: team?.id ?? null,
         onProgress: setNotice,
       });
@@ -221,7 +168,7 @@ export function EventRegistration() {
         {!!decidedRounds.length && <div className="flex flex-wrap gap-2 mt-4">{decidedRounds.map(round => <span key={round.roundId} className={`${s.badge} ${round.status === 'QUALIFIED' ? s.accepted : ''}`}>{round.name}: {round.status === 'QUALIFIED' ? 'Promoted' : 'Not promoted'}</span>)}</div>}
         <Link className={`${s.button} mt-5`} href="/profile">Go to my portal</Link></section> : null}
       {event.isTeamEvent ? !team ? <section className={s.card}><h2>Create your team</h2><p className={`${s.muted} mb-5`}>You’ll be the leader. Invite teammates after creating your draft.</p><form className={s.form} onSubmit={e => { e.preventDefault(); void mutate(() => participantRequest('/api/user/teams', { eventId: event.id, name: teamName, members: [] }), 'Team created. Invite your teammates below.'); }}>
-        <label>Team name<input required maxLength={80} value={teamName} onChange={e => setTeamName(e.target.value)} placeholder="Give your squad a name"/></label><label>Team leader<input readOnly value={`${fullName(user)} · ${user.festId || user.email}`}/></label><button disabled={busy || closed || registered || !isVerified || isProfileIncomplete} className={s.button}>{busy ? 'Creating…' : 'Create team'}</button>
+        <label>Team name<input required maxLength={80} value={teamName} onChange={e => setTeamName(e.target.value)} placeholder="Give your squad a name"/></label><label>Team leader<input readOnly value={`${fullName(participant)} · ${participant.festId || participant.email}`}/></label><button disabled={busy || closed || registered || !isVerified || isProfileIncomplete} className={s.button}>{busy ? 'Creating…' : 'Create team'}</button>
         {!isVerified && <p className={`${s.fine} text-pink-300 mt-2`}>Please verify your email before creating a team.</p>}
       </form></section> : <>
         <section className={s.card}><div className={s.row}><div><p className={s.eyebrow}>{team.teamCode}</p><h2 className="mt-2">{team.name}</h2></div><span className={s.badge}>{team.isLeader ? 'Team leader' : 'Team member'}</span></div>
@@ -232,7 +179,7 @@ export function EventRegistration() {
           {team.isLeader && !team.stats.isRegistered && team.stats.isReadyForRegistration && <div className="mt-4 p-4 rounded-xl bg-[#faff52]/15 border border-[#faff52]/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"><div><h4 className="font-bold text-[#faff52]">Team is ready!</h4><p className={s.fine}>Minimum team size reached. Finalize your registration below.</p></div><button disabled={busy} className={s.button} onClick={handleAction}>{busy ? (paymentRequired ? 'Processing payment…' : 'Registering…') : (paymentRequired ? `Pay ₹${event.price} & Register team` : 'Register team now')}</button></div>}
         </section>
         {team.isLeader && !team.stats.isRegistered && <section className={s.card}><h2>Invite a teammate</h2><p className={`${s.muted} mb-4`}>Ask for their TF ID from their profile. They’ll receive an invitation in their portal.</p><form className={s.form} onSubmit={e => { e.preventDefault(); void mutate(async () => { await participantRequest(`/api/user/teams/${team.id}/invites`, { identifier: identifier.trim().toUpperCase() }); setIdentifier(''); }, 'Invitation sent. Your teammate can accept or decline in their inbox.'); }}><label>Teammate’s TF ID<input required pattern="[Tt][Ff][0-9]{6}" placeholder="TF123456" value={identifier} onChange={e => setIdentifier(e.target.value.toUpperCase())}/></label><button className={s.button} disabled={busy || closed || team.members.length + team.stats.pendingCount >= (event.maxTeamSize || 4)}>Send invitation</button></form></section>}
-      </> : <section className={s.card}><h2>Your participant details</h2><h3>{fullName(user)}</h3><p className={s.muted}>{user.email}</p><p className={s.id}>{user.festId}</p><p className={s.muted}>{user.collegeName || 'You can add your college in your profile.'}</p></section>}
+      </> : <section className={s.card}><h2>Your participant details</h2><h3>{fullName(participant)}</h3><p className={s.muted}>{participant.email}</p><p className={s.id}>{participant.festId}</p><p className={s.muted}>{participant.collegeName || 'You can add your college in your profile.'}</p></section>}
     </div><aside className={s.card}><p className={s.eyebrow}>Registration summary</p><h2 className="mt-4">{event.name}</h2><div className={s.entry}><p className={s.muted}>Format</p><h3>{event.isTeamEvent ? `Team · ${event.minTeamSize}–${event.maxTeamSize} members` : 'Individual'}</h3></div><div className={s.entry}><p className={s.muted}>Registration closes</p><h3>{formatDate(event.registrationEndTime)} IST</h3></div><div className={s.entry}><p className={s.muted}>Entry fee</p><h3>{event.price ? `₹${event.price}${event.paymentTrigger === 'after_round' ? (feePaid ? ' · paid' : feeDueNow ? ' · due now' : notPromoted ? ' · not applicable' : ' · after qualification') : ''}` : 'Free registration'}</h3></div>
       {closed && <p className={s.error}>Registration is closed.</p>}
       
@@ -271,5 +218,23 @@ export function EventRegistration() {
       )}
       <p className={s.fine}>Joining a team does not register it. The leader confirms registration once everyone is ready.</p>
     </aside></div>}
+    {showProfileModal && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" role="presentation" onClick={() => !busy && setShowProfileModal(false)}>
+      <form className={`${s.card} ${s.form} w-full max-w-lg`} role="dialog" aria-modal="true" aria-label="Complete profile" onClick={e => e.stopPropagation()} onSubmit={e => {
+        e.preventDefault();
+        const data = Object.fromEntries(new FormData(e.currentTarget));
+        void mutate(async () => {
+          await participantRequest('/api/user/profile', data, 'PATCH');
+          window.dispatchEvent(new Event('tf-auth-change'));
+        }, 'Profile updated. You can now register.').then(saved => { if (saved) setShowProfileModal(false); });
+      }}>
+        <h2>Complete your profile</h2>
+        <p className={s.muted}>Add your college and phone number to register.</p>
+        <div className={s.fields}><label>First name<input name="firstName" defaultValue={participant.firstName} required maxLength={80}/></label><label>Last name<input name="lastName" defaultValue={participant.lastName} maxLength={80}/></label></div>
+        <label>College<input name="collegeName" defaultValue={participant.collegeName || ''} required maxLength={160}/></label>
+        <label>Phone number<input name="phoneNumber" type="tel" defaultValue={participant.phoneNumber || ''} required maxLength={20}/></label>
+        {error && <p className={s.error} role="alert">{error}</p>}
+        <div className={s.row}><button type="button" className={s.secondary} disabled={busy} onClick={() => setShowProfileModal(false)}>Cancel</button><button className={s.button} disabled={busy}>{busy ? 'Saving…' : 'Save profile'}</button></div>
+      </form>
+    </div>}
   </main>;
 }

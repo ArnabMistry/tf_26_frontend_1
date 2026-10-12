@@ -52,7 +52,7 @@ export function UserPortal() {
 
   async function mutate(key: string, work: () => Promise<unknown>, message: string) {
     setBusy(key); setError(''); setNotice('');
-    try { await work(); await load(); setNotice(message); window.dispatchEvent(new Event('tf-inbox-change')); }
+    try { await work(); await load(); setNotice(message); window.dispatchEvent(new Event('tf-inbox-change')); if (key === 'profile') window.dispatchEvent(new Event('tf-auth-change')); }
     catch (err) { setError(err instanceof Error ? err.message : 'Please try again.'); }
     finally { setBusy(''); }
   }
