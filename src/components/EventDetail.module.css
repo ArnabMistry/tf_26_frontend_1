@@ -205,6 +205,13 @@
 
 /* ── Prize box ── */
 
+.entryFee {
+  margin-top: 20px;
+  color: #fff;
+  font-family: var(--font-futura);
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
+}
+
 .prizeBox {
   position: relative;
   display: grid;
