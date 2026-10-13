@@ -9,6 +9,95 @@ import { participantRequest, fullName, formatDate, type Profile, type Inbox, typ
 import { payForEvent } from '@/lib/payments';
 import s from './Portal.module.css';
 
+export function PortalSkeleton() {
+  return (
+    <div aria-busy="true" aria-label="Loading your portal">
+      <div className={s.stats}>
+        {[1, 2, 3].map(i => (
+          <div className={s.stat} key={i}>
+            <div className={`${s.skeleton} ${s.skeletonStatNumber}`} />
+            <div className={`${s.skeleton} ${s.skeletonStatLabel}`} />
+          </div>
+        ))}
+      </div>
+
+      <div className={s.tabs} aria-label="Portal sections placeholder">
+        {[1, 2, 3, 4].map(i => (
+          <div key={i} className={`${s.skeleton} ${s.skeletonTabItem}`} />
+        ))}
+      </div>
+
+      <div className={s.grid}>
+        <div className={s.stack}>
+          <section className={s.card}>
+            <div className={`${s.skeleton} ${s.skeletonTitle}`} />
+            <div className={s.skeletonEntry}>
+              <div className="flex justify-between items-start mb-2">
+                <div className={`${s.skeleton} w-44 h-5`} />
+                <div className={`${s.skeleton} w-20 h-5`} />
+              </div>
+              <div className={`${s.skeleton} w-64 h-4 mb-3`} />
+              <div className={`${s.skeleton} w-32 h-7 rounded-md`} />
+            </div>
+            <div className={s.skeletonEntry}>
+              <div className="flex justify-between items-start mb-2">
+                <div className={`${s.skeleton} w-48 h-5`} />
+                <div className={`${s.skeleton} w-20 h-5`} />
+              </div>
+              <div className={`${s.skeleton} w-56 h-4 mb-3`} />
+              <div className={`${s.skeleton} w-32 h-7 rounded-md`} />
+            </div>
+          </section>
+
+          <section className={s.card}>
+            <div className={`${s.skeleton} ${s.skeletonTitle}`} />
+            <div className={s.skeletonEntry}>
+              <div className="flex justify-between items-start mb-2">
+                <div className={`${s.skeleton} w-36 h-5`} />
+                <div className={`${s.skeleton} w-24 h-5`} />
+              </div>
+              <div className={`${s.skeleton} w-72 h-4`} />
+            </div>
+          </section>
+        </div>
+
+        <aside className={s.stack}>
+          <section className={`${s.card} ${s.identity}`}>
+            <div className={`${s.skeleton} ${s.skeletonAvatar}`} />
+            <div className={`${s.skeleton} w-40 h-6 mb-2`} />
+            <div className={`${s.skeleton} w-48 h-4 mb-5`} />
+            <div className={`${s.skeleton} w-16 h-3 mb-2`} />
+            <div className={`${s.skeleton} w-32 h-8 mb-4`} />
+            <div className={`${s.skeleton} w-28 h-9 rounded-xl`} />
+          </section>
+
+          <section className={s.card}>
+            <div className={`${s.skeleton} ${s.skeletonTitle}`} />
+            <div className={`${s.skeleton} w-full h-8 mb-2 rounded-lg`} />
+            <div className={`${s.skeleton} w-full h-8 rounded-lg`} />
+          </section>
+        </aside>
+      </div>
+    </div>
+  );
+}
+
+export function PortalLoadingShell() {
+  return (
+    <main className={s.shell}>
+      <p className={s.eyebrow}>TantraFiesta 2026 • Participant portal</p>
+      <header className={s.hero}>
+        <div>
+          <h1>Your fest. Your space.</h1>
+          <p className={s.muted}>Welcome back. Build your team and make your next move.</p>
+        </div>
+        <Link href="/events" className={s.button}>Explore events →</Link>
+      </header>
+      <PortalSkeleton />
+    </main>
+  );
+}
+
 export function UserPortal() {
   const { user, loading } = useParticipant();
   const router = useRouter(), params = useSearchParams();
@@ -22,7 +111,7 @@ export function UserPortal() {
   const [error, setError] = useState(''), [notice, setNotice] = useState(''), [busy, setBusy] = useState('');
 
   const load = useCallback(async () => {
-    if (!user) return;
+    if (!hasSessionHint()) return;
     const token = hasSessionHint() ? 'session' : null;
     try {
       const [nextProfile, nextInbox, nextMeals] = await Promise.all([
@@ -36,14 +125,19 @@ export function UserPortal() {
       setMeals(nextMeals.meals || []);
       setError('');
     } catch (err) {
-      if (err instanceof ApiError && err.status === 401) router.replace('/login?next=%2Fprofile');
+      if (err instanceof ApiError && err.status === 401) {
+        router.replace('/login?next=%2Fprofile');
+        return;
+      }
       setError(err instanceof Error ? err.message : 'Could not load your portal.');
     }
-  }, [user, page, router]);
+  }, [page, router]);
 
   useEffect(() => {
-    if (!loading && !user) { router.replace('/login?next=%2Fprofile'); return; }
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (!hasSessionHint() || (!loading && !user)) {
+      router.replace('/login?next=%2Fprofile');
+      return;
+    }
     void load();
     const refresh = () => { if (!document.hidden) void load(); };
     const timer = window.setInterval(refresh, 30000);
@@ -157,11 +251,14 @@ export function UserPortal() {
     }
   }
 
-  if (loading || !user) return <main className={s.shell}><p role="status">Loading your account...</p></main>;
+  if (!hasSessionHint() && !loading && !user) {
+    return <main className={s.shell}><p role="status" className={s.muted}>Redirecting to login…</p></main>;
+  }
 
   const availableMealsCount = meals?.filter(m => m.status === 'AVAILABLE').length || 0;
   // Events this participant was promoted into whose entry fee is still unpaid.
   const feesDue = (profile?.registeredEvents || []).filter(item => item.payment?.dueNow);
+  const displayName = profile?.user?.firstName || user?.firstName;
 
   return <main className={s.shell}>
     <p className={s.eyebrow}>TantraFiesta 2026 • Participant portal</p>
@@ -192,7 +289,7 @@ export function UserPortal() {
       <header className={s.hero}>
       <div>
         <h1>Your fest. Your space.</h1>
-        <p className={s.muted}>Welcome back, {profile?.user.firstName || user.firstName}. Build your team and make your next move.</p>
+        <p className={s.muted}>Welcome back{displayName ? `, ${displayName}` : ''}. Build your team and make your next move.</p>
       </div>
       <Link href="/events" className={s.button}>Explore events →</Link>
     </header>
@@ -200,7 +297,9 @@ export function UserPortal() {
     {error && <div role="alert" className={s.error}>{error} <button onClick={load} className={s.secondary}>Retry</button></div>}
     {notice && <p role="status" className={s.notice}>{notice}</p>}
 
-    {!profile ? <p role="status">Loading your events and teams...</p> : <>
+    {!profile ? (
+      !error && <PortalSkeleton />
+    ) : <>
       <div className={s.stats}>
         {[[profile.stats.totalRegisteredEvents, 'Registered events'], [profile.stats.totalTeams, 'Your teams'], [inbox?.unreadCount || 0, 'Unread notifications']].map(([value, label]) => (
           <div className={s.stat} key={label}><strong>{value}</strong><span>{label}</span></div>

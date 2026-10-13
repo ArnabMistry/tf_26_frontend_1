@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Suspense } from "react";
-import { UserPortal } from "@/components/portal/UserPortal";
+import { UserPortal, PortalLoadingShell } from "@/components/portal/UserPortal";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -31,7 +31,9 @@ export default function ProfilePage() {
 
       <Navbar currentPath="/profile" />
 
-      <Suspense fallback={<p className="p-8">Loading your portal…</p>}><UserPortal /></Suspense>
+      <Suspense fallback={<PortalLoadingShell />}>
+        <UserPortal />
+      </Suspense>
     </div>
   );
 }
