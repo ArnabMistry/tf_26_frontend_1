@@ -3,6 +3,41 @@ import { Hero } from "@/components/Hero";
 import { AboutSection } from "@/components/AboutSection";
 import { AboutContent } from "@/components/AboutContent";
 import { Reveal } from "@/components/Reveal";
+import type { Metadata } from "next";
+import { siteConfig } from "@/lib/site";
+
+export const metadata: Metadata = {
+  title: { absolute: "TantraFiesta 2026 | IIIT Nagpur Tech Fest" },
+  description:
+    "TantraFiesta 2026 is IIIT Nagpur’s annual national technical festival. Explore this year’s events, sponsors, and festival highlights.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: siteConfig.locale,
+    siteName: siteConfig.fullName,
+    title: "TantraFiesta 2026 | IIIT Nagpur Tech Fest",
+    description:
+      "TantraFiesta 2026 is IIIT Nagpur’s annual national technical festival. Explore this year’s events, sponsors, and festival highlights.",
+    url: siteConfig.url,
+    images: [
+      {
+        url: siteConfig.ogImage,
+        width: 1200,
+        height: 630,
+        alt: "TantraFiesta 2026 at IIIT Nagpur",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TantraFiesta 2026 | IIIT Nagpur Tech Fest",
+    description:
+      "TantraFiesta 2026 is IIIT Nagpur’s annual national technical festival. Explore this year’s events, sponsors, and festival highlights.",
+    images: [siteConfig.ogImage],
+  },
+};
 
 // PHOTO GALLERY: Uncomment this import and the matching JSX below to restore the section.
 // const PhotoGallery = dynamic(() => import("@/components/PhotoGallery").then(m => m.PhotoGallery), {

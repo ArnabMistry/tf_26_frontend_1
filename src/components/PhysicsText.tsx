@@ -18,12 +18,10 @@ export function PhysicsText({ startTrigger = true }: PhysicsTextProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef<EngineWithCleanup | null>(null);
   const runnerRef = useRef<Matter.Runner | null>(null);
-  const hasStarted = useRef(false);
 
   useEffect(() => {
-    if (!startTrigger || !containerRef.current || hasStarted.current) return;
+    if (!startTrigger || !containerRef.current) return;
     if (window.innerWidth < 768) return; // Do not run on mobile
-    hasStarted.current = true;
 
     const Engine = Matter.Engine,
       Runner = Matter.Runner,
@@ -61,6 +59,9 @@ export function PhysicsText({ startTrigger = true }: PhysicsTextProps) {
       clone.style.top = "0px";
       clone.style.transform = `translate(${pos.x - pos.w / 2}px, ${pos.y - pos.h / 2}px)`;
       clone.style.zIndex = "10";
+      // The source letters remain hidden after the first run, so make every
+      // newly spawned clone visible when the animation replays.
+      clone.style.opacity = "1";
       
       el.style.opacity = "0";
       

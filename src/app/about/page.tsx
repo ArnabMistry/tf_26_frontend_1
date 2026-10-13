@@ -4,8 +4,12 @@ import { AboutContent } from "@/components/AboutContent";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About | History of TF",
-  description: "Learn about TantraFiesta, its history, mission, milestone editions, and student innovation at IIIT Nagpur.",
+  title: "About",
+  description:
+    "Discover TantraFiesta 2026, IIIT Nagpur’s annual national technical festival, and the ideas, team, and student innovation behind it.",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 export default function AboutPage() {

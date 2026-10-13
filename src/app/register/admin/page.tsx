@@ -1,5 +1,11 @@
 import { RegisterForm } from '@/components/auth/RegisterForm';
 import { Navbar } from '@/components/Navbar';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Admin registration',
+  robots: { index: false, follow: false },
+};
 
 export default function AdminRegistrationPage() {
   return <div className="min-h-screen bg-[#241A4C] text-white isolate bg-[url('/assets/bg.png')] bg-cover">

@@ -5,55 +5,45 @@ import { getAllEventDetailSlugs } from "@/lib/eventDetails";
 import { siteConfig } from "@/lib/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const currentDate = new Date();
-
   // 1. Static public routes
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: `${siteConfig.url}`,
-      lastModified: currentDate,
       changeFrequency: "weekly",
       priority: 1.0,
     },
     {
       url: `${siteConfig.url}/events`,
-      lastModified: currentDate,
       changeFrequency: "daily",
       priority: 0.9,
     },
     {
       url: `${siteConfig.url}/clubs`,
-      lastModified: currentDate,
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: `${siteConfig.url}/about`,
-      lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${siteConfig.url}/sponsors`,
-      lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${siteConfig.url}/speakers`,
-      lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${siteConfig.url}/contact`,
-      lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.6,
     },
     {
       url: `${siteConfig.url}/developers`,
-      lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.5,
     },
@@ -63,7 +53,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const clubSlugs = getAllClubSlugs();
   const clubRoutes: MetadataRoute.Sitemap = clubSlugs.map((slug) => ({
     url: `${siteConfig.url}/clubs/${slug}`,
-    lastModified: currentDate,
     changeFrequency: "weekly",
     priority: 0.8,
   }));
@@ -72,10 +61,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   //    so all 23 pre-rendered event pages always appear in the sitemap even when
   //    BACKEND_API_URL is not set at build time.
   const apiSlugs = await fetchAllEventSlugs();
-  const eventSlugs = apiSlugs.length > 0 ? apiSlugs : getAllEventDetailSlugs();
+  const eventSlugs = [...new Set([...getAllEventDetailSlugs(), ...apiSlugs])].sort();
   const eventRoutes: MetadataRoute.Sitemap = eventSlugs.map((slug) => ({
     url: `${siteConfig.url}/events/${slug}`,
-    lastModified: currentDate,
     changeFrequency: "daily",
     priority: 0.8,
   }));
