@@ -50,12 +50,22 @@ export const team: Developer[] = [
   },
   {
     name: "AVIRAL",
-    role: "UI/UX Director",
+    role: "Backend Developer",
     image: "/developers/aviral.webp",
   },
   {
     name: "SATVIK",
     role: "Frontend Developer",
     image: "/developers/Satvik.webp",
+  },
+  {
+    name: "Piyush Jangir",
+    role: "Designer",
+    image: "/developers/Piyush_Jangir.webp",
+  },
+  {
+    name: "Shrenik Gedam",
+    role: "Designer",
+    image: "/developers/Shrenik_Gedam.webp",
   },
 ];
