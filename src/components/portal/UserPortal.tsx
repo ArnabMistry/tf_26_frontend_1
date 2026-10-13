@@ -87,6 +87,16 @@ export function UserPortal() {
   /** Can this participant personally open the gateway? Teams pay via their leader. */
   const canPay = (item: Registration) => !!item.payment?.dueNow && (!item.teamId || item.team?.leaderId === profile?.user.id);
 
+  /**
+   * What is actually owed for this registration.
+   *
+   * `event.price` is the configured fee, which on a per-participant team event
+   * is the per-head figure, not the bill. The backend already resolves the
+   * real total (fee x roster) onto `payment.amount`, so that is what the
+   * participant must see next to a Pay button.
+   */
+  const dueAmount = (item: Registration) => item.payment?.amount ?? item.event.price;
+
   function respond(item: Notification, action: 'accept' | 'reject') {
     if (action === 'accept' && profile?.user && (!profile.user.collegeName?.trim() || !profile.user.phoneNumber?.trim())) {
       setProfileDismissed(false);
@@ -158,12 +168,12 @@ export function UserPortal() {
           <h3 className="font-bold text-[#faff52]">You’ve been promoted in {item.event.name}</h3>
           <p className={`${s.fine} mt-0.5`}>
             {canPay(item)
-              ? `Pay the ₹${item.event.price} entry fee to confirm your place in ${item.payment?.roundName || 'the next round'}.`
-              : `An entry fee of ₹${item.event.price} is due. Your team leader pays it for the whole team.`}
+              ? `Pay the ₹${dueAmount(item)} entry fee to confirm your place in ${item.payment?.roundName || 'the next round'}.`
+              : `An entry fee of ₹${dueAmount(item)} is due. Your team leader pays it for the whole team.`}
           </p>
         </div>
         {canPay(item)
-          ? <button className={s.button} disabled={!!busy} onClick={() => payFee(item)}>{busy === `pay-${item.id}` ? 'Processing payment…' : `Pay ₹${item.event.price}`}</button>
+          ? <button className={s.button} disabled={!!busy} onClick={() => payFee(item)}>{busy === `pay-${item.id}` ? 'Processing payment…' : `Pay ₹${dueAmount(item)}`}</button>
           : <Link className={s.secondary} href={`/register/${item.event.isTeamEvent ? 'team' : 'event'}?eventId=${encodeURIComponent(item.eventId)}`}>Open event</Link>}
       </div>
     ))}
@@ -240,7 +250,7 @@ export function UserPortal() {
                       (() => {
                         const due = feesDue.find(reg => reg.eventId === item.eventId);
                         return due && canPay(due)
-                          ? <button className={s.button} disabled={!!busy} onClick={() => payFee(due)}>{busy === `pay-${due.id}` ? 'Processing payment…' : `Pay ₹${due.event.price} now`}</button>
+                          ? <button className={s.button} disabled={!!busy} onClick={() => payFee(due)}>{busy === `pay-${due.id}` ? 'Processing payment…' : `Pay ₹${dueAmount(due)} now`}</button>
                           : <Link className={s.secondary} href={`/register/${item.teamId ? 'team' : 'event'}?eventId=${encodeURIComponent(item.eventId)}`}>Open event</Link>;
                       })()
                     ) : (
@@ -329,12 +339,12 @@ export function UserPortal() {
                         from creation, so "awaiting result" would be noise. */}
                     <div className="flex flex-wrap gap-2 mt-3">{item.roundProgress?.filter(round => round.status !== 'PENDING').map(round => <span key={round.roundId} className={`${s.badge} ${round.status === 'QUALIFIED' ? s.accepted : ''}`}>{round.name}: {round.status === 'QUALIFIED' ? 'Promoted' : 'Not promoted'}</span>)}</div>
                     {item.payment?.dueNow && <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-2">
-                      <span className={`${s.badge} ${s.pending}`}>Entry fee ₹{item.event.price} due</span>
+                      <span className={`${s.badge} ${s.pending}`}>Entry fee ₹{dueAmount(item)} due</span>
                       {canPay(item)
-                        ? <button className={s.button} disabled={!!busy} onClick={() => payFee(item)}>{busy === `pay-${item.id}` ? 'Processing payment…' : `Pay ₹${item.event.price} now`}</button>
+                        ? <button className={s.button} disabled={!!busy} onClick={() => payFee(item)}>{busy === `pay-${item.id}` ? 'Processing payment…' : `Pay ₹${dueAmount(item)} now`}</button>
                         : <span className={s.fine}>Your team leader pays this fee.</span>}
                     </div>}
-                    {item.payment?.paid && <p className={`${s.fine} mt-3`}>Entry fee of ₹{item.event.price} paid.</p>}
+                    {item.payment?.paid && <p className={`${s.fine} mt-3`}>Entry fee of ₹{dueAmount(item)} paid.</p>}
                     {item.payment?.rejected && <p className={`${s.fine} mt-3`}>Not selected for the paid round — no fee is due.</p>}
                     </article>
                 ))}

@@ -32,6 +32,8 @@ export interface PublicEvent {
   minTeamSize?: number | null;
   maxTeamSize?: number | null;
   price?: number;
+  /** Team events only: whether `price` is charged per head or once per team. */
+  feeMode?: 'per_team' | 'per_participant';
   paymentTrigger?: string;
   date?: string;
   startDate: string;
@@ -64,6 +66,7 @@ interface BackendEvent {
   registrationEndTime?: string;
   paymentPageLink?: string | null;
   price?: number;
+  feeMode?: 'per_team' | 'per_participant';
   isTeamEvent?: boolean;
   minTeamSize?: number | null;
   maxTeamSize?: number | null;
@@ -115,6 +118,7 @@ function normaliseBackendEvent(raw: BackendEvent): PublicEvent {
     minTeamSize: raw.minTeamSize,
     maxTeamSize: raw.maxTeamSize,
     price: raw.price,
+    feeMode: raw.feeMode,
     paymentTrigger: raw.paymentTrigger,
     venue: raw.venue ?? undefined,
     registrationDeadline: raw.registrationEndTime,

@@ -11,6 +11,12 @@ const eventFields: Field[] = [
   { name: 'isTeamEvent', label: 'Team event', type: 'checkbox' },
   { name: 'minTeamSize', label: 'Minimum team size', type: 'number', min: 1 }, { name: 'maxTeamSize', label: 'Maximum team size', type: 'number', min: 1 },
   { name: 'price', label: 'Fee', type: 'number', min: 0, value: 0, required: true }, { name: 'isPaid', label: 'Paid event', type: 'checkbox' },
+  // Only applied on team events. A solo event always charges the fee once, so
+  // the backend normalises this to 'per team' there regardless of what is sent.
+  { name: 'feeMode', label: 'Fee applies to (team events)', options: [
+    { value: 'per_team', label: 'Whole team \u2014 one flat fee' },
+    { value: 'per_participant', label: 'Per participant \u2014 fee \u00d7 team size' },
+  ] },
   // No "payment round" here on purpose: an `after_round` fee falls due on the
   // first promotion, whichever round that is, so there is nothing to pick.
   { name: 'paymentTrigger', label: 'Payment trigger', options: options(['free', 'before_registration', 'after_round']) },
@@ -44,7 +50,15 @@ export function EventTools({ eventId, superAdmin, changed }: { eventId: string; 
       fields: [...(create ? [{ name: 'id', label: 'Event ID', required: true }, { name: 'festId', label: 'Fest ID', type: 'number', min: 1, value: 1, required: true }] : []), ...eventFields],
       transform: data => {
         if (data.isTeamEvent && (!data.minTeamSize || !data.maxTeamSize || Number(data.minTeamSize) > Number(data.maxTeamSize))) throw new Error('Enter valid minimum and maximum team sizes.');
-        return { ...data, minTeamSize: data.isTeamEvent ? data.minTeamSize : null, maxTeamSize: data.isTeamEvent ? data.maxTeamSize : null, paymentPageLink: data.paymentPageLink || null };
+        return {
+          ...data,
+          minTeamSize: data.isTeamEvent ? data.minTeamSize : null,
+          maxTeamSize: data.isTeamEvent ? data.maxTeamSize : null,
+          // A solo event charges its fee once; sending per-participant there
+          // would store a setting that is never applied.
+          feeMode: data.isTeamEvent ? (data.feeMode || 'per_team') : 'per_team',
+          paymentPageLink: data.paymentPageLink || null,
+        };
       },
     });
   }
