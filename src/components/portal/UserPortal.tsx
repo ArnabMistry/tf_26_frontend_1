@@ -138,11 +138,11 @@ export function UserPortal() {
       router.replace('/login?next=%2Fprofile');
       return;
     }
-    void load();
+    const initial = window.setTimeout(() => void load(), 0);
     const refresh = () => { if (!document.hidden) void load(); };
     const timer = window.setInterval(refresh, 30000);
     document.addEventListener('visibilitychange', refresh);
-    return () => { clearInterval(timer); document.removeEventListener('visibilitychange', refresh); };
+    return () => { clearTimeout(initial); clearInterval(timer); document.removeEventListener('visibilitychange', refresh); };
   }, [loading, user, load, router]);
 
   async function mutate(key: string, work: () => Promise<unknown>, message: string) {
