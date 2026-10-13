@@ -1,9 +1,9 @@
 import { test, expect, type Page } from '@playwright/test';
-const user = { id: 'person-1', firstName: 'Vinay', lastName: 'Kumar', email: 'vinay@example.test', role: 'participant', festId: 'TF123456', collegeName: 'IIIT Nagpur', allowedEventIds: [] };
+const user = { id: 'person-1', firstName: 'Vinay', lastName: 'Kumar', email: 'vinay@example.test', role: 'participant', festId: 'TF123456', collegeName: 'IIIT Nagpur', phoneNumber: '9876543210', verified: true, allowedEventIds: [] };
 const member = { ...user, id: 'person-2', firstName: 'Aditi', festId: 'TF654321' };
 const event = { id: 'tf26_phoenix_cup', slug: 'phoenix-cup', name: 'Phoenix Cup', club: 'Synergy', isTeamEvent: true, minTeamSize: 2, maxTeamSize: 2, price: 0, paymentTrigger: 'free', registrationEndTime: '2099-10-25T12:00:00Z' };
 async function mock(page: Page) {
-  await page.addInitScript(() => localStorage.setItem('tf_auth_token', 'participant-fixture'));
+  await page.addInitScript(() => localStorage.setItem('tf_signed_in', '1'));
   let created = false, invited = false, accepted = false, registered = false, notificationStatus = 'PENDING', read = false;
   const team = () => ({ id: 7, name: 'Night Owls', eventId: event.id, event, teamCode: 'TEAM-TEST', leader: user, isLeader: true, members: accepted ? [{ ...user, isLeader: true }, member] : [{ ...user, isLeader: true }], invites: invited && !accepted ? [{ id: 9, user: member, status: 'PENDING', email: member.email }] : [], stats: { isRegistered: registered, isReadyForRegistration: accepted, pendingCount: invited && !accepted ? 1 : 0 } });
   await page.route('**/api/**', async route => {

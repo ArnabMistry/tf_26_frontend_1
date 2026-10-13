@@ -4,7 +4,7 @@ import React, { useState, useSyncExternalStore, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authRequest, destination, safeReturnPath } from "@/lib/auth";
-import { markSignedIn, startGoogleLogin } from "@/lib/session";
+import { clearSignedIn, markSignedIn, startGoogleLogin } from "@/lib/session";
 const subscribeNotice = () => () => {};
 
 export function LoginForm() {
@@ -48,7 +48,14 @@ export function LoginForm() {
     try {
       // The backend sets the session cookie on this response; there is no
       // token to capture or store.
-      await authRequest('/api/auth/login', { email, password });
+      const login = await authRequest('/api/auth/login', { email, password });
+      if (login.data?.verificationRequired) {
+        clearSignedIn();
+        const next = safeReturnPath(searchParams.get('next'));
+        if (next) sessionStorage.setItem('tf_return_to', next);
+        router.replace(`/verify-email?email=${encodeURIComponent(email.trim().toLowerCase())}`);
+        return;
+      }
       markSignedIn();
       const profile = await authRequest('/api/auth/me');
       sessionStorage.removeItem('tf_signup_notice');

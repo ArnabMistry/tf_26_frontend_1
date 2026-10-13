@@ -2,12 +2,14 @@ import { test, expect, type Page } from '@playwright/test';
 
 const event = { id: 'event1', name: 'Test Hackathon', club: 'Coding Club', description: 'Build something great.', venue: 'Auditorium', price: 0, isTeamEvent: false, isPaid: false, paymentTrigger: 'free', paymentRound: 'ROUND_1', registrationEndTime: '2026-10-14T18:30:00Z', _count: { registrations: 2, teams: 0, rounds: 1 } };
 async function mockApi(page: Page, role = 'super', authenticated = true) {
-  if (authenticated) await page.addInitScript(() => localStorage.setItem('tf_auth_token', 'browser-fixture'));
-  await page.route('http://localhost:5000/api/**', async route => {
+  if (authenticated) await page.addInitScript(() => localStorage.setItem('tf_signed_in', '1'));
+  await page.route('**/api/**', async route => {
     const url = new URL(route.request().url()); const path = url.pathname;
     let data: unknown = {};
     if (path === '/api/auth/me') data = { user: { id: 'me', role, allowedEventIds: role === 'super' ? null : ['event1'] } };
-    else if (path === '/api/auth/login') data = { accessToken: 'browser-fixture' };
+    else if (path === '/api/user/profile') data = { user: { id: 'me', firstName: 'Test', lastName: 'Participant', email: 'participant@example.test', festId: 'TF123456', verified: true, collegeName: 'College', phoneNumber: '9876543210' }, stats: { totalRegisteredEvents: 0, totalTeams: 0, totalQualifiedRounds: 0 }, registeredEvents: [], teams: [], activities: [] };
+    else if (path === '/api/user/notifications') data = { notifications: [], unreadCount: 0, page: 1, totalPages: 1 };
+    else if (path === '/api/user/meals') data = { meals: [] };
     else if (path === '/api/admin/dashboard') data = { totals: { events: 1, registrations: 2, teams: 0, users: 2 }, perEventStats: [event], recentRegistrations: [] };
     else if (path === '/api/admin/events/event1') data = event;
     else if (path.endsWith('/participants')) data = [{ userId: 'user1', name: 'Alice', status: 'PENDING' }, { userId: 'user2', name: 'Bob', status: 'PENDING' }];
@@ -81,12 +83,12 @@ test('existing account redeems admin code and redirects through role lookup', as
 });
 test('expired session redirects to login', async ({ page }) => {
   await mockApi(page);
-  await page.route('http://localhost:5000/api/auth/me', route => route.fulfill({ status: 401, json: { error: { message: 'Token expired' } } }));
+  await page.route('**/api/auth/me', route => route.fulfill({ status: 401, json: { error: { message: 'Session expired' } } }));
   await page.goto('/admin/super'); await expect(page).toHaveURL(/\/login$/);
 });
 test('meal service failure leaves the other admin sections usable', async ({ page }) => {
   await mockApi(page);
-  await page.route('http://localhost:5000/api/admin/meals', route => route.fulfill({ status: 500, json: { error: { message: 'Meal service unavailable' } } }));
+  await page.route('**/api/admin/meals', route => route.fulfill({ status: 500, json: { error: { message: 'Meal service unavailable' } } }));
   await page.goto('/admin/super?view=meals');
   await expect(page.getByText('Meal service unavailable')).toBeVisible();
   await page.getByRole('link', { name: 'Overview', exact: true }).click();
