@@ -1,35 +1,47 @@
+import { pageMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllClubs } from "@/lib/clubs";
-import { siteConfig } from "@/lib/site";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { breadcrumbJsonLd } from "@/lib/seo/jsonld";
 
-export const metadata: Metadata = {
-  title: "Clubs & Organizing Bodies",
-  description:
-    "Discover the student clubs and organizing communities powering competitions, hackathons, and symposiums at TantraFiesta.",
-  alternates: {
-    canonical: "/clubs",
-  },
-  openGraph: {
-    title: `Clubs & Organizing Bodies | ${siteConfig.fullName} | ${siteConfig.institute}`,
-    description:
-      "Discover the student clubs and organizing communities powering competitions, hackathons, and symposiums at TantraFiesta.",
-    url: `${siteConfig.url}/clubs`,
-  },
-  twitter: {
-    title: `Clubs & Organizing Bodies | ${siteConfig.fullName} | ${siteConfig.institute}`,
-    description:
-      "Discover the student clubs and organizing communities powering competitions, hackathons, and symposiums at TantraFiesta.",
-  },
-};
+export const metadata: Metadata = pageMetadata(
+  "Clubs & Organizing Bodies",
+  "Discover the student clubs and organizing communities powering competitions, hackathons, and symposiums at TantraFiesta 2026, IIIT Nagpur.",
+  "/clubs",
+  {
+    keywords: [
+      "TantraFiesta clubs",
+      "IIIT Nagpur student clubs",
+      "DotSlash",
+      "Dimensions",
+      "Probe",
+      "Synergy",
+      "Iotics",
+      "Elevate",
+      "The Orator Club",
+      "organizing bodies",
+    ],
+  }
+);
 
 export default function ClubsIndexPage() {
   const clubs = getAllClubs();
 
+  const breadcrumbs = breadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Clubs", path: "/clubs" },
+  ]);
+
   return (
     <div className="relative min-h-screen flex flex-col bg-[#241A4C] text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbs).replace(/</g, "\\u003c"),
+        }}
+      />
       {/* Background layer */}
       <div
         className="fixed inset-0 -z-10 bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat pointer-events-none"
@@ -63,15 +75,15 @@ export default function ClubsIndexPage() {
                   {club.name}
                 </h3>
                 {club.tagline && (
-                  <p className="mt-1 text-xs uppercase tracking-wider text-[#E7137D] font-semibold">
+                  <p className="text-xs uppercase font-semibold text-[#E7137D] mt-1">
                     {club.tagline}
                   </p>
                 )}
-                <p className="mt-3 text-sm text-zinc-300 leading-relaxed">
+                <p className="mt-3 text-sm text-zinc-300 line-clamp-2">
                   {club.description}
                 </p>
                 <span className="mt-4 inline-block text-xs font-semibold text-[#FFFF1A]">
-                  View organized events &rarr;
+                  View events &rarr;
                 </span>
               </Link>
             ))}

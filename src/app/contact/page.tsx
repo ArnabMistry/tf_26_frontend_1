@@ -1,28 +1,25 @@
+import { pageMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
-import { siteConfig } from "@/lib/site";
+import { breadcrumbJsonLd, contactPageJsonLd } from "@/lib/seo/jsonld";
 import styles from "./page.module.css";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description:
-    "Get in touch with the TantraFiesta organizing team for partnerships, student inquiries, sponsorships, and event details.",
-  alternates: {
-    canonical: "/contact",
-  },
-  openGraph: {
-    title: `Contact | ${siteConfig.fullName} | ${siteConfig.institute}`,
-    description:
-      "Get in touch with the TantraFiesta organizing team for partnerships, student inquiries, sponsorships, and event details.",
-    url: `${siteConfig.url}/contact`,
-  },
-  twitter: {
-    title: `Contact | ${siteConfig.fullName} | ${siteConfig.institute}`,
-    description:
-      "Get in touch with the TantraFiesta organizing team for partnerships, student inquiries, sponsorships, and event details.",
-  },
-};
+export const metadata: Metadata = pageMetadata(
+  "Contact",
+  "Get in touch with the TantraFiesta organizing team for partnerships, student inquiries, sponsorships, and event details.",
+  "/contact",
+  {
+    keywords: [
+      "Contact TantraFiesta",
+      "IIIT Nagpur address",
+      "how to reach IIIT Nagpur",
+      "TantraFiesta team contact",
+      "sponsorship queries",
+      "fest inquiries",
+    ],
+  }
+);
 
 const directions = [
   {
@@ -81,8 +78,26 @@ const busTimings = [
 ];
 
 export default function ContactPage() {
+  const breadcrumbs = breadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Contact", path: "/contact" },
+  ]);
+  const contactJsonLd = contactPageJsonLd();
+
   return (
     <div className={styles.page}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbs).replace(/</g, "\\u003c"),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(contactJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <Navbar currentPath="/contact" />
       <main className={styles.main}>
         <h1 className={`font-tantra ${styles.title}`}>Contact Us</h1>

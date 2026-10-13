@@ -1,29 +1,41 @@
+import { pageMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { DeveloperCard } from "@/components/DeveloperCard";
 import { heads, team } from "@/data/developers";
-import { siteConfig } from "@/lib/site";
+import { breadcrumbJsonLd } from "@/lib/seo/jsonld";
 import styles from "./developers.module.css";
 
-export const metadata: Metadata = {
-  title: "Meet the Developers",
-  description:
-    "Meet the heads and developer team who built the official platform for TantraFiesta 2026 at IIIT Nagpur.",
-  alternates: {
-    canonical: "/developers",
-  },
-  openGraph: {
-    title: `Meet the Developers | ${siteConfig.fullName} | ${siteConfig.institute}`,
-    description:
-      "Meet the heads and developer team who built the official platform for TantraFiesta 2026 at IIIT Nagpur.",
-    url: `${siteConfig.url}/developers`,
-  },
-};
+export const metadata: Metadata = pageMetadata(
+  "Meet the Developers",
+  "Meet the heads and developer team who built the official platform for TantraFiesta 2026 at IIIT Nagpur.",
+  "/developers",
+  {
+    keywords: [
+      "TantraFiesta developers",
+      "web development team",
+      "tech heads",
+      "IIIT Nagpur student developers",
+      "engineering team",
+    ],
+  }
+);
 
 export default function DevelopersPage() {
+  const breadcrumbs = breadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Developers", path: "/developers" },
+  ]);
+
   return (
     <div className="relative min-h-[100svh] flex flex-col text-white isolate">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbs).replace(/</g, "\\u003c"),
+        }}
+      />
       {/* Fixed background layer covering viewport at exact 1:1 scale of Hero landing page */}
       <div
         className="fixed inset-0 -z-10 bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat pointer-events-none"
