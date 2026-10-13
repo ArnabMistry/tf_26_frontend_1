@@ -52,6 +52,7 @@ export function EventRegistration() {
       sessionStorage.setItem('tf_return_to', next);
       router.replace(`/login?next=${encodeURIComponent(next)}`); return;
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void refresh();
     const poll = () => { if (!document.hidden) void refresh(); };
     const timer = window.setInterval(poll, 15000);

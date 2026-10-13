@@ -28,6 +28,7 @@ export function LoginForm() {
       const decoded = decodeURIComponent(urlEmail).trim().toLowerCase();
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (emailRegex.test(decoded)) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setEmail(decoded);
       }
     }

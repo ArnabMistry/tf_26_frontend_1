@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import styles from "./ThemeTeaser.module.css";
 
@@ -12,11 +12,11 @@ export function ThemeTeaser({ compact = false, className = "" }: { compact?: boo
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [position, setPosition] = useState<{ left: number; top: number } | null>(null);
 
-  function keepOpen() {
+  const keepOpen = useCallback(() => {
     if (timer.current) clearTimeout(timer.current);
-  }
+  }, []);
 
-  function show() {
+  const show = useCallback(() => {
     keepOpen();
     const bounds = trigger.current?.getBoundingClientRect();
     if (!bounds) return;
@@ -25,12 +25,12 @@ export function ThemeTeaser({ compact = false, className = "" }: { compact?: boo
       left: Math.max(12, Math.min(bounds.left + bounds.width / 2 - width / 2, window.innerWidth - width - 12)),
       top: bounds.top >= 172 ? bounds.top - 160 : Math.min(bounds.bottom + 10, window.innerHeight - 162),
     });
-  }
+  }, [keepOpen]);
 
-  function hideSoon() {
+  const hideSoon = useCallback(() => {
     keepOpen();
     timer.current = setTimeout(() => setPosition(null), 140);
-  }
+  }, [keepOpen]);
 
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
 
@@ -62,7 +62,7 @@ export function ThemeTeaser({ compact = false, className = "" }: { compact?: boo
       document.removeEventListener("keydown", escape);
       document.removeEventListener("pointerdown", outside);
     };
-  }, [position]);
+  }, [position, show]);
 
   return <>
     <button ref={trigger} type="button" className={`${styles.trigger} ${compact ? styles.compactTrigger : ""} ${className}`}

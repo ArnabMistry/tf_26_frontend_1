@@ -43,6 +43,7 @@ export function UserPortal() {
 
   useEffect(() => {
     if (!loading && !user) { router.replace('/login?next=%2Fprofile'); return; }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void load();
     const refresh = () => { if (!document.hidden) void load(); };
     const timer = window.setInterval(refresh, 30000);
@@ -123,7 +124,9 @@ export function UserPortal() {
             setQrModal(null);
           }
         }
-      } catch (_) {}
+      } catch {
+        // ignore polling error
+      }
     };
     const interval = setInterval(poll, 2500);
     return () => clearInterval(interval);
@@ -341,7 +344,7 @@ export function UserPortal() {
               </section>
               <section className={s.card}>
                 <h2>Your teams</h2>
-                {!profile.teams.length && <p className={s.empty}>Create a team from an event page, or accept a teammate's invitation in your inbox.</p>}
+                {!profile.teams.length && <p className={s.empty}>Create a team from an event page, or accept a teammate&apos;s invitation in your inbox.</p>}
                 {profile.teams.map(team => (
                   <article className={s.entry} key={team.id}>
                     <div className={s.row}><div><h3>{team.name}</h3><p className={s.muted}>{team.event.name}</p></div><span className={s.badge}>{team.isLeader ? 'Team leader' : 'Member'}</span></div>

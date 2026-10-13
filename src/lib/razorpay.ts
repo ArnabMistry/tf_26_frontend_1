@@ -2,9 +2,31 @@
  * Helper to dynamically load and interact with the Razorpay Checkout SDK.
  */
 
+export interface RazorpayPaymentError {
+  code?: string;
+  description?: string;
+  source?: string;
+  step?: string;
+  reason?: string;
+  message?: string;
+  metadata?: Record<string, unknown>;
+}
+
+export interface RazorpayFailureResponse {
+  error?: RazorpayPaymentError;
+  [key: string]: unknown;
+}
+
+export interface RazorpayInstance {
+  open: () => void;
+  on: (event: string, handler: (response: RazorpayFailureResponse) => void) => void;
+}
+
+export type RazorpayConstructor = new (options: Record<string, unknown>) => RazorpayInstance;
+
 declare global {
   interface Window {
-    Razorpay?: any;
+    Razorpay?: RazorpayConstructor;
   }
 }
 
@@ -25,7 +47,7 @@ export interface OpenRazorpayOptions {
   userEmail: string;
   userPhone?: string | null;
   onSuccess: (response: RazorpayPaymentSuccessResponse) => Promise<void> | void;
-  onFailure?: (error: any) => void;
+  onFailure?: (error: RazorpayPaymentError) => void;
   onDismiss?: () => void;
 }
 
@@ -94,8 +116,8 @@ export async function openRazorpayCheckout(options: OpenRazorpayOptions): Promis
 
   const rzp = new window.Razorpay(rzpOptions);
   if (options.onFailure) {
-    rzp.on('payment.failed', function (resp: any) {
-      options.onFailure?.(resp.error || resp);
+    rzp.on('payment.failed', function (resp: RazorpayFailureResponse) {
+      options.onFailure?.((resp.error || resp) as RazorpayPaymentError);
     });
   }
   rzp.open();
