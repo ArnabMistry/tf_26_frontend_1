@@ -96,7 +96,7 @@ export function Navbar({
         </Link>
 
         {/* ── Desktop links ── */}
-        <div className="hidden items-center gap-3 text-xs font-bold uppercase tracking-wider text-white md:flex lg:gap-4 lg:text-sm">
+        <div className={`hidden items-center gap-3 text-xs font-bold uppercase tracking-wider text-white md:flex lg:gap-4 lg:text-sm ${user ? "md:ml-auto" : ""}`}>
           {navigation.filter(({ href }) => href !== "/admin" || isAdmin).map(({ href, label }) => {
             const isActive = currentPath === href;
             return (
