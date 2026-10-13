@@ -32,12 +32,14 @@ export function RegisterForm({ admin = false }: { admin?: boolean }) {
     try {
       const { eventCode, ...details } = formData;
       // Registration signs the user straight in and emails a verification code.
-      await authRequest('/api/auth/register', { ...details, ...(admin ? { eventCode } : {}) });
+      const result = await authRequest('/api/auth/register', { ...details, ...(admin ? { eventCode } : {}) });
       markSignedIn();
-      sessionStorage.setItem('tf_signup_notice', 'Account created. We emailed you a 6-digit code to verify your address.');
+      sessionStorage.setItem('tf_signup_notice', result.data?.emailSent
+        ? 'Account created. We emailed you a 6-digit code to verify your address.'
+        : 'Account created, but the verification email could not be sent. Use Resend code on the next page.');
       const next = safeReturnPath(new URLSearchParams(window.location.search).get('next'));
       if (next) sessionStorage.setItem('tf_return_to', next);
-      router.replace(`/verify-email?email=${encodeURIComponent(details.email)}`);
+      router.replace(`/verify-email?email=${encodeURIComponent(details.email)}${result.data?.emailSent ? '' : '&emailSent=0'}`);
     } catch (err) { setError(err instanceof Error ? err.message : 'Registration failed.'); }
     finally { setIsLoading(false); }
   };

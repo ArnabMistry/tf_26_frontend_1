@@ -134,6 +134,7 @@ export async function sendEmailOtp(email: string) {
   });
   const data = await res.json().catch(() => null);
   if (!res.ok) throw new Error(data?.error?.message || 'Could not send the code.');
+  if (!data?.data?.emailSent) throw new Error('No code was sent for this address. Please sign in or contact support.');
   return data.data;
 }
 

@@ -75,7 +75,9 @@ export function VerifyEmailForm() {
         Verify your email
       </h1>
       <p className="text-[#A49FBD] text-sm mb-6">
-        We sent a 6-digit code to <span className="text-white font-bold">{email}</span>.
+        {searchParams.get('emailSent') === '0'
+          ? 'Your account was created, but the code could not be sent. Use Resend code below.'
+          : <>We sent a 6-digit code to <span className="text-white font-bold">{email}</span>.</>}
       </p>
 
       {error && <p role="alert" className="mb-3 text-pink-300">{error}</p>}
