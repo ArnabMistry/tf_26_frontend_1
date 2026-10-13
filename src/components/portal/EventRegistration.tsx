@@ -79,6 +79,18 @@ export function EventRegistration() {
   const feeDueNow = !!payment?.dueNow;
   const feePaid = !!payment?.paid;
   const notPromoted = !!payment?.rejected;
+
+  // What the leader is actually charged. On a per-participant team event that
+  // is the fee times the roster, never the per-head figure -- quoting 50000
+  // next to a button that takes 100000 is exactly the surprise this is meant
+  // to avoid.
+  //
+  // The backend's resolved amount wins whenever there is one: it priced the
+  // order and is roster-aware. The local calculation only covers the window
+  // before any registration exists.
+  const teamSize = team?.members.length ?? 0;
+  const feeIsPerHead = !!event?.isTeamEvent && event.feeMode === 'per_participant' && (event?.price ?? 0) > 0;
+  const feeTotal = payment?.amount ?? (feeIsPerHead ? (event?.price ?? 0) * Math.max(1, teamSize) : (event?.price ?? 0));
   // On a team event the backend only accepts the fee from the team leader.
   const leadsTheTeam = !event?.isTeamEvent || !!team?.isLeader;
   const canPayFee = feeDueNow && leadsTheTeam && isVerified && !isProfileIncomplete;
@@ -143,11 +155,11 @@ export function EventRegistration() {
         <h2 className="mt-4">You’ve been promoted to {feeRoundName || 'the next round'}.</h2>
         <p className={s.muted}>
           {leadsTheTeam
-            ? `Congratulations! Pay the ₹${event.price} entry fee to confirm ${event.isTeamEvent ? 'your team’s' : 'your'} place in ${feeRoundName || 'this round'}.`
-            : `Congratulations! An entry fee of ₹${event.price} is now due. Your team leader${team?.leader ? ` (${fullName(team.leader)})` : ''} pays it for the whole team.`}
+            ? `Congratulations! Pay the ₹${feeTotal} entry fee to confirm ${event.isTeamEvent ? 'your team’s' : 'your'} place in ${feeRoundName || 'this round'}.`
+            : `Congratulations! An entry fee of ₹${feeTotal} is now due. Your team leader${team?.leader ? ` (${fullName(team.leader)})` : ''} pays it for the whole team.`}
         </p>
         {leadsTheTeam && <button className={`${s.button} mt-5`} disabled={busy || !canPayFee} onClick={handlePayFee}>
-          {busy ? 'Processing payment…' : `Pay ₹${event.price} now`}
+          {busy ? 'Processing payment…' : `Pay ₹${feeTotal} now`}
         </button>}
         {leadsTheTeam && !isVerified && <p className={`${s.fine} mt-2`}>Verify your email before paying.</p>}
         {leadsTheTeam && isVerified && isProfileIncomplete && <p className={`${s.fine} mt-2`}>Add your college and phone number before paying.</p>}
@@ -155,7 +167,7 @@ export function EventRegistration() {
       {feePaid && <section className={`${s.card} border border-[#faff52]/40`}>
         <span className={`${s.badge} ${s.accepted}`}>Fee paid</span>
         <h2 className="mt-4">Your place is confirmed.</h2>
-        <p className={s.muted}>We’ve received ₹{event.price} for {event.name}. Nothing else to do — follow your round updates in your portal.</p>
+        <p className={s.muted}>We’ve received ₹{feeTotal} for {event.name}. Nothing else to do — follow your round updates in your portal.</p>
       </section>}
       {notPromoted && <section className={s.card}>
         <span className={s.badge}>Not promoted</span>
@@ -177,11 +189,11 @@ export function EventRegistration() {
           <p className={s.muted}>{team.members.length} accepted · {team.stats.pendingCount} pending · {event.minTeamSize}–{event.maxTeamSize} members required</p>
           {team.members.map(member => <div className={s.entry} key={member.id}><div className={s.row}><div><h3>{fullName(member)}</h3><p className={s.fine}>{member.festId}</p></div><span className={`${s.badge} ${s.accepted}`}>{member.isLeader ? 'Leader' : 'Accepted'}</span>{team.isLeader && !member.isLeader && !team.stats.isRegistered && <button disabled={busy} className={s.secondary} onClick={() => mutate(() => participantRequest(`/api/user/teams/${team.id}/members`, { userId: member.id }, 'DELETE'), 'Member removed.')}>Remove</button>}</div></div>)}
           {team.invites.filter(invite => invite.status !== 'ACCEPTED').map(invite => <div className={s.entry} key={invite.id}><div className={s.row}><div><h3>{invite.user ? fullName(invite.user) : invite.email}</h3><p className={s.fine}>{invite.user?.festId}</p></div><span className={`${s.badge} ${invite.status === 'PENDING' ? s.pending : ''}`}>{invite.status}</span>{team.isLeader && invite.status === 'PENDING' && !team.stats.isRegistered && <button className={s.secondary} disabled={busy} onClick={() => mutate(() => participantRequest(`/api/user/teams/${team.id}/members`, { inviteId: invite.id }, 'DELETE'), 'Invitation cancelled.')}>Cancel invite</button>}</div></div>)}
-          {team.isLeader && !team.stats.isRegistered && team.stats.isReadyForRegistration && <div className="mt-4 p-4 rounded-xl bg-[#faff52]/15 border border-[#faff52]/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"><div><h4 className="font-bold text-[#faff52]">Team is ready!</h4><p className={s.fine}>Minimum team size reached. Finalize your registration below.</p></div><button disabled={busy} className={s.button} onClick={handleAction}>{busy ? (paymentRequired ? 'Processing payment…' : 'Registering…') : (paymentRequired ? `Pay ₹${event.price} & Register team` : 'Register team now')}</button></div>}
+          {team.isLeader && !team.stats.isRegistered && team.stats.isReadyForRegistration && <div className="mt-4 p-4 rounded-xl bg-[#faff52]/15 border border-[#faff52]/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"><div><h4 className="font-bold text-[#faff52]">Team is ready!</h4><p className={s.fine}>Minimum team size reached. Finalize your registration below.</p></div><button disabled={busy} className={s.button} onClick={handleAction}>{busy ? (paymentRequired ? 'Processing payment…' : 'Registering…') : (paymentRequired ? `Pay ₹${feeTotal} & Register team` : 'Register team now')}</button></div>}
         </section>
         {team.isLeader && !team.stats.isRegistered && <section className={s.card}><h2>Invite a teammate</h2><p className={`${s.muted} mb-4`}>Ask for their TF ID from their profile. They’ll receive an invitation in their portal.</p><form className={s.form} onSubmit={e => { e.preventDefault(); void mutate(async () => { await participantRequest(`/api/user/teams/${team.id}/invites`, { identifier: identifier.trim().toUpperCase() }); setIdentifier(''); }, 'Invitation sent. Your teammate can accept or decline in their inbox.'); }}><label>Teammate’s TF ID<input required pattern="[Tt][Ff][0-9]{6}" placeholder="TF123456" value={identifier} onChange={e => setIdentifier(e.target.value.toUpperCase())}/></label><button className={s.button} disabled={busy || closed || team.members.length + team.stats.pendingCount >= (event.maxTeamSize || 4)}>Send invitation</button></form></section>}
       </> : <section className={s.card}><h2>Your participant details</h2><h3>{fullName(participant)}</h3><p className={s.muted}>{participant.email}</p><p className={s.id}>{participant.festId}</p><p className={s.muted}>{participant.collegeName || 'You can add your college in your profile.'}</p></section>}
-    </div><aside className={s.card}><p className={s.eyebrow}>Registration summary</p><h2 className="mt-4">{event.name}</h2><div className={s.entry}><p className={s.muted}>Format</p><h3>{event.isTeamEvent ? `Team · ${event.minTeamSize}–${event.maxTeamSize} members` : 'Individual'}</h3></div><div className={s.entry}><p className={s.muted}>Registration closes</p><h3>{formatDate(event.registrationEndTime)} IST</h3></div><div className={s.entry}><p className={s.muted}>Entry fee</p><h3>{event.price ? `₹${event.price}${event.paymentTrigger === 'after_round' ? (feePaid ? ' · paid' : feeDueNow ? ' · due now' : notPromoted ? ' · not applicable' : ' · after qualification') : ''}` : 'Free registration'}</h3></div>
+    </div><aside className={s.card}><p className={s.eyebrow}>Registration summary</p><h2 className="mt-4">{event.name}</h2><div className={s.entry}><p className={s.muted}>Format</p><h3>{event.isTeamEvent ? `Team · ${event.minTeamSize}–${event.maxTeamSize} members` : 'Individual'}</h3></div><div className={s.entry}><p className={s.muted}>Registration closes</p><h3>{formatDate(event.registrationEndTime)} IST</h3></div><div className={s.entry}><p className={s.muted}>Entry fee</p><h3>{event.price ? `₹${feeTotal}${event.paymentTrigger === 'after_round' ? (feePaid ? ' · paid' : feeDueNow ? ' · due now' : notPromoted ? ' · not applicable' : ' · after qualification') : ''}` : 'Free registration'}</h3>{feeIsPerHead && <p className={s.fine}>{team ? `₹${event.price} × ${teamSize} member${teamSize === 1 ? '' : 's'} · paid once by the team leader` : `₹${event.price} per participant · paid once by the team leader`}</p>}{!feeIsPerHead && event.isTeamEvent && event.price > 0 && <p className={s.fine}>Flat fee for the whole team · paid once by the team leader</p>}</div>
       {closed && <p className={s.error}>Registration is closed.</p>}
       
       {event.isTeamEvent && !registered && <p className={`${s.muted} mb-4`}>{!team ? 'Create a team first.' : !team.isLeader ? 'Your team leader completes registration for everyone.' : !team.stats.isReadyForRegistration ? 'Meet the minimum team size and resolve all pending invitations before registering.' : 'Your team is ready to register.'}</p>}
@@ -200,7 +212,7 @@ export function EventRegistration() {
         /* Already registered, already promoted — the only thing left is the fee. */
         <>
           <button className={`${s.button} w-full`} disabled={busy || !canPayFee} onClick={handlePayFee}>
-            {busy ? 'Processing payment…' : leadsTheTeam ? `Pay ₹${event.price} now` : 'Awaiting team leader'}
+            {busy ? 'Processing payment…' : leadsTheTeam ? `Pay ₹${feeTotal} now` : 'Awaiting team leader'}
           </button>
           <p className={s.fine}>{leadsTheTeam ? `You were promoted to ${feeRoundName || 'the next round'}. Pay to confirm your place.` : 'Your team leader pays this fee on behalf of the whole team.'}</p>
         </>
@@ -213,7 +225,7 @@ export function EventRegistration() {
             : registered
             ? 'Registered'
             : paymentRequired
-            ? event?.isTeamEvent ? `Pay ₹${event?.price} & Register team` : `Pay ₹${event?.price} & Register`
+            ? event?.isTeamEvent ? `Pay ₹${feeTotal} & Register team` : `Pay ₹${feeTotal} & Register`
             : event?.isTeamEvent ? 'Register team' : 'Confirm registration'}
         </button>
       )}
