@@ -9,9 +9,20 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: { absolute: "TantraFiesta 2026 | IIIT Nagpur Tech Fest" },
   description:
-    "TantraFiesta 2026 is IIIT Nagpur’s annual national technical festival. Explore this year’s events, sponsors, and festival highlights.",
+    "TantraFiesta 2026 is IIIT Nagpur’s annual national technical festival. Explore this year’s events, competitions, workshops, hackathons, and festival highlights.",
+  keywords: [
+    "TantraFiesta 2026",
+    "IIIT Nagpur",
+    "technical festival",
+    "annual tech fest",
+    "hackathons",
+    "coding competitions",
+    "robotics challenges",
+    "national tech fest",
+    "engineering competitions",
+  ],
   alternates: {
-    canonical: "/",
+    canonical: siteConfig.url,
   },
   openGraph: {
     type: "website",
@@ -19,11 +30,11 @@ export const metadata: Metadata = {
     siteName: siteConfig.fullName,
     title: "TantraFiesta 2026 | IIIT Nagpur Tech Fest",
     description:
-      "TantraFiesta 2026 is IIIT Nagpur’s annual national technical festival. Explore this year’s events, sponsors, and festival highlights.",
+      "TantraFiesta 2026 is IIIT Nagpur’s annual national technical festival. Explore this year’s events, competitions, workshops, hackathons, and festival highlights.",
     url: siteConfig.url,
     images: [
       {
-        url: siteConfig.ogImage,
+        url: `${siteConfig.url}${siteConfig.ogImage}`,
         width: 1200,
         height: 630,
         alt: "TantraFiesta 2026 at IIIT Nagpur",
@@ -34,8 +45,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "TantraFiesta 2026 | IIIT Nagpur Tech Fest",
     description:
-      "TantraFiesta 2026 is IIIT Nagpur’s annual national technical festival. Explore this year’s events, sponsors, and festival highlights.",
-    images: [siteConfig.ogImage],
+      "TantraFiesta 2026 is IIIT Nagpur’s annual national technical festival. Explore this year’s events, competitions, workshops, hackathons, and festival highlights.",
+    images: [`${siteConfig.url}${siteConfig.ogImage}`],
+    creator: "@tantrafiesta",
+    site: "@tantrafiesta",
   },
 };
 

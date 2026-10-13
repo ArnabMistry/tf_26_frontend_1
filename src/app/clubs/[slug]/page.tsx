@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { fetchEventsByClubSlug } from "@/lib/api/events";
 import { getAllClubSlugs, getClubBySlug } from "@/lib/clubs";
+import { eventDetails } from "@/lib/eventDetails";
 import { siteConfig } from "@/lib/site";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -34,27 +35,36 @@ export async function generateMetadata({
   }
 
   const title = club.name;
-  const description = `${club.name} (${club.tagline || "Organizing Club"}) at TantraFiesta 2026, IIIT Nagpur. ${club.description}`;
-  const canonicalUrl = `/clubs/${club.slug}`;
-  const fullUrl = `${siteConfig.url}${canonicalUrl}`;
+  const description = `${club.name} (${club.tagline || "Organizing Club"}) at TantraFiesta 2026, IIIT Nagpur. ${club.description}`.slice(0, 160);
+  const canonicalUrl = `${siteConfig.url}/clubs/${club.slug}`;
 
   return {
     title,
     description,
+    keywords: [
+      club.name,
+      `${club.name} IIIT Nagpur`,
+      "TantraFiesta 2026",
+      "organizing club",
+      "technical club",
+      ...(club.tagline ? [club.tagline] : []),
+    ],
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
       title: `${title} | Clubs | ${siteConfig.fullName} | ${siteConfig.institute}`,
       description,
-      url: fullUrl,
+      url: canonicalUrl,
       type: "website",
+      siteName: siteConfig.fullName,
+      locale: siteConfig.locale,
       images: [
         {
-          url: siteConfig.ogImage,
+          url: `${siteConfig.url}${siteConfig.ogImage}`,
           width: 1200,
           height: 630,
-          alt: `${club.name} - TantraFiesta`,
+          alt: `${club.name} - TantraFiesta 2026`,
         },
       ],
     },
@@ -62,7 +72,20 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: `${title} | Clubs | ${siteConfig.fullName} | ${siteConfig.institute}`,
       description,
-      images: [siteConfig.ogImage],
+      images: [`${siteConfig.url}${siteConfig.ogImage}`],
+      creator: "@tantrafiesta",
+      site: "@tantrafiesta",
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
   };
 }
@@ -75,12 +98,57 @@ export default async function ClubDetailPage({ params }: ClubPageProps) {
     notFound();
   }
 
-  // Fetch events organized by this club from the backend API interface
-  const events = await fetchEventsByClubSlug(slug);
+  // Fetch events organized by this club from backend; fall back to local records
+  let events = await fetchEventsByClubSlug(slug).catch(() => []);
+  if (!events || events.length === 0) {
+    events = eventDetails
+      .filter((e) => e.clubs.some((c) => c.slug === slug))
+      .map((e) => ({
+        id: e.slug,
+        slug: e.slug,
+        name: e.name,
+        description: e.description,
+        shortDescription: e.tagline,
+        club: { name: club.name, slug: club.slug },
+        startDate: e.startDate || "2026-10-10T09:00:00+05:30",
+        image: e.image || e.poster,
+      }));
+  }
+
+  const breadcrumbs = breadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Clubs", path: "/clubs" },
+    { name: club.name, path: `/clubs/${club.slug}` },
+  ]);
+
+  const clubJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: club.name,
+    description: club.description,
+    url: `${siteConfig.url}/clubs/${club.slug}`,
+    parentOrganization: {
+      "@type": "EducationalOrganization",
+      name: "Indian Institute of Information Technology, Nagpur",
+      alternateName: "IIIT Nagpur",
+      url: "https://iiitn.ac.in",
+    },
+  };
 
   return (
     <div className="relative min-h-screen flex flex-col bg-[#241A4C] text-white">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Clubs", path: "/clubs" }, { name: club.name, path: `/clubs/${club.slug}` }])).replace(/</g, "\\u003c") }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbs).replace(/</g, "\\u003c"),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(clubJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       {/* Background layer */}
       <div
         className="fixed inset-0 -z-10 bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat pointer-events-none"

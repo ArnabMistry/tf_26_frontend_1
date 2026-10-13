@@ -171,15 +171,15 @@ export async function fetchPublicEvents(): Promise<PublicEvent[]> {
       page++;
     } while (page <= totalPages);
     return [...new Map(events.map(event => [event.slug, event])).values()];
-  } catch (error) {
-    console.error("Unable to load public events", error);
-    throw error;
+  } catch {
+    console.warn("Backend API offline or unreachable; falling back to local brochure data.");
+    return [];
   }
 }
 
 /**
  * Fetches a single public event by its id / slug.
- * Returns null for a missing public event; API failures propagate.
+ * Returns null for a missing public event or API failures.
  */
 export async function fetchPublicEventBySlug(
   slug: string
@@ -188,19 +188,23 @@ export async function fetchPublicEventBySlug(
     return null;
   }
 
-  // The list supplies the canonical slug and database ID. Do not assume the
-  // detail endpoint accepts a slug, or expose duplicate ID aliases.
-  const events = await fetchPublicEvents();
-  const listed = events.find(event => event.slug === slug);
-  if (!listed) return null;
-  const res = await fetch(`${BACKEND_API_BASE.replace(/\/$/, "")}/api/events/${encodeURIComponent(listed.id)}`, {
-    next: { revalidate: 60 },
-  });
-  if (res.status === 404) return null;
-  if (!res.ok) throw new Error(`Public event API returned ${res.status}`);
-  const json = await res.json() as { success?: boolean; data?: BackendEvent };
-  if (json.success !== true || !json.data) throw new Error("Invalid public event response");
-  return isPublicEvent(json.data) ? { ...normaliseBackendEvent(json.data), slug: listed.slug } : null;
+  try {
+    // The list supplies the canonical slug and database ID. Do not assume the
+    // detail endpoint accepts a slug, or expose duplicate ID aliases.
+    const events = await fetchPublicEvents();
+    const listed = events.find(event => event.slug === slug);
+    if (!listed) return null;
+    const res = await fetch(`${BACKEND_API_BASE.replace(/\/$/, "")}/api/events/${encodeURIComponent(listed.id)}`, {
+      next: { revalidate: 60 },
+    });
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error(`Public event API returned ${res.status}`);
+    const json = await res.json() as { success?: boolean; data?: BackendEvent };
+    if (json.success !== true || !json.data) throw new Error("Invalid public event response");
+    return isPublicEvent(json.data) ? { ...normaliseBackendEvent(json.data), slug: listed.slug } : null;
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -209,16 +213,24 @@ export async function fetchPublicEventBySlug(
 export async function fetchEventsByClubSlug(
   clubSlug: string
 ): Promise<PublicEvent[]> {
-  const allEvents = await fetchPublicEvents();
-  return allEvents.filter((event) => (event.clubs || [event.club]).some(club => club.slug === clubSlug));
+  try {
+    const allEvents = await fetchPublicEvents();
+    return allEvents.filter((event) => (event.clubs || [event.club]).some(club => club.slug === clubSlug));
+  } catch {
+    return [];
+  }
 }
 
 /**
  * Fetches all event slugs for dynamic sitemap generation and static generation.
  */
 export async function fetchAllEventSlugs(): Promise<string[]> {
-  const events = await fetchPublicEvents();
-  return events.map((e) => e.slug);
+  try {
+    const events = await fetchPublicEvents();
+    return events.map((e) => e.slug);
+  } catch {
+    return [];
+  }
 }
 
 /** Safe identifiers from the public endpoint, respecting explicit visibility flags. */

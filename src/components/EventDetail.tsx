@@ -228,7 +228,7 @@ function Poster({ event }: { event: EventDetailData }) {
       {posterSrc ? (
         <Image
           src={posterSrc}
-          alt={`${event.name} poster`}
+          alt={`${event.name} official competition poster — TantraFiesta 2026, IIIT Nagpur`}
           width={586}
           height={742}
           className={styles.posterImage}
