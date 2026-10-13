@@ -93,6 +93,7 @@ export const eventDetails: EventDetail[] = [
     slug: "algorithmia",
     name: "Algorithmia",
     tagline: "The ICPC-style coding challenge",
+    image: "/event-posters/Algorithmia.png",
     clubs: [{ name: "DotSlash", slug: "dotslash" }],
     description:
       "Get ready to embark on an exciting journey into the world of algorithms and programming with Algorithmia, a prestigious ICPC-style coding competition by DotSlash, the coding club of IIIT Nagpur. Teams of two to three battle to solve challenging algorithmic problems, testing their teamwork, creativity, and coding speed at a national level during TantraFiesta.",
@@ -162,6 +163,7 @@ export const eventDetails: EventDetail[] = [
     slug: "flashcode",
     name: "FlashCode",
     tagline: "Three surprise mini coding games",
+    image: "/event-posters/FlashCode.png",
     clubs: [{ name: "DotSlash", slug: "dotslash" }],
     description:
       "Flash Code is a unique and exciting coding challenge hosted by DotSlash, IIIT Nagpur, designed to test participants in a fun, fast, and competitive way. Unlike traditional contests, Flash Code features 3 surprise mini coding games revealed only on the event day. Each game has its own winner, runner-up and second runner-up — giving everyone multiple chances to shine.",
@@ -223,6 +225,7 @@ export const eventDetails: EventDetail[] = [
     slug: "bugwars",
     name: "BugWars",
     tagline: "The debugging challenge",
+    image: "/event-posters/BugWars.png",
     clubs: [{ name: "DotSlash", slug: "dotslash" }],
     description:
       "BugWars is a high-energy coding challenge focused on debugging, problem-solving, and programming skills. Participants tackle a range of coding problems designed to test their ability to identify errors, analyze logic, optimize solutions, and think under pressure. Covering concepts from DSA and competitive programming, the event challenges participants to turn broken code into efficient, working solutions. Participation is individual-only, making it a fair and thrilling competition for all coders and debuggers.",
@@ -270,6 +273,7 @@ export const eventDetails: EventDetail[] = [
     slug: "design-a-thon",
     name: "Design-A-Thon",
     tagline: "UI/UX design hackathon",
+    image: "/event-posters/Design-A-Thon.png",
     clubs: [{ name: "Strokes", slug: "strokes" }],
     description:
       "Design-A-thon is a premier UI/UX hackathon that challenges participants to transform real-world problems into innovative, user-centric design solutions. Organized by Strokes, the official design club of IIIT Nagpur, this event pushes participants to explore the boundaries of creativity, problem-solving, and design methodologies under pressure. The competition simulates real-world design challenges through case studies, user research, and time-bound hackathon-style rounds. Beyond just visuals, the focus is on creating designs that are functional, inclusive, and impactful.",
@@ -335,6 +339,7 @@ export const eventDetails: EventDetail[] = [
     slug: "brandxperience",
     name: "Brand-Xperience",
     tagline: "24-hour branding challenge",
+    image: "/event-posters/Brand-Xperience.png",
     clubs: [
       { name: "Strokes", slug: "strokes" },
       { name: "Probe", slug: "probe" },
@@ -376,6 +381,7 @@ export const eventDetails: EventDetail[] = [
     slug: "edge-case-26",
     name: "Edge Case '26",
     tagline: "24-hour Physical AI hackathon",
+    image: "/event-posters/Edge-Case.png",
     clubs: [{ name: "GDG on Campus", slug: "gdg" }],
     description:
       "EDGE CASE '26 is a national 24-hour Physical AI hackathon by GDG on Campus IIIT Nagpur at Tantrafiesta '26, where student teams build working hardware that senses the real world, lets AI decide, and acts on it. After a nationwide online round, the top 25 teams build on campus on 23–24 October across safety, sustainability, Industry 4.0 and open-innovation tracks.",
@@ -887,6 +893,7 @@ export const eventDetails: EventDetail[] = [
     slug: "line-o-mania",
     name: "Line-O-Mania",
     tagline: "A line follower competition",
+    image: "/event-posters/Line-O-Mania.png",
     clubs: [{ name: "Iotics", slug: "iotics" }],
     description:
       "Line-O-Mania is a robotics contest where teams build an autonomous robot capable of following a pre-defined path on a contrast background. The track is black and white and includes bends, loops, sharp turns, junctions, dotted lines and dead ends. Bots require precise navigation to reach the end point in the shortest possible time. A special element is introduced in the track and disclosed only on the day of the event, adding an extra layer of challenge and unpredictability.",
@@ -948,6 +955,7 @@ export const eventDetails: EventDetail[] = [
     slug: "the-lost-pathways",
     name: "The Lost Pathways",
     tagline: "A micromouse event",
+    image: "/event-posters/The-Lost-Pathways.png",
     clubs: [{ name: "Iotics", slug: "iotics" }],
     description:
       "Teams must engineer an autonomous robot — a MicroMouse — that finds the shortest path through a 16×16 maze from a specified start square to the destination square at its centre. Robots must map, learn and optimize their path in the least time possible, testing algorithm design, decision-making, engineering, teamwork and innovation.",
@@ -1346,6 +1354,7 @@ export const eventDetails: EventDetail[] = [
     slug: "keep-alive-26",
     name: "Keep Alive '26",
     tagline: "National incident response championship",
+    image: "/event-posters/Keep-Alive.png",
     clubs: [{ name: "GDG on Campus", slug: "gdg" }],
     description:
       "An alert just fired. Checkout is failing. Can your team find out why before the clock runs out? KEEP ALIVE '26 is a national incident response championship for students who have been learning DevOps. You've practised Linux, Docker and Kubernetes — now test it in the field: read the alerts, dashboards, logs and traces of a live microservices system, find what broke and why, and explain how you would fix it. It runs on the same incident platform as Panic at the Pod, the live Kubernetes incident challenge by CNCG Noida, our Community Partner, hosted by GDG on Campus IIIT Nagpur at TantraFiesta 2026.",
