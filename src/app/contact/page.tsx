@@ -1,28 +1,10 @@
+import { pageMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
-import { siteConfig } from "@/lib/site";
 import styles from "./page.module.css";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description:
-    "Get in touch with the TantraFiesta organizing team for partnerships, student inquiries, sponsorships, and event details.",
-  alternates: {
-    canonical: "/contact",
-  },
-  openGraph: {
-    title: `Contact | ${siteConfig.fullName} | ${siteConfig.institute}`,
-    description:
-      "Get in touch with the TantraFiesta organizing team for partnerships, student inquiries, sponsorships, and event details.",
-    url: `${siteConfig.url}/contact`,
-  },
-  twitter: {
-    title: `Contact | ${siteConfig.fullName} | ${siteConfig.institute}`,
-    description:
-      "Get in touch with the TantraFiesta organizing team for partnerships, student inquiries, sponsorships, and event details.",
-  },
-};
+export const metadata: Metadata = pageMetadata("Contact", "Get in touch with the TantraFiesta organizing team for partnerships, student inquiries, sponsorships, and event details.", "/contact");
 
 const directions = [
   {

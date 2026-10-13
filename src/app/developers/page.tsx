@@ -1,25 +1,12 @@
+import { pageMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { DeveloperCard } from "@/components/DeveloperCard";
 import { heads, team } from "@/data/developers";
-import { siteConfig } from "@/lib/site";
 import styles from "./developers.module.css";
 
-export const metadata: Metadata = {
-  title: "Meet the Developers",
-  description:
-    "Meet the heads and developer team who built the official platform for TantraFiesta 2026 at IIIT Nagpur.",
-  alternates: {
-    canonical: "/developers",
-  },
-  openGraph: {
-    title: `Meet the Developers | ${siteConfig.fullName} | ${siteConfig.institute}`,
-    description:
-      "Meet the heads and developer team who built the official platform for TantraFiesta 2026 at IIIT Nagpur.",
-    url: `${siteConfig.url}/developers`,
-  },
-};
+export const metadata: Metadata = pageMetadata("Meet the Developers", "Meet the heads and developer team who built the official platform for TantraFiesta 2026 at IIIT Nagpur.", "/developers");
 
 export default function DevelopersPage() {
   return (

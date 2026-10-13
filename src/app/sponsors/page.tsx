@@ -1,29 +1,11 @@
+import { pageMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ComingSoon } from "@/components/ComingSoon";
-import { siteConfig } from "@/lib/site";
 import styles from "./page.module.css";
 
-export const metadata: Metadata = {
-  title: "Sponsors",
-  description:
-    "Explore past and present sponsors, corporate partners, and technology enterprises supporting TantraFiesta 2026 at IIIT Nagpur.",
-  alternates: {
-    canonical: "/sponsors",
-  },
-  openGraph: {
-    title: `Sponsors | ${siteConfig.fullName} | ${siteConfig.institute}`,
-    description:
-      "Explore past and present sponsors, corporate partners, and technology enterprises supporting TantraFiesta 2026 at IIIT Nagpur.",
-    url: `${siteConfig.url}/sponsors`,
-  },
-  twitter: {
-    title: `Sponsors | ${siteConfig.fullName} | ${siteConfig.institute}`,
-    description:
-      "Explore past and present sponsors, corporate partners, and technology enterprises supporting TantraFiesta 2026 at IIIT Nagpur.",
-  },
-};
+export const metadata: Metadata = pageMetadata("Sponsors", "Explore past and present sponsors, corporate partners, and technology enterprises supporting TantraFiesta 2026 at IIIT Nagpur.", "/sponsors");
 
 export default function SponsorsPage() {
   return (

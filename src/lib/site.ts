@@ -1,8 +1,3 @@
-const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
-const normalizedSiteUrl = configuredSiteUrl
-  ?.replace(/^https?:\/\/(?:www\.)?tantrafiesta\.in(?=\/|$)/i, "https://www.tantrafiesta.in")
-  .replace(/\/$/, "");
-
 export const siteConfig = {
   name: "TantraFiesta",
   fullName: "TantraFiesta 2026",
@@ -10,7 +5,7 @@ export const siteConfig = {
   tagline: "Annual National Technical Festival",
   description:
     "TantraFiesta 2026 is the annual national technical festival of Indian Institute of Information Technology, Nagpur (IIITN), celebrating technology, innovation, robotics, coding, AI, and leadership.",
-  url: normalizedSiteUrl || "https://www.tantrafiesta.in",
+  url: "https://www.tantrafiesta.in",
   ogImage: "/assets/tf_hero.png",
   locale: "en_US",
   socials: {

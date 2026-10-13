@@ -1,3 +1,4 @@
+import { breadcrumbJsonLd } from "@/lib/seo/jsonld";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -79,6 +80,7 @@ export default async function ClubDetailPage({ params }: ClubPageProps) {
 
   return (
     <div className="relative min-h-screen flex flex-col bg-[#241A4C] text-white">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Clubs", path: "/clubs" }, { name: club.name, path: `/clubs/${club.slug}` }])).replace(/</g, "\\u003c") }} />
       {/* Background layer */}
       <div
         className="fixed inset-0 -z-10 bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat pointer-events-none"

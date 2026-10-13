@@ -1,8 +1,10 @@
 import type { MetadataRoute } from "next";
-import { fetchAllEventSlugs } from "@/lib/api/events";
+import { BACKEND_API_BASE, fetchAllEventSlugs } from "@/lib/api/events";
 import { getAllClubSlugs } from "@/lib/clubs";
 import { getAllEventDetailSlugs } from "@/lib/eventDetails";
 import { siteConfig } from "@/lib/site";
+
+export const revalidate = 60;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 1. Static public routes
@@ -57,11 +59,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // 3. Event routes — prefer live backend, fall back to static event detail records
-  //    so all 23 pre-rendered event pages always appear in the sitemap even when
-  //    BACKEND_API_URL is not set at build time.
-  const apiSlugs = await fetchAllEventSlugs();
-  const eventSlugs = [...new Set([...getAllEventDetailSlugs(), ...apiSlugs])].sort();
+  // Match the event route resolver: the configured public API is authoritative.
+  const slugs = BACKEND_API_BASE ? await fetchAllEventSlugs() : getAllEventDetailSlugs();
+  const eventSlugs = [...new Set(slugs)].filter(slug => /^[a-zA-Z0-9]+(?:[-_][a-zA-Z0-9]+)*$/.test(slug)).sort();
   const eventRoutes: MetadataRoute.Sitemap = eventSlugs.map((slug) => ({
     url: `${siteConfig.url}/events/${slug}`,
     changeFrequency: "daily",

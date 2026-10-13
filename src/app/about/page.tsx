@@ -1,16 +1,10 @@
+import { pageMetadata } from "@/lib/seo/metadata";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { AboutContent } from "@/components/AboutContent";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "About",
-  description:
-    "Discover TantraFiesta 2026, IIIT Nagpur’s annual national technical festival, and the ideas, team, and student innovation behind it.",
-  alternates: {
-    canonical: "/about",
-  },
-};
+export const metadata: Metadata = pageMetadata("About", "Discover TantraFiesta 2026, IIIT Nagpur’s annual national technical festival, and the ideas, team, and student innovation behind it.", "/about");
 
 export default function AboutPage() {
   return (

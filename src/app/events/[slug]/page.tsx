@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { cache } from "react";
 import { notFound } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { EventDetail } from "@/components/EventDetail";
-import { fetchPublicEventBySlug, type PublicEvent } from "@/lib/api/events";
+import { BACKEND_API_BASE, fetchAllEventSlugs, fetchPublicEventBySlug, type PublicEvent } from "@/lib/api/events";
 import {
   getAllEventDetailSlugs,
   getEventDetail,
   type EventDetail as EventDetailData,
 } from "@/lib/eventDetails";
-import { generateEventJsonLd } from "@/lib/seo/jsonld";
+import { generateEventJsonLd, breadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { siteConfig } from "@/lib/site";
 import styles from "./page.module.css";
 
@@ -19,23 +20,23 @@ import styles from "./page.module.css";
  * design-reference records drive the route.
  */
 export async function generateStaticParams() {
-  return getAllEventDetailSlugs().map((slug) => ({ slug }));
+  return (BACKEND_API_BASE ? await fetchAllEventSlugs() : getAllEventDetailSlugs()).map((slug) => ({ slug }));
 }
 
 /** Maps the backend contract onto the shape the detail page renders. */
 function fromPublicEvent(event: PublicEvent): EventDetailData {
   const local = getEventDetail(event.slug);
   return {
+    ...local,
     slug: event.slug,
     name: event.name,
-    // The backend contract only models a single organizer today; joint events
-    // (multiple clubs) aren't representable until it grows a `clubs` field.
+    // Joint clubs are supplied by the normalized API contract.
     clubs: event.clubs || [event.club],
-    description: event.description || event.shortDescription || "",
+    description: local?.description || event.description || event.shortDescription || "",
     poster: event.image || local?.image || local?.poster,
     image: event.image || local?.image,
-    prizePool: event.prizes,
-    prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
+    prizePool: event.prizes || local?.prizePool,
+    prizes: local?.prizes ?? [],
     stages: local?.stages ?? [],
     organizers: local?.organizers ?? [],
     rules: event.rules ?? local?.rules ?? [],
@@ -45,17 +46,21 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
     eligibility: event.eligibility ? [event.eligibility] : (local?.eligibility ?? []),
     registrationUrl: event.registrationUrl,
     registrationDeadline: event.registrationDeadline,
-    startDate: event.startDate,
+    startDate: event.startDate || undefined,
     endDate: event.endDate,
+    registrationFee: event.price === undefined ? undefined : event.price === 0 ? "Free" : `₹${event.price}`,
+    teamSize: event.minTeamSize && event.maxTeamSize ? { min: event.minTeamSize, max: event.maxTeamSize } : local?.teamSize,
     venue: event.venue,
   };
 }
 
-/** Backend data wins when available; otherwise fall back to local content. */
-async function resolveEvent(slug: string): Promise<EventDetailData | null> {
+/** The configured API controls existence; local brochures enrich its records. */
+const resolveEvent = cache(async (slug: string): Promise<EventDetailData | null> => {
   const remote = await fetchPublicEventBySlug(slug);
-  return remote ? fromPublicEvent(remote) : getEventDetail(slug);
-}
+  return remote ? fromPublicEvent(remote) : BACKEND_API_BASE ? null : getEventDetail(slug);
+});
+
+export const revalidate = 60;
 
 export async function generateMetadata(
   props: PageProps<"/events/[slug]">
@@ -64,17 +69,15 @@ export async function generateMetadata(
   const event = await resolveEvent(slug);
 
   if (!event) {
-    return {
-      title: "Event Not Found",
-      description: "The requested event could not be found.",
-    };
+    notFound();
   }
 
   const title = event.name;
   const organizers = event.clubs.map((c) => c.name).join(" & ");
-  const description =
+  const description = (
     event.description ||
-    `Join ${event.name} at TantraFiesta 2026, IIIT Nagpur. Organized by ${organizers}. Review rules, schedule, prizes, and registration.`;
+    `Join ${event.name} at TantraFiesta 2026, IIIT Nagpur. Organized by ${organizers}. Review rules, schedule, prizes, and registration.`
+  ).replace(/\s+/g, " ").trim().slice(0, 160);
   const canonicalUrl = `/events/${event.slug}`;
   const fullUrl = `${siteConfig.url}${canonicalUrl}`;
   const posterSrc = event.image || event.poster;
@@ -98,8 +101,6 @@ export async function generateMetadata(
       images: [
         {
           url: imageUrl,
-          width: 1200,
-          height: 630,
           alt: `${event.name} - TantraFiesta 2026`,
         },
       ],
@@ -121,8 +122,8 @@ export default async function EventPage(props: PageProps<"/events/[slug]">) {
     notFound();
   }
 
-  // Schema.org Event requires a start date — skip the markup until one exists.
-  const jsonLd = event.startDate
+  // Registration windows in the brochure are not verified event dates.
+  const jsonLd = BACKEND_API_BASE && event.startDate && !Number.isNaN(Date.parse(event.startDate))
     ? generateEventJsonLd({
         id: event.slug,
         slug: event.slug,
@@ -143,6 +144,7 @@ export default async function EventPage(props: PageProps<"/events/[slug]">) {
 
   return (
     <div className={styles.page}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Events", path: "/events" }, { name: event.name, path: `/events/${event.slug}` }])).replace(/</g, "\\u003c") }} />
       {jsonLd && (
         <script
           type="application/ld+json"

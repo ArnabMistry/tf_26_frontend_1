@@ -1,29 +1,11 @@
+import { pageMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllClubs } from "@/lib/clubs";
-import { siteConfig } from "@/lib/site";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 
-export const metadata: Metadata = {
-  title: "Clubs & Organizing Bodies",
-  description:
-    "Discover the student clubs and organizing communities powering competitions, hackathons, and symposiums at TantraFiesta.",
-  alternates: {
-    canonical: "/clubs",
-  },
-  openGraph: {
-    title: `Clubs & Organizing Bodies | ${siteConfig.fullName} | ${siteConfig.institute}`,
-    description:
-      "Discover the student clubs and organizing communities powering competitions, hackathons, and symposiums at TantraFiesta.",
-    url: `${siteConfig.url}/clubs`,
-  },
-  twitter: {
-    title: `Clubs & Organizing Bodies | ${siteConfig.fullName} | ${siteConfig.institute}`,
-    description:
-      "Discover the student clubs and organizing communities powering competitions, hackathons, and symposiums at TantraFiesta.",
-  },
-};
+export const metadata: Metadata = pageMetadata("Clubs & Organizing Bodies", "Discover the student clubs and organizing communities powering competitions, hackathons, and symposiums at TantraFiesta.", "/clubs");
 
 export default function ClubsIndexPage() {
   const clubs = getAllClubs();

@@ -56,6 +56,11 @@ export interface PublicEvent {
  * `club` string instead of the `{ name, slug }` object this frontend expects.
  */
 interface BackendEvent {
+  isPublic?: boolean;
+  isPublished?: boolean;
+  startDate?: string;
+  endDate?: string;
+  image?: string;
   id: string;
   slug?: string;
   paymentTrigger?: string;
@@ -107,8 +112,7 @@ function normaliseBackendEvent(raw: BackendEvent): PublicEvent {
   const clubs = clubName.split(/\s+[xX&]\s+/).map(name => ({ name: name.trim(), slug: clubNameToSlug(name) }));
   return {
     id: raw.id,
-    // Backend has no slug column; derive it from the event id which is already
-    // a dash-separated identifier (e.g. "algorithmia", "cascade").
+    // Prefer the public slug; legacy records expose their ID as the identifier.
     slug: raw.slug || raw.id,
     name: raw.name,
     description: raw.description ?? "",
@@ -123,13 +127,14 @@ function normaliseBackendEvent(raw: BackendEvent): PublicEvent {
     venue: raw.venue ?? undefined,
     registrationDeadline: raw.registrationEndTime,
     registrationUrl: `${raw.isTeamEvent ? '/register/team' : '/register/event'}?eventId=${encodeURIComponent(raw.id)}`,
-    // startDate / endDate not stored on the backend yet — leave undefined so
-    // the detail page falls back gracefully to its "TBA" state.
-    startDate: "",
+    // Never substitute registration or round deadlines for event dates.
+    startDate: raw.startDate || "",
+    endDate: raw.endDate,
+    image: raw.image,
   };
 }
 
-const BACKEND_API_BASE =
+export const BACKEND_API_BASE =
   process.env.BACKEND_API_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
   "";
@@ -138,7 +143,7 @@ const BACKEND_API_BASE =
  * Fetches all public events.
  * Unwraps the backend's `{ success, data: { events } }` envelope and
  * normalises each record into the `PublicEvent` shape this frontend uses.
- * Returns an empty array gracefully if the backend is not reachable.
+ * Propagates API failures so an outage cannot publish an incomplete sitemap.
  */
 export async function fetchPublicEvents(): Promise<PublicEvent[]> {
   if (!BACKEND_API_BASE) {
@@ -150,29 +155,31 @@ export async function fetchPublicEvents(): Promise<PublicEvent[]> {
     let page = 1;
     let totalPages = 1;
     do {
-    const res = await fetch(`${BACKEND_API_BASE}/api/events?page=${page}&limit=100`, {
-      next: { revalidate: 60 },
-    });
+      const res = await fetch(`${BACKEND_API_BASE.replace(/\/$/, "")}/api/events?page=${page}&limit=100`, {
+        next: { revalidate: 60 },
+      });
 
-    if (!res.ok) return [];
+      if (!res.ok) throw new Error(`Public events API returned ${res.status}`);
 
-    // Backend shape: { success: true, data: { events: BackendEvent[], pagination: {...} } }
-    const json = await res.json() as { success?: boolean; data?: { events?: BackendEvent[]; pagination?: { totalPages: number } } };
-    const raw = json?.data?.events ?? [];
-    if (!Array.isArray(raw)) return [];
-    events.push(...raw.map(normaliseBackendEvent));
-    totalPages = json.data?.pagination?.totalPages || 1;
-    page++;
+      // Backend shape: { success: true, data: { events: BackendEvent[], pagination: {...} } }
+      const json = await res.json() as { success?: boolean; data?: { events?: BackendEvent[]; pagination?: { totalPages: number } } };
+      const raw = json?.data?.events;
+      if (json.success !== true || !Array.isArray(raw)) throw new Error("Invalid public event response");
+      events.push(...raw.filter(isPublicEvent).map(normaliseBackendEvent));
+      totalPages = json.data?.pagination?.totalPages || 1;
+      if (!Number.isInteger(totalPages) || totalPages < 1 || totalPages > 1000) throw new Error("Invalid event pagination");
+      page++;
     } while (page <= totalPages);
-    return events;
-  } catch {
-    return [];
+    return [...new Map(events.map(event => [event.slug, event])).values()];
+  } catch (error) {
+    console.error("Unable to load public events", error);
+    throw error;
   }
 }
 
 /**
  * Fetches a single public event by its id / slug.
- * Returns null if not found or if the backend is not reachable.
+ * Returns null for a missing public event; API failures propagate.
  */
 export async function fetchPublicEventBySlug(
   slug: string
@@ -181,20 +188,19 @@ export async function fetchPublicEventBySlug(
     return null;
   }
 
-  try {
-    const res = await fetch(`${BACKEND_API_BASE}/api/events/${encodeURIComponent(slug)}`, {
-      next: { revalidate: 60 },
-    });
-
-    if (!res.ok) return null;
-
-    // Backend shape: { success: true, data: { ...BackendEvent } }
-    const json = await res.json() as { success?: boolean; data?: BackendEvent };
-    const raw = json?.data;
-    return raw ? normaliseBackendEvent(raw) : null;
-  } catch {
-    return null;
-  }
+  // The list supplies the canonical slug and database ID. Do not assume the
+  // detail endpoint accepts a slug, or expose duplicate ID aliases.
+  const events = await fetchPublicEvents();
+  const listed = events.find(event => event.slug === slug);
+  if (!listed) return null;
+  const res = await fetch(`${BACKEND_API_BASE.replace(/\/$/, "")}/api/events/${encodeURIComponent(listed.id)}`, {
+    next: { revalidate: 60 },
+  });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`Public event API returned ${res.status}`);
+  const json = await res.json() as { success?: boolean; data?: BackendEvent };
+  if (json.success !== true || !json.data) throw new Error("Invalid public event response");
+  return isPublicEvent(json.data) ? { ...normaliseBackendEvent(json.data), slug: listed.slug } : null;
 }
 
 /**
@@ -213,4 +219,11 @@ export async function fetchEventsByClubSlug(
 export async function fetchAllEventSlugs(): Promise<string[]> {
   const events = await fetchPublicEvents();
   return events.map((e) => e.slug);
+}
+
+/** Safe identifiers from the public endpoint, respecting explicit visibility flags. */
+function isPublicEvent(event: BackendEvent): boolean {
+  return event.isPublic !== false && event.isPublished !== false &&
+    typeof event.id === "string" && typeof event.name === "string" &&
+    /^[a-zA-Z0-9]+(?:[-_][a-zA-Z0-9]+)*$/.test(event.slug || event.id);
 }

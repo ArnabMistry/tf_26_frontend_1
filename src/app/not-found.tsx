@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: true },
   title: "404 — Page Not Found",
   description: "This page doesn't exist. Head back to TantraFiesta 2026.",
 };

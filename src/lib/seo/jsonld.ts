@@ -1,54 +1,27 @@
 import type { PublicEvent } from "@/lib/api/events";
 import { siteConfig } from "@/lib/site";
 
-/**
- * Generates Schema.org Event JSON-LD structured data.
- * Enhances Google rich snippets for individual events.
- */
-export function generateEventJsonLd(event: PublicEvent) {
-  const eventUrl = `${siteConfig.url}/events/${event.slug}`;
-  const imageUrl = event.image
-    ? event.image.startsWith("http")
-      ? event.image
-      : `${siteConfig.url}${event.image}`
-    : `${siteConfig.url}/og-image.jpg`;
-
+export function breadcrumbJsonLd(items: { name: string; path: string }[]) {
   return {
-    "@context": "https://schema.org",
-    "@type": "Event",
-    name: event.name,
-    description: event.shortDescription || event.description,
-    url: eventUrl,
+    "@context": "https://schema.org", "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem", position: index + 1, name: item.name,
+      item: `${siteConfig.url}${item.path === "/" ? "" : item.path}`,
+    })),
+  };
+}
+
+/** Emit only fields actually supplied by the public API. Registration dates
+ * are not event start dates; unknown attendance, status and offers are omitted. */
+export function generateEventJsonLd(event: PublicEvent) {
+  return {
+    "@context": "https://schema.org", "@type": "Event",
+    name: event.name, description: event.description,
+    url: `${siteConfig.url}/events/${event.slug}`,
     startDate: event.startDate,
-    endDate: event.endDate || event.startDate,
-    eventStatus: "https://schema.org/EventScheduled",
-    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-    location: {
-      "@type": "Place",
-      name: event.venue || "IIIT Nagpur Campus",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Nagpur",
-        addressRegion: "Maharashtra",
-        addressCountry: "IN",
-      },
-    },
-    image: [imageUrl],
-    organizer: {
-      "@type": "Organization",
-      name: event.club?.name
-        ? `${event.club.name} - ${siteConfig.fullName}`
-        : siteConfig.fullName,
-      url: event.club?.slug
-        ? `${siteConfig.url}/clubs/${event.club.slug}`
-        : siteConfig.url,
-    },
-    offers: event.registrationUrl
-      ? {
-          "@type": "Offer",
-          url: event.registrationUrl,
-          availability: "https://schema.org/InStock",
-        }
-      : undefined,
+    endDate: event.endDate || undefined,
+    image: [new URL(event.image || siteConfig.ogImage, siteConfig.url).href],
+    location: event.venue ? { "@type": "Place", name: event.venue } : undefined,
+    organizer: { "@type": "Organization", name: event.club.name },
   };
 }
