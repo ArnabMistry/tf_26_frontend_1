@@ -1090,6 +1090,7 @@ export const eventDetails: EventDetail[] = [
     slug: "last-man-standing",
     name: "Last Man Standing 4.0",
     tagline: "The tech quiz where only one team walks out alive",
+    image: "/event-posters/LMS.png",
     clubs: [{ name: "Elevate", slug: "elevate" }],
     description:
       "Part quiz, part survival game. Every member of your team is a life: answer right and you live, answer wrong and the Wheel decides who's out. Play your Power Cards at the right moment and outlast all 19 other teams to be the Last Team Standing. Brought to you by Elevate, the technical club of IIIT Nagpur, as part of TantraFiesta'26.",
@@ -1149,6 +1150,7 @@ export const eventDetails: EventDetail[] = [
     slug: "ragnarok",
     name: "Ragnarok",
     tagline: "The agentic hackathon",
+    image: "/event-posters/ragnarok.png",
     clubs: [{ name: "CRISPR", slug: "crispr" }],
     description:
       "RAGNAROK is the flagship agentic hackathon of TantraFiesta 2026, organized by AIRA, the AI/ML domain at CRISPR, IIIT Nagpur. The age of passive AI is ending: the next wave of software is built from agents that reason, plan, use tools, and act on their own. RAGNAROK brings together the sharpest student builders in India to design, ship, and battle-test such systems under real pressure. Qualify online, then reach the IIIT Nagpur campus for a 24-hour build where only the best agents survive.",
@@ -1219,6 +1221,7 @@ export const eventDetails: EventDetail[] = [
     slug: "cascade",
     name: "Cascade",
     tagline: "The flagship 24-hour hackathon",
+    image: "/event-posters/Cas-Cade.png",
     clubs: [
       { name: "CRISPR", slug: "crispr" },
       { name: "Elevate", slug: "elevate" },

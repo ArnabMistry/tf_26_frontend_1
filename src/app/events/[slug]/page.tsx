@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
-import { BrandFooter } from "@/components/BrandFooter";
+import { Footer } from "@/components/Footer";
 import { EventDetail } from "@/components/EventDetail";
 import { fetchPublicEventBySlug, type PublicEvent } from "@/lib/api/events";
 import {
@@ -154,7 +154,7 @@ export default async function EventPage(props: PageProps<"/events/[slug]">) {
       </a>
       <Navbar currentPath="/events" registrationHref={event.registrationUrl ?? "/register"} />
       <EventDetail event={event} />
-      <BrandFooter />
+      <Footer variant="yellow" />
     </div>
   );
 }
