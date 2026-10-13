@@ -124,7 +124,7 @@ export function EventsExplorer({ events }: EventsExplorerProps) {
               <strong>Filter by club</strong>
               <div className={styles.clubList} role="group" aria-label="Filter events by club">
                 {clubOptions.map((club) => {
-                  const logo = getClubLogo(club.slug);
+                  const logo = getClubLogo(club.slug) || getClubLogo(club.name);
                   return (
                     <button
                       key={club.slug}

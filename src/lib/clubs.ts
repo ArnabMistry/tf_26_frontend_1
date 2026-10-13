@@ -69,7 +69,7 @@ export const KNOWN_CLUBS: readonly ClubInfo[] = [
     tagline: "Game Dev & XR",
     description:
       "Interactive media society spearheading game development, 3D world building, virtual reality, and spatial computing.",
-    logo: "/assets/club-logos/dimension.png",
+    logo: "/assets/club-logos/dimensions.png",
   },
   {
     id: "dotslash",
@@ -115,15 +115,25 @@ export function getAllClubs(): readonly ClubInfo[] {
   return KNOWN_CLUBS;
 }
 
-export function getClubBySlug(slug: string): ClubInfo | null {
-  return KNOWN_CLUBS.find((club) => club.slug === slug) ?? null;
+export function getClubBySlug(slugOrName: string): ClubInfo | null {
+  if (!slugOrName) return null;
+  const s = slugOrName.toLowerCase().trim();
+  if (s === "dimensions" || s === "dimension") {
+    return KNOWN_CLUBS.find((club) => club.slug === "dimension") ?? null;
+  }
+  return (
+    KNOWN_CLUBS.find((club) => club.slug.toLowerCase() === s) ??
+    KNOWN_CLUBS.find((club) => club.name.toLowerCase() === s) ??
+    null
+  );
 }
 
 export function getAllClubSlugs(): string[] {
   return KNOWN_CLUBS.map((club) => club.slug);
 }
 
-/** Looks up a club's real logo by slug. Returns undefined when none exists yet. */
-export function getClubLogo(slug: string): string | undefined {
-  return getClubBySlug(slug)?.logo;
+/** Looks up a club's real logo by slug or name. Returns undefined when none exists yet. */
+export function getClubLogo(slugOrName: string): string | undefined {
+  return getClubBySlug(slugOrName)?.logo;
 }
+

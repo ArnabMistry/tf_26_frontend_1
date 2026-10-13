@@ -291,7 +291,7 @@ function Tba({ title, text }: { title: string; text: React.ReactNode }) {
 
 /** Real club logo when one exists; otherwise a generated brand monogram. */
 function ClubMark({ club }: { club: ClubRef }) {
-  const logo = getClubLogo(club.slug);
+  const logo = getClubLogo(club.slug) || getClubLogo(club.name);
 
   if (logo) {
     return (
