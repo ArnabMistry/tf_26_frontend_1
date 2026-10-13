@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useRef, useState, type FormEvent } from "react";
+import { useMemo, useRef, useCallback, useState, type FormEvent } from "react";
 import Image from "next/image";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { EventCard } from "@/components/EventCard";
 import { Reveal } from "@/components/Reveal";
 import { getClubLogo } from "@/lib/clubs";
@@ -13,13 +14,33 @@ interface EventsExplorerProps {
 }
 
 export function EventsExplorer({ events }: EventsExplorerProps) {
-  const [searchInput, setSearchInput] = useState("");
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState<string | null>(null);
-  const [clubFilter, setClubFilter] = useState<string | null>(null);
-  const [registrationEvent, setRegistrationEvent] = useState<EventListing | null>(null);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const [registrationEvent, setRegistrationEvent] = useState<EventListing | null>(null);
   const resultsRef = useRef<HTMLHeadingElement>(null);
+
+  // Read filter state from URL so back/forward navigation restores filters
+  const search = searchParams.get("q") ?? "";
+  const category = searchParams.get("category") ?? null;
+  const clubFilter = searchParams.get("club") ?? null;
+
+  // The search input is a controlled local value that only commits on submit
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const updateParams = useCallback((updates: Record<string, string | null>) => {
+    const params = new URLSearchParams(searchParams.toString());
+    for (const [key, value] of Object.entries(updates)) {
+      if (value === null || value === "") {
+        params.delete(key);
+      } else {
+        params.set(key, value);
+      }
+    }
+    const query = params.toString();
+    router.replace(`${pathname}${query ? `?${query}` : ""}`, { scroll: false });
+  }, [router, pathname, searchParams]);
 
   // Clubs actually present in this catalog, alphabetized, so the filter list
   // never offers a club with zero events in it. A joint event lists under
@@ -53,17 +74,16 @@ export function EventsExplorer({ events }: EventsExplorerProps) {
     : eventCategories.find((item) => item.id === category)?.heading
       || (clubFilterName ? `${clubFilterName} Events` : "All Events");
 
-  function handleSearch(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setSearch(searchInput);
+  function handleSearch(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const value = searchInputRef.current?.value ?? "";
+    updateParams({ q: value || null });
     resultsRef.current?.focus({ preventScroll: true });
   }
 
   function resetFilters() {
-    setSearchInput("");
-    setSearch("");
-    setCategory(null);
-    setClubFilter(null);
+    if (searchInputRef.current) searchInputRef.current.value = "";
+    updateParams({ q: null, category: null, club: null });
   }
 
   function showRegistration(event: EventListing) {
@@ -78,7 +98,15 @@ export function EventsExplorer({ events }: EventsExplorerProps) {
         <div className={styles.controls}>
           <form role="search" aria-label="Search events" className={styles.searchForm} onSubmit={handleSearch}>
             <label htmlFor="event-search" className="sr-only">Search for an event or club</label>
-            <input id="event-search" type="search" placeholder="Search For Event Here" value={searchInput} onChange={(event) => setSearchInput(event.target.value)} className={styles.searchInput} />
+            <input
+              id="event-search"
+              ref={searchInputRef}
+              type="search"
+              placeholder="Search For Event Here"
+              defaultValue={search}
+              key={search}
+              className={styles.searchInput}
+            />
             <button type="submit" className={styles.searchButton} aria-label="Search events">
               <svg aria-hidden="true" width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
                 <circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4.5 4.5" />
@@ -103,7 +131,7 @@ export function EventsExplorer({ events }: EventsExplorerProps) {
                       type="button"
                       className={styles.clubChip}
                       aria-pressed={clubFilter === club.slug}
-                      onClick={() => setClubFilter(clubFilter === club.slug ? null : club.slug)}
+                      onClick={() => updateParams({ club: clubFilter === club.slug ? null : club.slug })}
                     >
                       {logo ? (
                         <Image src={logo} alt="" width={28} height={28} className={styles.clubChipLogo} />
@@ -118,7 +146,7 @@ export function EventsExplorer({ events }: EventsExplorerProps) {
                 })}
               </div>
               <div className={styles.filterActions}>
-                <button type="button" className={styles.filterClear} onClick={() => setClubFilter(null)}>Clear</button>
+                <button type="button" className={styles.filterClear} onClick={() => updateParams({ club: null })}>Clear</button>
                 <button type="button" popoverTarget="club-filter-notice" popoverTargetAction="hide">Done</button>
               </div>
             </div>
@@ -128,7 +156,13 @@ export function EventsExplorer({ events }: EventsExplorerProps) {
 
       <div className={styles.categories} role="group" aria-label="Event categories">
         {eventCategories.map((item) => (
-          <button key={item.id} type="button" className={styles.category} aria-pressed={category === item.id} onClick={() => setCategory(category === item.id ? null : item.id)}>
+          <button
+            key={item.id}
+            type="button"
+            className={styles.category}
+            aria-pressed={category === item.id}
+            onClick={() => updateParams({ category: category === item.id ? null : item.id })}
+          >
             {item.label}
           </button>
         ))}
