@@ -776,6 +776,7 @@ export const eventDetails: EventDetail[] = [
     slug: "the-game-jam",
     name: "The Game Jam™",
     tagline: "Theme: Plot Twist",
+    image: "/event-posters/The-Game-Jam.jpeg",
     clubs: [{ name: "Dimension", slug: "dimension" }],
     description:
       "The Game Jam™ is a flagship competition of TantraFiesta 2026, the annual technical fest of IIIT Nagpur and one of the largest tech fests in Central India. It brings together game developers, designers and innovators from across the country to showcase their talent. Teams work under the theme “Plot Twist” to rapidly design, develop and prototype games, putting creativity, technical execution, game mechanics, storytelling, art, sound design, teamwork and rapid iteration to the test.",
@@ -845,6 +846,7 @@ export const eventDetails: EventDetail[] = [
     slug: "pitch-please",
     name: "Pitch, Please!",
     tagline: "6-hour game concept pitching",
+    image: "/event-posters/Pitch-Please.jpeg",
     clubs: [{ name: "Dimension", slug: "dimension" }],
     description:
       "Pitch, Please! gives student creators and designers a formal platform to pitch original game concepts to an expert panel of judges and industry veterans. Participants are evaluated on gameplay design, core mechanics, narrative structure, art direction, target-audience feasibility and monetization potential, and receive direct constructive feedback that refines their ideas into viable commercial or indie production blueprints.",
