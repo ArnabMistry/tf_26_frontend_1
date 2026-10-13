@@ -16,16 +16,20 @@ interface FooterProps {
 export function Footer({ variant = "purple" }: FooterProps) {
   const isYellow = variant === "yellow";
   const [isVisible, setIsVisible] = useState(false);
+  const [animationRun, setAnimationRun] = useState(0);
+  const wasVisibleRef = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
+        const isIntersecting = entries[0]?.isIntersecting ?? false;
+        if (isIntersecting && !wasVisibleRef.current) {
+          setAnimationRun((run) => run + 1);
         }
+        wasVisibleRef.current = isIntersecting;
+        setIsVisible(isIntersecting);
       },
       { threshold: 0.5, rootMargin: "0px 0px -100px 0px" }
     );
@@ -88,7 +92,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
           {/* Top Center PhysicsText Spawn Point */}
           <div className="absolute top-16 left-1/2 -translate-x-1/2 z-50 pointer-events-none hidden md:flex justify-center w-full">
             <div ref={headingRef}>
-              <PhysicsText startTrigger={isVisible} />
+              <PhysicsText key={animationRun} startTrigger={isVisible} />
             </div>
           </div>
 
@@ -212,7 +216,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
           {/* Top Center PhysicsText Spawn Point */}
           <div className="absolute top-16 left-1/2 -translate-x-1/2 z-50 pointer-events-none hidden md:flex justify-center w-full">
             <div ref={headingRef}>
-              <PhysicsText startTrigger={isVisible} />
+              <PhysicsText key={animationRun} startTrigger={isVisible} />
             </div>
           </div>
 
