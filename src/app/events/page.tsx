@@ -1,6 +1,7 @@
 import { connection } from "next/server";
 import { pageMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Navbar } from "@/components/Navbar";
 import { EventsExplorer } from "@/components/EventsExplorer";
 import { Footer } from "@/components/Footer";
@@ -22,7 +23,9 @@ export default async function EventsPage() {
     <div className={styles.page}>
       <a href="#events-content" className={styles.skipLink}>Skip to events</a>
       <Navbar currentPath="/events" registrationHref="/register" />
-      <EventsExplorer events={events} />
+      <Suspense fallback={<main id="events-content">Loading events…</main>}>
+        <EventsExplorer events={events} />
+      </Suspense>
       <Footer variant="yellow" />
     </div>
   );

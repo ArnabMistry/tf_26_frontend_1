@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { authRequest, safeReturnPath } from "@/lib/auth";
-import { markSignedIn, startGoogleLogin } from "@/lib/session";
+import { clearSignedIn, startGoogleLogin } from "@/lib/session";
 
 export function RegisterForm({ admin = false }: { admin?: boolean }) {
   const router = useRouter();
@@ -33,7 +33,7 @@ export function RegisterForm({ admin = false }: { admin?: boolean }) {
       const { eventCode, ...details } = formData;
       // Registration signs the user straight in and emails a verification code.
       const result = await authRequest('/api/auth/register', { ...details, ...(admin ? { eventCode } : {}) });
-      markSignedIn();
+      clearSignedIn();
       sessionStorage.setItem('tf_signup_notice', result.data?.emailSent
         ? 'Account created. We emailed you a 6-digit code to verify your address.'
         : 'Account created, but the verification email could not be sent. Use Resend code on the next page.');

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ApiError, authRequest, destination, safeReturnPath } from '@/lib/auth';
@@ -10,13 +10,15 @@ import { logout, markSignedIn } from '@/lib/session';
 export default function OAuthCallbackClient() {
   const router = useRouter();
   const [error, setError] = useState('');
+  const deniedRef = useRef<boolean | null>(null);
 
   useEffect(() => {
     let active = true;
 
     (async () => {
       const params = new URLSearchParams(window.location.search);
-      const denied = params.has('error');
+      if (deniedRef.current === null) deniedRef.current = params.has('error');
+      const denied = deniedRef.current;
       window.history.replaceState({}, '', '/auth/callback');
 
       if (denied) {

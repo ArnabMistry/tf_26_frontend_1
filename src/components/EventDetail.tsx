@@ -114,6 +114,7 @@ export function EventDetail({ event }: EventDetailProps) {
                 text={`${joinClubNames(event.clubs)} is still putting together the brief for ${event.name}. Check back shortly.`}
               />
             )}
+            {event.entryFeeLabel && <p className={styles.entryFee}>Entry fee: {event.entryFeeLabel}</p>}
             <PrizeBox event={event} />
           </div>
           <Poster event={event} />

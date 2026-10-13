@@ -45,6 +45,11 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
     highlights: local?.highlights ?? [],
     eligibility: event.eligibility ? [event.eligibility] : (local?.eligibility ?? []),
     registrationUrl: event.registrationUrl,
+    entryFeeLabel: !event.price || event.paymentTrigger === "free"
+      ? "Free"
+      : event.isTeamEvent
+        ? `₹${event.price} ${event.feeMode === "per_participant" ? "per participant; team leader pays for all members" : "per team; team leader pays once"}`
+        : `₹${event.price} per participant`,
     registrationDeadline: event.registrationDeadline,
     startDate: event.startDate || undefined,
     endDate: event.endDate,

@@ -76,6 +76,8 @@ export interface EventDetail {
   registrationDeadline?: string;
   /** What it costs to enter. Every TantraFiesta'26 event is free. */
   registrationFee?: string;
+  /** Live fee wording from the API, including whether a team fee is per member. */
+  entryFeeLabel?: string;
   /** Team size the platform enforces. `min === max` means a fixed team. */
   teamSize?: { min: number; max: number };
   mode?: "Online" | "Offline" | "Hybrid";

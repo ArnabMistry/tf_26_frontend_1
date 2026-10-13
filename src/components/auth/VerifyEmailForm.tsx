@@ -11,7 +11,8 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { sendEmailOtp, verifyEmailOtp } from '@/lib/session';
+import { markSignedIn, sendEmailOtp, verifyEmailOtp } from '@/lib/session';
+import { ApiError, authRequest, destination, safeReturnPath } from '@/lib/auth';
 
 const RESEND_SECONDS = 60;
 
@@ -39,7 +40,20 @@ export function VerifyEmailForm() {
     try {
       await verifyEmailOtp(email, otp.trim());
       setNotice('Email verified.');
-      router.replace('/profile');
+      let profile;
+      try {
+        profile = await authRequest('/api/auth/me');
+      } catch (err) {
+        if (err instanceof ApiError && err.status === 401) {
+          router.replace(`/login?email=${encodeURIComponent(email)}&confirmed=1`);
+          return;
+        }
+        throw err;
+      }
+      markSignedIn();
+      const next = safeReturnPath(sessionStorage.getItem('tf_return_to'));
+      sessionStorage.removeItem('tf_return_to');
+      router.replace(next || destination(profile.data.user));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'That code was not accepted.');
     } finally {
