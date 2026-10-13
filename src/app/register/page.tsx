@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/register",
   },
+  robots: { index: false, follow: false },
   openGraph: {
     title: `Register | ${siteConfig.fullName} | ${siteConfig.institute}`,
     description: "Register for TantraFiesta 2026 at IIIT Nagpur.",

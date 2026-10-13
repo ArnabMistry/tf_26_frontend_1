@@ -38,9 +38,6 @@ export const metadata: Metadata = {
   authors: [{ name: "TantraFiesta Team" }],
   creator: "IIIT Nagpur",
   publisher: "TantraFiesta",
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     type: "website",
     locale: siteConfig.locale,
@@ -76,6 +73,32 @@ export const metadata: Metadata = {
   },
 };
 
+const siteStructuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${siteConfig.url}/#organization`,
+      name: siteConfig.fullName,
+      url: siteConfig.url,
+      logo: `${siteConfig.url}/assets/tf_logo.png`,
+      parentOrganization: {
+        "@type": "EducationalOrganization",
+        name: "Indian Institute of Information Technology, Nagpur",
+        alternateName: "IIIT Nagpur",
+      },
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteConfig.url}/#website`,
+      name: siteConfig.fullName,
+      url: siteConfig.url,
+      publisher: { "@id": `${siteConfig.url}/#organization` },
+      inLanguage: "en-IN",
+    },
+  ],
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -83,6 +106,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(siteStructuredData).replace(/</g, "\\u003c"),
+          }}
+        />
         <SmoothScroll />
         <PageOpeningAnimation />
         <ParticipantSession>{children}</ParticipantSession>

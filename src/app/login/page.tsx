@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/login",
   },
+  robots: { index: false, follow: false },
   openGraph: {
     title: `Login | ${siteConfig.fullName} | ${siteConfig.institute}`,
     description: "Sign in to your TantraFiesta 2026 account.",
