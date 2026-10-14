@@ -513,6 +513,26 @@
   font-size: 14px;
 }
 
+/* Explanatory line under a section heading. */
+.admin-hint {
+  color: #bfb2cf;
+  font-size: 13.5px;
+  line-height: 1.6;
+  max-width: 78ch;
+  margin: 0 0 14px;
+}
+
+/* Counter serve card: the code the participant reads out to the staff. */
+.admin-counter-code details {
+  margin-top: 14px;
+  font-size: 13px;
+  color: #bfb2cf;
+}
+
+.admin-counter-code summary {
+  cursor: pointer;
+}
+
 .admin-event-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
