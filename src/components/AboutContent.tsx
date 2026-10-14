@@ -14,6 +14,7 @@ const timelineData = [
     description: "TantraFiesta 2025 dives deep into the mysteries of the cosmos with \"Dark Matter Eclipse.\" This year marks a rebirth of innovation, where creativity meets the unseen power of technology.",
     link: "https://2025.tantrafiesta.in/",
     alignment: "right" as const,
+    logo: "/assets/tflogos/tf2025logo.png",
   },
   {
     year: "2024",
@@ -22,6 +23,7 @@ const timelineData = [
     description: "TantraFiesta 2024 exploded into the digital universe with its first website launch. The \"Digital Big Bang\" marked our online evolution—bringing the fest closer to every innovator nationwide.",
     link: "https://2024.tantrafiesta.in/",
     alignment: "left" as const,
+    logo: "/assets/tflogos/tf2024logo.png",
   },
   {
     year: "2023",
@@ -30,6 +32,7 @@ const timelineData = [
     description: "\"Genesis Unleashed\" redefined TantraFiesta with a fully virtual edition. AI-powered challenges and interactive workshops connected innovators from across the globe.",
     link: "https://2023.tantrafiesta.in/",
     alignment: "right" as const,
+    logo: "/assets/tflogos/tf2023logo.webp",
   },
   {
     year: "2022",
@@ -38,6 +41,7 @@ const timelineData = [
     description: "With \"Greener Tomorrow,\" TantraFiesta returned to campus life. Sustainability met technology as students reignited the spirit of in-person collaboration.",
     link: "https://2022.tantrafiesta.in/",
     alignment: "left" as const,
+    logo: "/assets/tflogos/22tflogo.webp",
   },
 ];
 
