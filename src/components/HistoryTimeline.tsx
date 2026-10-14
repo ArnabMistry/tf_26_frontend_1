@@ -13,6 +13,7 @@ export interface TimelineItem {
   description: string;
   link: string;
   alignment: "left" | "right";
+  logo?: string;
 }
 
 interface HistoryTimelineProps {
@@ -191,6 +192,8 @@ function TimelineContent({ item, align = 'left', mobile = false }: { item: Timel
       <div>
         <Link 
           href={item.link}
+          target="_blank"
+          rel="noopener noreferrer"
           className={`inline-flex items-center justify-center gap-2 ${mobile ? 'px-4 py-2 text-[10px]' : 'px-5 py-2.5 text-xs'} border border-[#E7137D] text-[#E7137D] font-semibold rounded-md hover:bg-[#E7137D]/10 transition-colors uppercase tracking-widest`}
         >
           <svg width={mobile ? "12" : "14"} height={mobile ? "12" : "14"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -205,13 +208,22 @@ function TimelineContent({ item, align = 'left', mobile = false }: { item: Timel
   );
 }
 
+const defaultLogos: Record<string, string> = {
+  "2025": "/assets/tflogos/tf2025logo.png",
+  "2024": "/assets/tflogos/tf2024logo.png",
+  "2023": "/assets/tflogos/tf2023logo.webp",
+  "2022": "/assets/tflogos/22tflogo.webp",
+};
+
 function TimelineLogo({ item, mobile = false }: { item: TimelineItem, mobile?: boolean }) {
+  const logoSrc = item.logo || defaultLogos[item.year] || "/assets/tf_history.webp";
+
   return (
     <div className={`flex ${mobile ? 'flex-row' : 'flex-col'} items-center gap-3 opacity-90`}>
       <div className={`relative ${mobile ? 'w-10 h-10 p-1' : 'w-20 h-20 md:w-24 md:h-24 p-2'} flex items-center justify-center bg-transparent rounded-full border-2 border-white/80 shrink-0`}>
         <Image
-          src="/assets/tf_history.webp"
-          alt="TF Logo"
+          src={logoSrc}
+          alt={`TantraFiesta ${item.year} Logo`}
           fill
           className="object-contain p-1.5 drop-shadow-md"
         />
