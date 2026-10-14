@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <main
-      className="relative min-h-screen w-full overflow-hidden flex flex-col items-center justify-center bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat px-4 py-16"
+      className="relative min-h-screen w-full overflow-hidden flex flex-col items-center justify-center bg-[#241A4C] bg-[url('/assets/bg.webp')] bg-cover bg-center bg-no-repeat px-4 py-16"
       aria-labelledby="not-found-heading"
     >
       {/* ── Glowing yellow ring behind the 404 ── */}
@@ -31,14 +31,14 @@ export default function NotFound() {
         className="mb-10 flex items-center gap-3 focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-[#ffe43b]"
       >
         <Image
-          src="/assets/tf_logo.png"
+          src="/assets/tf_logo.webp"
           alt=""
           width={52}
           height={52}
           className="h-12 w-12 object-contain"
         />
         <Image
-          src="/assets/tf_nav.png"
+          src="/assets/tf_nav.webp"
           alt="TantraFiesta"
           width={320}
           height={40}

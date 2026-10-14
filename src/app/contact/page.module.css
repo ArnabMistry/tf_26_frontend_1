@@ -14,7 +14,7 @@
   z-index: -1;
   inset: 0;
   content: "";
-  background: #241a4c url("/assets/bg.png") center / cover no-repeat;
+  background: #241a4c url("/assets/bg.webp") center / cover no-repeat;
   pointer-events: none;
 }
 

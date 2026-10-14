@@ -169,7 +169,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
           {/* Center Character Image */}
           <HoverTilt className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[160px] xs:w-[190px] sm:w-[250px] md:w-[350px] lg:w-[400px] z-10 pointer-events-auto flex flex-col items-center" rotationIntensity={10} scaleIntensity={1.03}>
             <Image
-              src="/assets/Neon Cosmic Cyberpunk Robot Portrait.png"
+              src="/assets/Neon Cosmic Cyberpunk Robot Portrait.webp"
               alt="Neon cosmic cyberpunk robot mascot"
               width={1100}
               height={1430}
@@ -295,7 +295,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
           {/* Center Character Image — smaller on xs so it doesn't overflow */}
           <HoverTilt className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[160px] xs:w-[190px] sm:w-[250px] md:w-[350px] lg:w-[400px] z-10 pointer-events-auto flex flex-col items-center" rotationIntensity={10} scaleIntensity={1.03}>
             <Image
-              src="/assets/Neon Cosmic Cyberpunk Robot Portrait.png"
+              src="/assets/Neon Cosmic Cyberpunk Robot Portrait.webp"
               alt="Neon cosmic cyberpunk robot mascot"
               width={1100}
               height={1430}

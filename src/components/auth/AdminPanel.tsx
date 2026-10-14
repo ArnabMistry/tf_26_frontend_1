@@ -71,7 +71,7 @@ function Workspace({ user, eventId }: { user: AuthUser; eventId?: string }) {
         <Link className="admin-brand" href="/" title="Go to TantraFiesta Website Homepage">
           <div className="admin-brand-icon-wrap">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/assets/tf_logo.png" alt="TantraFiesta" className="admin-brand-icon" width="28" height="28" loading="lazy" />
+            <img src="/assets/tf_logo.webp" alt="TantraFiesta" className="admin-brand-icon" width="28" height="28" loading="lazy" />
           </div>
           <div className="admin-brand-text">
             <span className="admin-brand-title">TANTRAFIESTA</span>

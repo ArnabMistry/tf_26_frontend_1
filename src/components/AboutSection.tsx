@@ -14,7 +14,7 @@ export function AboutSection() {
           {/* Character Illustration */}
           <HoverTilt className="hidden lg:flex absolute right-[-15%] top-1/2 -translate-y-1/2 h-[118%] pointer-events-auto z-20 items-center justify-center" rotationIntensity={8} scaleIntensity={1.03}>
             <Image
-              src="/assets/gurl.png"
+              src="/assets/gurl.webp"
               alt="TantraFiesta Mascot"
               width={600}
               height={733}

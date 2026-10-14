@@ -64,7 +64,7 @@ const Footer = dynamic(() => import("@/components/Footer").then(m => m.Footer));
 
 export default function Home() {
   return (
-    <main className="flex-1 bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat bg-fixed text-white">
+    <main className="flex-1 bg-[#241A4C] bg-[url('/assets/bg.webp')] bg-cover bg-center bg-no-repeat bg-fixed text-white">
       <Hero />
       <AboutSection />
       <TagsMarquee />
