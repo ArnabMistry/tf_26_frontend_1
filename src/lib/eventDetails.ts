@@ -11,7 +11,7 @@
  * Structured dates (`registrationOpens`, `registrationDeadline`, `startDate`,
  * `endDate`) come from Unstop's registration fields, which the clubs edit live.
  * Where a brochure's prose disagrees with those fields, the prose is kept in
- * the stage text and the fields stay authoritative — see `edge-case-26` and the
+ * the stage text and the fields stay authoritative — see the
  * Synergy esports events for the notes on this.
  *
  * Design-reference content, used only until the backend event endpoints are
@@ -398,27 +398,6 @@ export const eventDetails: EventDetail[] = [
     startDate: "2026-10-23T16:00:00+05:30",
     endDate: "2026-10-24T15:00:00+05:30",
     venue: IIITN,
-  },
-  {
-    // Not listed on the TantraFiesta'26 Unstop festival page. The copy below is
-    // the club's own brochure text; confirm with GDG before the fest.
-    slug: "edge-case-26",
-    name: "Edge Case '26",
-    tagline: "24-hour Physical AI hackathon",
-    image: "/event-posters/Edge-Case.webp",
-    clubs: [{ name: "GDG on Campus", slug: "gdg" }],
-    description:
-      "EDGE CASE '26 is a national 24-hour Physical AI hackathon by GDG on Campus IIIT Nagpur at Tantrafiesta '26, where student teams build working hardware that senses the real world, lets AI decide, and acts on it. After a nationwide online round, the top 25 teams build on campus on 23–24 October across safety, sustainability, Industry 4.0 and open-innovation tracks.",
-    prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
-    stages: [],
-    rules: [],
-    highlights: [],
-    eligibility: [],
-    organizers: [],
-    registrationFee: FREE,
-    entryFeeLabel: "Free",
-    feeMode: "per_team",
-    participationKit: false,
   },
   {
     slug: "firestorm-rampage",
@@ -1506,7 +1485,7 @@ export const eventDetails: EventDetail[] = [
       "Bring your senior: one recent graduate (2024–2026) of your college can join your team.",
     ],
     eligibility: [
-      "Teams of exactly 3, all from the same college.",
+      "Teams of 2–3, all from the same college.",
       "UG, PG and diploma students from any branch or year.",
       "Up to one alumnus per team, graduated in 2024, 2025 or 2026 — working alumni are welcome.",
       "PhD students and research scholars are not eligible.",
@@ -1531,7 +1510,7 @@ export const eventDetails: EventDetail[] = [
     feeMode: "per_participant",
     meals: "1 Meal + 1 Snacks",
     participationKit: true,
-    teamSize: { min: 3, max: 3 },
+    teamSize: { min: 2, max: 3 },
     mode: "Hybrid",
     startDate: "2026-10-11T09:00:00+05:30",
     endDate: "2026-10-26T19:00:00+05:30",
