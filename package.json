@@ -6,7 +6,6 @@
     "test:admin": "playwright test",
     "dev": "next dev",
     "build": "next build",
-    "postbuild": "prettier --ignore-path /dev/null --write \".next/server/app/**/*.html\"",
     "format:html": "prettier --ignore-path /dev/null --write \".next/server/app/**/*.html\"",
     "start": "next start",
     "lint": "eslint"

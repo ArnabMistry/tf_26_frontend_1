@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useParticipant } from '@/components/auth/ParticipantSession';
@@ -105,7 +105,6 @@ export function UserPortal() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [inbox, setInbox] = useState<Inbox | null>(null);
   const [meals, setMeals] = useState<MealPass[] | null>(null);
-  const [qrModal, setQrModal] = useState<{ title: string; image: string; token: string } | null>(null);
   const [profileDismissed, setProfileDismissed] = useState(false);
     const [page, setPage] = useState(1);
   const [error, setError] = useState(''), [notice, setNotice] = useState(''), [busy, setBusy] = useState('');
@@ -126,7 +125,8 @@ export function UserPortal() {
       setError('');
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) {
-        router.replace('/login?next=%2Fprofile');
+        const here = `/profile${window.location.search}`;
+        router.replace(`/login?next=${encodeURIComponent(here)}`);
         return;
       }
       setError(err instanceof Error ? err.message : 'Could not load your portal.');
@@ -214,42 +214,34 @@ export function UserPortal() {
     }, action === 'accept' ? 'Invitation accepted. Your team is now visible below.' : 'Invitation declined.');
   }
 
-    // Auto-refresh meal status when QR modal is active to immediately mark as stale/redeemed
-  useEffect(() => {
-    if (!qrModal) return;
-    const poll = async () => {
-      try {
-        const res = await participantRequest<{ meals: MealPass[] }>('/api/user/meals');
-        if (res.meals) {
-          setMeals(res.meals);
-          const current = res.meals.find(m => m.personalPassToken === qrModal.token);
-          if (current && current.status === 'CLAIMED') {
-            setNotice('Meal pass redeemed at counter! Enjoy your meal.');
-            setQrModal(null);
-          }
-        }
-      } catch {
-        // ignore polling error
-      }
-    };
-    const interval = setInterval(poll, 2500);
-    return () => clearInterval(interval);
-  }, [qrModal]);
+  // A counter QR carries ?claimMealToken=…; scanning it with any phone camera
+  // lands here, so the portal finishes the redemption on arrival and then drops
+  // the token from the URL so a refresh cannot replay it.
+  const claimToken = params.get('claimMealToken');
+  const [claiming, setClaiming] = useState(false);
+  const claimedRef = useRef<string | null>(null);
 
-  async function showPassQr(pass: MealPass) {
-    setError('');
-    try {
-      const QRCode = await import('qrcode');
-      const image = await QRCode.toDataURL(pass.personalPassToken, { width: 300, margin: 2 });
-      setQrModal({
-        title: `${pass.typeOfMeal.toUpperCase()} PASS`,
-        image,
-        token: pass.personalPassToken,
-      });
-    } catch {
-      setError('Failed to generate pass QR code.');
-    }
-  }
+  useEffect(() => {
+    if (!claimToken || !user || claimedRef.current === claimToken) return;
+    claimedRef.current = claimToken;
+    setClaiming(true);
+    (async () => {
+      try {
+        const claim = await participantRequest<{ typeOfMeal: string; mealId: number }>(
+          '/api/user/meals/claim', { qrToken: claimToken }
+        );
+        setError('');
+        setNotice(`Redeemed. Enjoy your ${claim?.typeOfMeal === 'snack' ? 'snack' : 'meal'}!`);
+      } catch (err) {
+        setNotice('');
+        setError(err instanceof Error ? err.message : 'Could not redeem that pass.');
+      } finally {
+        setClaiming(false);
+        router.replace('/profile?tab=meals');
+        void load();
+      }
+    })();
+  }, [claimToken, user, router, load]);
 
   if (!hasSessionHint() && !loading && !user) {
     return <main className={s.shell}><p role="status" className={s.muted}>Redirecting to login…</p></main>;
@@ -295,6 +287,7 @@ export function UserPortal() {
     </header>
 
     {error && <div role="alert" className={s.error}>{error} <button onClick={load} className={s.secondary}>Retry</button></div>}
+    {claiming && <p role="status" className={s.notice}>Redeeming your pass at the counter…</p>}
     {notice && <p role="status" className={s.notice}>{notice}</p>}
 
     {!profile ? (
@@ -377,7 +370,7 @@ export function UserPortal() {
               <div className={s.row}>
                 <div>
                   <h2>Your Meal Passes</h2>
-                  <p className={s.muted}>Dining passes granted for your registered competitions & hackathons.</p>
+                  <p className={s.muted}>Read your pass code to the staff at the food counter.</p>
                 </div>
                 <span className={s.badge}>{availableMealsCount} Available</span>
               </div>
@@ -385,14 +378,14 @@ export function UserPortal() {
               
 
               {!meals?.length ? (
-                <p className={s.empty}>No meal passes assigned yet. Meal entitlements are automatically linked when you participate in multi-hour competitions or hackathons.</p>
+                <p className={s.empty}>No meal passes yet. Meals and snacks are granted by the events you register for — each event&rsquo;s entitlement is listed on its page.</p>
               ) : (
                 meals.map(pass => (
                   <article className={s.entry} key={pass.mealId}>
                     <div className={s.row}>
                       <div>
                         <span className={s.eyebrow}>{formatDate(pass.date)}</span>
-                        <h3 className="mt-1 text-lg font-bold">{pass.typeOfMeal.toUpperCase()}</h3>
+                        <h3 className="mt-1 text-lg font-bold">{pass.name.toUpperCase()}</h3>
                       </div>
                       <span className={`${s.badge} ${pass.status === 'CLAIMED' ? s.accepted : pass.isServingNow ? s.pending : ''}`}>
                         {pass.status === 'CLAIMED' ? 'REDEEMED' : pass.isServingNow ? 'SERVING NOW' : 'AVAILABLE'}
@@ -403,17 +396,19 @@ export function UserPortal() {
                       Eligible via: {pass.grantedByEvents?.map(e => e.name).join(', ') || 'Fest Registration'}
                     </p>
 
-                    <div className={`${s.row} mt-3`}>
-                      {pass.status === 'AVAILABLE' ? (
-                        <button className={s.button} onClick={() => showPassQr(pass)}>
-                          Show Pass QR Code
-                        </button>
-                      ) : (
-                        <p className={s.fine}>
-                          Redeemed {pass.scannedAt ? `at ${formatDate(pass.scannedAt)} IST` : 'at counter'}
+                    {pass.status === 'AVAILABLE' ? (
+                      <div className="mt-3 rounded-2xl border border-[#faff52]/40 bg-[#faff52]/10 px-4 py-3">
+                        <p className={`${s.eyebrow} !mb-1`}>Your pass code</p>
+                        <p className="font-mono text-2xl font-bold tracking-[0.25em] text-[#faff52]">{pass.passCode}</p>
+                        <p className={`${s.fine} mt-2`}>
+                          Read this out to the staff at the counter.
                         </p>
-                      )}
                       </div>
+                    ) : (
+                      <p className={`${s.fine} mt-3`}>
+                        Redeemed {pass.scannedAt ? `at ${formatDate(pass.scannedAt)} IST` : 'at counter'}
+                      </p>
+                    )}
                   </article>
                 ))
               )}
@@ -545,21 +540,6 @@ export function UserPortal() {
         </div>
       )}
 
-      {/* Personal QR Pass Modal */}
-      {qrModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm" onClick={() => setQrModal(null)}>
-          <div className={`${s.card} max-w-sm w-full text-center relative border border-[#faff52]/40`} onClick={e => e.stopPropagation()}>
-            <span className={s.eyebrow}>Food Counter Pass</span>
-            <h2 className="mt-2 text-xl font-bold text-white">{qrModal.title}</h2>
-            <p className={`${s.muted} text-xs mb-4`}>Present this personal QR code to counter staff</p>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={qrModal.image} alt={qrModal.title} className="mx-auto rounded-2xl border-2 border-[#E7137D] p-3 bg-white shadow-2xl" width={260} height={260} />
-            <div className="flex justify-center mt-5">
-              <button className={s.button} onClick={() => setQrModal(null)}>Close</button>
-            </div>
-          </div>
-        </div>
-      )}
     </>}
   </main>;
 }
