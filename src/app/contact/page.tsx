@@ -152,12 +152,8 @@ export default function ContactPage() {
           ))}
           <p className={styles.urgentNotice}>
             For urgent queries, reach us at{" "}
-            <a href="mailto:support@tantrafiesta.in" className="underline hover:text-white transition-colors">
-              support@tantrafiesta.in
-            </a>{" "}
-            or call{" "}
-            <a href="tel:+918604551326" className="underline hover:text-white transition-colors">
-              +91 86045 51326
+            <a href="mailto:contact@tantrafiesta.in" className="underline hover:text-white transition-colors">
+              contact@tantrafiesta.in
             </a>.
           </p>
         </section>

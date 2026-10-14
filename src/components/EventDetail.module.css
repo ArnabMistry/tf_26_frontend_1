@@ -403,33 +403,6 @@
   z-index: 2;
 }
 
-.boxFee {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgb(15 10 38 / 85%);
-  border: 1px solid rgb(255 255 255 / 20%);
-  border-radius: 6px;
-  padding: 4px 10px;
-  width: fit-content;
-}
-
-.boxFeeLabel {
-  font-family: var(--font-futura);
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #ffdd3e;
-  font-weight: 600;
-}
-
-.boxFeeValue {
-  font-family: var(--font-futura);
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #fff;
-}
-
 .register {
   display: inline-flex;
   align-items: center;
@@ -694,10 +667,6 @@
     align-items: stretch;
   }
 
-  .boxFee {
-    width: 100%;
-    justify-content: center;
-  }
 
   .register {
     width: 100%;

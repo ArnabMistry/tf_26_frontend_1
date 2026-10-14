@@ -98,7 +98,7 @@ export const eventDetails: EventDetail[] = [
     slug: "algorithmia",
     name: "Algorithmia",
     tagline: "The ICPC-style coding challenge",
-    image: "/event-posters/Algorithmia.png",
+    image: "/event-posters/Algorithmia.webp",
     clubs: [{ name: "DotSlash", slug: "dotslash" }],
     description:
       "Get ready to embark on an exciting journey into the world of algorithms and programming with Algorithmia, a prestigious ICPC-style coding competition by DotSlash, the coding club of IIIT Nagpur. Teams of two to three battle to solve challenging algorithmic problems, testing their teamwork, creativity, and coding speed at a national level during TantraFiesta.",
@@ -117,7 +117,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Stage 1 — Preliminary Coding Contest",
-        when: "Registration closes 18 Oct 2026",
+        when: "Registration closes 20 Oct 2026",
         mode: "Online",
         detail:
           "Conducted online on Codeforces. Teams of 2–3 register as a team on Codeforces. Two hours, 5–6 programming problems, ranked by ICPC rules — problems solved first, then penalty time. The top 10 teams qualify for Stage 2, and standby teams may be invited if a selected team drops out.",
@@ -156,7 +156,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Aditya Singh", phone: "+91 92649 66840", email: "bt24csh051@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-10T12:00:00+05:30",
-    registrationDeadline: "2026-10-18T00:00:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹350 per person",
     entryFeeLabel: "₹350 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -172,7 +172,7 @@ export const eventDetails: EventDetail[] = [
     slug: "flashcode",
     name: "FlashCode",
     tagline: "Three surprise mini coding games",
-    image: "/event-posters/FlashCode.png",
+    image: "/event-posters/FlashCode.webp",
     clubs: [{ name: "DotSlash", slug: "dotslash" }],
     description:
       "Flash Code is a unique and exciting coding challenge hosted by DotSlash, IIIT Nagpur, designed to test participants in a fun, fast, and competitive way. Unlike traditional contests, Flash Code features 3 surprise mini coding games revealed only on the event day. Each game has its own winner, runner-up and second runner-up — giving everyone multiple chances to shine.",
@@ -238,7 +238,7 @@ export const eventDetails: EventDetail[] = [
     slug: "bugwars",
     name: "BugWars",
     tagline: "The debugging challenge",
-    image: "/event-posters/BugWars.png",
+    image: "/event-posters/BugWars.webp",
     clubs: [{ name: "DotSlash", slug: "dotslash" }],
     description:
       "BugWars is a high-energy coding challenge focused on debugging, problem-solving, and programming skills. Participants tackle a range of coding problems designed to test their ability to identify errors, analyze logic, optimize solutions, and think under pressure. Covering concepts from DSA and competitive programming, the event challenges participants to turn broken code into efficient, working solutions. Participation is individual-only, making it a fair and thrilling competition for all coders and debuggers.",
@@ -289,7 +289,7 @@ export const eventDetails: EventDetail[] = [
     slug: "design-a-thon",
     name: "Design-A-Thon",
     tagline: "UI/UX design hackathon",
-    image: "/event-posters/Design-A-Thon.png",
+    image: "/event-posters/Design-A-Thon.webp",
     clubs: [{ name: "Strokes", slug: "strokes" }],
     description:
       "Design-A-thon is a premier UI/UX hackathon that challenges participants to transform real-world problems into innovative, user-centric design solutions. Organized by Strokes, the official design club of IIIT Nagpur, this event pushes participants to explore the boundaries of creativity, problem-solving, and design methodologies under pressure. The competition simulates real-world design challenges through case studies, user research, and time-bound hackathon-style rounds. Beyond just visuals, the focus is on creating designs that are functional, inclusive, and impactful.",
@@ -303,7 +303,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Round 1 — Online Case Study Submission",
-        when: "10 Oct 2026, 12:00 AM – 19 Oct 2026, 11:59 PM",
+        when: "10 Oct 2026, 12:00 AM – 20 Oct 2026, 11:59 PM",
         mode: "Online",
         detail:
           "A research-driven design project: user personas, heuristic evaluations of popular designs, or a critique of design flaws in major platforms. Each submission needs research findings with insights and data, a clear identification of UX issues and pain points, practical recommendations, and mockups, wireframes or prototypes. Submit one comprehensive PDF case study plus supporting visuals (PNG/JPEG/PDF); a video walkthrough of the design process and Figma or source files are optional.",
@@ -343,7 +343,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Dharmendra Shukla", phone: "+91 70119 63526", email: "strokes@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-10T12:00:00+05:30",
-    registrationDeadline: "2026-10-19T23:59:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹400 per person",
     entryFeeLabel: "₹400 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -359,7 +359,7 @@ export const eventDetails: EventDetail[] = [
     slug: "brandxperience",
     name: "Brand-Xperience",
     tagline: "24-hour branding challenge",
-    image: "/event-posters/Brand-Xperience.png",
+    image: "/event-posters/Brand-Xperience.webp",
     clubs: [
       { name: "Strokes", slug: "strokes" },
       { name: "Probe", slug: "probe" },
@@ -405,7 +405,7 @@ export const eventDetails: EventDetail[] = [
     slug: "edge-case-26",
     name: "Edge Case '26",
     tagline: "24-hour Physical AI hackathon",
-    image: "/event-posters/Edge-Case.png",
+    image: "/event-posters/Edge-Case.webp",
     clubs: [{ name: "GDG on Campus", slug: "gdg" }],
     description:
       "EDGE CASE '26 is a national 24-hour Physical AI hackathon by GDG on Campus IIIT Nagpur at Tantrafiesta '26, where student teams build working hardware that senses the real world, lets AI decide, and acts on it. After a nationwide online round, the top 25 teams build on campus on 23–24 October across safety, sustainability, Industry 4.0 and open-innovation tracks.",
@@ -424,7 +424,7 @@ export const eventDetails: EventDetail[] = [
     slug: "firestorm-rampage",
     name: "Firestorm Rampage",
     tagline: "Free Fire — Battle Royale squads",
-    image: "/event-posters/firstom-rampage.png",
+    image: "/event-posters/firstom-rampage.webp",
     clubs: [{ name: "Synergy", slug: "synergy" }],
     description:
       "Firestorm Rampage is the official Free Fire battle-royale tournament of TantraFiesta'26, hosted by Synergy Club, IIIT Nagpur. Squads of four (plus one substitute) fight through online preliminaries before the top twelve meet for an offline final on campus — a fast-paced digital battleground that tests reflexes, strategy, and courage, where every decision can turn the tide.",
@@ -432,7 +432,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Registration",
-        when: "11 Oct – 19 Oct 2026",
+        when: "11 Oct – 20 Oct 2026",
         mode: "Online",
         detail: "Open to students of any discipline from any college in India.",
       },
@@ -472,7 +472,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Support", phone: "+91 72318 36153", email: "tantrafiesta@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-11T12:00:00+05:30",
-    registrationDeadline: "2026-10-19T12:00:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹200 per team",
     entryFeeLabel: "₹200 per team; team leader pays once",
     feeMode: "per_team",
@@ -487,13 +487,13 @@ export const eventDetails: EventDetail[] = [
     slug: "combat-carnage",
     name: "Combat Carnage",
     tagline: "BGMI — Squad TPP",
-    image: "/event-posters/combact-carnage.png",
+    image: "/event-posters/combact-carnage.webp",
     clubs: [{ name: "Synergy", slug: "synergy" }],
     description:
       "Combat Carnage is the official Battlegrounds Mobile India tournament of TantraFiesta'26 at IIIT Nagpur. Squads play third-person perspective matches in custom rooms across Erangel, Miramar and Rondo, qualifying online before the top sixteen meet offline for the championship — a tactical battle of survival that demands strategy, teamwork and composure.",
     prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
     stages: [
-      { name: "Registration", when: "10 Oct – 19 Oct 2026", mode: "Online" },
+      { name: "Registration", when: "10 Oct – 20 Oct 2026", mode: "Online" },
       { name: "Selected squads declared", when: "20 Oct 2026" },
       {
         name: "Qualifier Round 1",
@@ -529,7 +529,7 @@ export const eventDetails: EventDetail[] = [
       { name: "TantraFiesta IIIT Nagpur", email: "tantrafiesta@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-10T12:00:00+05:30",
-    registrationDeadline: "2026-10-19T00:00:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: FREE,
     entryFeeLabel: "Free",
     feeMode: "per_team",
@@ -544,13 +544,13 @@ export const eventDetails: EventDetail[] = [
     slug: "crown-clash",
     name: "Crown Clash",
     tagline: "Clash Royale — 1v1 knockout",
-    image: "/event-posters/crown-clash.png",
+    image: "/event-posters/crown-clash.webp",
     clubs: [{ name: "Synergy", slug: "synergy" }],
     description:
       "Crown Clash is the official Clash Royale esports tournament of TantraFiesta, hosted by Synergy Club at IIIT Nagpur. Players from across colleges battle through knockout rounds and an offline final to prove their deck management, timing, and strategic gameplay, competing for the championship title and prizes.",
     prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
     stages: [
-      { name: "Registration", when: "10 Oct – 19 Oct 2026", mode: "Online" },
+      { name: "Registration", when: "10 Oct – 20 Oct 2026", mode: "Online" },
       {
         name: "Prelims Round",
         when: "23 Oct – 24 Oct 2026",
@@ -585,7 +585,7 @@ export const eventDetails: EventDetail[] = [
       { name: "TantraFiesta IIIT Nagpur", email: "tantrafiesta@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-11T12:00:00+05:30",
-    registrationDeadline: "2026-10-19T06:30:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹50 per person",
     entryFeeLabel: "₹50 per participant",
     feeMode: "per_participant",
@@ -600,7 +600,7 @@ export const eventDetails: EventDetail[] = [
     slug: "phoenix-cup",
     name: "Phoenix Cup",
     tagline: "Valorant — 5v5",
-    image: "/event-posters/phoenix-cup.png",
+    image: "/event-posters/phoenix-cup.webp",
     clubs: [{ name: "Synergy", slug: "synergy" }],
     description:
       "Phoenix Cup is the Valorant tournament of TantraFiesta'26 at IIIT Nagpur — a competitive 5v5 arena demanding focus, strategy, reflexes and teamwork. Teams fight through two online qualifying stages on the Mumbai server before four survivors meet for the offline final. Lock. Load. Dominate.",
@@ -610,7 +610,7 @@ export const eventDetails: EventDetail[] = [
       { position: 2, label: "Runner-up", amount: "₹3,000" },
     ],
     stages: [
-      { name: "Registration", when: "10 Oct – 19 Oct 2026", mode: "Online" },
+      { name: "Registration", when: "10 Oct – 20 Oct 2026", mode: "Online" },
       {
         name: "Qualifier Round 1",
         when: "22 Oct 2026",
@@ -650,7 +650,7 @@ export const eventDetails: EventDetail[] = [
       { name: "TantraFiesta IIIT Nagpur", email: "tantrafiesta@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-11T12:00:00+05:30",
-    registrationDeadline: "2026-10-19T23:30:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹250 per team",
     entryFeeLabel: "₹250 per team; team leader pays once",
     feeMode: "per_team",
@@ -706,7 +706,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Admin", email: "tantrafiesta@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-10T06:30:00+05:30",
-    registrationDeadline: "2026-10-19T13:00:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: FREE,
     entryFeeLabel: "Free",
     feeMode: "per_participant",
@@ -721,7 +721,7 @@ export const eventDetails: EventDetail[] = [
     slug: "knights-legacy",
     name: "Knights Legacy",
     tagline: "Chess — Blitz qualifiers, Rapid final",
-    image: "/event-posters/knights-legacy.png",
+    image: "/event-posters/knights-legacy.webp",
     clubs: [{ name: "Synergy", slug: "synergy" }],
     description:
       "Knights Legacy is a three-stage chess tournament conducted at IIIT Nagpur. It begins with a first online Blitz qualification round on 22 October 2026, followed by a second online Blitz round on 23 October. The top 8 players advance to the final offline Rapid round on 25 October at the Academic Building, IIIT Nagpur. The tournament gives players a structured competitive environment to demonstrate strategic thinking, consistency and sportsmanship.",
@@ -778,13 +778,13 @@ export const eventDetails: EventDetail[] = [
     slug: "critical-ops",
     name: "Critical Ops",
     tagline: "Call of Duty: Mobile — 5v5",
-    image: "/event-posters/critical-ops.png",
+    image: "/event-posters/critical-ops.webp",
     clubs: [{ name: "Synergy", slug: "synergy" }],
     description:
       "Critical Ops is a competitive Call of Duty: Mobile 5v5 esports tournament designed to test team coordination, mechanical skill, strategy, communication, objective control, and composure under match pressure. Teams progress through structured competitive rounds before an offline playoff and final stage, with matches administered under consistent settings and an evidence-based dispute process.",
     prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
     stages: [
-      { name: "Registration", when: "10 Oct – 19 Oct 2026", mode: "Online" },
+      { name: "Registration", when: "10 Oct – 20 Oct 2026", mode: "Online" },
       { name: "Prelims Round", when: "23 Oct 2026", mode: "Online" },
       {
         name: "Final Round",
@@ -809,7 +809,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Sai Nitish", phone: "+91 96721 15599", email: "bt25eci052@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-10T12:00:00+05:30",
-    registrationDeadline: "2026-10-19T13:00:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹250 per team",
     entryFeeLabel: "₹250 per team; team leader pays once",
     feeMode: "per_team",
@@ -824,7 +824,7 @@ export const eventDetails: EventDetail[] = [
     slug: "the-game-jam",
     name: "The Game Jam™",
     tagline: "Theme: Plot Twist",
-    image: "/event-posters/The-Game-Jam.jpeg",
+    image: "/event-posters/The-Game-Jam.webp",
     clubs: [{ name: "Dimension", slug: "dimension" }],
     description:
       "The Game Jam™ is a flagship competition of TantraFiesta 2026, the annual technical fest of IIIT Nagpur and one of the largest tech fests in Central India. It brings together game developers, designers and innovators from across the country to showcase their talent. Teams work under the theme “Plot Twist” to rapidly design, develop and prototype games, putting creativity, technical execution, game mechanics, storytelling, art, sound design, teamwork and rapid iteration to the test.",
@@ -837,7 +837,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Round 1 — Online",
-        when: "25 Sep – 5 Oct 2026",
+        when: "25 Sep – 20 Oct 2026",
         mode: "Online",
         detail:
           "Games are submitted through the official Game Jam portal at itch.io/jam/tf-iiitn-game-jam-2026, with documentation covering credits, assets and the compiled game, plus a Git repository link containing all game files. After submitting on itch.io, participants post about their game on GameDoora so the Round 2 judges can play it. Judged on theme adherence, gameplay and mechanics, innovation and creativity, aesthetics, sound and music, and enjoyment factor.",
@@ -882,7 +882,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Hetansh Vakta", phone: "+91 99799 55969", email: "bt25csh001@iiitn.ac.in" },
     ],
     registrationOpens: "2026-09-19T13:00:00+05:30",
-    registrationDeadline: "2026-10-05T23:59:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹450 per person",
     entryFeeLabel: "₹450 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -898,7 +898,7 @@ export const eventDetails: EventDetail[] = [
     slug: "pitch-please",
     name: "Pitch, Please!",
     tagline: "6-hour game concept pitching",
-    image: "/event-posters/Pitch-Please.jpeg",
+    image: "/event-posters/Pitch-Please.webp",
     clubs: [{ name: "Dimension", slug: "dimension" }],
     description:
       "Pitch, Please! gives student creators and designers a formal platform to pitch original game concepts to an expert panel of judges and industry veterans. Participants are evaluated on gameplay design, core mechanics, narrative structure, art direction, target-audience feasibility and monetization potential, and receive direct constructive feedback that refines their ideas into viable commercial or indie production blueprints.",
@@ -951,7 +951,7 @@ export const eventDetails: EventDetail[] = [
     slug: "line-o-mania",
     name: "Line-O-Mania",
     tagline: "A line follower competition",
-    image: "/event-posters/Line-O-Mania.png",
+    image: "/event-posters/Line-O-Mania.webp",
     clubs: [{ name: "Iotics", slug: "iotics" }],
     description:
       "Line-O-Mania is a robotics contest where teams build an autonomous robot capable of following a pre-defined path on a contrast background. The track is black and white and includes bends, loops, sharp turns, junctions, dotted lines and dead ends. Bots require precise navigation to reach the end point in the shortest possible time. A special element is introduced in the track and disclosed only on the day of the event, adding an extra layer of challenge and unpredictability.",
@@ -1001,7 +1001,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Shreyansh Jain", phone: "+91 83027 99631", email: "bt25eci003@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-05T00:00:00+05:30",
-    registrationDeadline: "2026-10-20T17:12:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹150 per person",
     entryFeeLabel: "₹150 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -1017,7 +1017,7 @@ export const eventDetails: EventDetail[] = [
     slug: "the-lost-pathways",
     name: "The Lost Pathways",
     tagline: "A micromouse event",
-    image: "/event-posters/The-Lost-Pathways.png",
+    image: "/event-posters/The-Lost-Pathways.webp",
     clubs: [{ name: "Iotics", slug: "iotics" }],
     description:
       "Teams must engineer an autonomous robot — a MicroMouse — that finds the shortest path through a 16×16 maze from a specified start square to the destination square at its centre. Robots must map, learn and optimize their path in the least time possible, testing algorithm design, decision-making, engineering, teamwork and innovation.",
@@ -1079,7 +1079,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Neel Kotecha", phone: "+91 79765 77767", email: "bt25eci057@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-10T12:00:00+05:30",
-    registrationDeadline: "2026-10-20T00:00:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹150 per person",
     entryFeeLabel: "₹150 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -1168,7 +1168,7 @@ export const eventDetails: EventDetail[] = [
     slug: "last-man-standing",
     name: "Last Man Standing 4.0",
     tagline: "The tech quiz where only one team walks out alive",
-    image: "/event-posters/LMS.png",
+    image: "/event-posters/LMS.webp",
     clubs: [{ name: "Elevate", slug: "elevate" }],
     description:
       "Part quiz, part survival game. Every member of your team is a life: answer right and you live, answer wrong and the Wheel decides who's out. Play your Power Cards at the right moment and outlast all 19 other teams to be the Last Team Standing. Brought to you by Elevate, the technical club of IIIT Nagpur, as part of TantraFiesta'26.",
@@ -1181,7 +1181,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Online shortlisting round",
-        when: "Sat, 17 Oct 2026",
+        when: "Tue, 20 Oct 2026",
         mode: "Online",
         detail:
           "The top 20 teams qualify for the offline finale and are contacted with the round details.",
@@ -1216,7 +1216,7 @@ export const eventDetails: EventDetail[] = [
       { name: "TantraFiesta IIIT Nagpur", email: "tantrafiesta@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-11T00:00:00+05:30",
-    registrationDeadline: "2026-10-17T23:59:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹150 per person",
     entryFeeLabel: "₹150 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -1232,7 +1232,7 @@ export const eventDetails: EventDetail[] = [
     slug: "ragnarok",
     name: "Ragnarok",
     tagline: "The agentic hackathon",
-    image: "/event-posters/ragnarok.png",
+    image: "/event-posters/ragnarok.webp",
     clubs: [{ name: "CRISPR", slug: "crispr" }],
     description:
       "RAGNAROK is the flagship agentic hackathon of TantraFiesta 2026, organized by AIRA, the AI/ML domain at CRISPR, IIIT Nagpur. The age of passive AI is ending: the next wave of software is built from agents that reason, plan, use tools, and act on their own. RAGNAROK brings together the sharpest student builders in India to design, ship, and battle-test such systems under real pressure. Qualify online, then reach the IIIT Nagpur campus for a 24-hour build where only the best agents survive.",
@@ -1291,7 +1291,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Tejas Tajane", phone: "+91 90215 64389", email: "tejastajane007@gmail.com" },
     ],
     registrationOpens: "2026-10-08T20:30:00+05:30",
-    registrationDeadline: "2026-10-20T18:29:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹450 per person",
     entryFeeLabel: "₹450 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -1307,7 +1307,7 @@ export const eventDetails: EventDetail[] = [
     slug: "cascade",
     name: "Cascade",
     tagline: "The flagship 24-hour hackathon",
-    image: "/event-posters/Cas-Cade.png",
+    image: "/event-posters/Cas-Cade.webp",
     clubs: [
       { name: "CRISPR", slug: "crispr" },
       { name: "Elevate", slug: "elevate" },
@@ -1321,7 +1321,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Round 1 — Online GitHub & Portfolio Screening",
-        when: "14–18 Oct 2026",
+        when: "14–20 Oct 2026",
         mode: "Online",
         detail:
           "GitHub profiles, repositories, previous projects and portfolios are screened. Teams are evaluated on previous work, technical skills, individual contributions and problem-solving ability — project quality and technical depth, individual contribution and collaboration, and portfolio and problem-solving ability. The Team Leader must provide the required links and details for every member. The top 60 teams qualify for the offline hackathon.",
@@ -1377,7 +1377,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Krushna Mali", phone: "+91 85302 96969", email: "bt25csd037@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-11T00:00:00+05:30",
-    registrationDeadline: "2026-10-20T00:00:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹550 per person",
     entryFeeLabel: "₹550 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -1393,7 +1393,7 @@ export const eventDetails: EventDetail[] = [
     slug: "yuvaan",
     name: "Yuvaan: Youth Conclave",
     tagline: "Structured debate and discussion",
-    image: "/event-posters/yuvaan.png",
+    image: "/event-posters/yuvaan.webp",
     clubs: [{ name: "Orator", slug: "orator" }],
     description:
       "Yuvaan is a youth conclave designed to encourage structured discussion, critical thinking, public speaking, questioning and constructive disagreement. The format combines prepared individual speeches with direct questioning and open interactive discussion, treating the committee as an intellectual discussion rather than a personal confrontation.",
@@ -1440,7 +1440,7 @@ export const eventDetails: EventDetail[] = [
     slug: "keep-alive-26",
     name: "Keep Alive '26",
     tagline: "National incident response championship",
-    image: "/event-posters/Keep-Alive.png",
+    image: "/event-posters/Keep-Alive.webp",
     clubs: [{ name: "GDG on Campus", slug: "gdg" }],
     description:
       "An alert just fired. Checkout is failing. Can your team find out why before the clock runs out? KEEP ALIVE '26 is a national incident response championship for students who have been learning DevOps. You've practised Linux, Docker and Kubernetes — now test it in the field: read the alerts, dashboards, logs and traces of a live microservices system, find what broke and why, and explain how you would fix it. It runs on the same incident platform as Panic at the Pod, the live Kubernetes incident challenge by CNCG Noida, our Community Partner, hosted by GDG on Campus IIIT Nagpur at TantraFiesta 2026.",
@@ -1476,7 +1476,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Round 1 — The Night Shift",
-        when: "11 Oct, 9:00 AM – 18 Oct 2026, 11:59 PM",
+        when: "11 Oct, 9:00 AM – 20 Oct 2026, 11:59 PM",
         mode: "Online",
         detail:
           "One 30-minute assessment per team, taken once from the team leader's account: multiple-choice questions on DevOps and observability, one incident to investigate from screenshots of dashboards, logs and traces, and two short written answers. Proctored and taken in full screen — no AI tools, no search and no second device. The top 15 teams reach the finale; the next 10 form the waitlist.",
@@ -1525,7 +1525,7 @@ export const eventDetails: EventDetail[] = [
       { name: "GDGoC IIITN", phone: "+91 89038 92943", email: "gdg@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-09T02:00:00+05:30",
-    registrationDeadline: "2026-10-18T23:29:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹250 per person",
     entryFeeLabel: "₹250 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -1541,7 +1541,7 @@ export const eventDetails: EventDetail[] = [
     slug: "digital-time-capsule",
     name: "Digital Time Capsule",
     tagline: "Photography & videography challenge",
-    image: "/event-posters/digital-timecapsule.png",
+    image: "/event-posters/digital-timecapsule.webp",
     clubs: [{ name: "Probe", slug: "probe" }],
     description:
       "The Digital Time Capsule gives participants a platform to document and interpret the vibrant spirit of TantraFiesta through photography and videography. It encourages original visual storytelling, creative observation and thoughtful curation of festival moments, preserving them as a digital archive that future audiences can revisit — a curated visual record of the festival, captured from the perspectives of the people in it.",
@@ -1589,7 +1589,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Abhijna Hadimani", phone: "+91 63663 16755", email: "bt25csa041@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-06T12:00:00+05:30",
-    registrationDeadline: "2026-10-11T19:36:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: FREE,
     entryFeeLabel: "Free",
     feeMode: "per_participant",
@@ -1604,7 +1604,7 @@ export const eventDetails: EventDetail[] = [
     slug: "vlsi-workshop",
     name: "VLSI Workshop",
     tagline: "Hands-on silicon design and semiconductor workshop",
-    image: "/event-posters/Iotics.png",
+    image: "/event-posters/Iotics.webp",
     clubs: [{ name: "Iotics", slug: "iotics" }],
     description:
       "A comprehensive, hands-on workshop on Very Large Scale Integration (VLSI) and semiconductor design organized by Iotics, the robotics and IoT club of IIIT Nagpur. Learn modern EDA workflows, digital circuit modeling, and silicon architecture fundamentals.",

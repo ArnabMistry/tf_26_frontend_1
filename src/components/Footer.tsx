@@ -132,8 +132,8 @@ export function Footer({ variant = "purple" }: FooterProps) {
               <div className="w-full md:w-auto">
                 <h3 className="text-xs md:text-sm font-black text-black mb-4 tracking-[0.2em] uppercase">Get in touch</h3>
                 <div className="flex flex-col gap-2 text-sm font-bold">
-                  <a href="mailto:support@tantrafiesta.in" className="hover:underline break-all">support@tantrafiesta.in</a>
-                  <a href="tel:+918604551326" className="hover:underline">+91 86045 51326</a>
+                  <a href="mailto:contact@tantrafiesta.in" className="hover:underline break-all">contact@tantrafiesta.in</a>
+                  <a href="tel:+919989211620" className="hover:underline">+91 9989211620</a>
                 </div>
               </div>
 
@@ -263,8 +263,8 @@ export function Footer({ variant = "purple" }: FooterProps) {
               <div className="w-full md:w-auto">
                 <h3 className="text-xs md:text-sm font-black text-[#FFFF1A] mb-4 tracking-[0.2em] uppercase">Get in touch</h3>
                 <div className="flex flex-col gap-2 text-sm font-bold">
-                  <a href="mailto:support@tantrafiesta.in" className="hover:underline break-all">support@tantrafiesta.in</a>
-                  <a href="tel:+918604551326" className="hover:underline">+91 86045 51326</a>
+                  <a href="mailto:contact@tantrafiesta.in" className="hover:underline break-all">contact@tantrafiesta.in</a>
+                  <a href="tel:+919989211620" className="hover:underline">+91 9989211620</a>
                 </div>
               </div>
 
