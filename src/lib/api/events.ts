@@ -41,6 +41,13 @@ export interface PublicEvent {
   venue?: string;
   rules?: string[];
   eligibility?: string;
+  /** Total prize pool, already formatted for display (for example "₹35,000"). */
+  prizePool?: string;
+  /** Optional explanatory note about how the pool is split. */
+  prizeNote?: string;
+  /** Per-position breakdown from the event brochure. */
+  prizeBreakdown?: { position: number; label?: string; amount?: string; note?: string }[];
+  /** Legacy summary field used by event listing cards. */
   prizes?: string;
   /** Category ids matching `eventCategories` in `@/lib/events` (e.g. "hackathon", "ai-ml"). */
   categories?: string[];
@@ -75,6 +82,16 @@ interface BackendEvent {
   isTeamEvent?: boolean;
   minTeamSize?: number | null;
   maxTeamSize?: number | null;
+  prizePool?: number | string | null;
+  prizePoolStr?: string | null;
+  prizeNote?: string | null;
+  prizeBreakdown?: PublicEvent['prizeBreakdown'];
+  requirements?: {
+    prizePool?: string | null;
+    prizeAmount?: number | null;
+    prizeNote?: string | null;
+    prizes?: PublicEvent['prizeBreakdown'];
+  } | null;
   rounds?: { roundNumber: number; name?: string; roundEndTime?: string }[];
   _count?: { registrations: number; teams: number };
 }
@@ -110,6 +127,10 @@ function clubNameToSlug(name: string): string {
 function normaliseBackendEvent(raw: BackendEvent): PublicEvent {
   const clubName = raw.club ?? "TantraFiesta";
   const clubs = clubName.split(/\s+[xX&]\s+/).map(name => ({ name: name.trim(), slug: clubNameToSlug(name) }));
+  const rawPrizePool = raw.requirements?.prizePool ?? raw.prizePoolStr ?? raw.prizePool;
+  const prizePool = typeof rawPrizePool === 'number'
+    ? `₹${new Intl.NumberFormat('en-IN').format(rawPrizePool)}`
+    : rawPrizePool?.trim() || undefined;
   return {
     id: raw.id,
     // Prefer the public slug; legacy records expose their ID as the identifier.
@@ -121,6 +142,10 @@ function normaliseBackendEvent(raw: BackendEvent): PublicEvent {
     isTeamEvent: raw.isTeamEvent,
     minTeamSize: raw.minTeamSize,
     maxTeamSize: raw.maxTeamSize,
+    prizePool,
+    prizeNote: raw.requirements?.prizeNote ?? raw.prizeNote ?? undefined,
+    prizeBreakdown: raw.requirements?.prizes ?? raw.prizeBreakdown,
+    prizes: prizePool,
     price: raw.price,
     feeMode: raw.feeMode,
     paymentTrigger: raw.paymentTrigger,
