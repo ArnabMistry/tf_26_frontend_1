@@ -6,7 +6,7 @@ import { Navbar } from "@/components/Navbar";
 import { EventsExplorer } from "@/components/EventsExplorer";
 import { Footer } from "@/components/Footer";
 import { fetchPublicEvents } from "@/lib/api/events";
-import { referenceEvents, toEventListing } from "@/lib/events";
+import { referenceEvents, toEventListing, type EventListing } from "@/lib/events";
 import { breadcrumbJsonLd, itemListJsonLd } from "@/lib/seo/jsonld";
 import styles from "./page.module.css";
 
@@ -29,6 +29,25 @@ export const metadata: Metadata = pageMetadata(
   }
 );
 
+const PINNED_SLUGS = ["cascade", "ragnarok", "last-man-standing"];
+
+function sortWithPinned(list: EventListing[]): EventListing[] {
+  const pinned: EventListing[] = [];
+  const rest: EventListing[] = [];
+
+  for (const slug of PINNED_SLUGS) {
+    const found = list.find((e) => e.id === slug || e.href === `/events/${slug}`);
+    if (found) pinned.push(found);
+  }
+
+  for (const item of list) {
+    const isPinned = PINNED_SLUGS.some((slug) => item.id === slug || item.href === `/events/${slug}`);
+    if (!isPinned) rest.push(item);
+  }
+
+  return [...pinned, ...rest];
+}
+
 export default async function EventsPage() {
   // Resolve URL filters during server rendering so the event catalog stays crawlable.
   await connection();
@@ -45,6 +64,8 @@ export default async function EventsPage() {
       events = referenceEvents;
     }
   }
+
+  events = sortWithPinned(events);
 
   const breadcrumbs = breadcrumbJsonLd([
     { name: "Home", path: "/" },
