@@ -90,7 +90,7 @@ className="fixed inset-0 -z-10 bg-[#241A4C] bg-[url(/assets/bg.webp)] bg-cover b
           </Reveal>
         </section>
 
-        <AboutSection />
+        <AboutSection compactTop />
 
         <AboutPeople />
 

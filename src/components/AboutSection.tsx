@@ -4,10 +4,10 @@ import { HoverTilt } from "./HoverTilt";
 import { Reveal } from "./Reveal";
 import { ThemeTeaser } from "./ThemeTeaser";
 
-export function AboutSection() {
+export function AboutSection({ compactTop = false }: { compactTop?: boolean }) {
   return (
-    <section className="relative w-full py-12 md:py-20 px-4 sm:px-6 lg:px-12 text-black overflow-hidden">
-      <div className="max-w-5xl mx-auto flex flex-col gap-8 md:gap-14">
+    <section className={`relative w-full ${compactTop ? "pt-4 pb-12 md:pb-20" : "py-12 md:py-20 px-4 sm:px-6 lg:px-12"} text-black overflow-hidden`}>
+      <div className={`${compactTop ? "max-w-[1120px] px-4 sm:px-6" : "max-w-5xl"} mx-auto flex flex-col gap-8 md:gap-14`}>
         
         {/* About TantraFiesta Card */}
         <Reveal variant="scale" className="relative bg-[#FFFF1A] rounded-2xl md:rounded-[28px] p-6 sm:p-8 md:p-12 lg:min-h-[530px] shadow-2xl border-2 border-black/10">
