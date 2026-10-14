@@ -23,11 +23,11 @@ test('Google login requests Better Auth and returns through the frontend callbac
     } } });
     if (url.pathname === '/api/user/notifications') return route.fulfill({ json: { success: true, data: { notifications: [], unreadCount: 0, page: 1, totalPages: 1 } } });
     if (url.pathname === '/api/user/meals') return route.fulfill({ json: { success: true, data: { meals: [] } } });
-    return route.abort();
+    return route.fulfill({ status: 404, json: { error: { message: 'Not found' } } });
   });
   await page.route('https://accounts.google.test/authorize', route => route.fulfill({ contentType: 'text/html', body: 'Google consent fixture' }));
 
-  await page.goto('/login');
+  await page.goto('/login', { waitUntil: 'domcontentloaded' });
   await page.getByRole('button', { name: 'CONTINUE WITH GOOGLE' }).click();
   await expect(page).toHaveURL('https://accounts.google.test/authorize');
   expect(socialRequest).toBe(true);
