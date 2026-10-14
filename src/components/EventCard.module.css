@@ -129,16 +129,17 @@
 
 .action {
   position: relative;
-  isolation: isolate;
   display: inline-flex;
   min-height: 2.95cqw;
-  width: 48%;
+  width: fit-content;
+  max-width: 100%;
   align-items: center;
-  gap: 0.3em;
+  gap: 0.35em;
   border: 0;
   border-radius: 7px;
-  background: transparent;
-  padding: 0;
+  background: #ff2485;
+  box-shadow: 0 4px 0 #a61a61;
+  padding: 0.35em 1em;
   color: white;
   font-family: var(--font-futura, "Futura PT", "Century Gothic", sans-serif);
   font-size: clamp(0.8rem, 1.45cqw, 1.25rem);
@@ -148,46 +149,27 @@
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-}
-
-.action::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  background: #a61a61;
-  clip-path: var(--action-shape, none);
-  transform: translateY(6px);
+  transition: transform 160ms ease, box-shadow 160ms ease;
 }
 
 .actionFace {
-  display: flex;
-  width: 100%;
-  min-height: inherit;
+  display: inline-flex;
   align-items: center;
-  justify-content: inherit;
-  gap: 0.3em;
-  border-radius: inherit;
-  background: #ff2485;
-  padding: 0.35em 0.65em;
-  clip-path: var(--action-shape, none);
-  transition: transform 160ms ease;
+  justify-content: center;
+  gap: 0.35em;
+  white-space: nowrap;
 }
 
 .actionIcon {
   width: 1em;
   height: 1em;
   flex-shrink: 0;
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .prize {
   transition: transform 220ms ease;
   transform-origin: center;
-}
-
-.left .action {
-  --action-shape: polygon(0 0, 100% 0, 100% 28%, 92% 100%, 0 100%);
 }
 
 .right .heading {
@@ -205,11 +187,6 @@
 
 .right .actionRow {
   justify-content: flex-end;
-}
-
-.right .action {
-  justify-content: flex-end;
-  --action-shape: polygon(0 0, 100% 0, 100% 100%, 8% 100%, 0 28%);
 }
 
 .center {
@@ -249,22 +226,18 @@
   width: 100%;
 }
 
-.center .action {
-  width: auto;
-  min-width: 16.6cqw;
-  justify-content: center;
-}
-
-.action:hover:not(:disabled) .actionFace {
-  transform: translateY(-3px);
+.action:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #a61a61;
 }
 
 .action:hover:not(:disabled) .actionIcon {
   transform: translateX(4px);
 }
 
-.action:active:not(:disabled) .actionFace {
-  transform: translateY(2px) scale(0.98);
+.action:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #a61a61;
 }
 
 .card:is(:hover, :focus-within) {
@@ -340,11 +313,6 @@
     justify-content: flex-start;
   }
 
-  .right .action {
-    justify-content: flex-start;
-    --action-shape: polygon(0 0, 100% 0, 100% 28%, 92% 100%, 0 100%);
-  }
-
   .title {
     font-size: clamp(1.75rem, 8cqw, 2.75rem);
     line-height: 1.15;
@@ -368,13 +336,10 @@
   }
 
   .action {
-    min-height: 40px;
-    width: 48%;
+    min-height: 38px;
+    width: fit-content;
     font-size: 0.75rem;
-  }
-
-  .actionFace {
-    padding-inline: 8px;
+    padding: 0.35em 0.85em;
   }
 
   /* The centered/trio variant stands out from a 2-column desktop grid on
@@ -420,13 +385,6 @@
     justify-content: flex-start;
     width: 100%;
   }
-
-  .center .action {
-    width: 48%;
-    min-width: 0;
-    justify-content: flex-start;
-    --action-shape: polygon(0 0, 100% 0, 100% 28%, 92% 100%, 0 100%);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -435,7 +393,8 @@
   .title::after,
   .backing,
   .actionIcon,
-  .prize {
+  .prize,
+  .action {
     transition: none;
   }
 
@@ -448,11 +407,8 @@
     transform: none;
   }
 
-  .actionFace {
-    transition: none;
-  }
-
-  .action:hover:not(:disabled) .actionFace {
+  .action:hover:not(:disabled),
+  .action:active:not(:disabled) {
     transform: none;
   }
 }
