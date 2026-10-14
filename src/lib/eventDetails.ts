@@ -117,7 +117,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Stage 1 — Preliminary Coding Contest",
-        when: "Registration closes 20 Oct 2026",
+        when: "18 Oct 2026",
         mode: "Online",
         detail:
           "Conducted online on Codeforces. Teams of 2–3 register as a team on Codeforces. Two hours, 5–6 programming problems, ranked by ICPC rules — problems solved first, then penalty time. The top 10 teams qualify for Stage 2, and standby teams may be invited if a selected team drops out.",
@@ -156,7 +156,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Aditya Singh", phone: "+91 92649 66840", email: "bt24csh051@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-10T12:00:00+05:30",
-    registrationDeadline: "2026-10-20T23:59:00+05:30",
+    registrationDeadline: "2026-10-18T23:59:00+05:30",
     registrationFee: "₹350 per person",
     entryFeeLabel: "₹350 per participant; team leader pays for all members",
     feeMode: "per_participant",
