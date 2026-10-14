@@ -114,11 +114,13 @@ export function Footer({ variant = "purple" }: FooterProps) {
 
               <div>
                 <h3 className="text-xs md:text-sm font-black text-black mb-4 tracking-[0.2em] uppercase">Explore</h3>
-                <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-sm font-semibold max-w-[250px] text-gray-600">
-                  <Link href="/" className="hover:text-black hover:underline py-1 transition-colors">Home</Link>
-                  <Link href="/about" className="hover:text-black hover:underline py-1 transition-colors">About</Link>
-                  <Link href="/events" className="hover:text-black hover:underline py-1 transition-colors">Events</Link>
-                  <Link href="/contact" className="hover:text-black hover:underline py-1 transition-colors">How to reach?</Link>
+                <div className="grid grid-cols-2 gap-x-6 sm:gap-x-8 gap-y-2.5 text-sm font-semibold max-w-[290px] text-gray-700">
+                  <Link href="/" className="hover:text-black hover:underline py-0.5 transition-colors">Home</Link>
+                  <Link href="/about" className="hover:text-black hover:underline py-0.5 transition-colors">About</Link>
+                  <Link href="/events" className="hover:text-black hover:underline py-0.5 transition-colors">Events</Link>
+                  <Link href="/contact" className="hover:text-black hover:underline py-0.5 transition-colors">How to reach?</Link>
+                  <Link href="/faqs" className="hover:text-black hover:underline py-0.5 transition-colors">FAQs</Link>
+                  <Link href="/refund-policy" className="hover:text-black hover:underline py-0.5 transition-colors">Refund Policy</Link>
                 </div>
               </div>
             </div>
@@ -245,11 +247,13 @@ export function Footer({ variant = "purple" }: FooterProps) {
 
               <div>
                 <h3 className="text-xs md:text-sm font-black text-[#FFFF1A] mb-4 tracking-[0.2em] uppercase">Explore</h3>
-                <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-sm font-semibold max-w-[250px] text-gray-300">
-                  <Link href="/" className="hover:text-white hover:underline py-1 transition-colors">Home</Link>
-                  <Link href="/about" className="hover:text-white hover:underline py-1 transition-colors">About</Link>
-                  <Link href="/events" className="hover:text-white hover:underline py-1 transition-colors">Events</Link>
-                  <Link href="/contact" className="hover:text-white hover:underline py-1 transition-colors">How to reach?</Link>
+                <div className="grid grid-cols-2 gap-x-6 sm:gap-x-8 gap-y-2.5 text-sm font-semibold max-w-[290px] text-gray-300">
+                  <Link href="/" className="hover:text-white hover:underline py-0.5 transition-colors">Home</Link>
+                  <Link href="/about" className="hover:text-white hover:underline py-0.5 transition-colors">About</Link>
+                  <Link href="/events" className="hover:text-white hover:underline py-0.5 transition-colors">Events</Link>
+                  <Link href="/contact" className="hover:text-white hover:underline py-0.5 transition-colors">How to reach?</Link>
+                  <Link href="/faqs" className="hover:text-white hover:underline py-0.5 transition-colors">FAQs</Link>
+                  <Link href="/refund-policy" className="hover:text-white hover:underline py-0.5 transition-colors">Refund Policy</Link>
                 </div>
               </div>
             </div>
