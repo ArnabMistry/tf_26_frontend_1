@@ -205,11 +205,29 @@ export function contactPageJsonLd() {
         postalCode: "441108",
         addressCountry: "IN",
       },
-      contactPoint: {
-        "@type": "ContactPoint",
-        contactType: "Organizing Team",
-        url: `${siteConfig.url}/contact`,
-      },
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          contactType: "Hospitality Lead",
+          name: "Keshav Shukla",
+          telephone: "+91-9016188508",
+          email: "tantrafiesta.hospitality@iiitn.ac.in",
+        },
+        {
+          "@type": "ContactPoint",
+          contactType: "Corporate Lead",
+          name: "Aryan Patil",
+          telephone: "+91-9373773402",
+          email: "tantrafiesta.corporate@iiitn.ac.in",
+        },
+        {
+          "@type": "ContactPoint",
+          contactType: "Marketing Lead",
+          name: "Abdul Malik",
+          telephone: "+91-9989211620",
+          email: "tantrafiesta.marketing@iiitn.ac.in",
+        },
+      ],
     },
   };
 }
