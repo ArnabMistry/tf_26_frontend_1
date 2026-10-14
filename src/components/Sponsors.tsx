@@ -90,7 +90,7 @@ export function Sponsors() {
         <Reveal variant="left" className="absolute -top-12 md:-top-20 left-4 md:left-12 w-48 md:w-80 z-20">
           <HoverTilt className="w-full" rotationIntensity={10} scaleIntensity={1.03}>
             <Image
-              src="/assets/hovercar.png"
+              src="/assets/hovercar.webp"
               alt="Hovercar"
               width={320}
               height={240}

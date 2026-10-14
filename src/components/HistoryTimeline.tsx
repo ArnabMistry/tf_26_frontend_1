@@ -65,7 +65,7 @@ export function HistoryTimeline({ timelineData }: HistoryTimelineProps) {
       <div 
         className="md:hidden absolute left-0 top-0 w-[88px] h-full pointer-events-none z-0 opacity-80"
         style={{
-          backgroundImage: "url('/assets/path_straight.png')",
+          backgroundImage: "url('/assets/path_straight.webp')",
           backgroundRepeat: "repeat-y",
           backgroundSize: "88px auto",
           WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 40px, black calc(100% - 60px), transparent 100%)",
@@ -77,7 +77,7 @@ export function HistoryTimeline({ timelineData }: HistoryTimelineProps) {
       <div className="hidden md:flex absolute inset-0 w-full h-full pointer-events-none z-0 flex-col items-center" aria-hidden="true">
         {/* 1. Original Image (V-shape fork) */}
         <div className="relative w-full flex-shrink-0 leading-none">
-          <Image src="/assets/path.png" alt="" width={1278} height={1230} sizes="100vw" className="w-full h-auto block" />
+        <Image src="/assets/path.webp" alt="" width={1278} height={1230} sizes="100vw" className="w-full h-auto block" />
         </div>
         {/* 2. Seamless Straight Continuation (matching exact 261/1278 road width with smooth bottom fade) */}
         <div 
@@ -91,7 +91,7 @@ export function HistoryTimeline({ timelineData }: HistoryTimelineProps) {
             className="h-full"
             style={{
               width: "calc(100% * 261 / 1278)",
-              backgroundImage: "url('/assets/path_straight.png')",
+              backgroundImage: "url('/assets/path_straight.webp')",
               backgroundRepeat: "repeat-y",
               backgroundSize: "100% auto",
               backgroundPosition: "top center"
@@ -108,7 +108,7 @@ export function HistoryTimeline({ timelineData }: HistoryTimelineProps) {
         >
           <div className="relative w-12 h-12 md:w-[clamp(48px,8vw,112px)] md:h-[clamp(48px,8vw,112px)]">
             <Image
-              src="/assets/drone.png"
+              src="/assets/drone.webp"
               alt=""
               fill
               className="object-contain drop-shadow-[0_0_15px_rgba(231,19,125,0.6)]"
@@ -210,7 +210,7 @@ function TimelineLogo({ item, mobile = false }: { item: TimelineItem, mobile?: b
     <div className={`flex ${mobile ? 'flex-row' : 'flex-col'} items-center gap-3 opacity-90`}>
       <div className={`relative ${mobile ? 'w-10 h-10 p-1' : 'w-20 h-20 md:w-24 md:h-24 p-2'} flex items-center justify-center bg-transparent rounded-full border-2 border-white/80 shrink-0`}>
         <Image
-          src="/assets/tf_history.png"
+          src="/assets/tf_history.webp"
           alt="TF Logo"
           fill
           className="object-contain p-1.5 drop-shadow-md"

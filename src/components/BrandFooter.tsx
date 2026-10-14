@@ -12,7 +12,7 @@ export function BrandFooter() {
         </div>
       </div>
       <Link href="/" aria-label="TantraFiesta home" className={styles.wordmark}>
-        <Image src="/assets/tf_nav.png" alt="TantraFiesta" width={4096} height={514} sizes="100vw" className={styles.wordmarkImage} />
+        <Image src="/assets/tf_nav.webp" alt="TantraFiesta" width={4096} height={514} sizes="100vw" className={styles.wordmarkImage} />
       </Link>
     </footer>
   );

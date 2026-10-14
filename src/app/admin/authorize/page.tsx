@@ -14,7 +14,7 @@ export default function AuthorizeAdmin() {
         <div className="mb-6 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/assets/tf_logo.png" alt="TantraFiesta" width={36} height={36} className="w-9 h-9 object-contain drop-shadow-[0_0_8px_rgba(255,255,26,0.3)]" loading="lazy" />
+            <img src="/assets/tf_logo.webp" alt="TantraFiesta" width={36} height={36} className="w-9 h-9 object-contain drop-shadow-[0_0_8px_rgba(255,255,26,0.3)]" loading="lazy" />
             <span className="font-futura text-lg font-bold tracking-wider text-[#FFFF1A] group-hover:brightness-110">TANTRAFIESTA</span>
           </Link>
           <Link href="/" className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-yellow-400/40 text-[#FFFF1A] hover:bg-[#FFFF1A] hover:text-[#170f2e] transition-all">

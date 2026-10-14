@@ -40,7 +40,7 @@ export default function AboutPage() {
 
       {/* Fixed background layer covering viewport */}
       <div
-        className="fixed inset-0 -z-10 bg-[#241A4C] bg-[url('/assets/bg.png')] bg-cover bg-center bg-no-repeat pointer-events-none"
+        className="fixed inset-0 -z-10 bg-[#241A4C] bg-[url('/assets/bg.webp')] bg-cover bg-center bg-no-repeat pointer-events-none"
         aria-hidden="true"
       />
 

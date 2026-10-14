@@ -80,14 +80,14 @@ export function Navbar({
           className="flex shrink-0 items-center gap-3 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-[#ffe43b]"
         >
           <Image
-            src="/assets/tf_logo.png"
+            src="/assets/tf_logo.webp"
             alt=""
             width={48}
             height={48}
             className="h-10 w-10 object-contain"
           />
           <Image
-            src="/assets/tf_nav.png"
+            src="/assets/tf_nav.webp"
             alt="TantraFiesta"
             width={320}
             height={40}

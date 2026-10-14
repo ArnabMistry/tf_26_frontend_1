@@ -16,7 +16,7 @@ export function Hero() {
 
           {/* Hero Text */}
           <div className="relative z-20 flex flex-col items-center justify-center pointer-events-none drop-shadow-2xl px-4 w-full">
-            <Image src="/assets/tf_hero.png" alt="Tantra Fiesta" width={800} height={400} className="w-full max-w-md sm:max-w-xl md:max-w-2xl lg:max-w-3xl h-auto object-contain" />
+            <Image src="/assets/tf_hero.webp" alt="Tantra Fiesta" width={800} height={400} preload fetchPriority="high" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 672px, 768px" className="w-full max-w-md sm:max-w-xl md:max-w-2xl lg:max-w-3xl h-auto object-contain" />
             <p className="mt-6 md:mt-8 text-white text-xl md:text-3xl lg:text-4xl tracking-widest font-regular drop-shadow-lg text-center uppercase">
               {/* THEME REVEAL: Replace this silhouette with the official theme copy. */}
               <ThemeTeaser />
