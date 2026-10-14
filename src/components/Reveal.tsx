@@ -8,9 +8,10 @@ type RevealProps = {
   className?: string;
   variant?: "rise" | "scale" | "left" | "right" | "fade" | "split" | "stagger" | "sponsor-left" | "sponsor-right";
   delay?: number;
+  animateOnMount?: boolean;
 };
 
-export function Reveal({ children, className = "", variant = "rise", delay = 0 }: RevealProps) {
+export function Reveal({ children, className = "", variant = "rise", delay = 0, animateOnMount = false }: RevealProps) {
   const elementRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -25,6 +26,7 @@ export function Reveal({ children, className = "", variant = "rise", delay = 0 }
 
     // Keep above-the-fold content visible on the first paint and in the HTML.
     if (element.getBoundingClientRect().top < window.innerHeight * 0.88) {
+      if (animateOnMount) element.dataset.state = "revealed";
       return;
     }
 
@@ -44,7 +46,7 @@ export function Reveal({ children, className = "", variant = "rise", delay = 0 }
       observer.disconnect();
       element.dataset.state = "visible";
     };
-  }, []);
+  }, [animateOnMount]);
 
   return (
     <div

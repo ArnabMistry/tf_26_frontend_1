@@ -25,7 +25,7 @@ export default function LoginPage() {
     <div className="relative min-h-[100svh] flex flex-col text-white isolate overflow-x-hidden">
       {/* Fixed background layer covering viewport at exact 1:1 scale of Hero landing page */}
       <div
-        className="fixed inset-0 -z-10 bg-[#241A4C] bg-[url('/assets/bg.webp')] bg-cover bg-center bg-no-repeat pointer-events-none"
+className="fixed inset-0 -z-10 bg-[#241A4C] bg-[url(/assets/bg.webp)] bg-cover bg-center bg-no-repeat pointer-events-none"
         aria-hidden="true"
       />
 
