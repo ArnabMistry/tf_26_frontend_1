@@ -30,6 +30,7 @@ function truncate(text: string, max: number): string {
 export function EventCard({ event, variant = "left", lowerWing = false, onRegister, reveal = false }: EventCardProps) {
   const centered = variant === "center";
   const destination = event.href || event.registrationUrl;
+  const isExternal = typeof destination === "string" && /^https?:\/\//i.test(destination);
   const actionLabel = "More Info";
   const actionContent = (
     <>
@@ -64,7 +65,20 @@ export function EventCard({ event, variant = "left", lowerWing = false, onRegist
       )}
       <div className={styles.content}>
         <div className={styles.heading}>
-          <h3 className={`${styles.title} ${!centered && event.prize && event.name.length > 10 ? styles.compactTitle : ""}`}>{event.name}</h3>
+          <h3 className={`${styles.title} ${!centered && event.prize && event.name.length > 10 ? styles.compactTitle : ""}`}>
+            {destination ? (
+              <Link
+                href={destination}
+                className={styles.titleLink}
+                target={isExternal ? "_blank" : undefined}
+                rel={isExternal ? "noopener noreferrer" : undefined}
+              >
+                {event.name}
+              </Link>
+            ) : (
+              event.name
+            )}
+          </h3>
           {!centered && event.prize && <p className={styles.prize}><span className="sr-only">Prize pool: </span>{event.prize}</p>}
         </div>
         <p className={styles.description}>{truncate(event.description, MAX_DESCRIPTION_CHARS)}</p>
@@ -75,8 +89,8 @@ export function EventCard({ event, variant = "left", lowerWing = false, onRegist
               href={destination}
               className={styles.action}
               aria-label={`${actionLabel} — ${event.name}`}
-              target="_blank"
-              rel="noopener noreferrer"
+              target={isExternal ? "_blank" : undefined}
+              rel={isExternal ? "noopener noreferrer" : undefined}
             >
               <span className={styles.actionFace}>{actionContent}</span>
             </Link>
