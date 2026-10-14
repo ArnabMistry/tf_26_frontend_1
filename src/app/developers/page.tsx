@@ -56,7 +56,8 @@ export default function DevelopersPage() {
             className="mt-4 sm:mt-5 text-xs sm:text-sm md:text-base font-normal text-white/80 tracking-wider"
             style={{ fontFamily: 'var(--font-futura)' }}
           >
-            Our team did a phenomenal job
+            Our team did a phenomenal job bringing the TantraFiesta website to life. Every wild idea, creative experiment, and silly little thought was turned into something real, making the website a reflection of our collective imagination, creativity, and countless hours of hard work. What started as ideas on a screen became an experience we’re genuinely proud of. Huge shoutout to the developers who made it all happen!
+
           </p>
         </header>
 
