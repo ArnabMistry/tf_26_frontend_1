@@ -65,7 +65,14 @@ export default async function EventsPage() {
     }
   }
 
-  events = sortWithPinned(events);
+  events = sortWithPinned(
+    events.filter((e) => {
+      const slug = (e.id || "").toLowerCase();
+      const name = (e.name || "").toLowerCase();
+      const href = (e.href || "").toLowerCase();
+      return !slug.includes("edge") && !name.includes("edge case") && !href.includes("edge");
+    })
+  );
 
   const breadcrumbs = breadcrumbJsonLd([
     { name: "Home", path: "/" },
