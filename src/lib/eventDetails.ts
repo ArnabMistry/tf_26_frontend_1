@@ -117,7 +117,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Stage 1 — Preliminary Coding Contest",
-        when: "Registration closes 18 Oct 2026",
+        when: "Registration closes 20 Oct 2026",
         mode: "Online",
         detail:
           "Conducted online on Codeforces. Teams of 2–3 register as a team on Codeforces. Two hours, 5–6 programming problems, ranked by ICPC rules — problems solved first, then penalty time. The top 10 teams qualify for Stage 2, and standby teams may be invited if a selected team drops out.",
@@ -156,7 +156,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Aditya Singh", phone: "+91 92649 66840", email: "bt24csh051@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-10T12:00:00+05:30",
-    registrationDeadline: "2026-10-18T00:00:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹350 per person",
     entryFeeLabel: "₹350 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -303,7 +303,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Round 1 — Online Case Study Submission",
-        when: "10 Oct 2026, 12:00 AM – 19 Oct 2026, 11:59 PM",
+        when: "10 Oct 2026, 12:00 AM – 20 Oct 2026, 11:59 PM",
         mode: "Online",
         detail:
           "A research-driven design project: user personas, heuristic evaluations of popular designs, or a critique of design flaws in major platforms. Each submission needs research findings with insights and data, a clear identification of UX issues and pain points, practical recommendations, and mockups, wireframes or prototypes. Submit one comprehensive PDF case study plus supporting visuals (PNG/JPEG/PDF); a video walkthrough of the design process and Figma or source files are optional.",
@@ -343,7 +343,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Dharmendra Shukla", phone: "+91 70119 63526", email: "strokes@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-10T12:00:00+05:30",
-    registrationDeadline: "2026-10-19T23:59:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹400 per person",
     entryFeeLabel: "₹400 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -432,7 +432,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Registration",
-        when: "11 Oct – 19 Oct 2026",
+        when: "11 Oct – 20 Oct 2026",
         mode: "Online",
         detail: "Open to students of any discipline from any college in India.",
       },
@@ -472,7 +472,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Support", phone: "+91 72318 36153", email: "tantrafiesta@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-11T12:00:00+05:30",
-    registrationDeadline: "2026-10-19T12:00:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹200 per team",
     entryFeeLabel: "₹200 per team; team leader pays once",
     feeMode: "per_team",
@@ -493,7 +493,7 @@ export const eventDetails: EventDetail[] = [
       "Combat Carnage is the official Battlegrounds Mobile India tournament of TantraFiesta'26 at IIIT Nagpur. Squads play third-person perspective matches in custom rooms across Erangel, Miramar and Rondo, qualifying online before the top sixteen meet offline for the championship — a tactical battle of survival that demands strategy, teamwork and composure.",
     prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
     stages: [
-      { name: "Registration", when: "10 Oct – 19 Oct 2026", mode: "Online" },
+      { name: "Registration", when: "10 Oct – 20 Oct 2026", mode: "Online" },
       { name: "Selected squads declared", when: "20 Oct 2026" },
       {
         name: "Qualifier Round 1",
@@ -529,7 +529,7 @@ export const eventDetails: EventDetail[] = [
       { name: "TantraFiesta IIIT Nagpur", email: "tantrafiesta@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-10T12:00:00+05:30",
-    registrationDeadline: "2026-10-19T00:00:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: FREE,
     entryFeeLabel: "Free",
     feeMode: "per_team",
@@ -550,7 +550,7 @@ export const eventDetails: EventDetail[] = [
       "Crown Clash is the official Clash Royale esports tournament of TantraFiesta, hosted by Synergy Club at IIIT Nagpur. Players from across colleges battle through knockout rounds and an offline final to prove their deck management, timing, and strategic gameplay, competing for the championship title and prizes.",
     prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
     stages: [
-      { name: "Registration", when: "10 Oct – 19 Oct 2026", mode: "Online" },
+      { name: "Registration", when: "10 Oct – 20 Oct 2026", mode: "Online" },
       {
         name: "Prelims Round",
         when: "23 Oct – 24 Oct 2026",
@@ -585,7 +585,7 @@ export const eventDetails: EventDetail[] = [
       { name: "TantraFiesta IIIT Nagpur", email: "tantrafiesta@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-11T12:00:00+05:30",
-    registrationDeadline: "2026-10-19T06:30:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹50 per person",
     entryFeeLabel: "₹50 per participant",
     feeMode: "per_participant",
@@ -610,7 +610,7 @@ export const eventDetails: EventDetail[] = [
       { position: 2, label: "Runner-up", amount: "₹3,000" },
     ],
     stages: [
-      { name: "Registration", when: "10 Oct – 19 Oct 2026", mode: "Online" },
+      { name: "Registration", when: "10 Oct – 20 Oct 2026", mode: "Online" },
       {
         name: "Qualifier Round 1",
         when: "22 Oct 2026",
@@ -650,7 +650,7 @@ export const eventDetails: EventDetail[] = [
       { name: "TantraFiesta IIIT Nagpur", email: "tantrafiesta@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-11T12:00:00+05:30",
-    registrationDeadline: "2026-10-19T23:30:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹250 per team",
     entryFeeLabel: "₹250 per team; team leader pays once",
     feeMode: "per_team",
@@ -706,7 +706,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Admin", email: "tantrafiesta@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-10T06:30:00+05:30",
-    registrationDeadline: "2026-10-19T13:00:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: FREE,
     entryFeeLabel: "Free",
     feeMode: "per_participant",
@@ -784,7 +784,7 @@ export const eventDetails: EventDetail[] = [
       "Critical Ops is a competitive Call of Duty: Mobile 5v5 esports tournament designed to test team coordination, mechanical skill, strategy, communication, objective control, and composure under match pressure. Teams progress through structured competitive rounds before an offline playoff and final stage, with matches administered under consistent settings and an evidence-based dispute process.",
     prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
     stages: [
-      { name: "Registration", when: "10 Oct – 19 Oct 2026", mode: "Online" },
+      { name: "Registration", when: "10 Oct – 20 Oct 2026", mode: "Online" },
       { name: "Prelims Round", when: "23 Oct 2026", mode: "Online" },
       {
         name: "Final Round",
@@ -809,7 +809,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Sai Nitish", phone: "+91 96721 15599", email: "bt25eci052@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-10T12:00:00+05:30",
-    registrationDeadline: "2026-10-19T13:00:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹250 per team",
     entryFeeLabel: "₹250 per team; team leader pays once",
     feeMode: "per_team",
@@ -837,7 +837,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Round 1 — Online",
-        when: "25 Sep – 5 Oct 2026",
+        when: "25 Sep – 20 Oct 2026",
         mode: "Online",
         detail:
           "Games are submitted through the official Game Jam portal at itch.io/jam/tf-iiitn-game-jam-2026, with documentation covering credits, assets and the compiled game, plus a Git repository link containing all game files. After submitting on itch.io, participants post about their game on GameDoora so the Round 2 judges can play it. Judged on theme adherence, gameplay and mechanics, innovation and creativity, aesthetics, sound and music, and enjoyment factor.",
@@ -882,7 +882,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Hetansh Vakta", phone: "+91 99799 55969", email: "bt25csh001@iiitn.ac.in" },
     ],
     registrationOpens: "2026-09-19T13:00:00+05:30",
-    registrationDeadline: "2026-10-05T23:59:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹450 per person",
     entryFeeLabel: "₹450 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -1001,7 +1001,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Shreyansh Jain", phone: "+91 83027 99631", email: "bt25eci003@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-05T00:00:00+05:30",
-    registrationDeadline: "2026-10-20T17:12:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹150 per person",
     entryFeeLabel: "₹150 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -1079,7 +1079,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Neel Kotecha", phone: "+91 79765 77767", email: "bt25eci057@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-10T12:00:00+05:30",
-    registrationDeadline: "2026-10-20T00:00:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹150 per person",
     entryFeeLabel: "₹150 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -1181,7 +1181,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Online shortlisting round",
-        when: "Sat, 17 Oct 2026",
+        when: "Tue, 20 Oct 2026",
         mode: "Online",
         detail:
           "The top 20 teams qualify for the offline finale and are contacted with the round details.",
@@ -1216,7 +1216,7 @@ export const eventDetails: EventDetail[] = [
       { name: "TantraFiesta IIIT Nagpur", email: "tantrafiesta@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-11T00:00:00+05:30",
-    registrationDeadline: "2026-10-17T23:59:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹150 per person",
     entryFeeLabel: "₹150 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -1291,7 +1291,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Tejas Tajane", phone: "+91 90215 64389", email: "tejastajane007@gmail.com" },
     ],
     registrationOpens: "2026-10-08T20:30:00+05:30",
-    registrationDeadline: "2026-10-20T18:29:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹450 per person",
     entryFeeLabel: "₹450 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -1321,7 +1321,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Round 1 — Online GitHub & Portfolio Screening",
-        when: "14–18 Oct 2026",
+        when: "14–20 Oct 2026",
         mode: "Online",
         detail:
           "GitHub profiles, repositories, previous projects and portfolios are screened. Teams are evaluated on previous work, technical skills, individual contributions and problem-solving ability — project quality and technical depth, individual contribution and collaboration, and portfolio and problem-solving ability. The Team Leader must provide the required links and details for every member. The top 60 teams qualify for the offline hackathon.",
@@ -1377,7 +1377,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Krushna Mali", phone: "+91 85302 96969", email: "bt25csd037@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-11T00:00:00+05:30",
-    registrationDeadline: "2026-10-20T00:00:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹550 per person",
     entryFeeLabel: "₹550 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -1476,7 +1476,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Round 1 — The Night Shift",
-        when: "11 Oct, 9:00 AM – 18 Oct 2026, 11:59 PM",
+        when: "11 Oct, 9:00 AM – 20 Oct 2026, 11:59 PM",
         mode: "Online",
         detail:
           "One 30-minute assessment per team, taken once from the team leader's account: multiple-choice questions on DevOps and observability, one incident to investigate from screenshots of dashboards, logs and traces, and two short written answers. Proctored and taken in full screen — no AI tools, no search and no second device. The top 15 teams reach the finale; the next 10 form the waitlist.",
@@ -1525,7 +1525,7 @@ export const eventDetails: EventDetail[] = [
       { name: "GDGoC IIITN", phone: "+91 89038 92943", email: "gdg@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-09T02:00:00+05:30",
-    registrationDeadline: "2026-10-18T23:29:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹250 per person",
     entryFeeLabel: "₹250 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -1589,7 +1589,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Abhijna Hadimani", phone: "+91 63663 16755", email: "bt25csa041@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-06T12:00:00+05:30",
-    registrationDeadline: "2026-10-11T19:36:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: FREE,
     entryFeeLabel: "Free",
     feeMode: "per_participant",
