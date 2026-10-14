@@ -59,6 +59,57 @@
   gap: 16px;
 }
 
+.metaBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.metaChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 16%);
+  background: rgb(255 255 255 / 8%);
+  padding: 6px 14px;
+  font-family: var(--font-futura);
+  font-size: 0.92rem;
+  color: #dcd6f0;
+}
+
+.metaFeeChip {
+  border-color: #ff5aa5;
+  background: rgb(231 19 125 / 18%);
+  color: #fff;
+}
+
+.metaIcon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.metaLabel {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #ffe43b;
+  font-weight: 600;
+}
+
+.metaValueHighlight {
+  font-weight: 700;
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.metaValue {
+  font-weight: 500;
+  color: #fff;
+}
+
 .mark {
   flex-shrink: 0;
   display: block;
@@ -203,14 +254,75 @@
   color: #d5cfe7;
 }
 
-/* ── Prize box ── */
+/* ── Fee overview card & perks ── */
 
-.entryFee {
-  margin-top: 20px;
-  color: #fff;
-  font-family: var(--font-futura);
-  font-size: clamp(1rem, 1.2vw, 1.2rem);
+.feeOverviewCard {
+  margin-top: 24px;
+  margin-bottom: 8px;
+  border: 1px solid rgb(255 36 133 / 30%);
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgb(255 36 133 / 10%) 0%, rgb(40 22 75 / 40%) 100%);
+  padding: 18px 22px;
 }
+
+.feeOverviewHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.feeBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.feeBadgeLabel {
+  font-family: var(--font-futura);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #ffe43b;
+  font-weight: 600;
+}
+
+.feeBadgeAmount {
+  font-family: var(--font-futura);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.feeOverviewDetail {
+  margin: 0;
+  color: #e5def5;
+  font-family: var(--font-futura);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.perksRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgb(255 255 255 / 12%);
+}
+
+.perkChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 6px;
+  background: rgb(255 255 255 / 10%);
+  padding: 4px 10px;
+  font-family: var(--font-futura);
+  font-size: 0.88rem;
+  color: #fff;
+}
+
+/* ── Prize box ── */
 
 .prizeBox {
   position: relative;
@@ -230,7 +342,7 @@
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  padding-left: 150px;
+  padding-left: 170px;
 }
 
 .trophy {
@@ -279,11 +391,46 @@
   height: 26px;
 }
 
-/* The register CTA sits in the lower-left corner of the prize box, per design. */
-.register {
+/* Lower-left action area: registration fee info + Register Now CTA */
+.actionArea {
   position: absolute;
   bottom: 14px;
   left: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  z-index: 2;
+}
+
+.boxFee {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgb(15 10 38 / 85%);
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: 6px;
+  padding: 4px 10px;
+  width: fit-content;
+}
+
+.boxFeeLabel {
+  font-family: var(--font-futura);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #ffdd3e;
+  font-weight: 600;
+}
+
+.boxFeeValue {
+  font-family: var(--font-futura);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.register {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -461,9 +608,11 @@
     padding-left: 0;
   }
 
-  .register {
+  .actionArea {
     position: static;
     margin-top: 16px;
+    width: 100%;
+    align-items: center;
   }
 
   .prizeBox {
@@ -538,6 +687,16 @@
   .prizeRow {
     width: 100%;
     min-width: 0;
+  }
+
+  .actionArea {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .boxFee {
+    width: 100%;
+    justify-content: center;
   }
 
   .register {

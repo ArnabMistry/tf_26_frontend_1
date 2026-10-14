@@ -35,6 +35,11 @@ export interface PublicEvent {
   /** Team events only: whether `price` is charged per head or once per team. */
   feeMode?: 'per_team' | 'per_participant';
   paymentTrigger?: string;
+  isPaid?: boolean;
+  registrationFee?: string;
+  meals?: string;
+  participationKit?: boolean;
+  requirements?: Record<string, any> | null;
   date?: string;
   startDate: string;
   endDate?: string;
@@ -91,6 +96,10 @@ interface BackendEvent {
     prizeAmount?: number | null;
     prizeNote?: string | null;
     prizes?: PublicEvent['prizeBreakdown'];
+    registrationFee?: string | null;
+    meals?: string | null;
+    participationKit?: boolean | null;
+    [key: string]: any;
   } | null;
   rounds?: { roundNumber: number; name?: string; roundEndTime?: string }[];
   _count?: { registrations: number; teams: number };
@@ -149,6 +158,11 @@ function normaliseBackendEvent(raw: BackendEvent): PublicEvent {
     price: raw.price,
     feeMode: raw.feeMode,
     paymentTrigger: raw.paymentTrigger,
+    isPaid: raw.price !== undefined && raw.price > 0,
+    registrationFee: raw.requirements?.registrationFee || (raw.price === undefined || raw.price === 0 ? "Free" : `₹${raw.price}${raw.feeMode === "per_team" ? " per team" : " per participant"}`),
+    meals: raw.requirements?.meals || undefined,
+    participationKit: raw.requirements?.participationKit !== undefined ? Boolean(raw.requirements.participationKit) : undefined,
+    requirements: raw.requirements,
     venue: raw.venue ?? undefined,
     registrationDeadline: raw.registrationEndTime,
     registrationUrl: `${raw.isTeamEvent ? '/register/team' : '/register/event'}?eventId=${encodeURIComponent(raw.id)}`,
