@@ -71,7 +71,13 @@ export function EventCard({ event, variant = "left", lowerWing = false, onRegist
         {centered && event.prize && <p className={styles.prize}><span className="sr-only">Prize pool: </span>{event.prize}</p>}
         <div className={styles.actionRow}>
           {destination ? (
-            <Link href={destination} className={styles.action} aria-label={`${actionLabel} — ${event.name}`}>
+            <Link
+              href={destination}
+              className={styles.action}
+              aria-label={`${actionLabel} — ${event.name}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <span className={styles.actionFace}>{actionContent}</span>
             </Link>
           ) : (
