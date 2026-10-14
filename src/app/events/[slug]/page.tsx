@@ -31,9 +31,11 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
   const isFree = !event.price || event.price === 0 || event.paymentTrigger === "free";
   const entryFeeLabel = isFree
     ? "Free"
-    : event.isTeamEvent
-      ? `₹${event.price} ${event.feeMode === "per_participant" ? "per participant (team leader pays for all members)" : "per team (team leader pays once)"}`
-      : `₹${event.price} per participant`;
+    : event.paymentTrigger === "after_round"
+      ? `₹${event.price} ${event.feeMode === "per_participant" ? "per participant" : "per team"} (free to enter; payable upon Round 2 promotion)`
+      : event.isTeamEvent
+        ? `₹${event.price} ${event.feeMode === "per_participant" ? "per participant (team leader pays for all members)" : "per team (team leader pays once)"}`
+        : `₹${event.price} per participant`;
 
   const registrationFee = event.registrationFee || (isFree ? "Free" : `₹${event.price}${event.feeMode === "per_team" ? " / team" : " / person"}`);
 
