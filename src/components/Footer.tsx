@@ -44,10 +44,13 @@ export function Footer({ variant = "purple" }: FooterProps) {
   if (isYellow) {
     return (
       <section className="relative w-full pt-0 pb-12 md:pb-20 flex flex-col items-center px-4 md:px-8">
-        {/* Yellow Container for Developers Page */}
+        {/* Yellow Container for Other Pages */}
+        {/* Below md the mascot sits in normal flow, so no bottom padding is
+            reserved for it. From md up it goes back to absolute centering and
+            pb-64 is what keeps the content clear of it. */}
         <div
           ref={containerRef}
-          className="footer-bounds relative w-full max-w-[1600px] bg-[#FFFF1A] rounded-[24px] md:rounded-[32px] shadow-2xl pt-16 pb-48 md:pt-20 md:pb-64 px-8 md:px-12 mx-auto text-black min-h-[400px] md:min-h-[500px]"
+          className="footer-bounds relative w-full max-w-[1600px] bg-[#FFFF1A] rounded-[24px] md:rounded-[32px] shadow-2xl pt-16 pb-0 md:pt-20 md:pb-64 px-8 md:px-12 mx-auto text-black min-h-[400px] md:min-h-[500px]"
         >
           {/* Top Center Tab in Yellow */}
           <div className="absolute -top-8 md:-top-10 left-1/2 -translate-x-1/2 w-48 md:w-64 h-8 md:h-10 bg-[#FFFF1A] flex items-center justify-center">
@@ -166,8 +169,11 @@ export function Footer({ variant = "purple" }: FooterProps) {
             </div>
           </div>
 
-          {/* Center Character Image */}
-          <HoverTilt className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[160px] xs:w-[190px] sm:w-[250px] md:w-[350px] lg:w-[400px] z-10 pointer-events-auto flex flex-col items-center" rotationIntensity={10} scaleIntensity={1.03}>
+          {/* Center Character Image. In flow (and so unable to overlap the
+              contact column) until md, absolutely centered on the container
+              bottom from md up. The art is a bust crop, so sitting flush with
+              the bottom edge is intentional. */}
+          <HoverTilt className="relative mx-auto mt-10 w-[180px] sm:w-[240px] md:absolute md:bottom-0 md:left-1/2 md:-translate-x-1/2 md:mt-0 md:w-[350px] lg:w-[400px] z-10 pointer-events-auto flex flex-col items-center" rotationIntensity={10} scaleIntensity={1.03}>
             <Image
               src="/assets/Neon Cosmic Cyberpunk Robot Portrait.webp"
               alt="Neon cosmic cyberpunk robot mascot"
