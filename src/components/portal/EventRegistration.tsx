@@ -9,6 +9,63 @@ import { participantRequest, formatDate, fullName, type EventInfo, type Team, ty
 import { payForEvent } from '@/lib/payments';
 import s from './Portal.module.css';
 
+export function EventRegistrationSkeleton({ message = 'Loading registration details…' }: { message?: string }) {
+  return (
+    <div aria-busy="true" aria-label={message} className="w-full">
+      <div className="flex items-center gap-2.5 mb-6 text-sm text-[#b8afcf]">
+        <span className="w-3.5 h-3.5 border-2 border-[#faff52] border-t-transparent rounded-full animate-spin inline-block" />
+        <span role="status">{message}</span>
+      </div>
+      <div className={s.grid}>
+        <div className={s.stack}>
+          <section className={s.card}>
+            <div className={`${s.skeleton} ${s.skeletonTitle}`} />
+            <div className={`${s.skeleton} w-48 h-6 mb-2.5 rounded-lg`} />
+            <div className={`${s.skeleton} w-64 h-4 mb-5 rounded`} />
+            <div className={`${s.skeleton} w-40 h-8 mb-4 rounded-lg`} />
+            <div className={`${s.skeleton} w-44 h-4 rounded`} />
+          </section>
+        </div>
+        <aside className={s.card}>
+          <div className={`${s.skeleton} w-32 h-3.5 mb-4 rounded`} />
+          <div className={`${s.skeleton} w-52 h-7 mb-6 rounded-lg`} />
+          <div className={s.skeletonEntry}>
+            <div className={`${s.skeleton} w-16 h-3.5 mb-2 rounded`} />
+            <div className={`${s.skeleton} w-28 h-5 rounded`} />
+          </div>
+          <div className={s.skeletonEntry}>
+            <div className={`${s.skeleton} w-32 h-3.5 mb-2 rounded`} />
+            <div className={`${s.skeleton} w-48 h-5 rounded`} />
+          </div>
+          <div className={s.skeletonEntry}>
+            <div className={`${s.skeleton} w-20 h-3.5 mb-2 rounded`} />
+            <div className={`${s.skeleton} w-24 h-5 rounded`} />
+          </div>
+          <div className={`${s.skeleton} w-full h-12 mt-6 rounded-xl`} />
+          <div className={`${s.skeleton} w-4/5 h-3.5 mt-3.5 mx-auto rounded`} />
+        </aside>
+      </div>
+    </div>
+  );
+}
+
+export function EventRegistrationLoadingShell({ message }: { message?: string }) {
+  return (
+    <main className={s.shell}>
+      <Link className={s.eyebrow} href="/events">← All events</Link>
+      <header className={s.hero}>
+        <div>
+          <p className={`${s.eyebrow} mt-5`}>TantraFiesta 2026</p>
+          <h1>Your next challenge</h1>
+          <p className={s.muted}>One participant. One challenge. Your next achievement.</p>
+        </div>
+        <Link className={s.secondary} href="/profile">My portal ↗</Link>
+      </header>
+      <EventRegistrationSkeleton message={message} />
+    </main>
+  );
+}
+
 export function EventRegistration() {
   const router = useRouter(), params = useSearchParams();
   const requestedEvent = params.get('eventId');
@@ -65,7 +122,7 @@ export function EventRegistration() {
     finally { setBusy(false); }
   }
   if (!requestedEvent) return <main className={s.shell}><h1 className="text-3xl font-bold">Choose your event first</h1><p className={s.empty}>Team size and registration rules depend on the event.</p><Link className={s.button} href="/events">Explore events</Link></main>;
-  if (loading || !user) return <main className={s.shell}><p role="status">Checking your account…</p></main>;
+  if (loading || !user) return <EventRegistrationLoadingShell message="Checking your account…" />;
   const participant = profileUser?.id === user.id ? profileUser : user;
   const closed = !!event && new Date(event.registrationEndTime) <= new Date();
   const paymentRequired = !!event && event.price > 0 && event.paymentTrigger === 'before_registration';
@@ -148,7 +205,7 @@ export function EventRegistration() {
     <header className={s.hero}><div><p className={`${s.eyebrow} mt-5`}>{event?.club || 'TantraFiesta 2026'}</p><h1>{event?.name || 'Your next challenge'}</h1><p className={s.muted}>{event?.isTeamEvent ? 'Build your squad. Invite with TF IDs. Register together.' : 'One participant. One challenge. Your next achievement.'}</p></div><Link className={s.secondary} href="/profile">My portal ↗</Link></header>
     {error && <div className={s.error} role="alert">{error} <button className={s.secondary} onClick={refresh}>Refresh</button></div>}
     {notice && <p className={s.notice} role="status">{notice}</p>}
-    {!ready || !event ? <p role="status">Loading registration details…</p> : <div className={s.grid}><div className={s.stack}>
+    {!ready || !event ? <EventRegistrationSkeleton /> : <div className={s.grid}><div className={s.stack}>
       {/* Promoted into the round this event's fee is gated on: the gateway is
           now open, and this is the participant's prompt to use it. */}
       {feeDueNow && <section className={`${s.card} border border-[#faff52]/60 bg-[#faff52]/10`}>
