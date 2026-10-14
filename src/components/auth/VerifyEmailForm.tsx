@@ -21,12 +21,23 @@ export function VerifyEmailForm() {
   const searchParams = useSearchParams();
   const email = (searchParams.get('email') || '').trim().toLowerCase();
 
-  const [otp, setOtp] = useState('');
+  // The code arrives in the link from the verification email, so clicking
+  // "Enter the code" fills the box instead of making anyone copy six digits
+  // across from the message. Typed-in codes still work exactly as before.
+  const [otp, setOtp] = useState(() => (searchParams.get('code') || '').replace(/\D/g, '').slice(0, 6));
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [busy, setBusy] = useState(false);
   const [cooldown, setCooldown] = useState(0);
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    if (!searchParams.get('code')) return;
+    const rest = new URLSearchParams(searchParams.toString());
+    rest.delete('code');
+    const query = rest.toString();
+    router.replace(query ? `/verify-email?${query}` : '/verify-email');
+  }, [searchParams, router]);
 
   useEffect(() => {
     if (cooldown <= 0) return;
