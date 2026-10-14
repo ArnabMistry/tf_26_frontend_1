@@ -1,4 +1,6 @@
-@import "tailwindcss";
+/* Scan application source only; generated HTML can contain escaped class names. */
+@import "tailwindcss" source(none);
+@source "../";
 
 @theme inline {
   --font-sans: var(--font-geist-sans);

@@ -1,0 +1,86 @@
+.groups {
+  display: grid;
+  gap: clamp(4rem, 8vw, 8rem);
+  width: min(100% - 2rem, 1400px);
+  margin: 0 auto;
+  padding: 3rem 0 7rem;
+}
+
+.headingRow {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 3vw, 2rem);
+  margin-bottom: clamp(2rem, 4vw, 4rem);
+}
+
+.headingRow span {
+  height: 2px;
+  flex: 1;
+  background: linear-gradient(90deg, transparent, #e7137d);
+}
+
+.headingRow span:last-child {
+  transform: rotate(180deg);
+}
+
+.headingRow h2 {
+  color: #ffff1a;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1.05;
+  font-size: clamp(1.75rem, 4vw, 3.5rem);
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2.5rem clamp(1rem, 3vw, 3rem);
+}
+
+.card {
+  width: min(100%, 260px);
+  text-align: center;
+}
+
+.portrait {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border: 2px solid #e7137d;
+  border-radius: 1rem;
+  background: #2b1f5e;
+  box-shadow: 0 14px 35px #100b2b99;
+}
+
+.photo {
+  object-fit: cover;
+  object-position: center top;
+}
+
+.placeholder {
+  display: grid;
+  height: 100%;
+  place-items: center;
+  padding: 1.5rem;
+  color: #ffff1a;
+  font-size: 1rem;
+  font-weight: 700;
+  background: radial-gradient(circle at 50% 35%, #594dd0, #241a4c 72%);
+}
+
+.card h3 {
+  margin-top: 1.2rem;
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.card p {
+  margin-top: 0.3rem;
+  color: #d5cced;
+  font-size: 0.95rem;
+}

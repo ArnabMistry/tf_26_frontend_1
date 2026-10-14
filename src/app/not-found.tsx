@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <main
-      className="relative min-h-screen w-full overflow-hidden flex flex-col items-center justify-center bg-[#241A4C] bg-[url('/assets/bg.webp')] bg-cover bg-center bg-no-repeat px-4 py-16"
+      className="relative min-h-screen w-full overflow-hidden flex flex-col items-center justify-center bg-[#241A4C] bg-[url(/assets/bg.webp)] bg-cover bg-center bg-no-repeat px-4 py-16"
       aria-labelledby="not-found-heading"
     >
       {/* ── Glowing yellow ring behind the 404 ── */}

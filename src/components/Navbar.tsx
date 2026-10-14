@@ -9,6 +9,7 @@ import { MobileBottomNav } from "./MobileBottomNav";
 
 const navigation = [
   { href: "/admin", label: "Admin" },
+  { href: "/about", label: "About" },
   { href: "/sponsors", label: "Sponsors" },
   { href: "/events", label: "Events" },
   { href: "/speakers", label: "Speakers" },
