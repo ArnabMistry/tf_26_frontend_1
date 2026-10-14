@@ -91,8 +91,8 @@ export const teamInvitations: TeamInvitation[] = [
 ];
 
 export const mealPasses: MealPass[] = [
-  { id: "day1-lunch", day: "Day 1", meal: "Lunch", redeemed: true },
-  { id: "day1-dinner", day: "Day 1", meal: "Dinner", redeemed: false },
-  { id: "day2-lunch", day: "Day 2", meal: "Lunch", redeemed: false },
-  { id: "day2-dinner", day: "Day 2", meal: "Dinner", redeemed: false },
+  { id: "meal-1", day: "Day 1", meal: "Meal 1", redeemed: true },
+  { id: "snack-1", day: "Day 1", meal: "Snack 1", redeemed: false },
+  { id: "meal-2", day: "Day 2", meal: "Meal 2", redeemed: false },
+  { id: "snack-2", day: "Day 2", meal: "Snack 2", redeemed: false },
 ];
