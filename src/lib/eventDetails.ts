@@ -11,7 +11,7 @@
  * Structured dates (`registrationOpens`, `registrationDeadline`, `startDate`,
  * `endDate`) come from Unstop's registration fields, which the clubs edit live.
  * Where a brochure's prose disagrees with those fields, the prose is kept in
- * the stage text and the fields stay authoritative — see `edge-case-26` and the
+ * the stage text and the fields stay authoritative — see the
  * Synergy esports events for the notes on this.
  *
  * Design-reference content, used only until the backend event endpoints are
@@ -309,11 +309,11 @@ export const eventDetails: EventDetail[] = [
           "A research-driven design project: user personas, heuristic evaluations of popular designs, or a critique of design flaws in major platforms. Each submission needs research findings with insights and data, a clear identification of UX issues and pain points, practical recommendations, and mockups, wireframes or prototypes. Submit one comprehensive PDF case study plus supporting visuals (PNG/JPEG/PDF); a video walkthrough of the design process and Figma or source files are optional.",
       },
       {
-        name: "Round 2 — Offline Finals (16-hour hackathon)",
-        when: "25 Oct 2026, 9:00 PM – 26 Oct 2026, 3:00 PM",
+        name: "Round 2 — Offline Finals (15-hour hackathon)",
+        when: "24 Oct 2026, 6:00 PM – 25 Oct 2026, 9:00 AM",
         mode: "Offline",
         detail:
-          "A 16-hour on-campus design hackathon. Teams receive the problem statement at the start and must research, ideate and deliver a complete design solution — wireframes, prototypes and final designs — within the deadline. Any design or collaboration tool is allowed. Surprise twists may include target-audience shifts, theme reversals, limited palettes, or mandatory design elements.",
+          "A 15-hour on-campus design hackathon. Teams receive the problem statement at the start and must research, ideate and deliver a complete design solution — wireframes, prototypes and final designs — within the deadline. Any design or collaboration tool is allowed. Surprise twists may include target-audience shifts, theme reversals, limited palettes, or mandatory design elements.",
       },
     ],
     highlights: [
@@ -352,7 +352,7 @@ export const eventDetails: EventDetail[] = [
     teamSize: { min: 2, max: 4 },
     mode: "Hybrid",
     startDate: "2026-10-10T12:00:00+05:30",
-    endDate: "2026-10-26T15:00:00+05:30",
+    endDate: "2026-10-25T09:00:00+05:30",
     venue: IIITN,
   },
   {
@@ -398,27 +398,6 @@ export const eventDetails: EventDetail[] = [
     startDate: "2026-10-23T16:00:00+05:30",
     endDate: "2026-10-24T15:00:00+05:30",
     venue: IIITN,
-  },
-  {
-    // Not listed on the TantraFiesta'26 Unstop festival page. The copy below is
-    // the club's own brochure text; confirm with GDG before the fest.
-    slug: "edge-case-26",
-    name: "Edge Case '26",
-    tagline: "24-hour Physical AI hackathon",
-    image: "/event-posters/Edge-Case.webp",
-    clubs: [{ name: "GDG on Campus", slug: "gdg" }],
-    description:
-      "EDGE CASE '26 is a national 24-hour Physical AI hackathon by GDG on Campus IIIT Nagpur at Tantrafiesta '26, where student teams build working hardware that senses the real world, lets AI decide, and acts on it. After a nationwide online round, the top 25 teams build on campus on 23–24 October across safety, sustainability, Industry 4.0 and open-innovation tracks.",
-    prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
-    stages: [],
-    rules: [],
-    highlights: [],
-    eligibility: [],
-    organizers: [],
-    registrationFee: FREE,
-    entryFeeLabel: "Free",
-    feeMode: "per_team",
-    participationKit: false,
   },
   {
     slug: "firestorm-rampage",
@@ -1181,7 +1160,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Online shortlisting round",
-        when: "Tue, 20 Oct 2026",
+        when: "Sun, 18 Oct 2026",
         mode: "Online",
         detail:
           "The top 20 teams qualify for the offline finale and are contacted with the round details.",
@@ -1207,7 +1186,7 @@ export const eventDetails: EventDetail[] = [
     ],
     rules: [
       "Register your team of 4; every member counts as one life.",
-      "Clear the online shortlisting round on Sat, 17 Oct 2026.",
+      "Clear the online shortlisting round on Sun, 18 Oct 2026.",
       "The top 20 teams are shortlisted and contacted with offline-round details.",
       "Battle it out live at IIIT Nagpur on 26 Oct 2026.",
     ],
@@ -1216,7 +1195,7 @@ export const eventDetails: EventDetail[] = [
       { name: "TantraFiesta IIIT Nagpur", email: "tantrafiesta@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-11T00:00:00+05:30",
-    registrationDeadline: "2026-10-20T23:59:00+05:30",
+    registrationDeadline: "2026-10-18T23:59:00+05:30",
     registrationFee: "₹150 per person",
     entryFeeLabel: "₹150 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -1224,7 +1203,7 @@ export const eventDetails: EventDetail[] = [
     participationKit: true,
     teamSize: { min: 4, max: 4 },
     mode: "Hybrid",
-    startDate: "2026-10-17T00:00:00+05:30",
+    startDate: "2026-10-18T00:00:00+05:30",
     endDate: "2026-10-26T16:15:00+05:30",
     venue: IIITN,
   },
@@ -1245,7 +1224,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Round 1 — Online MCQ Round",
-        when: "20 Oct 2026",
+        when: "18 Oct 2026",
         mode: "Online",
         detail:
           "A timed, online objective test covering problem solving, AI/ML concepts, LLMs, and agentic AI concepts such as tool use, planning, memory and prompting. The link is shared via your registered email and the official event group. Top-scoring teams are shortlisted for the finale.",
@@ -1291,7 +1270,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Tejas Tajane", phone: "+91 90215 64389", email: "tejastajane007@gmail.com" },
     ],
     registrationOpens: "2026-10-08T20:30:00+05:30",
-    registrationDeadline: "2026-10-20T23:59:00+05:30",
+    registrationDeadline: "2026-10-18T23:59:00+05:30",
     registrationFee: "₹450 per person",
     entryFeeLabel: "₹450 per participant; team leader pays for all members",
     feeMode: "per_participant",
@@ -1299,7 +1278,7 @@ export const eventDetails: EventDetail[] = [
     participationKit: true,
     teamSize: { min: 2, max: 4 },
     mode: "Hybrid",
-    startDate: "2026-10-20T00:00:00+05:30",
+    startDate: "2026-10-18T00:00:00+05:30",
     endDate: "2026-10-26T09:00:00+05:30",
     venue: IIITN,
   },
@@ -1506,7 +1485,7 @@ export const eventDetails: EventDetail[] = [
       "Bring your senior: one recent graduate (2024–2026) of your college can join your team.",
     ],
     eligibility: [
-      "Teams of exactly 3, all from the same college.",
+      "Teams of 2–3, all from the same college.",
       "UG, PG and diploma students from any branch or year.",
       "Up to one alumnus per team, graduated in 2024, 2025 or 2026 — working alumni are welcome.",
       "PhD students and research scholars are not eligible.",
@@ -1531,7 +1510,7 @@ export const eventDetails: EventDetail[] = [
     feeMode: "per_participant",
     meals: "1 Meal + 1 Snacks",
     participationKit: true,
-    teamSize: { min: 3, max: 3 },
+    teamSize: { min: 2, max: 3 },
     mode: "Hybrid",
     startDate: "2026-10-11T09:00:00+05:30",
     endDate: "2026-10-26T19:00:00+05:30",

@@ -220,12 +220,19 @@
   border: 4px solid #ffdd3e;
   border-radius: 4px;
   overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .posterImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
 }
 
 .posterFallback {

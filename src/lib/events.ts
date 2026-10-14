@@ -32,9 +32,7 @@ export const eventCategories = [
  * event's name, club, and description. An event can carry more than one
  * category (Ragnarok and Cascade are both Hackathon and AI/ML).
  *
- * "edge-case-26" wasn't in that breakdown; it's filed under Hackathon here as
- * a reasonable read of its own "Physical AI hackathon" description pending
- * confirmation from GDG. "digital-time-capsule" is the photography and
+ * "digital-time-capsule" is the photography and
  * videography challenge listed on Unstop but absent from the sheet.
  */
 const CATEGORIES_BY_SLUG: Record<string, string[]> = {
@@ -45,7 +43,6 @@ const CATEGORIES_BY_SLUG: Record<string, string[]> = {
   ragnarok: ["hackathon", "ai-ml"],
   cascade: ["hackathon", "ai-ml"],
   "the-game-jam": ["hackathon"],
-  "edge-case-26": ["hackathon"],
   "line-o-mania": ["robotics"],
   "the-lost-pathways": ["robotics"],
   "rann-bhoomi": ["robotics"],
