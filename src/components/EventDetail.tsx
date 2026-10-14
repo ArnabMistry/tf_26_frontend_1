@@ -292,7 +292,7 @@ export function EventDetail({ event }: EventDetailProps) {
 function Poster({ event }: { event: EventDetailData }) {
   const posterSrc = event.image || event.poster;
   return (
-    <div className={styles.poster}>
+    <div className={styles.poster} onDragStart={(e) => e.preventDefault()}>
       {posterSrc ? (
         <Image
           src={posterSrc}
@@ -300,6 +300,7 @@ function Poster({ event }: { event: EventDetailData }) {
           width={586}
           height={742}
           className={styles.posterImage}
+          draggable={false}
         />
       ) : (
         <div className={`${styles.posterImage} ${styles.posterFallback}`}>
