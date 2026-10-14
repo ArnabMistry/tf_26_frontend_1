@@ -64,11 +64,17 @@
   display: grid;
   height: 100%;
   place-items: center;
-  padding: 1.5rem;
-  color: #ffff1a;
-  font-size: 1rem;
-  font-weight: 700;
-  background: radial-gradient(circle at 50% 35%, #594dd0, #241a4c 72%);
+  background: radial-gradient(circle at 50% 30%, #51449f, #241a4c 72%);
+}
+
+.placeholder svg {
+  width: 58%;
+  height: 58%;
+  fill: none;
+  stroke: #d5cced;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 7;
 }
 
 .card h3 {
