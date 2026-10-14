@@ -65,6 +65,48 @@ export function EventDetail({ event }: EventDetailProps) {
               </span>
             ))}
           </p>
+
+          <div className={styles.metaBar}>
+            <div className={`${styles.metaChip} ${styles.metaFeeChip}`}>
+              <span className={styles.metaIcon}>🎟️</span>
+              <span className={styles.metaLabel}>Fee:</span>
+              <span className={styles.metaValueHighlight}>
+                {event.registrationFee || event.entryFeeLabel || "Free"}
+              </span>
+            </div>
+
+            {event.teamSize && (
+              <div className={styles.metaChip}>
+                <span className={styles.metaIcon}>👥</span>
+                <span className={styles.metaValue}>
+                  {event.teamSize.min === event.teamSize.max
+                    ? `${event.teamSize.min} member${event.teamSize.min === 1 ? "" : "s"}`
+                    : `${event.teamSize.min}–${event.teamSize.max} members`}
+                </span>
+              </div>
+            )}
+
+            {event.meals && (
+              <div className={styles.metaChip}>
+                <span className={styles.metaIcon}>🍽️</span>
+                <span className={styles.metaValue}>{event.meals}</span>
+              </div>
+            )}
+
+            {event.participationKit && (
+              <div className={styles.metaChip}>
+                <span className={styles.metaIcon}>🎒</span>
+                <span className={styles.metaValue}>Kit Included</span>
+              </div>
+            )}
+
+            {event.venue && (
+              <div className={styles.metaChip}>
+                <span className={styles.metaIcon}>📍</span>
+                <span className={styles.metaValue}>{event.venue}</span>
+              </div>
+            )}
+          </div>
         </div>
         <div className={styles.marks}>
           {event.clubs.map((club) => (
@@ -114,7 +156,33 @@ export function EventDetail({ event }: EventDetailProps) {
                 text={`${joinClubNames(event.clubs)} is still putting together the brief for ${event.name}. Check back shortly.`}
               />
             )}
-            {event.entryFeeLabel && <p className={styles.entryFee}>Entry fee: {event.entryFeeLabel}</p>}
+            <div className={styles.feeOverviewCard}>
+              <div className={styles.feeOverviewHeader}>
+                <div className={styles.feeBadge}>
+                  <span className={styles.feeBadgeLabel}>Registration Fee</span>
+                  <span className={styles.feeBadgeAmount}>
+                    {event.registrationFee || event.entryFeeLabel || "Free"}
+                  </span>
+                </div>
+                {event.entryFeeLabel && event.entryFeeLabel !== "Free" && (
+                  <p className={styles.feeOverviewDetail}>{event.entryFeeLabel}</p>
+                )}
+              </div>
+              {(event.meals || event.participationKit !== undefined) && (
+                <div className={styles.perksRow}>
+                  {event.meals && (
+                    <span className={styles.perkChip}>
+                      <span aria-hidden="true">🍽️</span> {event.meals}
+                    </span>
+                  )}
+                  {event.participationKit && (
+                    <span className={styles.perkChip}>
+                      <span aria-hidden="true">🎒</span> Participation Kit Included
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
             <PrizeBox event={event} />
           </div>
           <Poster event={event} />
@@ -246,6 +314,7 @@ function Poster({ event }: { event: EventDetailData }) {
 function PrizeBox({ event }: { event: EventDetailData }) {
   // The ₹ is styled separately, so drop one if the source value already carries it.
   const prizePool = (event.prizePool ?? "XX,XXX").replace(/^\s*₹\s*/, "");
+  const feeDisplay = event.registrationFee || event.entryFeeLabel || "Free";
 
   return (
     <div className={styles.prizeBox}>
@@ -270,13 +339,19 @@ function PrizeBox({ event }: { event: EventDetailData }) {
         ))}
       </ul>
 
-      <Link
-        href={event.registrationUrl || `/register/event?eventId=${encodeURIComponent(event.slug)}`}
-        className={styles.register}
-        aria-label={`Register now for ${event.name}`}
-      >
-        Register Now <span aria-hidden="true">↗</span>
-      </Link>
+      <div className={styles.actionArea}>
+        <div className={styles.boxFee}>
+          <span className={styles.boxFeeLabel}>Registration Fee</span>
+          <span className={styles.boxFeeValue}>{feeDisplay}</span>
+        </div>
+        <Link
+          href={event.registrationUrl || `/register/event?eventId=${encodeURIComponent(event.slug)}`}
+          className={styles.register}
+          aria-label={`Register now for ${event.name}`}
+        >
+          Register Now <span aria-hidden="true">↗</span>
+        </Link>
+      </div>
     </div>
   );
 }

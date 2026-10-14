@@ -28,6 +28,15 @@ export async function generateStaticParams() {
 /** Maps the backend contract onto the shape the detail page renders. */
 function fromPublicEvent(event: PublicEvent): EventDetailData {
   const local = getEventDetail(event.slug);
+  const isFree = !event.price || event.price === 0 || event.paymentTrigger === "free";
+  const entryFeeLabel = isFree
+    ? "Free"
+    : event.isTeamEvent
+      ? `₹${event.price} ${event.feeMode === "per_participant" ? "per participant (team leader pays for all members)" : "per team (team leader pays once)"}`
+      : `₹${event.price} per participant`;
+
+  const registrationFee = event.registrationFee || (isFree ? "Free" : `₹${event.price}${event.feeMode === "per_team" ? " / team" : " / person"}`);
+
   return {
     ...local,
     slug: event.slug,
@@ -48,17 +57,16 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
     highlights: local?.highlights ?? [],
     eligibility: event.eligibility ? [event.eligibility] : (local?.eligibility ?? []),
     registrationUrl: event.registrationUrl,
-    entryFeeLabel: !event.price || event.paymentTrigger === "free"
-      ? "Free"
-      : event.isTeamEvent
-        ? `₹${event.price} ${event.feeMode === "per_participant" ? "per participant; team leader pays for all members" : "per team; team leader pays once"}`
-        : `₹${event.price} per participant`,
+    entryFeeLabel: entryFeeLabel || local?.entryFeeLabel,
     registrationDeadline: event.registrationDeadline,
     startDate: event.startDate || undefined,
     endDate: event.endDate,
-    registrationFee: event.price === undefined ? undefined : event.price === 0 ? "Free" : `₹${event.price}`,
+    registrationFee: registrationFee || local?.registrationFee,
+    feeMode: event.feeMode || local?.feeMode,
+    meals: event.meals || local?.meals,
+    participationKit: event.participationKit !== undefined ? event.participationKit : local?.participationKit,
     teamSize: event.minTeamSize && event.maxTeamSize ? { min: event.minTeamSize, max: event.maxTeamSize } : local?.teamSize,
-    venue: event.venue,
+    venue: event.venue || local?.venue,
   };
 }
 
