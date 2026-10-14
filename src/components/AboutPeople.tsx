@@ -50,7 +50,7 @@ const groups: { title: string; people: Person[] }[] = [
       { name: "Mr. Pravin Satyavan Bhagat", role: "SAC Member", image: "pravin_sac_member.webp" },
       { name: "Mrs. Ruchira Nitin Selote", role: "SAC Member", image: "ruchira_sac_member.webp" },
       { name: "Ms. Jaya Pathak", role: "SAC Member" },
-      { name: "Ms. Rasika Ghonge", role: "SAC Member" },
+      { name: "Ms. Rasika Ghonge", role: "SAC Member", image: "Rasika_sac_member.webp" },
       { name: "Mr. Sunil Dhole", role: "SAC Member" },
     ],
   },
@@ -79,7 +79,12 @@ export function AboutPeople() {
                       className={styles.photo}
                     />
                   ) : (
-                    <span className={styles.placeholder}>Photo coming soon</span>
+                    <div className={styles.placeholder} aria-label={`${person.name} portrait unavailable`}>
+                      <svg viewBox="0 0 120 120" aria-hidden="true">
+                        <circle cx="60" cy="42" r="22" />
+                        <path d="M20 108c4-26 20-40 40-40s36 14 40 40" />
+                      </svg>
+                    </div>
                   )}
                 </div>
                 <h3>{person.name}</h3>
