@@ -314,7 +314,6 @@ function Poster({ event }: { event: EventDetailData }) {
 function PrizeBox({ event }: { event: EventDetailData }) {
   // The ₹ is styled separately, so drop one if the source value already carries it.
   const prizePool = (event.prizePool ?? "XX,XXX").replace(/^\s*₹\s*/, "");
-  const feeDisplay = event.registrationFee || event.entryFeeLabel || "Free";
 
   return (
     <div className={styles.prizeBox}>
@@ -340,10 +339,6 @@ function PrizeBox({ event }: { event: EventDetailData }) {
       </ul>
 
       <div className={styles.actionArea}>
-        <div className={styles.boxFee}>
-          <span className={styles.boxFeeLabel}>Registration Fee</span>
-          <span className={styles.boxFeeValue}>{feeDisplay}</span>
-        </div>
         <Link
           href={event.registrationUrl || `/register/event?eventId=${encodeURIComponent(event.slug)}`}
           className={styles.register}
