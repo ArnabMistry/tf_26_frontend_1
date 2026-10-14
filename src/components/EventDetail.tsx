@@ -55,7 +55,7 @@ export function EventDetail({ event }: EventDetailProps) {
     <main id="event-content" className={styles.detail}>
       <header className={styles.header}>
         <div className={styles.titleBlock}>
-          <h1 className={styles.title}>{event.name}</h1>
+          <h1 className={`${styles.title} ${event.slug === "cascade" ? styles.cascadeTitle : ""}`}>{event.name}</h1>
           <p className={styles.club}>
             <span className="sr-only">Organized by </span>
             {event.clubs.map((club, index) => (

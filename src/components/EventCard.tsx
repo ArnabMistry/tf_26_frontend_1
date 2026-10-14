@@ -65,7 +65,11 @@ export function EventCard({ event, variant = "left", lowerWing = false, onRegist
       )}
       <div className={styles.content}>
         <div className={styles.heading}>
-          <h3 className={`${styles.title} ${!centered && event.prize && event.name.length > 10 ? styles.compactTitle : ""}`}>
+          <h3
+            className={`${styles.title} ${!centered && event.prize && event.name.length > 10 ? styles.compactTitle : ""} ${
+              event.id === "cascade" || event.href === "/events/cascade" ? styles.cascadeTitle : ""
+            }`}
+          >
             {destination ? (
               <Link
                 href={destination}

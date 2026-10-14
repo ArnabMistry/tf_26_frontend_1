@@ -119,6 +119,10 @@
   font-size: clamp(1rem, 3.6cqw, 48px);
 }
 
+.cascadeTitle {
+  font-size: clamp(2.35rem, 5.5cqw, 72px);
+}
+
 .description {
   margin-top: 1cqw;
   min-height: 66px;

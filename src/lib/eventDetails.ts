@@ -1356,7 +1356,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Krushna Mali", phone: "+91 85302 96969", email: "bt25csd037@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-11T00:00:00+05:30",
-    registrationDeadline: "2026-10-20T23:59:00+05:30",
+    registrationDeadline: "2026-10-24T23:59:00+05:30",
     registrationFee: "₹550 per person",
     entryFeeLabel: "₹550 per participant; team leader pays for all members",
     feeMode: "per_participant",
