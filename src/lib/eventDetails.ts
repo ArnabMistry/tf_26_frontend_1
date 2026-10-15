@@ -1377,6 +1377,7 @@ export const eventDetails: EventDetail[] = [
     slug: "rann-bhoomi",
     name: "Rann Bhoomi 2.0",
     tagline: "The Robowars",
+    image: "/event-posters/Rann_Bhoomi_2.0.webp",
     clubs: [{ name: "Iotics", slug: "iotics" }],
     description:
       "Rann Bhoomi 2.0 challenges participants to design and build a manually controlled combat robot capable of engaging in head-to-head battles inside a dedicated arena. Robots must demonstrate superior strength, control, durability and strategy to overpower their opponents — the goal is to outlast and outfight competitors while adhering to strict safety and design standards.",
@@ -1396,7 +1397,7 @@ export const eventDetails: EventDetail[] = [
         when: "24 Oct 2026, 6:00 PM – 25 Oct 2026, 11:30 PM",
         mode: "Offline",
         detail:
-          "Five-minute matches in an elimination format. The losing bot is eliminated and the winner advances, continuing until the top 6 teams qualify for the finals — 2 from 1.5 kg, 2 from 8 kg and 2 from 15 kg. Victory by knock-out: the opposing bot fails to move 6 inches within 30 seconds. Scored on aggression, damage, control and strategy.",
+          "Five-minute matches in an elimination format. The losing bot is eliminated and the winner advances, continuing until the top 9 teams qualify for the finals — 3 from 1.5 kg, 3 from 8 kg and 3 from 15 kg. Victory by knock-out: the opposing bot fails to move 6 inches within 30 seconds. Scored on aggression, damage, control and strategy.",
       },
       {
         name: "Round 3 — Finals: Championship Battles",
@@ -1420,7 +1421,7 @@ export const eventDetails: EventDetail[] = [
       "Valid student ID cards are required at registration.",
     ],
     rules: [
-      "Dimensions: 30 × 30 × 30 cm for 1.5 kg bots; 75 × 75 × 50 cm for 8 kg and 15 kg bots.",
+      "Dimensions: 30 × 30 × 30 for 1.5 kg bots; 75 × 75 × 50 for 8 kg and 15 kg bots (±5% tolerance allowed).",
       "Power supply: electrical (batteries) only — internal combustion engines are prohibited. Maximum 52 V DC between any two points.",
       "Robots must have a manual kill switch, an emergency stop on the controller, and proper insulation and secure wiring.",
       "Hydraulics and pneumatics: maximum 50 bar, fully self-contained and leak-proof; pneumatics need certified tanks and regulators with mandatory safety approvals.",
@@ -1436,6 +1437,9 @@ export const eventDetails: EventDetail[] = [
     ],
     organizers: [
       { name: "Support", phone: "+91 72318 36153", email: "tantrafiesta@iiitn.ac.in" },
+      { name: "Shamit Chandra", phone: "+91 8960565026", email: "bt25ece005@iiitn.ac.in" },
+      { name: "Siddhesh Balkawade", phone: "+91 7972658621", email: "bt25cse178@iiitn.ac.in" },
+      { name: "Neel Kotecha", phone: "+91 7976577767", email: "iotics@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-12T12:00:00+05:30",
     registrationDeadline: "2026-10-22T18:00:00+05:30",
