@@ -105,7 +105,7 @@ export const KNOWN_CLUBS: readonly ClubInfo[] = [
     tagline: "Robotics & Automation",
     description:
       "Premier robotics society building autonomous bots, robowars gladiators, line-followers, and intelligent automation systems.",
-    logo: "/assets/club-logos/iotics.png",
+    logo: "/assets/iotics.png",
   },
 ] as const;
 
