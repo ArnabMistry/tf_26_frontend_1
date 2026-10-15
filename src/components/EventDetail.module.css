@@ -32,6 +32,10 @@
   overflow-wrap: anywhere;
 }
 
+.cascadeTitle {
+  font-size: clamp(3.85rem, 8.8vw, 7.6rem);
+}
+
 .club {
   margin-top: 12px;
   color: #e6e1f7;

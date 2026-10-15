@@ -37,7 +37,8 @@
 
 .contacts {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 380px));
+  justify-content: center;
   gap: 32px;
   padding-inline: 0;
   font-family: var(--font-futura);
@@ -54,6 +55,14 @@
   align-items: center;
   justify-content: center;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+}
+
+.primaryCard {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: 100%;
+  max-width: 380px;
 }
 
 .contactCard:hover {
@@ -70,7 +79,7 @@
 }
 
 .role {
-  margin-bottom: 6px;
+  margin-bottom: 18px;
   color: #ffd1e3;
   font-size: 18px;
   font-weight: 600;
@@ -242,10 +251,16 @@
   margin-bottom: 10px;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 840px) {
   .contacts {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding-inline: 0;
+  }
+
+  .primaryCard {
+    grid-column: auto;
+    max-width: 380px;
   }
 }
 
@@ -266,6 +281,11 @@
     grid-template-columns: 1fr;
     gap: 20px;
     padding-inline: 0;
+  }
+
+  .primaryCard {
+    grid-column: auto;
+    max-width: 380px;
   }
 
   .contactCard {

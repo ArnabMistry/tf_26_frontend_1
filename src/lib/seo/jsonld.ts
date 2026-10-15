@@ -208,17 +208,17 @@ export function contactPageJsonLd() {
       contactPoint: [
         {
           "@type": "ContactPoint",
+          contactType: "Technical Secretary",
+          name: "Amulya Yadav",
+          telephone: "+91-86045-51326",
+          email: "ts@iiitn.ac.in",
+        },
+        {
+          "@type": "ContactPoint",
           contactType: "Hospitality Lead",
           name: "Keshav Shukla",
           telephone: "+91-9016188508",
           email: "tantrafiesta.hospitality@iiitn.ac.in",
-        },
-        {
-          "@type": "ContactPoint",
-          contactType: "Corporate Lead",
-          name: "Aryan Patil",
-          telephone: "+91-9373773402",
-          email: "tantrafiesta.corporate@iiitn.ac.in",
         },
         {
           "@type": "ContactPoint",
@@ -229,5 +229,20 @@ export function contactPageJsonLd() {
         },
       ],
     },
+  };
+}
+
+export function faqPageJsonLd(faqs: { question: string; answer: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
   };
 }
