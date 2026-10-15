@@ -27,7 +27,6 @@ export async function generateStaticParams() {
 
 /** Maps the backend contract onto the shape the detail page renders. */
 function fromPublicEvent(event: PublicEvent): EventDetailData {
-  const local = getEventDetail(event.slug);
   const isFree = !event.price || event.price === 0 || event.paymentTrigger === "free";
   const entryFeeLabel = event.entryFeeLabel || (isFree
     ? "Free"
@@ -40,34 +39,32 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
   const registrationFee = event.registrationFee || (isFree ? "Free" : `₹${event.price}${event.feeMode === "per_team" ? " / team" : " / person"}`);
 
   return {
-    ...local,
     slug: event.slug,
     name: event.name,
-    // Joint clubs are supplied by the normalized API contract.
     clubs: event.clubs || [event.club],
-    description: event.description || local?.description || event.shortDescription || "",
-    tagline: event.tagline || local?.tagline,
-    poster: event.poster || event.image || local?.image || local?.poster,
-    image: event.image || local?.image,
-    prizePool: event.prizePool || local?.prizePool,
-    prizeNote: event.prizeNote || local?.prizeNote,
-    prizes: event.prizeBreakdown?.length ? event.prizeBreakdown : (local?.prizes ?? []),
-    stages: event.stages?.length ? event.stages : (local?.stages ?? []),
-    organizers: event.organizers?.length ? event.organizers : (local?.organizers ?? []),
-    rules: event.rules?.length ? event.rules : (local?.rules ?? []),
-    highlights: event.highlights?.length ? event.highlights : (local?.highlights ?? []),
-    eligibility: event.eligibility?.length ? event.eligibility : (local?.eligibility ?? []),
+    description: event.description || event.shortDescription || "",
+    tagline: event.tagline,
+    poster: event.poster || event.image,
+    image: event.image,
+    prizePool: event.prizePool,
+    prizeNote: event.prizeNote,
+    prizes: event.prizeBreakdown || [],
+    stages: event.stages || [],
+    organizers: event.organizers || [],
+    rules: event.rules || [],
+    highlights: event.highlights || [],
+    eligibility: event.eligibility || [],
     registrationUrl: event.registrationUrl,
     entryFeeLabel,
-    registrationDeadline: event.registrationDeadline || local?.registrationDeadline,
-    startDate: event.startDate || local?.startDate,
-    endDate: event.endDate || local?.endDate,
+    registrationDeadline: event.registrationDeadline,
+    startDate: event.startDate,
+    endDate: event.endDate,
     registrationFee,
-    feeMode: event.feeMode || local?.feeMode,
-    meals: event.meals || local?.meals,
-    participationKit: event.participationKit !== undefined ? event.participationKit : local?.participationKit,
-    teamSize: event.minTeamSize && event.maxTeamSize ? { min: event.minTeamSize, max: event.maxTeamSize } : local?.teamSize,
-    venue: event.venue || local?.venue,
+    feeMode: event.feeMode,
+    meals: event.meals,
+    participationKit: event.participationKit,
+    teamSize: event.minTeamSize || event.maxTeamSize ? { min: event.minTeamSize ?? 1, max: event.maxTeamSize ?? 1 } : undefined,
+    venue: event.venue,
   };
 }
 

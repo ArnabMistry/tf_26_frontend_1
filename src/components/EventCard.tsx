@@ -71,7 +71,7 @@ export function EventCard({ event, variant = "left", lowerWing = false, onRegist
       <div className={styles.content}>
         <div className={styles.heading}>
           <h3
-            className={`${styles.title} ${!centered && event.prize && event.name.length > 10 ? styles.compactTitle : ""} ${
+            className={`${styles.title} ${
               event.id === "cascade" || event.href === "/events/cascade" ? styles.cascadeTitle : ""
             }`}
           >
@@ -88,10 +88,8 @@ export function EventCard({ event, variant = "left", lowerWing = false, onRegist
               event.name
             )}
           </h3>
-          {!centered && event.prize && <p className={styles.prize}><span className="sr-only">Prize pool: </span>{event.prize}</p>}
         </div>
         <p className={styles.description}>{truncate(event.description, MAX_DESCRIPTION_CHARS)}</p>
-        {centered && event.prize && <p className={styles.prize}><span className="sr-only">Prize pool: </span>{event.prize}</p>}
         <div className={styles.actionRow}>
           {destination ? (
             <Link

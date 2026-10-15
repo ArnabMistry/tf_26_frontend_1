@@ -95,7 +95,6 @@ export function toEventListing(event: PublicEvent): EventListing {
     description: event.shortDescription || event.description,
     clubs: event.clubs || [event.club],
     categories: event.categories?.length ? event.categories : (CATEGORIES_BY_SLUG[event.slug] ?? []),
-    prize: event.prizePool || event.prizes,
     href: `/events/${encodeURIComponent(event.slug)}`,
     registrationUrl: event.registrationUrl,
     image: event.image,

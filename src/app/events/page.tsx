@@ -54,18 +54,16 @@ export const revalidate = 0;
 export default async function EventsPage() {
   // Resolve URL filters during server rendering so the event catalog stays crawlable.
   await connection();
-  const hasBackend = Boolean(process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL);
-  let events = referenceEvents;
-
-  if (hasBackend) {
-    try {
-      const remote = await fetchPublicEvents();
-      if (remote && remote.length > 0) {
-        events = remote.map(toEventListing);
-      }
-    } catch {
+  let events: EventListing[] = [];
+  try {
+    const remote = await fetchPublicEvents();
+    if (remote && remote.length > 0) {
+      events = remote.map(toEventListing);
+    } else {
       events = referenceEvents;
     }
+  } catch {
+    events = referenceEvents;
   }
 
   events = sortWithPinned(

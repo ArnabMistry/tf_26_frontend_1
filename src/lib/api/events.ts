@@ -90,6 +90,9 @@ export interface PublicEvent {
   poster?: string;
   faqs?: EventFAQ[];
   rounds?: { roundNumber: number; name?: string; roundEndTime?: string }[];
+  dayLabel?: string;
+  timingStr?: string;
+  categoryLabel?: string;
 }
 
 /**
@@ -188,18 +191,39 @@ function clubNameToSlug(name: string): string {
     .replace(/^-|-$/g, "");
 }
 
+function parseCategoryToFilterIds(catStr?: string): string[] {
+  if (!catStr) return [];
+  const lower = catStr.toLowerCase();
+  const ids = new Set<string>();
+  if (lower.includes("hackathon")) ids.add("hackathon");
+  if (lower.includes("coding")) ids.add("coding");
+  if (lower.includes("ai") || lower.includes("ml")) ids.add("ai-ml");
+  if (lower.includes("robotics")) ids.add("robotics");
+  if (lower.includes("design") || lower.includes("branding")) ids.add("design");
+  if (lower.includes("gaming") || lower.includes("esports")) ids.add("gaming");
+  if (lower.includes("debate") || lower.includes("speaking") || lower.includes("conclave") || lower.includes("yuvaan")) ids.add("speaking");
+  if (lower.includes("creative") || lower.includes("photography") || lower.includes("media") || lower.includes("quiz") || lower.includes("devops") || lower.includes("cloud") || lower.includes("workshop") || lower.includes("vlsi") || lower.includes("pitch")) ids.add("creative");
+  return Array.from(ids);
+}
+
 /**
  * Normalises a raw backend event record into the `PublicEvent` contract this
  * frontend consumes. Static content (categories, prize strings, rules) is not
  * sent by the backend — callers merge it from `eventDetails.ts` separately.
  */
 function normaliseBackendEvent(raw: BackendEvent): PublicEvent {
-  const clubName = raw.club ?? "TantraFiesta";
-  const clubs = clubName.split(/\s+[xX&]\s+/).map(name => ({ name: name.trim(), slug: clubNameToSlug(name) }));
+  const clubs: EventClubReference[] = Array.isArray(raw.requirements?.clubs) && raw.requirements.clubs.length > 0
+    ? (raw.requirements.clubs as EventClubReference[])
+    : (raw.club ?? "TantraFiesta").split(/\s+[xX&]\s+/).map(name => ({ name: name.trim(), slug: clubNameToSlug(name) }));
   const rawPrizePool = raw.requirements?.prizePool ?? raw.prizePoolStr ?? raw.prizePool;
   const prizePool = typeof rawPrizePool === 'number'
     ? `₹${new Intl.NumberFormat('en-IN').format(rawPrizePool)}`
     : rawPrizePool?.trim() || undefined;
+
+  const rawCategories = (raw.requirements?.categories as string) || ((raw as unknown as { categories?: string }).categories) || "";
+  const categories = parseCategoryToFilterIds(rawCategories);
+  const dayLabel = (raw.requirements?.dayLabel as string) || ((raw as unknown as { dayLabel?: string }).dayLabel) || undefined;
+  const timingStr = (raw.requirements?.timingStr as string) || ((raw as unknown as { timingStr?: string }).timingStr) || undefined;
 
   const price = raw.price ?? 0;
   const feeMode = raw.feeMode ?? 'per_team';
@@ -308,13 +332,17 @@ function normaliseBackendEvent(raw: BackendEvent): PublicEvent {
     rules: raw.requirements?.rules,
     highlights: raw.requirements?.highlights,
     eligibility,
+    categories: categories.length > 0 ? categories : undefined,
+    categoryLabel: rawCategories || undefined,
+    dayLabel,
+    timingStr,
   };
 }
 
 export const BACKEND_API_BASE =
   process.env.BACKEND_API_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
-  "";
+  "http://localhost:5000";
 
 /**
  * Fetches all public events.
