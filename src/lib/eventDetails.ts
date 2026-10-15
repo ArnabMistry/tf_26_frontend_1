@@ -282,8 +282,8 @@ export const eventDetails: EventDetail[] = [
     prizePool: "₹20,000",
     prizes: [
       { position: 1, label: "Winner", amount: "₹10,000", note: "Certificate included." },
-      { position: 2, label: "1st Runner-up", amount: "₹6,000", note: "Certificate included." },
-      { position: 3, label: "2nd Runner-up", amount: "₹4,000", note: "Certificate included." },
+      { position: 2, label: "1st Runner-up", amount: "₹6,500", note: "Certificate included." },
+      { position: 3, label: "2nd Runner-up", amount: "₹3,500", note: "Certificate included." },
     ],
     stages: [
       {
@@ -599,45 +599,87 @@ export const eventDetails: EventDetail[] = [
   {
     slug: "brandxperience",
     name: "Brand-Xperience",
-    tagline: "24-hour branding challenge",
+    tagline: "Innovative branding challenge",
     image: "/event-posters/Brand-Xperience.webp",
     clubs: [
       { name: "Strokes", slug: "strokes" },
       { name: "Probe", slug: "probe" },
     ],
     description:
-      "BrandXperience is a fast-paced branding competition at IIIT Nagpur, where teams transform creative ideas into compelling brand identities and impactful campaigns. Participants analyse an existing brand's identity, image and communication, then develop a fresh creative direction for it — combining strategy, storytelling, visual design and brand positioning under a hard time limit.",
-    prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
+      "BrandXperience is an innovative branding challenge that blends creativity with strategy. Organized as part of IIIT Nagpur’s flagship tech fest TantraFiesta 2026, this is an event by Strokes (Design Club) in collaboration with Probe (Photography & Videography Club). Participants will step into the shoes of a brand strategist, using the powerful tools of videography, photography, editing, and design to craft a complete brand identity from scratch. From logos and colour palettes to storytelling visuals, teams will showcase how design and media can bring a brand to life.",
+    prizePool: "₹35,000",
+    prizes: [
+      {
+        position: 1,
+        label: "Winner",
+        amount: "₹18,000",
+        note: "Cash, Certificate, GOODIES",
+      },
+      {
+        position: 2,
+        label: "1st Runner-up",
+        amount: "₹10,000",
+        note: "Cash, Certificate, GOODIES",
+      },
+      {
+        position: 3,
+        label: "2nd Runner-up",
+        amount: "₹7,000",
+        note: "Cash, Certificate, GOODIES",
+      },
+    ],
     stages: [
       {
-        name: "24-hour branding challenge",
-        when: "23 Oct 2026, 4:00 PM – 24 Oct 2026, 3:00 PM",
+        name: "Preliminary Round (Online) – Concept Pitch",
+        when: "12 Oct 26, 12:15 AM IST – 20 Oct 26, 12:15 AM IST",
+        mode: "Online",
+        detail:
+          "Before the on-campus rounds, teams must submit a Brand case study (PDF) on a Real brand of their choice. Template Link: https://docs.google.com/document/d/1ZhXEK1IJ1n3yvqUHTAifi7vry4tF8xpruEoO13zoXsw/edit?usp=sharing",
+      },
+      {
+        name: "Day 1 – Kick-off & Design Sprint",
+        when: "24 Oct 26, 06:00 PM IST – 25 Oct 26, 02:00 AM IST",
         mode: "Offline",
         detail:
-          "Runs across three designated classrooms, including a reading room equipped with high-speed connectivity, extension boards, power backup and classroom coordinators.",
+          "The on-ground event begins on Day 1. Teams will get 8 hours in an offline, hackathon-style setting to craft the foundation of their brand’s visual identity based on a given Problem Statement which will be announced prior the start of the event.",
+      },
+      {
+        name: "Day 2 – Promotional Video & Storytelling",
+        when: "25 Oct 26, 02:00 AM IST – 25 Oct 26, 04:00 PM IST",
+        mode: "Offline",
+        detail:
+          "After the design phase, participants create a promotional ad / short video, using their logos, fonts, colours, and other design elements. They’ll combine videography, photography, editing, and storytelling skills to communicate the brand’s personality. Editing and final assembly must be completed by the 4:00 PM Day 2 deadline.",
+      },
+      {
+        name: "Final Pitch & Evaluation",
+        when: "25 Oct 26, 04:00 PM IST – 25 Oct 26, 06:00 PM IST",
+        mode: "Offline",
+        detail:
+          "Each team will present its projects to the jury, explaining: • Their thought process and reasoning behind each design choice • Filming techniques, creative direction, and overall narrative. • Branding and marketing elements, demonstrating how effectively the brand identity is developed and represented on paper.",
       },
     ],
     highlights: [
-      "Redefine and redesign the identity of an existing brand.",
-      "Analyse an existing brand's identity, image and communication, then develop a fresh creative direction.",
-      "Use logos, colour palettes, typography, photography, videography and other visual elements to communicate a brand's personality.",
+      "Innovative branding and marketing solutions for fictional or real-world brands.",
+      "Campaigns that demonstrate originality, strategic thinking, and compelling storytelling.",
+      "Redefine and redesign the identity of an existing brand using logos, colour palettes, typography, photography, and videography.",
     ],
-    eligibility: ["Open to all.", "Teams of 1–2 members."],
+    eligibility: ["Open to all college students.", "Teams of 2 to 4 members."],
     rules: [],
     organizers: [
       { name: "TantraFiesta IIIT Nagpur", email: "tantrafiesta@iiitn.ac.in" },
+      { name: "TEJAS", email: "bt25cse194@iiitn.ac.in", phone: "+91 95189 95714" },
     ],
-    registrationOpens: "2026-10-11T12:00:00+05:30",
-    registrationDeadline: "2026-10-24T17:11:00+05:30",
+    registrationOpens: "2026-10-12T00:15:00+05:30",
+    registrationDeadline: "2026-10-20T23:59:00+05:30",
     registrationFee: "₹450 per person",
     entryFeeLabel: "₹450 per participant; team leader pays for all members",
     feeMode: "per_participant",
     meals: "2 Meals + 2 Snacks",
     participationKit: true,
-    teamSize: { min: 1, max: 2 },
-    mode: "Offline",
-    startDate: "2026-10-23T16:00:00+05:30",
-    endDate: "2026-10-24T15:00:00+05:30",
+    teamSize: { min: 2, max: 4 },
+    mode: "Hybrid",
+    startDate: "2026-10-12T00:15:00+05:30",
+    endDate: "2026-10-25T18:00:00+05:30",
     venue: IIITN,
   },
   {
