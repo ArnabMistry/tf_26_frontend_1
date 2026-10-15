@@ -128,7 +128,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Round 1 — Online GitHub & Portfolio Screening",
-        when: "14–19 Oct 2026",
+        when: "14–21 Oct 2026",
         mode: "Online",
         detail:
           "GitHub profiles, repositories, previous projects and portfolios are screened. Teams are evaluated on previous work, technical skills, individual contributions and problem-solving ability — project quality and technical depth, individual contribution and collaboration, and portfolio and problem-solving ability. The Team Leader must provide the required links and details for every member. The top 60 teams qualify for the offline hackathon.",
@@ -184,7 +184,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Krushna Mali", phone: "+91 85302 96969", email: "bt25csd037@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-11T00:00:00+05:30",
-    registrationDeadline: "2026-10-20T23:59:00+05:30",
+    registrationDeadline: "2026-10-21T23:59:00+05:30",
     registrationFee: "₹550 per person",
     entryFeeLabel: "₹550 per participant; team leader pays for all members",
     feeMode: "per_participant",
