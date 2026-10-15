@@ -1312,13 +1312,7 @@ export const eventDetails: EventDetail[] = [
     ],
     stages: [
       {
-        name: "Technical inspection and registration",
-        mode: "Offline",
-        detail:
-          "The robot must pass technical inspection before the competition, checked against the robot and operator requirements. Only one team member with the robot — the currently selected operator — may attend. The robot is marked with a number sticker, and inspection must be completed by the time specified by the organizers.",
-      },
-      {
-        name: "Maze runs",
+        name: "Final Round",
         when: "25 Oct 2026, 10:00 AM – 3:00 PM",
         mode: "Offline",
         detail:
