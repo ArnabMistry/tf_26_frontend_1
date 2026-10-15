@@ -1381,8 +1381,10 @@ export const eventDetails: EventDetail[] = [
     clubs: [{ name: "Iotics", slug: "iotics" }],
     description:
       "Rann Bhoomi 2.0 challenges participants to design and build a manually controlled combat robot capable of engaging in head-to-head battles inside a dedicated arena. Robots must demonstrate superior strength, control, durability and strategy to overpower their opponents — the goal is to outlast and outfight competitors while adhering to strict safety and design standards.",
-    prizePool: "₹1,50,000",
-    prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
+    prizePool: "₹1,20,000",
+    prizes: [{ position: 1, amount: "15Kg: ₹60,000" },
+    { position: 1, amount: " 8Kg: ₹40,000" },
+    { position: 1, amount: "1.5Kg: ₹20,000" }],
     prizeNote: "Winners are declared per weight category — 1.5 kg, 8 kg and 15 kg.",
     stages: [
       {
