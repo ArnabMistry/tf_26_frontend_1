@@ -47,7 +47,7 @@ const CATEGORIES_BY_SLUG: Record<string, string[]> = {
   "the-lost-pathways": ["robotics"],
   "rann-bhoomi": ["robotics"],
   "design-a-thon": ["design"],
-  brandxperience: ["design"],
+  brandxperience: ["design", "creative"],
   "firestorm-rampage": ["gaming"],
   "combat-carnage": ["gaming"],
   "phoenix-cup": ["gaming"],

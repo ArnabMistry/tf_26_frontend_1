@@ -600,7 +600,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "brandxperience",
-    name: "Brand-Xperience",
+    name: "Brand Xperience",
     tagline: "Innovative branding challenge",
     image: "/event-posters/Brand-Xperience.webp",
     clubs: [
@@ -608,7 +608,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Probe", slug: "probe" },
     ],
     description:
-      "BrandXperience is an innovative branding challenge that blends creativity with strategy. Organized as part of IIIT Nagpur’s flagship tech fest TantraFiesta 2026, this is an event by Strokes (Design Club) in collaboration with Probe (Photography & Videography Club). Participants will step into the shoes of a brand strategist, using the powerful tools of videography, photography, editing, and design to craft a complete brand identity from scratch. From logos and colour palettes to storytelling visuals, teams will showcase how design and media can bring a brand to life.",
+      "Brand Xperience is an innovative branding challenge that blends creativity with strategy. Organized as part of IIIT Nagpur’s flagship tech fest TantraFiesta 2026, this is an event by Strokes (Design Club) in collaboration with Probe (Photography & Videography Club). Participants will step into the shoes of a brand strategist, using the powerful tools of videography, photography, editing, and design to craft a complete brand identity from scratch. From logos and colour palettes to storytelling visuals, teams will showcase how design and media can bring a brand to life.",
     prizePool: "₹35,000",
     prizes: [
       {
@@ -672,7 +672,7 @@ export const eventDetails: EventDetail[] = [
       { name: "TEJAS", email: "bt25cse194@iiitn.ac.in", phone: "+91 95189 95714" },
     ],
     registrationOpens: "2026-10-12T00:15:00+05:30",
-    registrationDeadline: "2026-10-20T23:59:00+05:30",
+    registrationDeadline: "2026-10-20T00:15:00+05:30",
     registrationFee: "₹450 per person",
     entryFeeLabel: "₹450 per participant; team leader pays for all members",
     feeMode: "per_participant",
