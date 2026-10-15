@@ -215,10 +215,10 @@ export function contactPageJsonLd() {
         },
         {
           "@type": "ContactPoint",
-          contactType: "Corporate Lead",
-          name: "Aryan Patil",
-          telephone: "+91-9373773402",
-          email: "tantrafiesta.corporate@iiitn.ac.in",
+          contactType: "Technical Secretary",
+          name: "Amulya Yadav",
+          telephone: "+91-86045-51326",
+          email: "tantrafiesta.technical@iiitn.ac.in",
         },
         {
           "@type": "ContactPoint",
