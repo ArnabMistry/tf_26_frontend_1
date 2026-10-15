@@ -177,6 +177,7 @@ export function EventsExplorer({ events }: EventsExplorerProps) {
               <div className={styles.clubList} role="group" aria-label="Filter events by club">
                 {clubOptions.map((club) => {
                   const logo = getClubLogo(club.slug) || getClubLogo(club.name);
+                  const isIotics = club.slug?.toLowerCase().includes("iotics") || club.name?.toLowerCase().includes("iotics");
                   return (
                     <button
                       key={club.slug}
@@ -186,7 +187,7 @@ export function EventsExplorer({ events }: EventsExplorerProps) {
                       onClick={() => updateParams({ club: clubFilter === club.slug ? null : club.slug })}
                     >
                       {logo ? (
-                        <Image src={logo} alt="" width={28} height={28} className={styles.clubChipLogo} />
+                        <Image src={logo} alt="" width={28} height={28} className={`${styles.clubChipLogo} ${isIotics ? styles.clubChipLogoIotics : ""}`} />
                       ) : (
                         <span className={styles.clubChipMonogram} aria-hidden="true">
                           {club.name.charAt(0).toUpperCase()}

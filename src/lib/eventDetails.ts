@@ -1397,7 +1397,7 @@ export const eventDetails: EventDetail[] = [
         when: "24 Oct 2026, 6:00 PM – 25 Oct 2026, 11:30 PM",
         mode: "Offline",
         detail:
-          "Five-minute matches in an elimination format. The losing bot is eliminated and the winner advances, continuing until the top 9 teams qualify for the finals — 3 from 1.5 kg, 3 from 8 kg and 3 from 15 kg. Victory by knock-out: the opposing bot fails to move 6 inches within 30 seconds. Scored on aggression, damage, control and strategy.",
+          "Five-minute matches in an elimination format. The losing bot is eliminated and the winner advances, continuing until the top 6 teams qualify for the finals — 2 from 1.5 kg, 2 from 8 kg and 2 from 15 kg. Victory by knock-out: the opposing bot fails to move 6 inches within 30 seconds. Scored on aggression, damage, control and strategy.",
       },
       {
         name: "Round 3 — Finals: Championship Battles",
@@ -1421,7 +1421,7 @@ export const eventDetails: EventDetail[] = [
       "Valid student ID cards are required at registration.",
     ],
     rules: [
-      "Dimensions: 30 × 30 × 30 for 1.5 kg bots; 75 × 75 × 50 for 8 kg and 15 kg bots (±5% tolerance allowed).",
+      "Weight Categories: 1.5 kg (±5%), 8kg (±5%) and 15 kg (±5%)",
       "Power supply: electrical (batteries) only — internal combustion engines are prohibited. Maximum 52 V DC between any two points.",
       "Robots must have a manual kill switch, an emergency stop on the controller, and proper insulation and secure wiring.",
       "Hydraulics and pneumatics: maximum 50 bar, fully self-contained and leak-proof; pneumatics need certified tanks and regulators with mandatory safety approvals.",

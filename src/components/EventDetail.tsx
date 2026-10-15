@@ -366,6 +366,7 @@ function ClubMark({ club }: { club: ClubRef }) {
   const logo = getClubLogo(club.slug) || getClubLogo(club.name);
 
   if (logo) {
+    const isIotics = club.slug?.toLowerCase().includes("iotics") || club.name?.toLowerCase().includes("iotics");
     return (
       <span className={styles.mark} title={club.name}>
         <Image
@@ -373,7 +374,7 @@ function ClubMark({ club }: { club: ClubRef }) {
           alt={`${club.name} logo`}
           width={160}
           height={160}
-          className={styles.markImage}
+          className={`${styles.markImage} ${isIotics ? styles.markImageIotics : ""}`}
         />
       </span>
     );
