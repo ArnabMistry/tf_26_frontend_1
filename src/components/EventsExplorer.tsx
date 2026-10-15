@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useCallback, useState, type FormEvent } from "react";
+import { useMemo, useRef, useCallback, useState, useEffect, type FormEvent } from "react";
 import Image from "next/image";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { EventCard } from "@/components/EventCard";
@@ -67,6 +67,58 @@ export function EventsExplorer({ events }: EventsExplorerProps) {
     return matchesSearch && matchesCategory && matchesClub;
   });
   const eventGroups = groupEventsForLayout(visibleEvents);
+
+  // On mobile, the focused event card pops out while scrolling (similar to desktop hover)
+  useEffect(() => {
+    const isMobileDevice = () => window.innerWidth <= 768 || window.matchMedia("(hover: none)").matches;
+    if (!isMobileDevice()) return;
+
+    let ticking = false;
+    const updateActiveCard = () => {
+      const cards = document.querySelectorAll<HTMLElement>("[data-event-card]");
+      if (!cards.length) return;
+
+      const viewportCenter = window.innerHeight * 0.48;
+      let closestCard: HTMLElement | null = null;
+      let minDistance = Infinity;
+
+      cards.forEach((card) => {
+        const rect = card.getBoundingClientRect();
+        if (rect.bottom > 0 && rect.top < window.innerHeight) {
+          const cardCenter = rect.top + rect.height / 2;
+          const distance = Math.abs(viewportCenter - cardCenter);
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestCard = card;
+          }
+        }
+      });
+
+      cards.forEach((card) => {
+        const isActive = card === closestCard && minDistance < window.innerHeight * 0.38;
+        if (card.getAttribute("data-active") !== String(isActive)) {
+          card.setAttribute("data-active", String(isActive));
+        }
+      });
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateActiveCard);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll, { passive: true });
+    updateActiveCard();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, [visibleEvents]);
 
   const clubFilterName = clubFilter ? clubOptions.find((c) => c.slug === clubFilter)?.name : undefined;
   const heading = normalizedSearch

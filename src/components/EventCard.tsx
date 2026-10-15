@@ -42,7 +42,12 @@ export function EventCard({ event, variant = "left", lowerWing = false, onRegist
   );
 
   return (
-    <article data-reveal-item={reveal ? variant : undefined} className={`${styles.card} ${styles[variant]} ${lowerWing ? styles.lowerWing : ""}`} aria-label={event.name}>
+    <article
+      data-event-card="true"
+      data-reveal-item={reveal ? variant : undefined}
+      className={`${styles.card} ${styles[variant]} ${lowerWing ? styles.lowerWing : ""}`}
+      aria-label={event.name}
+    >
       <svg className={`${styles.backing} ${centered ? styles.shapeDesktopOnly : ""}`} aria-hidden="true" viewBox={centered ? "0 0 688 318" : "0 0 606 292"} preserveAspectRatio="none">
         <path d={centered ? centerShape : lowerWing ? lowerWingShape : wingShape} transform={variant === "right" ? "translate(606 0) scale(-1 1)" : undefined} />
       </svg>

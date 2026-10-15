@@ -9,6 +9,8 @@
  * This module defines the read-only contract for public, SEO-indexable event pages.
  */
 
+import { formatMealsLabel } from "@/lib/eventDetails";
+
 export interface EventClubReference {
   name: string;
   slug: string;
@@ -160,7 +162,7 @@ function normaliseBackendEvent(raw: BackendEvent): PublicEvent {
     paymentTrigger: raw.paymentTrigger,
     isPaid: raw.price !== undefined && raw.price > 0,
     registrationFee: raw.requirements?.registrationFee || (raw.price === undefined || raw.price === 0 ? "Free" : `₹${raw.price}${raw.feeMode === "per_team" ? " per team" : " per participant"}`),
-    meals: raw.requirements?.meals || undefined,
+    meals: raw.requirements?.meals ? formatMealsLabel(raw.requirements.meals) : undefined,
     participationKit: raw.requirements?.participationKit !== undefined ? Boolean(raw.requirements.participationKit) : undefined,
     requirements: raw.requirements,
     venue: raw.venue ?? undefined,
