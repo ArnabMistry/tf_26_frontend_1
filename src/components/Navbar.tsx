@@ -120,11 +120,7 @@ export function Navbar({
         </Link>
 
         {/* ── Desktop links ── */}
-        <div
-          className={`hidden items-center gap-3 text-xs font-bold uppercase tracking-wider text-white md:flex lg:gap-4 lg:text-sm ${
-            user ? "md:ml-auto" : ""
-          }`}
-        >
+        <div className="hidden items-center gap-3 text-xs font-bold uppercase tracking-wider text-white md:flex md:ml-auto lg:gap-4 lg:text-sm">
           {navigation
             .filter(({ href }) => href !== "/admin" || isAdmin)
             .map(({ href, label }) => {
@@ -153,7 +149,7 @@ export function Navbar({
         </div>
 
         {/* ── Right side controls: PortalNav + Mobile Menu Button ── */}
-        <div className="flex items-center gap-2">
+        <div className={`flex items-center gap-2 ${!user ? "md:hidden" : ""}`}>
           <PortalNav />
 
           {/* Mobile menu toggle button */}
