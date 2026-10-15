@@ -39,7 +39,7 @@ export interface PublicEvent {
   registrationFee?: string;
   meals?: string;
   participationKit?: boolean;
-  requirements?: Record<string, any> | null;
+  requirements?: Record<string, unknown> | null;
   date?: string;
   startDate: string;
   endDate?: string;
@@ -99,7 +99,7 @@ interface BackendEvent {
     registrationFee?: string | null;
     meals?: string | null;
     participationKit?: boolean | null;
-    [key: string]: any;
+    [key: string]: unknown;
   } | null;
   rounds?: { roundNumber: number; name?: string; roundEndTime?: string }[];
   _count?: { registrations: number; teams: number };

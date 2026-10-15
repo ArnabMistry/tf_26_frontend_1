@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useId } from "react";
 import Link from "next/link";
-import { FAQ_CATEGORIES, FAQS_DATA, type FAQItem } from "@/data/faqs";
+import { FAQ_CATEGORIES, FAQS_DATA } from "@/data/faqs";
 import styles from "./FaqExplorer.module.css";
 
 export function FaqExplorer() {
@@ -103,7 +103,7 @@ export function FaqExplorer() {
       {/* Questions Accordion */}
       {filteredFaqs.length > 0 ? (
         <ul className={styles.accordionList} role="list">
-          {filteredFaqs.map((faq, index) => {
+          {filteredFaqs.map((faq) => {
             const isOpen = openIds.has(faq.id);
             const questionId = `${baseId}-q-${faq.id}`;
             const answerId = `${baseId}-a-${faq.id}`;
