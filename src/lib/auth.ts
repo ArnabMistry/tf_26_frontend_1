@@ -1,7 +1,7 @@
 import { clearSignedIn } from './session';
 
 export const API_BASE = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '');
-export type AuthUser = { id: string; role: 'participant' | 'event_admin' | 'super'; allowedEventIds: string[] | null };
+export type AuthUser = { id: string; email?: string; role: 'participant' | 'event_admin' | 'super'; allowedEventIds: string[] | null };
 
 export class ApiError extends Error {
   constructor(message: string, public status: number) { super(message); }
@@ -44,6 +44,10 @@ export async function authRequest(path: string, body?: unknown, _legacyToken?: s
 }
 
 export function destination(user: AuthUser) {
+  const email = (user.email || '').trim().toLowerCase();
+  if (email === 'meals@iiitn.ac.in' || email.startsWith('meals@')) {
+    return '/meal-scanner';
+  }
   if (user.role === 'super') return '/admin/super';
   if (user.role === 'event_admin') return user.allowedEventIds?.length
     ? `/admin/events/${encodeURIComponent(user.allowedEventIds[0])}` : '/admin/events';
