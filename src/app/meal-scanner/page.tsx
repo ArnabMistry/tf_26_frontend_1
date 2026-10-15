@@ -36,6 +36,52 @@ type MealSession = {
   scannedCount: number;
 };
 
+// ── Mobile Audio & Haptic Feedback ──────────────────────────────
+function playFeedbackTone(type: 'success' | 'error') {
+  try {
+    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    if (type === 'success') {
+      // High pleasant chime (880Hz -> 1320Hz)
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1320, ctx.currentTime + 0.16);
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.001, ctx.currentTime + 0.18);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.18);
+    } else {
+      // Warning buzzer (240Hz -> 160Hz)
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(240, ctx.currentTime);
+      osc.frequency.linearRampToValueAtTime(160, ctx.currentTime + 0.28);
+      gain.gain.setValueAtTime(0.25, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.3);
+    }
+  } catch {}
+
+  // Mobile physical vibration
+  try {
+    if (typeof window !== 'undefined' && 'vibrate' in navigator) {
+      if (type === 'success') {
+        navigator.vibrate([80]);
+      } else {
+        navigator.vibrate([150, 70, 150]);
+      }
+    }
+  } catch {}
+}
+
 export default function MealScannerPage() {
   const router = useRouter();
   const [authed, setAuthed] = useState(false);
@@ -48,6 +94,12 @@ export default function MealScannerPage() {
   const [manualCode, setManualCode] = useState('');
   const [meals, setMeals] = useState<MealSession[]>([]);
   const [selectedMealId, setSelectedMealId] = useState<number | null>(null);
+
+  // Camera feature state
+  const [hasTorch, setHasTorch] = useState(false);
+  const [isTorchOn, setIsTorchOn] = useState(false);
+  const [cameras, setCameras] = useState<Array<{ id: string; label: string }>>([]);
+  const [selectedCameraId, setSelectedCameraId] = useState<string | null>(null);
 
   const scannerRef = useRef<any>(null);
   const isLockedRef = useRef(false);
@@ -109,7 +161,7 @@ export default function MealScannerPage() {
       }
 
       setPhase('processing');
-      setMessage('Verifying pass & recording claim...');
+      setMessage('Verifying pass & claiming meal...');
       setClaim(null);
 
       // Immediately pause camera decoding while API verifies claim
@@ -120,7 +172,7 @@ export default function MealScannerPage() {
       try {
         let response: any;
         if (isManual) {
-          if (!selectedMealId) throw new Error('Please select a meal session');
+          if (!selectedMealId) throw new Error('Please select an active meal session');
           response = await authRequest(
             `/api/admin/meals/${selectedMealId}/verify-code`,
             { code: tokenOrCode.trim() }
@@ -131,6 +183,7 @@ export default function MealScannerPage() {
           });
         }
 
+        playFeedbackTone('success');
         setPhase('success');
         setMessage(response.message || 'Meal pass successfully redeemed!');
         setClaim(response.data);
@@ -148,6 +201,7 @@ export default function MealScannerPage() {
           } catch {}
         }, SUCCESS_RESET_MS);
       } catch (err: any) {
+        playFeedbackTone('error');
         setPhase('error');
         const errMsg =
           err instanceof ApiError
@@ -180,11 +234,23 @@ export default function MealScannerPage() {
         const { Html5Qrcode } = await import('html5-qrcode');
         if (!isMounted) return;
 
+        // Discover available cameras
+        try {
+          const devices = await Html5Qrcode.getCameras();
+          if (devices && devices.length > 0 && isMounted) {
+            setCameras(devices.map((d) => ({ id: d.id, label: d.label || `Camera ${d.id}` })));
+          }
+        } catch {}
+
         const scanner = new Html5Qrcode('meal-qr-reader', { verbose: false });
         scannerRef.current = scanner;
 
+        const cameraConfig = selectedCameraId
+          ? { deviceId: { exact: selectedCameraId } }
+          : { facingMode: 'environment' };
+
         await scanner.start(
-          { facingMode: 'environment' },
+          cameraConfig,
           {
             fps: 15,
             qrbox: { width: 260, height: 260 },
@@ -197,6 +263,14 @@ export default function MealScannerPage() {
           },
           () => {} // silence normal frame-by-frame non-matches
         );
+
+        // Check torch capability
+        try {
+          const videoTrack = (scanner as any).getRunningTrackCameraCapabilities?.() || null;
+          if (videoTrack?.torch) {
+            setHasTorch(true);
+          }
+        } catch {}
       } catch (err: any) {
         if (isMounted) {
           setCameraError(
@@ -214,7 +288,27 @@ export default function MealScannerPage() {
         scannerRef.current = null;
       }
     };
-  }, [authed, handleRedeem]);
+  }, [authed, selectedCameraId, handleRedeem]);
+
+  // Torch toggle
+  const toggleTorch = async () => {
+    if (!scannerRef.current) return;
+    try {
+      const nextTorch = !isTorchOn;
+      await scannerRef.current.applyVideoConstraints({
+        advanced: [{ torch: nextTorch }],
+      });
+      setIsTorchOn(nextTorch);
+    } catch {}
+  };
+
+  // Switch camera toggle
+  const switchCamera = () => {
+    if (cameras.length <= 1) return;
+    const currentIndex = cameras.findIndex((c) => c.id === selectedCameraId);
+    const nextIndex = (currentIndex + 1) % cameras.length;
+    setSelectedCameraId(cameras[nextIndex].id);
+  };
 
   // 5. Cleanup on unmount
   useEffect(() => {
@@ -310,12 +404,39 @@ export default function MealScannerPage() {
                 {phase === 'processing' && (
                   <div className={styles.freeze_overlay}>
                     <div className={styles.spinner} />
-                    <p style={{ fontWeight: 700, fontSize: '13px', color: '#faff52' }}>
+                    <p style={{ fontWeight: 800, fontSize: '13px', color: '#faff52', letterSpacing: '0.06em' }}>
                       LOCKING & CLAIMING...
                     </p>
                   </div>
                 )}
               </>
+            )}
+          </div>
+
+          {/* Camera Tools (Torch / Flip) */}
+          <div className={styles.camera_tools}>
+            {hasTorch && (
+              <button
+                type="button"
+                onClick={toggleTorch}
+                className={`${styles.tool_btn} ${isTorchOn ? styles.active : ''}`}
+                title="Toggle Flashlight"
+              >
+                <span>⚡</span>
+                <span>{isTorchOn ? 'Flash On' : 'Flash'}</span>
+              </button>
+            )}
+
+            {cameras.length > 1 && (
+              <button
+                type="button"
+                onClick={switchCamera}
+                className={styles.tool_btn}
+                title="Switch Camera"
+              >
+                <span>🔄</span>
+                <span>Flip Camera</span>
+              </button>
             )}
           </div>
         </div>
@@ -466,6 +587,10 @@ export default function MealScannerPage() {
                     if (e.key === 'Enter') void handleRedeem(manualCode, true);
                   }}
                   maxLength={9}
+                  inputMode="text"
+                  autoCapitalize="characters"
+                  autoCorrect="off"
+                  spellCheck={false}
                   disabled={phase === 'processing'}
                 />
                 <button
