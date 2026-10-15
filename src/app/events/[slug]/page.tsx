@@ -67,6 +67,7 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
     feeMode: event.feeMode || local?.feeMode,
     meals: event.meals || local?.meals,
     participationKit: event.participationKit !== undefined ? event.participationKit : local?.participationKit,
+    accommodation: event.accommodation !== undefined ? event.accommodation : local?.accommodation,
     teamSize: event.minTeamSize && event.maxTeamSize ? { min: event.minTeamSize, max: event.maxTeamSize } : local?.teamSize,
     venue: event.venue || local?.venue,
   };

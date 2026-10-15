@@ -81,6 +81,7 @@ export interface EventDetail {
   feeMode?: "per_team" | "per_participant";
   meals?: string;
   participationKit?: boolean;
+  accommodation?: boolean;
   /** Team size the platform enforces. `min === max` means a fixed team. */
   teamSize?: { min: number; max: number };
   mode?: "Online" | "Offline" | "Hybrid";
@@ -1382,9 +1383,11 @@ export const eventDetails: EventDetail[] = [
     description:
       "Rann Bhoomi 2.0 challenges participants to design and build a manually controlled combat robot capable of engaging in head-to-head battles inside a dedicated arena. Robots must demonstrate superior strength, control, durability and strategy to overpower their opponents — the goal is to outlast and outfight competitors while adhering to strict safety and design standards.",
     prizePool: "₹1,20,000",
-    prizes: [{ position: 1, amount: "15Kg: ₹60,000" },
-    { position: 1, amount: " 8Kg: ₹40,000" },
-    { position: 1, amount: "1.5Kg: ₹20,000" }],
+    prizes: [
+      { position: 1, amount: "15Kg: ₹60,000" },
+      { position: 1, amount: "8Kg: ₹40,000" },
+      { position: 1, amount: "1.5Kg: ₹20,000" },
+    ],
     prizeNote: "Winners are declared per weight category — 1.5 kg, 8 kg and 15 kg.",
     stages: [
       {
@@ -1450,6 +1453,7 @@ export const eventDetails: EventDetail[] = [
     feeMode: "per_participant",
     meals: "1 Meal + 1 Snack",
     participationKit: true,
+    accommodation: true,
     teamSize: { min: 1, max: 6 },
     mode: "Hybrid",
     startDate: "2026-10-22T18:00:00+05:30",

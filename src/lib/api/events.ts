@@ -41,6 +41,7 @@ export interface PublicEvent {
   registrationFee?: string;
   meals?: string;
   participationKit?: boolean;
+  accommodation?: boolean;
   requirements?: Record<string, unknown> | null;
   date?: string;
   startDate: string;

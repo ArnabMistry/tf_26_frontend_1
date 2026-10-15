@@ -100,6 +100,13 @@ export function EventDetail({ event }: EventDetailProps) {
               </div>
             )}
 
+            {(event.accommodation || event.slug === "rann-bhoomi") && (
+              <div className={styles.metaChip}>
+                <span className={styles.metaIcon}>🏨</span>
+                <span className={styles.metaValue}>Accommodation</span>
+              </div>
+            )}
+
             {event.venue && (
               <div className={styles.metaChip}>
                 <span className={styles.metaIcon}>📍</span>
@@ -168,7 +175,7 @@ export function EventDetail({ event }: EventDetailProps) {
                   <p className={styles.feeOverviewDetail}>{event.entryFeeLabel}</p>
                 )}
               </div>
-              {(event.meals || event.participationKit !== undefined) && (
+              {(event.meals || event.participationKit !== undefined || event.accommodation || event.slug === "rann-bhoomi") && (
                 <div className={styles.perksRow}>
                   {event.meals && (
                     <span className={styles.perkChip}>
@@ -178,6 +185,11 @@ export function EventDetail({ event }: EventDetailProps) {
                   {event.participationKit && (
                     <span className={styles.perkChip}>
                       <span aria-hidden="true">🎒</span> Participation Kit Included
+                    </span>
+                  )}
+                  {(event.accommodation || event.slug === "rann-bhoomi") && (
+                    <span className={styles.perkChip}>
+                      <span aria-hidden="true">🏨</span> Accommodation Included
                     </span>
                   )}
                 </div>
@@ -316,6 +328,10 @@ function PrizeBox({ event }: { event: EventDetailData }) {
   // The ₹ is styled separately, so drop one if the source value already carries it.
   const prizePool = (event.prizePool ?? "XX,XXX").replace(/^\s*₹\s*/, "");
 
+  const uniquePrizes = (event.prizes || []).filter((prize, index, self) =>
+    index === self.findIndex(p => p.position === prize.position && (p.amount ?? p.label) === (prize.amount ?? prize.label))
+  );
+
   return (
     <div className={styles.prizeBox}>
       <div className={styles.prizeSummary}>
@@ -328,8 +344,8 @@ function PrizeBox({ event }: { event: EventDetailData }) {
       </div>
 
       <ul className={styles.prizeList}>
-        {event.prizes.map((prize) => (
-          <li key={prize.position} className={styles.prizeRow}>
+        {uniquePrizes.map((prize, index) => (
+          <li key={`${prize.position}-${prize.label || prize.amount || index}`} className={styles.prizeRow}>
             <MedalIcon position={prize.position} />
             <span>
               <span className="sr-only">{ordinal(prize.position)} place: </span>
