@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useId, useRef, useState } from "react";
 import { getClubLogo } from "@/lib/clubs";
-import type { EventDetail as EventDetailData } from "@/lib/eventDetails";
+import { formatMealsLabel, type EventDetail as EventDetailData } from "@/lib/eventDetails";
 import styles from "./EventDetail.module.css";
 
 type ClubRef = EventDetailData["clubs"][number];
@@ -89,7 +89,7 @@ export function EventDetail({ event }: EventDetailProps) {
             {event.meals && (
               <div className={styles.metaChip}>
                 <span className={styles.metaIcon}>🍽️</span>
-                <span className={styles.metaValue}>{event.meals}</span>
+                <span className={styles.metaValue}>{formatMealsLabel(event.meals)}</span>
               </div>
             )}
 
@@ -172,7 +172,7 @@ export function EventDetail({ event }: EventDetailProps) {
                 <div className={styles.perksRow}>
                   {event.meals && (
                     <span className={styles.perkChip}>
-                      <span aria-hidden="true">🍽️</span> {event.meals}
+                      <span aria-hidden="true">🍽️</span> {formatMealsLabel(event.meals)}
                     </span>
                   )}
                   {event.participationKit && (

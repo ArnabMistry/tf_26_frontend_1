@@ -90,6 +90,22 @@ export interface EventDetail {
   venue?: string;
 }
 
+/**
+ * Normalizes meal/snack perk strings according to quantity:
+ * - If meal count > 1, displays "Meals" instead of "Meal".
+ * - If meal count === 1, displays "Meal" instead of "Meals".
+ * - If snack count === 1, displays "Snack" instead of "Snacks".
+ * - If snack count > 1, displays "Snacks" instead of "Snack".
+ */
+export function formatMealsLabel(str?: string | null): string {
+  if (!str) return "";
+  return str
+    .replace(/\b([2-9]|\d{2,})\s+Meal\b/gi, "$1 Meals")
+    .replace(/\b1\s+Meals\b/gi, "1 Meal")
+    .replace(/\b1\s+Snacks\b/gi, "1 Snack")
+    .replace(/\b([2-9]|\d{2,})\s+Snack\b/gi, "$1 Snacks");
+}
+
 const FREE = "Free";
 const IIITN = "Indian Institute of Information Technology, Nagpur";
 
@@ -172,7 +188,7 @@ export const eventDetails: EventDetail[] = [
     registrationFee: "₹550 per person",
     entryFeeLabel: "₹550 per participant; team leader pays for all members",
     feeMode: "per_participant",
-    meals: "2 Meal + 2 Snacks",
+    meals: "2 Meals + 2 Snacks",
     participationKit: true,
     teamSize: { min: 3, max: 4 },
     mode: "Hybrid",
@@ -247,7 +263,7 @@ export const eventDetails: EventDetail[] = [
     registrationFee: "₹450 per person",
     entryFeeLabel: "₹450 per participant; team leader pays for all members",
     feeMode: "per_participant",
-    meals: "2 Meal + 2 Snacks",
+    meals: "2 Meals + 2 Snacks",
     participationKit: true,
     teamSize: { min: 2, max: 4 },
     mode: "Hybrid",
@@ -311,7 +327,7 @@ export const eventDetails: EventDetail[] = [
     registrationFee: "₹150 per person",
     entryFeeLabel: "₹150 per participant; team leader pays for all members",
     feeMode: "per_participant",
-    meals: "1 Snacks",
+    meals: "1 Snack",
     participationKit: true,
     teamSize: { min: 4, max: 4 },
     mode: "Hybrid",
@@ -385,7 +401,7 @@ export const eventDetails: EventDetail[] = [
     registrationFee: "₹350 per person",
     entryFeeLabel: "₹350 per participant; team leader pays for all members",
     feeMode: "per_participant",
-    meals: "1 Snacks",
+    meals: "1 Snack",
     participationKit: true,
     teamSize: { min: 2, max: 3 },
     mode: "Hybrid",
@@ -451,7 +467,7 @@ export const eventDetails: EventDetail[] = [
     registrationFee: "₹50 per person",
     entryFeeLabel: "₹50 per participant",
     feeMode: "per_participant",
-    meals: "1 Snacks",
+    meals: "1 Snack",
     participationKit: false,
     teamSize: { min: 1, max: 1 },
     mode: "Offline",
@@ -616,7 +632,7 @@ export const eventDetails: EventDetail[] = [
     registrationFee: "₹450 per person",
     entryFeeLabel: "₹450 per participant; team leader pays for all members",
     feeMode: "per_participant",
-    meals: "2 Meal + 2 Snacks",
+    meals: "2 Meals + 2 Snacks",
     participationKit: true,
     teamSize: { min: 1, max: 2 },
     mode: "Offline",
@@ -1090,7 +1106,7 @@ export const eventDetails: EventDetail[] = [
     registrationFee: "₹450 per person",
     entryFeeLabel: "₹450 per participant; team leader pays for all members",
     feeMode: "per_participant",
-    meals: "2 Meal + 2 Snacks",
+    meals: "2 Meals + 2 Snacks",
     participationKit: true,
     teamSize: { min: 1, max: 4 },
     mode: "Hybrid",
@@ -1143,7 +1159,7 @@ export const eventDetails: EventDetail[] = [
     registrationFee: "₹150 per person",
     entryFeeLabel: "₹150 per participant; team leader pays for all members",
     feeMode: "per_participant",
-    meals: "1 Snacks",
+    meals: "1 Snack",
     participationKit: true,
     teamSize: { min: 1, max: 4 },
     mode: "Offline",
@@ -1209,7 +1225,7 @@ export const eventDetails: EventDetail[] = [
     registrationFee: "₹150 per person",
     entryFeeLabel: "₹150 per participant; team leader pays for all members",
     feeMode: "per_participant",
-    meals: "1 Snacks",
+    meals: "1 Snack",
     participationKit: true,
     teamSize: { min: 1, max: 4 },
     mode: "Offline",
@@ -1287,7 +1303,7 @@ export const eventDetails: EventDetail[] = [
     registrationFee: "₹150 per person",
     entryFeeLabel: "₹150 per participant; team leader pays for all members",
     feeMode: "per_participant",
-    meals: "1 Snacks",
+    meals: "1 Snack",
     participationKit: true,
     teamSize: { min: 1, max: 5 },
     mode: "Offline",
@@ -1360,7 +1376,7 @@ export const eventDetails: EventDetail[] = [
     registrationFee: "₹300 per person",
     entryFeeLabel: "₹300 per participant; team leader pays for all members",
     feeMode: "per_participant",
-    meals: "1 Meal + 1 Snacks",
+    meals: "1 Meal + 1 Snack",
     participationKit: true,
     teamSize: { min: 1, max: 6 },
     mode: "Hybrid",
@@ -1407,7 +1423,7 @@ export const eventDetails: EventDetail[] = [
     registrationFee: "₹300 per person",
     entryFeeLabel: "₹300 per participant; team leader pays for all members",
     feeMode: "per_participant",
-    meals: "1 Snacks",
+    meals: "1 Snack",
     participationKit: true,
     teamSize: { min: 1, max: 1 },
     mode: "Offline",
@@ -1508,7 +1524,7 @@ export const eventDetails: EventDetail[] = [
     registrationFee: "₹250 per person",
     entryFeeLabel: "₹250 per participant; team leader pays for all members",
     feeMode: "per_participant",
-    meals: "1 Meal + 1 Snacks",
+    meals: "1 Meal + 1 Snack",
     participationKit: true,
     teamSize: { min: 2, max: 3 },
     mode: "Hybrid",
@@ -1623,7 +1639,7 @@ export const eventDetails: EventDetail[] = [
     registrationFee: "₹250 per person",
     entryFeeLabel: "₹250 per participant",
     feeMode: "per_participant",
-    meals: "1 Meal + 1 Snacks",
+    meals: "1 Meal + 1 Snack",
     participationKit: true,
     teamSize: { min: 1, max: 1 },
     mode: "Offline",

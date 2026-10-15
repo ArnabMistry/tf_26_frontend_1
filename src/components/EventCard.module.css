@@ -255,29 +255,29 @@
   box-shadow: 0 2px 0 #a61a61;
 }
 
-.card:is(:hover, :focus-within) {
+.card:is(:hover, :focus-within, [data-active="true"]) {
   z-index: 1;
   transform: translateY(-5px) scale(1.025);
 }
 
-.card:is(:hover, :focus-within) .shape {
+.card:is(:hover, :focus-within, [data-active="true"]) .shape {
   fill: #ffe75c;
 }
 
-.card:is(:hover, :focus-within) .title::after {
+.card:is(:hover, :focus-within, [data-active="true"]) .title::after {
   transform: scaleX(1);
 }
 
-.card:is(:hover, :focus-within) .backing {
+.card:is(:hover, :focus-within, [data-active="true"]) .backing {
   opacity: 1;
   translate: 10px 10px;
 }
 
-.card:is(:hover, :focus-within) .actionIcon {
+.card:is(:hover, :focus-within, [data-active="true"]) .actionIcon {
   transform: translateX(4px);
 }
 
-.card:is(:hover, :focus-within) .prize {
+.card:is(:hover, :focus-within, [data-active="true"]) .prize {
   transform: translateY(-2px);
 }
 
@@ -413,12 +413,12 @@
     transition: none;
   }
 
-  .card:is(:hover, :focus-within) {
+  .card:is(:hover, :focus-within, [data-active="true"]) {
     transform: none;
   }
 
-  .card:is(:hover, :focus-within) .prize,
-  .card:is(:hover, :focus-within) .actionIcon {
+  .card:is(:hover, :focus-within, [data-active="true"]) .prize,
+  .card:is(:hover, :focus-within, [data-active="true"]) .actionIcon {
     transform: none;
   }
 
