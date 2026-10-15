@@ -80,32 +80,31 @@ const busTimings = [
 interface ContactLead {
   role: string;
   name: string;
-  id?: string;
   phone: string;
   tel: string;
   email: string;
+  isPrimary?: boolean;
 }
 
 const leads: ContactLead[] = [
-  {
-    role: "Hospitality Lead",
-    name: "Keshav Shukla",
-    id: "BT24ECI049",
-    phone: "+91 9016188508",
-    tel: "+919016188508",
-    email: "tantrafiesta.hospitality@iiitn.ac.in",
-  },
   {
     role: "Technical Secretary",
     name: "Amulya Yadav",
     phone: "+91 86045 51326",
     tel: "+918604551326",
-    email: "tantrafiesta.technical@iiitn.ac.in",
+    email: "ts@iiitn.ac.in",
+    isPrimary: true,
+  },
+  {
+    role: "Hospitality Lead",
+    name: "Keshav Shukla",
+    phone: "+91 9016188508",
+    tel: "+919016188508",
+    email: "tantrafiesta.hospitality@iiitn.ac.in",
   },
   {
     role: "Marketing Lead",
     name: "Abdul Malik",
-    id: "BT24CSA046",
     phone: "+91 9989211620",
     tel: "+919989211620",
     email: "tantrafiesta.marketing@iiitn.ac.in",
@@ -139,10 +138,12 @@ export default function ContactPage() {
 
         <section aria-label="Organizing team contacts" className={styles.contacts}>
           {leads.map((lead) => (
-            <article className={styles.contactCard} key={lead.id || lead.name}>
+            <article
+              className={`${styles.contactCard} ${lead.isPrimary ? styles.primaryCard : ""}`}
+              key={lead.name}
+            >
               <h2>{lead.name}</h2>
               <p className={styles.role}>{lead.role}</p>
-              {lead.id && <span className={styles.rollNo}>{lead.id}</span>}
               <p className={styles.phone}>
                 <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">
                   <path d="m6.6 10.8 2.8-2.1a1 1 0 0 0 .3-1.2L7.4 2.7a1 1 0 0 0-1.1-.5L2.8 3A1 1 0 0 0 2 4c0 9.9 8.1 18 18 18a1 1 0 0 0 1-.8l.8-3.5a1 1 0 0 0-.5-1.1l-4.8-2.3a1 1 0 0 0-1.2.3l-2.1 2.8a15.2 15.2 0 0 1-6.6-6.6Z" />

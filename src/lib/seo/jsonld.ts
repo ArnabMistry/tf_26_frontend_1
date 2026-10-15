@@ -208,17 +208,17 @@ export function contactPageJsonLd() {
       contactPoint: [
         {
           "@type": "ContactPoint",
+          contactType: "Technical Secretary",
+          name: "Amulya Yadav",
+          telephone: "+91-86045-51326",
+          email: "ts@iiitn.ac.in",
+        },
+        {
+          "@type": "ContactPoint",
           contactType: "Hospitality Lead",
           name: "Keshav Shukla",
           telephone: "+91-9016188508",
           email: "tantrafiesta.hospitality@iiitn.ac.in",
-        },
-        {
-          "@type": "ContactPoint",
-          contactType: "Technical Secretary",
-          name: "Amulya Yadav",
-          telephone: "+91-86045-51326",
-          email: "tantrafiesta.technical@iiitn.ac.in",
         },
         {
           "@type": "ContactPoint",
