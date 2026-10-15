@@ -48,6 +48,9 @@ function sortWithPinned(list: EventListing[]): EventListing[] {
   return [...pinned, ...rest];
 }
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function EventsPage() {
   // Resolve URL filters during server rendering so the event catalog stays crawlable.
   await connection();

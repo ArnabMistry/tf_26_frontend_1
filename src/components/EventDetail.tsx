@@ -106,6 +106,23 @@ export function EventDetail({ event }: EventDetailProps) {
                 <span className={styles.metaValue}>{event.venue}</span>
               </div>
             )}
+
+            {event.registrationDeadline && (
+              <div className={styles.metaChip}>
+                <span className={styles.metaIcon}>⏳</span>
+                <span className={styles.metaLabel}>Deadline:</span>
+                <span className={styles.metaValue}>
+                  {new Date(event.registrationDeadline).toLocaleString("en-IN", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                    hour: "numeric",
+                    minute: "2-digit",
+                    timeZone: "Asia/Kolkata",
+                  })}
+                </span>
+              </div>
+            )}
           </div>
         </div>
         <div className={styles.marks}>

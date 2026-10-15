@@ -29,13 +29,13 @@ export async function generateStaticParams() {
 function fromPublicEvent(event: PublicEvent): EventDetailData {
   const local = getEventDetail(event.slug);
   const isFree = !event.price || event.price === 0 || event.paymentTrigger === "free";
-  const entryFeeLabel = isFree
+  const entryFeeLabel = event.entryFeeLabel || (isFree
     ? "Free"
     : event.paymentTrigger === "after_round"
       ? `₹${event.price} ${event.feeMode === "per_participant" ? "per participant" : "per team"} (free to enter; payable upon Round 2 promotion)`
       : event.isTeamEvent
         ? `₹${event.price} ${event.feeMode === "per_participant" ? "per participant (team leader pays for all members)" : "per team (team leader pays once)"}`
-        : `₹${event.price} per participant`;
+        : `₹${event.price} per participant`);
 
   const registrationFee = event.registrationFee || (isFree ? "Free" : `₹${event.price}${event.feeMode === "per_team" ? " / team" : " / person"}`);
 
@@ -45,25 +45,24 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
     name: event.name,
     // Joint clubs are supplied by the normalized API contract.
     clubs: event.clubs || [event.club],
-    description: local?.description || event.description || event.shortDescription || "",
-    poster: event.image || local?.image || local?.poster,
+    description: event.description || local?.description || event.shortDescription || "",
+    tagline: event.tagline || local?.tagline,
+    poster: event.poster || event.image || local?.image || local?.poster,
     image: event.image || local?.image,
     prizePool: event.prizePool || local?.prizePool,
     prizeNote: event.prizeNote || local?.prizeNote,
     prizes: event.prizeBreakdown?.length ? event.prizeBreakdown : (local?.prizes ?? []),
-    stages: local?.stages ?? [],
-    organizers: local?.organizers ?? [],
-    rules: event.rules ?? local?.rules ?? [],
-    // The backend contract has no highlights field yet, and models eligibility
-    // as one free-text string rather than the bullet list the page renders.
-    highlights: local?.highlights ?? [],
-    eligibility: event.eligibility ? [event.eligibility] : (local?.eligibility ?? []),
+    stages: event.stages?.length ? event.stages : (local?.stages ?? []),
+    organizers: event.organizers?.length ? event.organizers : (local?.organizers ?? []),
+    rules: event.rules?.length ? event.rules : (local?.rules ?? []),
+    highlights: event.highlights?.length ? event.highlights : (local?.highlights ?? []),
+    eligibility: event.eligibility?.length ? event.eligibility : (local?.eligibility ?? []),
     registrationUrl: event.registrationUrl,
-    entryFeeLabel: entryFeeLabel || local?.entryFeeLabel,
-    registrationDeadline: event.registrationDeadline,
-    startDate: event.startDate || undefined,
-    endDate: event.endDate,
-    registrationFee: registrationFee || local?.registrationFee,
+    entryFeeLabel,
+    registrationDeadline: event.registrationDeadline || local?.registrationDeadline,
+    startDate: event.startDate || local?.startDate,
+    endDate: event.endDate || local?.endDate,
+    registrationFee,
     feeMode: event.feeMode || local?.feeMode,
     meals: event.meals || local?.meals,
     participationKit: event.participationKit !== undefined ? event.participationKit : local?.participationKit,
@@ -82,7 +81,8 @@ const resolveEvent = cache(async (slug: string): Promise<EventDetailData | null>
   return getEventDetail(normalizedSlug) || getEventDetail(slug) || null;
 });
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function generateMetadata(
   props: PageProps<"/events/[slug]">

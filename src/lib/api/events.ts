@@ -22,6 +22,27 @@ export interface EventFAQ {
   answer: string;
 }
 
+export interface PublicEventStage {
+  name: string;
+  when?: string;
+  detail?: string;
+  mode?: "Offline" | "Online";
+}
+
+export interface PublicEventOrganizer {
+  name: string;
+  role?: string;
+  phone?: string;
+  email?: string;
+}
+
+export interface PublicEventPrize {
+  position: number;
+  label?: string;
+  amount?: string;
+  note?: string;
+}
+
 export interface PublicEvent {
   id: string;
   slug: string;
@@ -39,6 +60,7 @@ export interface PublicEvent {
   paymentTrigger?: string;
   isPaid?: boolean;
   registrationFee?: string;
+  entryFeeLabel?: string;
   meals?: string;
   participationKit?: boolean;
   requirements?: Record<string, unknown> | null;
@@ -47,13 +69,17 @@ export interface PublicEvent {
   endDate?: string;
   venue?: string;
   rules?: string[];
-  eligibility?: string;
+  eligibility?: string[];
+  highlights?: string[];
+  stages?: PublicEventStage[];
+  organizers?: PublicEventOrganizer[];
+  tagline?: string;
   /** Total prize pool, already formatted for display (for example "₹35,000"). */
   prizePool?: string;
   /** Optional explanatory note about how the pool is split. */
   prizeNote?: string;
   /** Per-position breakdown from the event brochure. */
-  prizeBreakdown?: { position: number; label?: string; amount?: string; note?: string }[];
+  prizeBreakdown?: PublicEventPrize[];
   /** Legacy summary field used by event listing cards. */
   prizes?: string;
   /** Category ids matching `eventCategories` in `@/lib/events` (e.g. "hackathon", "ai-ml"). */
@@ -61,7 +87,9 @@ export interface PublicEvent {
   registrationUrl?: string;
   registrationDeadline?: string;
   image?: string;
+  poster?: string;
   faqs?: EventFAQ[];
+  rounds?: { roundNumber: number; name?: string; roundEndTime?: string }[];
 }
 
 /**
@@ -92,19 +120,49 @@ interface BackendEvent {
   prizePool?: number | string | null;
   prizePoolStr?: string | null;
   prizeNote?: string | null;
-  prizeBreakdown?: PublicEvent['prizeBreakdown'];
+  prizeBreakdown?: PublicEventPrize[];
   requirements?: {
     prizePool?: string | null;
     prizeAmount?: number | null;
     prizeNote?: string | null;
-    prizes?: PublicEvent['prizeBreakdown'];
+    prizes?: PublicEventPrize[];
     registrationFee?: string | null;
     meals?: string | null;
     participationKit?: boolean | null;
+    stages?: PublicEventStage[];
+    organizers?: PublicEventOrganizer[];
+    rules?: string[];
+    highlights?: string[];
+    eligibility?: string[] | string;
+    tagline?: string;
+    startDate?: string;
+    endDate?: string;
+    registrationDeadline?: string;
+    registrationOpens?: string;
+    poster?: string;
+    image?: string;
+    description?: string;
+    venue?: string;
+    teamSize?: { min?: number; max?: number };
     [key: string]: unknown;
   } | null;
   rounds?: { roundNumber: number; name?: string; roundEndTime?: string }[];
   _count?: { registrations: number; teams: number };
+}
+
+function formatDateTimeIST(dateStr?: string | null): string {
+  if (!dateStr) return "";
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return String(dateStr);
+  return d.toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
 }
 
 /**
@@ -142,36 +200,114 @@ function normaliseBackendEvent(raw: BackendEvent): PublicEvent {
   const prizePool = typeof rawPrizePool === 'number'
     ? `₹${new Intl.NumberFormat('en-IN').format(rawPrizePool)}`
     : rawPrizePool?.trim() || undefined;
+
+  const price = raw.price ?? 0;
+  const feeMode = raw.feeMode ?? 'per_team';
+  const paymentTrigger = raw.paymentTrigger ?? 'free';
+  const isFree = !price || price === 0 || paymentTrigger === 'free';
+  const entryFeeLabel = isFree
+    ? "Free"
+    : paymentTrigger === "after_round"
+      ? `₹${price} ${feeMode === "per_participant" ? "per participant" : "per team"} (free to enter; payable upon Round 2 promotion)`
+      : raw.isTeamEvent
+        ? `₹${price} ${feeMode === "per_participant" ? "per participant (team leader pays for all members)" : "per team (team leader pays once)"}`
+        : `₹${price} per participant`;
+
+  const registrationFee = raw.requirements?.registrationFee || (isFree ? "Free" : `₹${price}${feeMode === "per_team" ? " per team" : " per participant"}`);
+
+  // Assemble stages from backend requirements and live rounds
+  let stages: PublicEventStage[] = [];
+  if (Array.isArray(raw.requirements?.stages) && raw.requirements.stages.length > 0) {
+    stages = raw.requirements.stages.map((s, idx) => {
+      const match = s.name?.match(/(?:round|stage)\s*(\d+)/i);
+      const roundNum = match ? parseInt(match[1], 10) : idx + 1;
+      const matchingRound = raw.rounds?.find(r => r.roundNumber === roundNum);
+      const when = matchingRound?.roundEndTime ? formatDateTimeIST(matchingRound.roundEndTime) : (s.when || undefined);
+      const name = (matchingRound?.name && !matchingRound.name.match(/^Round \d+$/i)) ? matchingRound.name : s.name;
+      const mode = s.mode === "Online" || s.mode === "Offline" ? s.mode : undefined;
+      return {
+        name,
+        when,
+        detail: s.detail,
+        mode,
+      };
+    });
+  } else if (Array.isArray(raw.rounds) && raw.rounds.length > 0) {
+    stages = raw.rounds.map(r => ({
+      name: r.name || `Round ${r.roundNumber}`,
+      when: formatDateTimeIST(r.roundEndTime),
+      detail: "",
+      mode: "Offline",
+    }));
+  }
+
+  if (Array.isArray(raw.rounds) && raw.rounds.length > stages.length) {
+    for (const r of raw.rounds) {
+      const exists = stages.some((s, idx) => {
+        const match = s.name?.match(/(?:round|stage)\s*(\d+)/i);
+        const roundNum = match ? parseInt(match[1], 10) : idx + 1;
+        return roundNum === r.roundNumber;
+      });
+      if (!exists) {
+        stages.push({
+          name: r.name || `Round ${r.roundNumber}`,
+          when: formatDateTimeIST(r.roundEndTime),
+          detail: "",
+          mode: "Offline",
+        });
+      }
+    }
+  }
+
+  const rawEligibility = raw.requirements?.eligibility;
+  const eligibility = Array.isArray(rawEligibility)
+    ? rawEligibility
+    : rawEligibility
+      ? [String(rawEligibility)]
+      : undefined;
+
+  const registrationDeadline = raw.registrationEndTime || (raw.requirements?.registrationDeadline as string) || undefined;
+  const startDate = (raw.requirements?.startDate as string) || raw.startDate || "";
+  const endDate = (raw.requirements?.endDate as string) || raw.endDate || undefined;
+
   return {
     id: raw.id,
     // Prefer the public slug; legacy records expose their ID as the identifier.
     slug: raw.slug || raw.id,
     name: raw.name,
-    description: raw.description ?? "",
+    description: raw.description ?? (raw.requirements?.description as string) ?? "",
+    tagline: raw.requirements?.tagline as string | undefined,
     club: clubs[0],
     clubs,
     isTeamEvent: raw.isTeamEvent,
-    minTeamSize: raw.minTeamSize,
-    maxTeamSize: raw.maxTeamSize,
+    minTeamSize: raw.minTeamSize ?? raw.requirements?.teamSize?.min,
+    maxTeamSize: raw.maxTeamSize ?? raw.requirements?.teamSize?.max,
     prizePool,
     prizeNote: raw.requirements?.prizeNote ?? raw.prizeNote ?? undefined,
     prizeBreakdown: raw.requirements?.prizes ?? raw.prizeBreakdown,
     prizes: prizePool,
-    price: raw.price,
-    feeMode: raw.feeMode,
-    paymentTrigger: raw.paymentTrigger,
-    isPaid: raw.price !== undefined && raw.price > 0,
-    registrationFee: raw.requirements?.registrationFee || (raw.price === undefined || raw.price === 0 ? "Free" : `₹${raw.price}${raw.feeMode === "per_team" ? " per team" : " per participant"}`),
+    price,
+    feeMode,
+    paymentTrigger,
+    entryFeeLabel,
+    registrationFee,
+    isPaid: price > 0,
     meals: raw.requirements?.meals ? formatMealsLabel(raw.requirements.meals) : undefined,
     participationKit: raw.requirements?.participationKit !== undefined ? Boolean(raw.requirements.participationKit) : undefined,
     requirements: raw.requirements,
-    venue: raw.venue ?? undefined,
-    registrationDeadline: raw.registrationEndTime,
+    venue: raw.venue ?? (raw.requirements?.venue as string) ?? undefined,
+    registrationDeadline,
     registrationUrl: `${raw.isTeamEvent ? '/register/team' : '/register/event'}?eventId=${encodeURIComponent(raw.id)}`,
-    // Never substitute registration or round deadlines for event dates.
-    startDate: raw.startDate || "",
-    endDate: raw.endDate,
-    image: raw.image,
+    startDate,
+    endDate,
+    image: (raw.requirements?.image as string) || raw.image,
+    poster: (raw.requirements?.poster as string) || (raw.requirements?.image as string) || raw.image,
+    stages,
+    rounds: raw.rounds,
+    organizers: raw.requirements?.organizers,
+    rules: raw.requirements?.rules,
+    highlights: raw.requirements?.highlights,
+    eligibility,
   };
 }
 
@@ -197,7 +333,7 @@ export async function fetchPublicEvents(): Promise<PublicEvent[]> {
     let totalPages = 1;
     do {
       const res = await fetch(`${BACKEND_API_BASE.replace(/\/$/, "")}/api/events?page=${page}&limit=100`, {
-        next: { revalidate: 60 },
+        cache: "no-store",
       });
 
       if (!res.ok) throw new Error(`Public events API returned ${res.status}`);
@@ -236,7 +372,7 @@ export async function fetchPublicEventBySlug(
     const listed = events.find(event => event.slug === slug);
     if (!listed) return null;
     const res = await fetch(`${BACKEND_API_BASE.replace(/\/$/, "")}/api/events/${encodeURIComponent(listed.id)}`, {
-      next: { revalidate: 60 },
+      cache: "no-store",
     });
     if (res.status === 404) return null;
     if (!res.ok) throw new Error(`Public event API returned ${res.status}`);
