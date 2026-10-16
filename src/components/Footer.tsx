@@ -27,15 +27,19 @@ export function Footer({ variant = "purple" }: FooterProps) {
         const isIntersecting = entries[0]?.isIntersecting ?? false;
         if (isIntersecting && !wasVisibleRef.current) {
           setAnimationRun((run) => run + 1);
+          setIsVisible(true);
         }
         wasVisibleRef.current = isIntersecting;
-        setIsVisible(isIntersecting);
+        if (isIntersecting) {
+          setIsVisible(true);
+        }
       },
-      { threshold: 0.5, rootMargin: "0px 0px -100px 0px" }
+      { threshold: 0.15 }
     );
 
-    if (headingRef.current) {
-      observer.observe(headingRef.current);
+    const target = containerRef.current || headingRef.current;
+    if (target) {
+      observer.observe(target);
     }
 
     return () => observer.disconnect();
