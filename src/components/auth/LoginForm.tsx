@@ -24,7 +24,7 @@ export function LoginForm() {
     const isConfirmed = searchParams.get('confirmed') === '1';
 
     if (urlEmail) {
-      // Decode and sanitize â€” only allow valid email chars
+      // Decode and sanitize — only allow valid email chars
       const decoded = decodeURIComponent(urlEmail).trim().toLowerCase();
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (emailRegex.test(decoded)) {
@@ -74,15 +74,15 @@ export function LoginForm() {
 
   return (
     <div className="w-full max-w-[700px]">
-      {/* Email confirmed banner â€” shown after clicking email verification link */}
+      {/* Email confirmed banner — shown after clicking email verification link */}
       {searchParams.get('reset') === '1' && (
         <p role="status" className="mb-3 text-green-400 font-bold">
-          âœ… Password updated. Log in with your new password.
+          ✅ Password updated. Log in with your new password.
         </p>
       )}
       {confirmed && (
         <p role="status" className="mb-3 text-green-400 font-bold">
-          âœ… Email confirmed! Enter your password to log in.
+          ✅ Email confirmed! Enter your password to log in.
         </p>
       )}
       {notice && !confirmed && <p role="status" className="mb-3 text-[#FFFF1A]">{notice}</p>}
