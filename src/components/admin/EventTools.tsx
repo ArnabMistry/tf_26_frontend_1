@@ -4,6 +4,28 @@ import { adminRequest, downloadCsv, enc, person, record, rows, text, type Row } 
 import { Details, EditorDialog, LoadState, Table, useAdminData, type Editor, type Field } from './AdminUI';
 
 const options = (values: string[]) => values.map(value => ({ value, label: value.replaceAll('_', ' ') }));
+
+/**
+ * Yuvaan registrants rank three committees and declare For or Against on each.
+ * They live in registration.metadata rather than their own columns, so read
+ * them back defensively: an older registration predates the fields entirely
+ * and carries null metadata.
+ */
+type Preference = { rank: number; committee: string; motion: string };
+function preferencesOf(registration: Row): Preference[] {
+  const meta = record(registration.metadata);
+  const out: Preference[] = [];
+  for (const rank of [1, 2, 3]) {
+    const committee = meta[`committeePreference${rank}`];
+    const motion = meta[`motionPreference${rank}`];
+    if (committee || motion) {
+      out.push({ rank, committee: committee ? String(committee) : '—', motion: motion ? String(motion) : '—' });
+    }
+  }
+  return out;
+}
+/** Only show the preference column on events that actually collect them. */
+const hasPreferences = (list: Row[]) => list.some(r => preferencesOf(r).length > 0);
 const eventFields: Field[] = [
   { name: 'name', label: 'Event name', required: true }, { name: 'club', label: 'Club', required: true },
   { name: 'description', label: 'Description', type: 'textarea' }, { name: 'venue', label: 'Venue' },
@@ -95,19 +117,51 @@ export function Registrations({ eventId }: { eventId: string }) {
   const path = `/api/admin/events/${enc(eventId)}/registrations`;
   const resource = useAdminData(`${path}?page=${page}&limit=20&status=${enc(status)}`);
   const data = record(resource.data); const list = rows(data.registrations); const pagination = record(data.pagination); const feeRequired = Boolean(data.feeRequired);
+  const showPreferences = hasPreferences(list);
   async function exportAll() {
     setBusy(true); setError('');
     try {
       const all: Row[] = []; let current = 1; let pages = 1;
       do { const result = await adminRequest(`${path}?page=${current}&limit=100&status=${enc(status)}`); all.push(...rows(result.registrations)); pages = result.pagination.totalPages; current++; } while (current <= pages);
-      downloadCsv(`${eventId}-registrations.csv`, [['ID', 'Participant / Team', 'Email', 'Status', 'Entry fee', 'Paid at', 'Payment ID', 'Created'], ...all.map(r => { const p = record(r.payment); return [r.id, record(r.team).name || person(r.user), record(r.user).email, r.status, paymentLabel(p).label, p.paidAt, p.paymentId, r.createdAt]; })]);
+      // Preferences are exported as their own columns, so the sheet can be
+      // sorted and filtered by committee or by stance.
+      const withPreferences = hasPreferences(all);
+      const preferenceHeadings = withPreferences
+        ? ['Preference 1', 'Stance 1', 'Preference 2', 'Stance 2', 'Preference 3', 'Stance 3', 'School / College', 'Class / Year']
+        : [];
+      downloadCsv(`${eventId}-registrations.csv`, [
+        ['ID', 'Participant / Team', 'Email', 'Status', 'Entry fee', 'Paid at', 'Payment ID', 'Created', ...preferenceHeadings],
+        ...all.map(r => {
+          const p = record(r.payment);
+          const base = [r.id, record(r.team).name || person(r.user), record(r.user).email, r.status, paymentLabel(p).label, p.paidAt, p.paymentId, r.createdAt];
+          if (!withPreferences) return base;
+          const meta = record(r.metadata);
+          const picks = preferencesOf(r);
+          const cells = [1, 2, 3].flatMap(rank => {
+            const pick = picks.find(x => x.rank === rank);
+            return [pick?.committee ?? '', pick?.motion ?? ''];
+          });
+          return [...base, ...cells, meta.schoolCollege ?? '', meta.classYear ?? ''];
+        }),
+      ]);
     } catch (err) { setError(err instanceof Error ? err.message : 'Export failed.'); } finally { setBusy(false); }
   }
   return <section><div className="admin-section-heading"><h2>Registrations</h2><button disabled={busy || resource.loading} onClick={exportAll}>Export all filtered rows</button></div>
     <label>Status<select value={status} onChange={e => { setStatus(e.target.value); setPage(1); setDetails(null); }}><option value="">All statuses</option>{options(['registered', 'in_round', 'shortlisted', 'eliminated', 'confirmed', 'cancelled']).map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select></label>
     <LoadState {...resource} />{error && <p role="alert" className="admin-error">{error}</p>}
     {feeRequired && <p>Entry fee ₹{text(data.feeAmount)}{data.feePerHead ? ' per participant; team totals appear below' : data.isTeamEvent ? ' per team' : ''} · {text(list.filter(r => record(r.payment).status === 'PAID').length)} of {list.length} on this page have paid.</p>}
-    <Table headings={['ID', 'Participant / Team', 'Email', 'Status', ...(feeRequired ? ['Entry fee'] : []), 'Details']} empty={!list.length}>{list.map(r => { const p = record(r.payment); const fee = paymentLabel(p); return <tr key={text(r.id)}><td>{text(r.id)}</td><td>{text(record(r.team).name || person(r.user))}</td><td>{text(record(r.user).email)}</td><td><span className="admin-badge">{text(r.status)}</span></td>{feeRequired && <td><span className={`admin-badge ${fee.tone}`} title={p.paidAt ? `Paid ${new Date(String(p.paidAt)).toLocaleString()}${p.paymentId ? ` · ${text(p.paymentId)}` : ''}` : undefined}>{fee.label}</span></td>}<td><button onClick={async () => { setError(''); try { setDetails(await adminRequest(`/api/admin/registrations/${enc(r.id)}`)); } catch (err) { setError(err instanceof Error ? err.message : 'Unable to load details.'); } }}>View</button></td></tr>; })}</Table>
+    <Table headings={['ID', 'Participant / Team', 'Email', 'Status', ...(feeRequired ? ['Entry fee'] : []), ...(showPreferences ? ['Committee preferences'] : []), 'Details']} empty={!list.length}>{list.map(r => {
+      const p = record(r.payment); const fee = paymentLabel(p); const picks = preferencesOf(r);
+      return <tr key={text(r.id)}><td>{text(r.id)}</td><td>{text(record(r.team).name || person(r.user))}</td><td>{text(record(r.user).email)}</td><td><span className="admin-badge">{text(r.status)}</span></td>{feeRequired && <td><span className={`admin-badge ${fee.tone}`} title={p.paidAt ? `Paid ${new Date(String(p.paidAt)).toLocaleString()}${p.paymentId ? ` · ${text(p.paymentId)}` : ''}` : undefined}>{fee.label}</span></td>}
+        {showPreferences && <td>{picks.length
+          ? picks.map(pick => (
+              /* Ranked choice, then the stance taken on it. */
+              <div key={pick.rank}>
+                {pick.rank}. {pick.committee} — <strong>{pick.motion}</strong>
+              </div>
+            ))
+          : <span className="admin-badge">Not provided</span>}</td>}
+        <td><button onClick={async () => { setError(''); try { setDetails(await adminRequest(`/api/admin/registrations/${enc(r.id)}`)); } catch (err) { setError(err instanceof Error ? err.message : 'Unable to load details.'); } }}>View</button></td></tr>; })}</Table>
     <div className="admin-actions"><button disabled={page === 1 || resource.loading} onClick={() => setPage(p => p - 1)}>Previous</button><span>Page {page} of {Number(pagination.totalPages) || 1} · {text(pagination.total)} records</span><button disabled={resource.loading || page >= (Number(pagination.totalPages) || 1)} onClick={() => setPage(p => p + 1)}>Next</button></div>
     {!!details && <article className="admin-card"><button onClick={() => setDetails(null)}>Close details</button><Details value={details} /></article>}
   </section>;
