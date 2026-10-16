@@ -86,13 +86,13 @@ export function PortalSkeleton() {
 export function PortalLoadingShell() {
   return (
     <main className={s.shell}>
-      <p className={s.eyebrow}>TantraFiesta 2026 â€¢ Participant portal</p>
+      <p className={s.eyebrow}>TantraFiesta 2026 • Participant portal</p>
       <header className={s.hero}>
         <div>
           <h1>Your fest. Your space.</h1>
           <p className={s.muted}>Welcome back. Build your team and make your next move.</p>
         </div>
-        <Link href="/events" className={s.button}>Explore events â†’</Link>
+        <Link href="/events" className={s.button}>Explore events →</Link>
       </header>
       <PortalSkeleton />
     </main>
@@ -215,7 +215,7 @@ export function UserPortal() {
     }, action === 'accept' ? 'Invitation accepted. Your team is now visible below.' : 'Invitation declined.');
   }
 
-  // A counter QR carries ?claimMealToken=â€¦; scanning it with any phone camera
+  // A counter QR carries ?claimMealToken=…; scanning it with any phone camera
   // lands here, so the portal finishes the redemption on arrival and then drops
   // the token from the URL so a refresh cannot replay it.
   const claimToken = params.get('claimMealToken');
@@ -245,7 +245,7 @@ export function UserPortal() {
   }, [claimToken, user, router, load]);
 
   if (!hasSessionHint() && !loading && !user) {
-    return <main className={s.shell}><p role="status" className={s.muted}>Redirecting to loginâ€¦</p></main>;
+    return <main className={s.shell}><p role="status" className={s.muted}>Redirecting to login…</p></main>;
   }
 
   const availableMealsCount = meals?.filter(m => m.status === 'AVAILABLE').length || 0;
@@ -254,19 +254,19 @@ export function UserPortal() {
   const displayName = profile?.user?.firstName || user?.firstName;
 
   return <main className={s.shell}>
-    <p className={s.eyebrow}>TantraFiesta 2026 â€¢ Participant portal</p>
+    <p className={s.eyebrow}>TantraFiesta 2026 • Participant portal</p>
     {feesDue.map(item => (
       <div key={`due-${item.id}`} className="mb-6 p-4 rounded-2xl bg-[#faff52]/10 border border-[#faff52]/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-          <h3 className="font-bold text-[#faff52]">Youâ€™ve been promoted in {item.event.name}</h3>
+          <h3 className="font-bold text-[#faff52]">You’ve been promoted in {item.event.name}</h3>
           <p className={`${s.fine} mt-0.5`}>
             {canPay(item)
-              ? `Pay the â‚¹${dueAmount(item)} entry fee to confirm your place in ${item.payment?.roundName || 'the next round'}.`
-              : `An entry fee of â‚¹${dueAmount(item)} is due. Your team leader pays it for the whole team.`}
+              ? `Pay the ₹${dueAmount(item)} entry fee to confirm your place in ${item.payment?.roundName || 'the next round'}.`
+              : `An entry fee of ₹${dueAmount(item)} is due. Your team leader pays it for the whole team.`}
           </p>
         </div>
         {canPay(item)
-          ? <button className={s.button} disabled={!!busy} onClick={() => payFee(item)}>{busy === `pay-${item.id}` ? 'Processing paymentâ€¦' : `Pay â‚¹${dueAmount(item)}`}</button>
+          ? <button className={s.button} disabled={!!busy} onClick={() => payFee(item)}>{busy === `pay-${item.id}` ? 'Processing payment…' : `Pay ₹${dueAmount(item)}`}</button>
           : <Link className={s.secondary} href={`/register/${item.event.isTeamEvent ? 'team' : 'event'}?eventId=${encodeURIComponent(item.eventId)}`}>Open event</Link>}
       </div>
     ))}
@@ -284,11 +284,11 @@ export function UserPortal() {
         <h1>Your fest. Your space.</h1>
         <p className={s.muted}>Welcome back{displayName ? `, ${displayName}` : ''}. Build your team and make your next move.</p>
       </div>
-      <Link href="/events" className={s.button}>Explore events â†’</Link>
+      <Link href="/events" className={s.button}>Explore events →</Link>
     </header>
 
     {error && <div role="alert" className={s.error}>{error} <button onClick={load} className={s.secondary}>Retry</button></div>}
-    {claiming && <p role="status" className={s.notice}>Redeeming your pass at the counterâ€¦</p>}
+    {claiming && <p role="status" className={s.notice}>Redeeming your pass at the counter…</p>}
     {notice && <p role="status" className={s.notice}>{notice}</p>}
 
     {!profile ? (
@@ -328,25 +328,25 @@ export function UserPortal() {
                 <article className={s.entry} key={item.id}>
                   <div className={s.row}>
                     <span className={`${s.badge} ${item.status === 'PENDING' ? s.pending : item.status === 'ACCEPTED' ? s.accepted : ''}`}>
-                      {/* A promotion is news, not an invitation â€” label it by what it asks of you. */}
+                      {/* A promotion is news, not an invitation — label it by what it asks of you. */}
                       {item.kind === 'ROUND_PROMOTION' ? (item.status === 'PENDING' ? 'PAYMENT DUE' : 'PROMOTED') : item.status}
                     </span>
                     {!item.readAt && <span className={s.eyebrow}>New</span>}
                   </div>
-                  <h3 className="mt-3">{item.kind === 'TEAM_INVITE' ? `${item.senderName} invited you to ${item.teamName}` : item.kind === 'ROUND_PROMOTION' ? `Youâ€™ve been promoted in ${item.eventName}` : `${item.senderName} ${item.status.toLowerCase()} your invitation`}</h3>
+                  <h3 className="mt-3">{item.kind === 'TEAM_INVITE' ? `${item.senderName} invited you to ${item.teamName}` : item.kind === 'ROUND_PROMOTION' ? `You’ve been promoted in ${item.eventName}` : `${item.senderName} ${item.status.toLowerCase()} your invitation`}</h3>
                   <p className={s.muted}>{item.kind === 'ROUND_PROMOTION' ? item.message : item.eventName}</p>
-                  <p className={s.fine}>Sent {formatDate(item.createdAt)} IST{item.respondedAt ? ` â€¢ Responded ${formatDate(item.respondedAt)} IST` : ''}</p>
+                  <p className={s.fine}>Sent {formatDate(item.createdAt)} IST{item.respondedAt ? ` • Responded ${formatDate(item.respondedAt)} IST` : ''}</p>
                   <div className={`${s.row} mt-3`}>
                     {item.kind === 'TEAM_INVITE' && item.status === 'PENDING' && item.inviteId ? (
                       <div className="flex gap-2">
-                        <button className={s.button} disabled={!!busy} onClick={() => respond(item, 'accept')}>{busy === `invite-${item.id}` ? 'Acceptingâ€¦' : 'Accept invitation'}</button>
+                        <button className={s.button} disabled={!!busy} onClick={() => respond(item, 'accept')}>{busy === `invite-${item.id}` ? 'Accepting…' : 'Accept invitation'}</button>
                         <button className={s.secondary} disabled={!!busy} onClick={() => respond(item, 'reject')}>Decline</button>
                       </div>
                     ) : item.kind === 'ROUND_PROMOTION' ? (
                       (() => {
                         const due = feesDue.find(reg => reg.eventId === item.eventId);
                         return due && canPay(due)
-                          ? <button className={s.button} disabled={!!busy} onClick={() => payFee(due)}>{busy === `pay-${due.id}` ? 'Processing paymentâ€¦' : `Pay â‚¹${dueAmount(due)} now`}</button>
+                          ? <button className={s.button} disabled={!!busy} onClick={() => payFee(due)}>{busy === `pay-${due.id}` ? 'Processing payment…' : `Pay ₹${dueAmount(due)} now`}</button>
                           : <Link className={s.secondary} href={`/register/${item.teamId ? 'team' : 'event'}?eventId=${encodeURIComponent(item.eventId)}`}>Open event</Link>;
                       })()
                     ) : (
@@ -379,7 +379,7 @@ export function UserPortal() {
               
 
               {!meals?.length ? (
-                <p className={s.empty}>No meal passes yet. Meals and snacks are granted by the events you register for â€” each event&rsquo;s entitlement is listed on its page.</p>
+                <p className={s.empty}>No meal passes yet. Meals and snacks are granted by the events you register for — each event&rsquo;s entitlement is listed on its page.</p>
               ) : (
                 meals.map(pass => (
                   <article className={s.entry} key={pass.mealId}>
@@ -432,18 +432,18 @@ export function UserPortal() {
                 {profile.registeredEvents.map(item => (
                   <article key={item.id} className={s.entry}>
                     <div className={s.row}><div><p className={s.eyebrow}>{item.event.club}</p><h3 className="mt-2">{item.event.name}</h3></div><span className={s.badge}>{item.status.replaceAll('_',' ')}</span></div>
-                    <p className={s.muted}>{item.team?.name || 'Individual entry'} â€¢ {item.event.venue || 'Venue to be announced'}</p>
+                    <p className={s.muted}>{item.team?.name || 'Individual entry'} • {item.event.venue || 'Venue to be announced'}</p>
                     {/* Undecided rounds are hidden: every event has a Round 1
                         from creation, so "awaiting result" would be noise. */}
                     <div className="flex flex-wrap gap-2 mt-3">{item.roundProgress?.filter(round => round.status !== 'PENDING').map(round => <span key={round.roundId} className={`${s.badge} ${round.status === 'QUALIFIED' ? s.accepted : ''}`}>{round.name}: {round.status === 'QUALIFIED' ? 'Promoted' : 'Not promoted'}</span>)}</div>
                     {item.payment?.dueNow && <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-2">
-                      <span className={`${s.badge} ${s.pending}`}>Entry fee â‚¹{dueAmount(item)} due</span>
+                      <span className={`${s.badge} ${s.pending}`}>Entry fee ₹{dueAmount(item)} due</span>
                       {canPay(item)
-                        ? <button className={s.button} disabled={!!busy} onClick={() => payFee(item)}>{busy === `pay-${item.id}` ? 'Processing paymentâ€¦' : `Pay â‚¹${dueAmount(item)} now`}</button>
+                        ? <button className={s.button} disabled={!!busy} onClick={() => payFee(item)}>{busy === `pay-${item.id}` ? 'Processing payment…' : `Pay ₹${dueAmount(item)} now`}</button>
                         : <span className={s.fine}>Your team leader pays this fee.</span>}
                     </div>}
-                    {item.payment?.paid && <p className={`${s.fine} mt-3`}>Entry fee of â‚¹{dueAmount(item)} paid.</p>}
-                    {item.payment?.rejected && <p className={`${s.fine} mt-3`}>Not selected for the paid round â€” no fee is due.</p>}
+                    {item.payment?.paid && <p className={`${s.fine} mt-3`}>Entry fee of ₹{dueAmount(item)} paid.</p>}
+                    {item.payment?.rejected && <p className={`${s.fine} mt-3`}>Not selected for the paid round — no fee is due.</p>}
                     </article>
                 ))}
               </section>
@@ -453,8 +453,8 @@ export function UserPortal() {
                 {profile.teams.map(team => (
                   <article className={s.entry} key={team.id}>
                     <div className={s.row}><div><h3>{team.name}</h3><p className={s.muted}>{team.event.name}</p></div><span className={s.badge}>{team.isLeader ? 'Team leader' : 'Member'}</span></div>
-                    <p className={s.fine}>{team.members.map(fullName).join(' â€¢ ')}</p>
-                    <Link className={`${s.secondary} mt-3`} href={`/register/team?eventId=${encodeURIComponent(team.eventId)}`}>Open team â†’</Link>
+                    <p className={s.fine}>{team.members.map(fullName).join(' • ')}</p>
+                    <Link className={`${s.secondary} mt-3`} href={`/register/team?eventId=${encodeURIComponent(team.eventId)}`}>Open team →</Link>
                   </article>
                 ))}
               </section>
