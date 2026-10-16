@@ -43,6 +43,8 @@ export interface OpenRazorpayOptions {
   amountInPaise: number;
   currency?: string;
   eventName: string;
+  /** Overrides the "Registration fee for …" line shown in Checkout. */
+  description?: string;
   userName: string;
   userEmail: string;
   userPhone?: string | null;
@@ -87,7 +89,7 @@ export async function openRazorpayCheckout(options: OpenRazorpayOptions): Promis
     amount: options.amountInPaise,
     currency: options.currency || 'INR',
     name: 'TantraFiesta 2026',
-    description: `Registration fee for ${options.eventName}`,
+    description: options.description || `Registration fee for ${options.eventName}`,
     image: '/assets/logo.png',
     order_id: options.razorpayOrderId,
     prefill: {

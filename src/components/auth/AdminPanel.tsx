@@ -26,6 +26,9 @@ const Users = dynamic(() => import('@/components/admin/Governance').then(m => m.
 const Meals = dynamic(() => import('@/components/admin/Meals').then(m => m.Meals), {
   loading: () => <p className="admin-loading-card">Loading meal counter…</p>,
 });
+const Accommodation = dynamic(() => import('@/components/admin/Accommodation').then(m => m.Accommodation), {
+  loading: () => <p className="admin-loading-card">Loading accommodation…</p>,
+});
 import '@/components/admin/admin.css';
 import { logout } from '@/lib/session';
 
@@ -57,7 +60,7 @@ function AdminGate({ superAdmin = false, eventId }: { superAdmin?: boolean; even
 function Workspace({ user, eventId }: { user: AuthUser; eventId?: string }) {
   const router = useRouter(); const params = useSearchParams(); const superAdmin = user.role === 'super';
   const resource = useAdminData('/api/admin/dashboard'); const dashboard = resource.data as Dashboard | null;
-  const tabs = [{ id: 'overview', name: 'Overview' }, { id: 'events', name: 'Event management' }, { id: 'registrations', name: 'Registrations' }, { id: 'promotion', name: 'Round promotion' }, { id: 'meals', name: 'Food counter' }, ...(superAdmin ? [{ id: 'users', name: 'User governance' }, { id: 'staff', name: 'Coordinators' }] : [])];
+  const tabs = [{ id: 'overview', name: 'Overview' }, { id: 'events', name: 'Event management' }, { id: 'registrations', name: 'Registrations' }, { id: 'promotion', name: 'Round promotion' }, { id: 'meals', name: 'Food counter' }, ...(superAdmin ? [{ id: 'accommodation', name: 'Accommodation' }, { id: 'users', name: 'User governance' }, { id: 'staff', name: 'Coordinators' }] : [])];
   const view = tabs.some(t => t.id === params.get('view')) ? params.get('view')! : 'overview';
   const events = dashboard?.perEventStats || [];
   const selectedId = eventId || (events.some(e => e.id === params.get('event')) ? params.get('event')! : events[0]?.id || '');
@@ -121,6 +124,7 @@ function Workspace({ user, eventId }: { user: AuthUser; eventId?: string }) {
           {view === 'registrations' && <Registrations eventId={selectedId} />}
           {view === 'promotion' && <Promotion eventId={selectedId} />}
           {view === 'meals' && <Meals events={events} />}
+          {view === 'accommodation' && superAdmin && <Accommodation />}
           {view === 'users' && superAdmin && <Users currentUserId={user.id} />}
           {view === 'staff' && superAdmin && <Coordinators events={events} />}
         </div>}
