@@ -17,7 +17,7 @@ const TABS = [
   { id: "descriptions", label: "Descriptions" },
   { id: "stages", label: "Stages & Timeline" },
   { id: "rules", label: "Rules & Regulations" },
-  { id: "contact", label: "Contact Organizers" },
+  { id: "contact", label: "Contact Us" },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -97,6 +97,13 @@ export function EventDetail({ event }: EventDetailProps) {
               <div className={styles.metaChip}>
                 <span className={styles.metaIcon}>🎒</span>
                 <span className={styles.metaValue}>Kit Included</span>
+              </div>
+            )}
+
+            {event.accommodation && (
+              <div className={styles.metaChip}>
+                <span className={styles.metaIcon}>🏨</span>
+                <span className={styles.metaValue}>Accommodation: {event.accommodation}</span>
               </div>
             )}
 
@@ -220,7 +227,7 @@ export function EventDetail({ event }: EventDetailProps) {
         tabIndex={0}
         className={styles.panel}
       >
-        <h2 className={styles.sectionHeading}>Contact Organizers</h2>
+        <h2 className={styles.sectionHeading}>Contact Us</h2>
         {event.organizers.length > 0 ? (
           <ul className={styles.organizerList}>
             {event.organizers.map((organizer) => (
@@ -298,6 +305,7 @@ function PrizeBox({ event }: { event: EventDetailData }) {
           <span className={styles.rupee}>₹</span>
           {prizePool}
         </p>
+        {event.prizeNote && <p className={styles.prizeNote}>{event.prizeNote}</p>}
       </div>
 
       <ul className={styles.prizeList}>
