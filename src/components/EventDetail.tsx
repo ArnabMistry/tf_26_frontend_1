@@ -337,9 +337,9 @@ function PrizeBox({ event }: { event: EventDetailData }) {
             target="_blank"
             rel="noopener noreferrer"
             className={styles.unstopRegister}
-            aria-label={`Register on Unstop for ${event.name} (reference)`}
+            aria-label={`Unstop page for ${event.name}`}
           >
-            Register on Unstop <span aria-hidden="true">↗</span>
+            Unstop <span aria-hidden="true">↗</span>
           </a>
         )}
       </div>
