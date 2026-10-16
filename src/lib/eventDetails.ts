@@ -1630,7 +1630,7 @@ export const eventDetails: EventDetail[] = [
       },
     ],
     highlights: [
-      "₹25,000 in cash prizes for the top three teams and the Sharpest RCA award.",
+      "₹50,000 in cash prizes for the top three teams and the Sharpest RCA award.",
       "Investigate real incidents on a real observability stack: Grafana dashboards, Prometheus metrics, logs and traces.",
       "No production experience needed — a 30-minute hands-on session at the finale teaches every tool you will use.",
       "After the finale, the platform team walks everyone through all 10 incidents and how they were solved.",
