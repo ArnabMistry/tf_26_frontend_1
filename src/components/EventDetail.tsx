@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useId, useRef, useState } from "react";
 import { getClubLogo } from "@/lib/clubs";
 import { formatMealsLabel, type EventDetail as EventDetailData } from "@/lib/eventDetails";
+import { isYuvaanIdentifier } from "@/lib/yuvaan";
+import { YuvaanRegistrationModal } from "@/components/portal/YuvaanRegistrationModal";
 import styles from "./EventDetail.module.css";
 
 type ClubRef = EventDetailData["clubs"][number];
@@ -28,9 +30,11 @@ interface EventDetailProps {
 
 export function EventDetail({ event }: EventDetailProps) {
   const [activeTab, setActiveTab] = useState<TabId>("descriptions");
+  const [showYuvaanModal, setShowYuvaanModal] = useState(false);
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const baseId = useId();
 
+  const isYuvaan = isYuvaanIdentifier(event.slug);
   const tabId = (id: TabId) => `${baseId}-tab-${id}`;
   const panelId = (id: TabId) => `${baseId}-panel-${id}`;
 
@@ -163,7 +167,11 @@ export function EventDetail({ event }: EventDetailProps) {
                 text={`${joinClubNames(event.clubs)} is still putting together the brief for ${event.name}. Check back shortly.`}
               />
             )}
-            <PrizeBox event={event} />
+            <PrizeBox
+              event={event}
+              isYuvaan={isYuvaan}
+              onOpenYuvaanModal={() => setShowYuvaanModal(true)}
+            />
           </div>
           <Poster event={event} />
         </div>
@@ -265,6 +273,12 @@ export function EventDetail({ event }: EventDetailProps) {
           />
         )}
       </section>
+      {isYuvaan && (
+        <YuvaanRegistrationModal
+          isOpen={showYuvaanModal}
+          onClose={() => setShowYuvaanModal(false)}
+        />
+      )}
     </main>
   );
 }
@@ -292,7 +306,15 @@ function Poster({ event }: { event: EventDetailData }) {
   );
 }
 
-function PrizeBox({ event }: { event: EventDetailData }) {
+function PrizeBox({
+  event,
+  isYuvaan,
+  onOpenYuvaanModal,
+}: {
+  event: EventDetailData;
+  isYuvaan?: boolean;
+  onOpenYuvaanModal?: () => void;
+}) {
   // The ₹ is styled separately, so drop one if the source value already carries it.
   const prizePool = (event.prizePool ?? "XX,XXX").replace(/^\s*₹\s*/, "");
   const isTeam = Boolean(event.teamSize && event.teamSize.max > 1);
@@ -324,13 +346,24 @@ function PrizeBox({ event }: { event: EventDetailData }) {
       </ul>
 
       <div className={styles.actionArea}>
-        <Link
-          href={internalRegisterHref}
-          className={styles.register}
-          aria-label={`Register now for ${event.name}`}
-        >
-          Register Now <span aria-hidden="true">↗</span>
-        </Link>
+        {isYuvaan && onOpenYuvaanModal ? (
+          <button
+            type="button"
+            onClick={onOpenYuvaanModal}
+            className={styles.register}
+            aria-label={`Register now for ${event.name}`}
+          >
+            Register Now <span aria-hidden="true">↗</span>
+          </button>
+        ) : (
+          <Link
+            href={internalRegisterHref}
+            className={styles.register}
+            aria-label={`Register now for ${event.name}`}
+          >
+            Register Now <span aria-hidden="true">↗</span>
+          </Link>
+        )}
         {unstopUrl && (
           <a
             href={unstopUrl}
