@@ -295,9 +295,9 @@ function Poster({ event }: { event: EventDetailData }) {
 function PrizeBox({ event }: { event: EventDetailData }) {
   // The ₹ is styled separately, so drop one if the source value already carries it.
   const prizePool = (event.prizePool ?? "XX,XXX").replace(/^\s*₹\s*/, "");
-  const isUnstop = Boolean(event.registrationUrl && /unstop\.com/i.test(event.registrationUrl));
-  const isExternal = Boolean(event.registrationUrl && /^https?:\/\//i.test(event.registrationUrl));
-  const registerLabel = isUnstop ? "Register on Unstop" : "Register Now";
+  const isTeam = Boolean(event.teamSize && event.teamSize.max > 1);
+  const internalRegisterHref = `${isTeam ? "/register/team" : "/register/event"}?eventId=${encodeURIComponent(event.slug)}`;
+  const unstopUrl = event.registrationUrl && /^https?:\/\//i.test(event.registrationUrl) ? event.registrationUrl : null;
 
   return (
     <div className={styles.prizeBox}>
@@ -325,13 +325,23 @@ function PrizeBox({ event }: { event: EventDetailData }) {
 
       <div className={styles.actionArea}>
         <Link
-          href={event.registrationUrl || `/register/event?eventId=${encodeURIComponent(event.slug)}`}
+          href={internalRegisterHref}
           className={styles.register}
-          aria-label={`${registerLabel} for ${event.name}`}
-          {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          aria-label={`Register now for ${event.name}`}
         >
-          {registerLabel} <span aria-hidden="true">↗</span>
+          Register Now <span aria-hidden="true">↗</span>
         </Link>
+        {unstopUrl && (
+          <a
+            href={unstopUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.unstopRegister}
+            aria-label={`Register on Unstop for ${event.name} (reference)`}
+          >
+            Register on Unstop <span aria-hidden="true">↗</span>
+          </a>
+        )}
       </div>
     </div>
   );

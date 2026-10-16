@@ -234,6 +234,9 @@ export default async function EventPage(props: PageProps<"/events/[slug]">) {
     registrationOpens: event.registrationOpens,
   });
 
+  const isTeam = Boolean(event.teamSize && event.teamSize.max > 1);
+  const internalRegisterHref = `${isTeam ? "/register/team" : "/register/event"}?eventId=${encodeURIComponent(event.slug)}`;
+
   return (
     <div className={styles.page}>
       <script
@@ -257,7 +260,7 @@ export default async function EventPage(props: PageProps<"/events/[slug]">) {
       <a href="#event-content" className={styles.skipLink}>
         Skip to event details
       </a>
-      <Navbar currentPath="/events" registrationHref={event.registrationUrl ?? "/register"} />
+      <Navbar currentPath="/events" registrationHref={internalRegisterHref} />
       <EventDetail event={event} />
       <Footer variant="yellow" />
     </div>
