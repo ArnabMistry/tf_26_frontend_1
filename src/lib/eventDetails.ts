@@ -124,7 +124,11 @@ export const eventDetails: EventDetail[] = [
     prizePool: "₹2,00,000",
     prizeNote:
       "The pool includes cash prizes and goodies across four themes, the Side Quest, and the Best Women in Tech Team Award. Teams may compete in multiple themes and win in more than one — prize stacking is allowed where the team meets each award's eligibility criteria.",
-    prizes: [],
+    prizes: [
+      { position: 1, label: "1st Prize (Across 4 Themes)", amount: "₹1,20,000", note: "₹30,000 × 4 themes." },
+      { position: 2, label: "2nd Prize (Across 4 Themes)", amount: "₹60,000", note: "₹15,000 × 4 themes." },
+      { position: 3, label: "Special Mention", amount: "₹20,000", note: "₹10,000 × 2." },
+    ],
     stages: [
       {
         name: "Round 1 — Online GitHub & Portfolio Screening",
@@ -135,7 +139,7 @@ export const eventDetails: EventDetail[] = [
       },
       {
         name: "Round 2 — CASCADE '26, 24-hour offline hackathon",
-        when: "25 Oct 2026, 11:00 AM – 26 Oct 2026, 11:00 AM",
+        when: "25 Oct 2026, 11:00 AM – 26 Oct 2026, 2:00 PM",
         mode: "Offline",
         detail:
           "On the IIIT Nagpur campus, shortlisted teams develop practical solutions across four real-world themes. Judged on problem understanding and relevance, innovation and creativity, technical implementation, feasibility and real-world impact, execution and completeness, and demo and presentation.",
@@ -193,8 +197,8 @@ export const eventDetails: EventDetail[] = [
     teamSize: { min: 3, max: 4 },
     mode: "Hybrid",
     startDate: "2026-10-25T11:00:00+05:30",
-    endDate: "2026-10-26T11:00:00+05:30",
-    venue: IIITN,
+    endDate: "2026-10-26T14:00:00+05:30",
+    venue: "CR-301, 302, 306, 307, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "ragnarok",
@@ -206,8 +210,8 @@ export const eventDetails: EventDetail[] = [
       "RAGNAROK is the flagship agentic hackathon of TantraFiesta 2026, organized by AIRA, the AI/ML domain at CRISPR, IIIT Nagpur. The age of passive AI is ending: the next wave of software is built from agents that reason, plan, use tools, and act on their own. RAGNAROK brings together the sharpest student builders in India to design, ship, and battle-test such systems under real pressure. Qualify online, then reach the IIIT Nagpur campus for a 24-hour build where only the best agents survive.",
     prizePool: "₹50,000",
     prizes: [
-      { position: 1, label: "Winner", amount: "₹25,000", note: "Including cash and goodies." },
-      { position: 2, label: "1st Runner Up", amount: "₹15,000", note: "Including cash and goodies." },
+      { position: 1, label: "Winner", amount: "₹26,000", note: "Including cash and goodies." },
+      { position: 2, label: "1st Runner Up", amount: "₹14,000", note: "Including cash and goodies." },
       { position: 3, label: "2nd Runner Up", amount: "₹10,000", note: "Including cash and goodies." },
     ],
     stages: [
@@ -220,7 +224,7 @@ export const eventDetails: EventDetail[] = [
       },
       {
         name: "Round 2 — Offline Finale",
-        when: "25 Oct 2026",
+        when: "25 Oct 2026, 9:00 AM – 26 Oct 2026, 10:00 AM",
         mode: "Offline",
         detail:
           "Shortlisted teams get 24 hours of continuous building on the IIIT Nagpur campus. Problem statements are revealed at the start of the finale; teams build, demo and defend their solution in front of the evaluators. All finalists must report to campus by 9:30 AM on 25 October 2026, and participation in the offline round is mandatory to be eligible for prizes.",
@@ -268,8 +272,8 @@ export const eventDetails: EventDetail[] = [
     teamSize: { min: 2, max: 4 },
     mode: "Hybrid",
     startDate: "2026-10-18T00:00:00+05:30",
-    endDate: "2026-10-26T09:00:00+05:30",
-    venue: IIITN,
+    endDate: "2026-10-26T10:00:00+05:30",
+    venue: "Seminar Hall, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "last-man-standing",
@@ -282,8 +286,8 @@ export const eventDetails: EventDetail[] = [
     prizePool: "₹20,000",
     prizes: [
       { position: 1, label: "Winner", amount: "₹10,000", note: "Certificate included." },
-      { position: 2, label: "1st Runner-up", amount: "₹6,000", note: "Certificate included." },
-      { position: 3, label: "2nd Runner-up", amount: "₹4,000", note: "Certificate included." },
+      { position: 2, label: "1st Runner-up", amount: "₹6,500", note: "Certificate included." },
+      { position: 3, label: "2nd Runner-up", amount: "₹3,500", note: "Certificate included." },
     ],
     stages: [
       {
@@ -295,7 +299,7 @@ export const eventDetails: EventDetail[] = [
       },
       {
         name: "Offline finale",
-        when: "26 Oct 2026, 10:00 AM – 4:15 PM",
+        when: "26 Oct 2026, 12:00 PM – 5:00 PM",
         mode: "Offline",
         detail:
           "Two rounds at IIIT Nagpur: a non-stop survival quiz that runs until only the Top 5 teams remain, then a high-risk Tiles round to crown the champion.",
@@ -319,8 +323,8 @@ export const eventDetails: EventDetail[] = [
       "Battle it out live at IIIT Nagpur on 26 Oct 2026.",
     ],
     organizers: [
-      { name: "Samyaak Jain", email: "bt25csh048@iiitn.ac.in" },
-      { name: "TantraFiesta IIIT Nagpur", email: "tantrafiesta@iiitn.ac.in" },
+      { name: "Samyaak Jain", phone: "+91 93535 83515", email: "bt25csh048@iiitn.ac.in" },
+      { name: "Elevate Co-Lead", phone: "+91 63926 51839", email: "tantrafiesta@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-11T00:00:00+05:30",
     registrationDeadline: "2026-10-17T23:59:00+05:30",
@@ -332,8 +336,8 @@ export const eventDetails: EventDetail[] = [
     teamSize: { min: 4, max: 4 },
     mode: "Hybrid",
     startDate: "2026-10-18T00:00:00+05:30",
-    endDate: "2026-10-26T16:15:00+05:30",
-    venue: IIITN,
+    endDate: "2026-10-26T17:00:00+05:30",
+    venue: "Admin Hall 1, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "algorithmia",
@@ -365,7 +369,7 @@ export const eventDetails: EventDetail[] = [
       },
       {
         name: "Stage 2 — Onsite Round",
-        when: "25 Oct 2026",
+        when: "25 Oct 2026, 10:00 AM – 4:00 PM",
         mode: "Offline",
         detail:
           "Held on campus at IIIT Nagpur, again on Codeforces. Five hours, 7–8 programming problems, same ICPC ranking rules. One computer — your own laptop — is allotted per team and every submission must be made from it.",
@@ -407,7 +411,7 @@ export const eventDetails: EventDetail[] = [
     mode: "Hybrid",
     startDate: "2026-10-10T12:00:00+05:30",
     endDate: "2026-10-25T16:00:00+05:30",
-    venue: IIITN,
+    venue: "Admin Hall 1, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "flashcode",
@@ -459,8 +463,8 @@ export const eventDetails: EventDetail[] = [
       "Goodies, prizes and certificates for all winners.",
     ],
     organizers: [
-      { name: "Agraj Shukla", phone: "+91 63928 86837", email: "dotslash@iiitn.ac.in" },
       { name: "Hrushikesh Paithankar", phone: "+91 83290 96785", email: "bt24csh044@iiitn.ac.in" },
+      { name: "Agraj Shukla", phone: "+91 63928 86837", email: "dotslash@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-10T00:00:00+05:30",
     registrationDeadline: "2026-10-26T11:00:00+05:30",
@@ -473,7 +477,7 @@ export const eventDetails: EventDetail[] = [
     mode: "Offline",
     startDate: "2026-10-26T12:00:00+05:30",
     endDate: "2026-10-26T18:00:00+05:30",
-    venue: IIITN,
+    venue: "Seminar Hall, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "bugwars",
@@ -484,8 +488,12 @@ export const eventDetails: EventDetail[] = [
     description:
       "BugWars is a high-energy coding challenge focused on debugging, problem-solving, and programming skills. Participants tackle a range of coding problems designed to test their ability to identify errors, analyze logic, optimize solutions, and think under pressure. Covering concepts from DSA and competitive programming, the event challenges participants to turn broken code into efficient, working solutions. Participation is individual-only, making it a fair and thrilling competition for all coders and debuggers.",
     prizePool: "₹10,000",
-    prizeNote: "Three winners, with goodies, prizes and certificates. Cash split to be announced.",
-    prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
+    prizeNote: "Three winners, with goodies, prizes and certificates.",
+    prizes: [
+      { position: 1, label: "1st Prize", amount: "₹5,000" },
+      { position: 2, label: "2nd Prize", amount: "₹3,000" },
+      { position: 3, label: "3rd Prize", amount: "₹2,000" },
+    ],
     stages: [
       {
         name: "BugWars — Onsite contest",
@@ -514,19 +522,20 @@ export const eventDetails: EventDetail[] = [
       "Participation certificates will be awarded to all participants.",
     ],
     organizers: [
-      { name: "Support", phone: "+91 72318 36153", email: "tantrafiesta@iiitn.ac.in" },
+      { name: "Agraj Shukla", phone: "+91 63928 86837", email: "dotslash@iiitn.ac.in" },
+      { name: "Aditya Singh", phone: "+91 92649 66840", email: "bt24csh051@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-12T12:00:00+05:30",
     registrationDeadline: "2026-10-24T18:00:00+05:30",
-    registrationFee: "₹100 per person",
-    entryFeeLabel: "₹100 per participant",
+    registrationFee: "₹150 per person",
+    entryFeeLabel: "₹150 per participant",
     feeMode: "per_participant",
     participationKit: false,
     teamSize: { min: 1, max: 1 },
     mode: "Offline",
     startDate: "2026-10-24T18:00:00+05:30",
     endDate: "2026-10-24T20:00:00+05:30",
-    venue: IIITN,
+    venue: "Admin Hall 1, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "design-a-thon",
@@ -596,7 +605,7 @@ export const eventDetails: EventDetail[] = [
     mode: "Hybrid",
     startDate: "2026-10-10T12:00:00+05:30",
     endDate: "2026-10-25T09:00:00+05:30",
-    venue: IIITN,
+    venue: "CR 305 & 306, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "brandxperience",
@@ -682,7 +691,7 @@ export const eventDetails: EventDetail[] = [
     mode: "Hybrid",
     startDate: "2026-10-12T00:15:00+05:30",
     endDate: "2026-10-25T18:00:00+05:30",
-    venue: IIITN,
+    venue: "CR 203 & Reading Room, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "firestorm-rampage",
@@ -693,7 +702,11 @@ export const eventDetails: EventDetail[] = [
     description:
       "Firestorm Rampage is the official Free Fire battle-royale tournament of TantraFiesta'26, hosted by Synergy Club, IIIT Nagpur. Squads of four (plus one substitute) fight through online preliminaries before the top twelve meet for an offline final on campus — a fast-paced digital battleground that tests reflexes, strategy, and courage, where every decision can turn the tide.",
     prizePool: "₹15,000",
-    prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
+    prizes: [
+      { position: 1, label: "1st Prize", amount: "₹7,000" },
+      { position: 2, label: "2nd Prize", amount: "₹5,000" },
+      { position: 3, label: "3rd Prize", amount: "₹3,000" },
+    ],
     stages: [
       {
         name: "Registration",
@@ -710,7 +723,7 @@ export const eventDetails: EventDetail[] = [
       },
       {
         name: "Final Round",
-        when: "25 Oct 2026",
+        when: "25 Oct 2026, 11:00 AM – 4:00 PM",
         mode: "Offline",
         detail:
           "Held on the IIIT Nagpur campus. The top 12 qualified teams compete across a total of 5 matches — details shared closer to the date. Official results and winner announcements follow immediately after the final matches.",
@@ -734,7 +747,7 @@ export const eventDetails: EventDetail[] = [
       "Strict enforcement of fair-play protocols; breaking the rules or using unauthorised devices leads to immediate disqualification.",
     ],
     organizers: [
-      { name: "Support", phone: "+91 72318 36153", email: "tantrafiesta@iiitn.ac.in" },
+      { name: "Synergy Lead", phone: "+91 77801 14237", email: "synergy@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-11T12:00:00+05:30",
     registrationDeadline: "2026-10-19T23:59:00+05:30",
@@ -745,8 +758,8 @@ export const eventDetails: EventDetail[] = [
     teamSize: { min: 4, max: 5 },
     mode: "Hybrid",
     startDate: "2026-10-23T00:00:00+05:30",
-    endDate: "2026-10-26T23:59:00+05:30",
-    venue: IIITN,
+    endDate: "2026-10-25T16:00:00+05:30",
+    venue: "Lab 1 & Lab 2, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "combat-carnage",
@@ -757,7 +770,14 @@ export const eventDetails: EventDetail[] = [
     description:
       "Combat Carnage is the official Battlegrounds Mobile India tournament of TantraFiesta'26 at IIIT Nagpur. Squads play third-person perspective matches in custom rooms across Erangel, Miramar and Rondo, qualifying online before the top sixteen meet offline for the championship — a tactical battle of survival that demands strategy, teamwork and composure.",
     prizePool: "₹15,000",
-    prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
+    prizes: [
+      { position: 1, label: "1st Prize", amount: "₹5,000" },
+      { position: 2, label: "2nd Prize", amount: "₹2,000" },
+      { position: 3, label: "3rd Prize", amount: "₹1,000" },
+      { position: 4, label: "4th Place", amount: "₹800" },
+      { position: 5, label: "5th Place", amount: "₹600" },
+      { position: 6, label: "6th Place", amount: "₹400" },
+    ],
     stages: [
       { name: "Registration", when: "10 Oct – 19 Oct 2026", mode: "Online" },
       { name: "Selected squads declared", when: "20 Oct 2026" },
@@ -770,7 +790,7 @@ export const eventDetails: EventDetail[] = [
       },
       {
         name: "Round 2 — Final",
-        when: "25 Oct 2026",
+        when: "25 Oct 2026, 11:00 AM – 4:00 PM",
         mode: "Offline",
         detail:
           "The top 16 qualified squads compete offline for the championship title and the prize pool. Official winners and results are declared the same day.",
@@ -792,7 +812,7 @@ export const eventDetails: EventDetail[] = [
       "Absolute adherence to fair play and sportsmanship; any form of cheating leads to immediate disqualification.",
     ],
     organizers: [
-      { name: "TantraFiesta IIIT Nagpur", email: "tantrafiesta@iiitn.ac.in" },
+      { name: "Synergy Lead", phone: "+91 87881 79852", email: "synergy@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-10T12:00:00+05:30",
     registrationDeadline: "2026-10-19T23:59:00+05:30",
@@ -803,8 +823,8 @@ export const eventDetails: EventDetail[] = [
     teamSize: { min: 4, max: 5 },
     mode: "Hybrid",
     startDate: "2026-10-21T00:00:00+05:30",
-    endDate: "2026-10-25T23:49:00+05:30",
-    venue: IIITN,
+    endDate: "2026-10-25T16:00:00+05:30",
+    venue: "Lab 7 & Lab 8, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "crown-clash",
@@ -815,7 +835,10 @@ export const eventDetails: EventDetail[] = [
     description:
       "Crown Clash is the official Clash Royale esports tournament of TantraFiesta, hosted by Synergy Club at IIIT Nagpur. Players from across colleges battle through knockout rounds and an offline final to prove their deck management, timing, and strategic gameplay, competing for the championship title and prizes.",
     prizePool: "₹5,000",
-    prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
+    prizes: [
+      { position: 1, label: "1st Prize", amount: "₹3,000" },
+      { position: 2, label: "2nd Prize", amount: "₹2,000" },
+    ],
     stages: [
       { name: "Registration", when: "10 Oct – 19 Oct 2026", mode: "Online" },
       {
@@ -827,7 +850,7 @@ export const eventDetails: EventDetail[] = [
       },
       {
         name: "Final Round",
-        when: "25 Oct 2026",
+        when: "25 Oct 2026, 1:00 PM – 5:00 PM",
         mode: "Offline",
         detail: "Played on the IIIT Nagpur campus for the championship title.",
       },
@@ -849,7 +872,7 @@ export const eventDetails: EventDetail[] = [
       "Fair play and sportsmanship are required; cheating or foul play of any kind leads to immediate disqualification.",
     ],
     organizers: [
-      { name: "TantraFiesta IIIT Nagpur", email: "tantrafiesta@iiitn.ac.in" },
+      { name: "Synergy Lead", phone: "+91 63013 48147", email: "synergy@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-11T12:00:00+05:30",
     registrationDeadline: "2026-10-19T23:59:00+05:30",
@@ -860,8 +883,8 @@ export const eventDetails: EventDetail[] = [
     teamSize: { min: 1, max: 1 },
     mode: "Hybrid",
     startDate: "2026-10-23T00:00:00+05:30",
-    endDate: "2026-10-26T23:59:00+05:30",
-    venue: IIITN,
+    endDate: "2026-10-25T17:00:00+05:30",
+    venue: "Lab 3, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "phoenix-cup",
@@ -894,7 +917,7 @@ export const eventDetails: EventDetail[] = [
       },
       {
         name: "Round 3 — Final",
-        when: "25 Oct 2026",
+        when: "25 Oct 2026, 1:00 PM – 4:00 PM",
         mode: "Offline",
         detail:
           "The qualifying teams compete offline for the championship title and prize money. Official results and winner announcements take place the same day.",
@@ -914,7 +937,7 @@ export const eventDetails: EventDetail[] = [
       "Strict enforcement of sportsmanship and fair play; cheating or unauthorized software usage leads to immediate disqualification.",
     ],
     organizers: [
-      { name: "TantraFiesta IIIT Nagpur", email: "tantrafiesta@iiitn.ac.in" },
+      { name: "Synergy Lead", phone: "+91 92510 10664", email: "synergy@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-11T12:00:00+05:30",
     registrationDeadline: "2026-10-19T23:30:00+05:30",
@@ -925,8 +948,8 @@ export const eventDetails: EventDetail[] = [
     teamSize: { min: 5, max: 6 },
     mode: "Hybrid",
     startDate: "2026-10-22T00:00:00+05:30",
-    endDate: "2026-10-25T23:59:00+05:30",
-    venue: IIITN,
+    endDate: "2026-10-25T16:00:00+05:30",
+    venue: "Lab 6, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "rc-24",
@@ -936,18 +959,25 @@ export const eventDetails: EventDetail[] = [
     description:
       "The RC24 Esports Tournament is the official Real Cricket 24 competition of TantraFiesta, hosted by IIIT Nagpur. Players from any college face off 1v1 in a knockout bracket — first in the Open Rounds and then in the Finals — to prove their batting, bowling and game sense and win the championship title and prizes.",
     prizePool: "₹5,000",
-    prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
+    prizes: [
+      { position: 1, label: "1st Prize", amount: "₹2,000" },
+      { position: 2, label: "2nd Prize", amount: "₹1,000" },
+      { position: 3, label: "3rd Prize", amount: "₹600" },
+      { position: 4, label: "4th Place", amount: "₹600" },
+      { position: 5, label: "5th Place", amount: "₹400" },
+      { position: 6, label: "6th Place", amount: "₹400" },
+    ],
     stages: [
       {
         name: "Open Rounds",
-        when: "25 Oct 2026",
+        when: "25 Oct 2026, 1:00 PM – 5:00 PM",
         mode: "Offline",
         detail:
           "1v1 knockout matches, 2 overs per innings, played under organizer supervision at IIIT Nagpur. The bracket is drawn randomly by the organizers and shared on WhatsApp on 24 Oct 2026; byes are assigned if the player count is not a power of two. Players are called to their station by the organizers — a player not ready 5 minutes after being called loses by walkover. Room ID and password are created and shared at the station. Winners progress each round until 8 players remain.",
       },
       {
         name: "Final Round",
-        when: "26 Oct 2026",
+        when: "26 Oct 2026, 1:00 PM – 5:00 PM",
         mode: "Offline",
         detail:
           "At IIIT Nagpur, the top 8 players from the Open Rounds compete through Quarter-Finals, Semi-Finals, a Third-Place Match and the Final, all 1v1. Quarter-Finals, Semi-Finals and the Third-Place Match are one match each at 2 overs per innings. The Final is best of 3 at 5 overs per innings — the first player to win 2 matches is the champion. Finalists are seeded by the order in which they qualified, and the Final bracket is announced before the Quarter-Finals begin.",
@@ -971,7 +1001,7 @@ export const eventDetails: EventDetail[] = [
       "Cheating of any kind leads to immediate disqualification.",
     ],
     organizers: [
-      { name: "Admin", email: "tantrafiesta@iiitn.ac.in" },
+      { name: "Synergy Lead", phone: "+91 76808 14695", email: "synergy@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-10T06:30:00+05:30",
     registrationDeadline: "2026-10-19T13:00:00+05:30",
@@ -981,9 +1011,9 @@ export const eventDetails: EventDetail[] = [
     participationKit: false,
     teamSize: { min: 1, max: 1 },
     mode: "Offline",
-    startDate: "2026-10-25T00:00:00+05:30",
-    endDate: "2026-10-26T23:59:00+05:30",
-    venue: IIITN,
+    startDate: "2026-10-25T13:00:00+05:30",
+    endDate: "2026-10-26T17:00:00+05:30",
+    venue: "Lab 5, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "knights-legacy",
@@ -994,7 +1024,10 @@ export const eventDetails: EventDetail[] = [
     description:
       "Knights Legacy is a three-stage chess tournament conducted at IIIT Nagpur. It begins with a first online Blitz qualification round on 22 October 2026, followed by a second online Blitz round on 23 October. The top 8 players advance to the final offline Rapid round on 25 October at the Academic Building, IIIT Nagpur. The tournament gives players a structured competitive environment to demonstrate strategic thinking, consistency and sportsmanship.",
     prizePool: "₹5,000",
-    prizes: [{ position: 1 }, { position: 2 }],
+    prizes: [
+      { position: 1, label: "1st Prize", amount: "₹3,000" },
+      { position: 2, label: "2nd Prize", amount: "₹2,000" },
+    ],
     stages: [
       {
         name: "Day 1 — First Qualifier: Blitz Chess",
@@ -1010,7 +1043,7 @@ export const eventDetails: EventDetail[] = [
       },
       {
         name: "Day 3 — Final Round: Rapid Chess",
-        when: "25 Oct 2026",
+        when: "25 Oct 2026, 10:00 AM – 2:00 PM",
         mode: "Offline",
         detail:
           "Held at the Academic Building, IIIT Nagpur. The top 8 players compete for the Winner and Runner-up positions.",
@@ -1029,7 +1062,7 @@ export const eventDetails: EventDetail[] = [
       "Round 1: the top 18 players advance to Round 2. Round 2: the top 8 advance to the final.",
     ],
     organizers: [
-      { name: "Support", phone: "+91 72318 36153", email: "tantrafiesta@iiitn.ac.in" },
+      { name: "Synergy Lead", phone: "+91 95012 11477", email: "synergy@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-12T19:30:00+05:30",
     registrationDeadline: "2026-10-21T23:59:00+05:30",
@@ -1040,8 +1073,8 @@ export const eventDetails: EventDetail[] = [
     teamSize: { min: 1, max: 1 },
     mode: "Hybrid",
     startDate: "2026-10-22T00:00:00+05:30",
-    endDate: "2026-10-25T23:59:00+05:30",
-    venue: "Academic Building, Indian Institute of Information Technology, Nagpur",
+    endDate: "2026-10-25T14:00:00+05:30",
+    venue: "Lab 4, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "critical-ops",
@@ -1052,13 +1085,16 @@ export const eventDetails: EventDetail[] = [
     description:
       "Critical Ops is a competitive Call of Duty: Mobile 5v5 esports tournament designed to test team coordination, mechanical skill, strategy, communication, objective control, and composure under match pressure. Teams progress through structured competitive rounds before an offline playoff and final stage, with matches administered under consistent settings and an evidence-based dispute process.",
     prizePool: "₹8,000",
-    prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
+    prizes: [
+      { position: 1, label: "1st Prize", amount: "₹5,000" },
+      { position: 2, label: "2nd Prize", amount: "₹3,000" },
+    ],
     stages: [
       { name: "Registration", when: "10 Oct – 19 Oct 2026", mode: "Online" },
       { name: "Prelims Round", when: "23 Oct 2026", mode: "Online" },
       {
         name: "Final Round",
-        when: "25 Oct 2026",
+        when: "26 Oct 2026, 1:00 PM – 3:00 PM",
         mode: "Offline",
         detail: "Offline playoff and final at IIIT Nagpur; results announced the same day.",
       },
@@ -1087,8 +1123,8 @@ export const eventDetails: EventDetail[] = [
     teamSize: { min: 5, max: 6 },
     mode: "Hybrid",
     startDate: "2026-10-23T00:00:00+05:30",
-    endDate: "2026-10-25T23:59:00+05:30",
-    venue: IIITN,
+    endDate: "2026-10-26T15:00:00+05:30",
+    venue: "Lab 5, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "the-game-jam",
@@ -1114,7 +1150,7 @@ export const eventDetails: EventDetail[] = [
       },
       {
         name: "Round 2 — Offline Finale",
-        when: "25 Oct – 26 Oct 2026",
+        when: "25 Oct 2026, 10:00 AM – 26 Oct 2026, 10:00 AM (Evaluation till 2:00 PM)",
         mode: "Offline",
         detail:
           "Shortlisted teams are invited to the IIIT Nagpur campus and given 24 hours to work on and modify their game. The Round 2 theme is revealed on the day the round begins. All finalist teams must reach campus by 9:00 AM on 23 October 2026. Judgment parameters for the final round are announced on the day of the event.",
@@ -1161,8 +1197,8 @@ export const eventDetails: EventDetail[] = [
     teamSize: { min: 1, max: 4 },
     mode: "Hybrid",
     startDate: "2026-10-25T10:00:00+05:30",
-    endDate: "2026-10-26T10:00:00+05:30",
-    venue: IIITN,
+    endDate: "2026-10-26T14:00:00+05:30",
+    venue: "CR-201, CR-202 & Admin Hall 2, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "pitch-please",
@@ -1181,10 +1217,10 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Pitch Day",
-        when: "11:00 AM – 6:00 PM (6 hours)",
+        when: "25 Oct 2026, 12:00 PM – 6:00 PM",
         mode: "Offline",
         detail:
-          "Held in the designated Admin Block Hall, equipped with AV projection, audio output and judge evaluation seating. Time-capped pitch presentations per team — roughly a 10-minute pitch plus 3–5 minutes of Q&A — evaluated live by the judging panel.",
+          "Held in CR 204, equipped with AV projection, audio output and judge evaluation seating. Time-capped pitch presentations per team — roughly a 10-minute pitch plus 3–5 minutes of Q&A — evaluated live by the judging panel.",
       },
     ],
     highlights: [
@@ -1201,8 +1237,8 @@ export const eventDetails: EventDetail[] = [
       "Pitches are evaluated live by the judging panel.",
     ],
     organizers: [
-      { name: "TantraFiesta IIIT Nagpur", email: "tantrafiesta@iiitn.ac.in" },
-      { name: "Dimensions", phone: "+91 78801 45151", email: "dimensions@iiitn.ac.in" },
+      { name: "Akshat Vyas", phone: "+91 78801 45151", email: "dimensions@iiitn.ac.in" },
+      { name: "Samarth Kodape", phone: "+91 78880 45421", email: "tantrafiesta@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-11T12:00:00+05:30",
     registrationDeadline: "2026-10-24T00:00:00+05:30",
@@ -1213,9 +1249,9 @@ export const eventDetails: EventDetail[] = [
     participationKit: true,
     teamSize: { min: 1, max: 4 },
     mode: "Offline",
-    startDate: "2026-10-11T12:00:00+05:30",
-    endDate: "2026-10-24T00:00:00+05:30",
-    venue: "Admin Block Hall, Indian Institute of Information Technology, Nagpur",
+    startDate: "2026-10-25T12:00:00+05:30",
+    endDate: "2026-10-25T18:00:00+05:30",
+    venue: "CR 204, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "line-o-mania",
@@ -1278,8 +1314,8 @@ export const eventDetails: EventDetail[] = [
       "Rules may be subject to change according to the circumstances.",
     ],
     organizers: [
-      { name: "TantraFiesta IIIT Nagpur", email: "tantrafiesta@iiitn.ac.in" },
-      { name: "IoTics IoT and Robotics wing", phone: "+91 93430 80363", email: "iotics@iiitn.ac.in" },
+      { name: "IoTics Lead", phone: "+91 93430 80363", email: "iotics@iiitn.ac.in" },
+      { name: "IoTics Co-Lead", phone: "+91 93479 75307", email: "tantrafiesta@iiitn.ac.in" },
       { name: "Shreyansh Jain", phone: "+91 83027 99631", email: "bt25eci003@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-05T00:00:00+05:30",
@@ -1291,9 +1327,9 @@ export const eventDetails: EventDetail[] = [
     participationKit: true,
     teamSize: { min: 1, max: 4 },
     mode: "Offline",
-    startDate: "2026-10-25T00:00:00+05:30",
+    startDate: "2026-10-25T09:00:00+05:30",
     endDate: "2026-10-25T16:00:00+05:30",
-    venue: IIITN,
+    venue: "Academic Block Ground Floor, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "the-lost-pathways",
@@ -1318,7 +1354,7 @@ export const eventDetails: EventDetail[] = [
       },
       {
         name: "Maze runs",
-        when: "25 Oct 2026, 10:00 AM – 3:00 PM",
+        when: "26 Oct 2026, 9:00 AM – 2:00 PM",
         mode: "Offline",
         detail:
           "Each robot is allocated a total of 20 minutes of access to the final maze, including any time spent adjusting it between runs. Teams may perform as many runs as they want within that window; the fastest successful run is the official result. After the third run, a 1-minute penalty is added to each subsequent run. First place goes to the robot with the shortest official time; robots that do not finish are ranked by how close they got to the destination square.",
@@ -1356,8 +1392,7 @@ export const eventDetails: EventDetail[] = [
       "Rules may be subject to change according to the circumstances.",
     ],
     organizers: [
-      { name: "Helpdesk", email: "tantrafiesta@iiitn.ac.in" },
-      { name: "IoTics IoT and Robotics wing", phone: "+91 74989 12500", email: "iotics@iiitn.ac.in" },
+      { name: "IoTics Lead", phone: "+91 74989 12500", email: "iotics@iiitn.ac.in" },
       { name: "Neel Kotecha", phone: "+91 79765 77767", email: "bt25eci057@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-10T12:00:00+05:30",
@@ -1369,9 +1404,9 @@ export const eventDetails: EventDetail[] = [
     participationKit: true,
     teamSize: { min: 1, max: 5 },
     mode: "Offline",
-    startDate: "2026-10-25T10:00:00+05:30",
-    endDate: "2026-10-25T15:00:00+05:30",
-    venue: IIITN,
+    startDate: "2026-10-26T09:00:00+05:30",
+    endDate: "2026-10-26T14:00:00+05:30",
+    venue: "Academic Block Ground Floor, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "rann-bhoomi",
@@ -1380,9 +1415,15 @@ export const eventDetails: EventDetail[] = [
     clubs: [{ name: "Iotics", slug: "iotics" }],
     description:
       "Rann Bhoomi 2.0 challenges participants to design and build a manually controlled combat robot capable of engaging in head-to-head battles inside a dedicated arena. Robots must demonstrate superior strength, control, durability and strategy to overpower their opponents — the goal is to outlast and outfight competitors while adhering to strict safety and design standards.",
-    prizePool: "₹1,50,000",
-    prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
-    prizeNote: "Winners are declared per weight category — 1.5 kg, 8 kg and 15 kg.",
+    prizePool: "₹1,20,000+",
+    prizes: [
+      { position: 1, label: "1st Prize", amount: "₹60,000" },
+      { position: 2, label: "2nd Prize", amount: "₹40,000" },
+      { position: 3, label: "3rd Prize", amount: "₹20,000" },
+      { position: 4, label: "Best Design", note: "Special recognition" },
+      { position: 5, label: "Best Warrior", note: "Special recognition" },
+    ],
+    prizeNote: "Winners are declared across weight categories and special awards.",
     stages: [
       {
         name: "Round 1 — Qualification: Portfolio Submission",
@@ -1393,14 +1434,14 @@ export const eventDetails: EventDetail[] = [
       },
       {
         name: "Round 2 — Knockout Elimination: Arena Battle",
-        when: "24 Oct 2026, 6:00 PM – 25 Oct 2026, 11:30 PM",
+        when: "25 Oct 2026, 3:00 PM – 6:00 PM & 8:00 PM – 11:00 PM",
         mode: "Offline",
         detail:
           "Five-minute matches in an elimination format. The losing bot is eliminated and the winner advances, continuing until the top 6 teams qualify for the finals — 2 from 1.5 kg, 2 from 8 kg and 2 from 15 kg. Victory by knock-out: the opposing bot fails to move 6 inches within 30 seconds. Scored on aggression, damage, control and strategy.",
       },
       {
         name: "Round 3 — Finals: Championship Battles",
-        when: "26 Oct 2026, 3:00 PM – 7:00 PM",
+        when: "26 Oct 2026, 12:00 PM – 6:00 PM",
         mode: "Offline",
         detail:
           "Three matches, one final per weight category, in a different format: two rounds of 3 minutes each, with a 5-minute break after Round 1 for technical repairs. Winners of each weight category are declared on final-match performance.",
@@ -1435,7 +1476,8 @@ export const eventDetails: EventDetail[] = [
       "The rules in the brochure may change according to circumstances.",
     ],
     organizers: [
-      { name: "Support", phone: "+91 72318 36153", email: "tantrafiesta@iiitn.ac.in" },
+      { name: "IoTics Lead", phone: "+91 89605 65026", email: "iotics@iiitn.ac.in" },
+      { name: "IoTics Co-Lead", phone: "+91 79726 58621", email: "tantrafiesta@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-12T12:00:00+05:30",
     registrationDeadline: "2026-10-22T18:00:00+05:30",
@@ -1447,8 +1489,8 @@ export const eventDetails: EventDetail[] = [
     teamSize: { min: 1, max: 6 },
     mode: "Hybrid",
     startDate: "2026-10-22T18:00:00+05:30",
-    endDate: "2026-10-26T19:00:00+05:30",
-    venue: IIITN,
+    endDate: "2026-10-26T18:00:00+05:30",
+    venue: "Academic Parking Area, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "yuvaan",
@@ -1459,11 +1501,15 @@ export const eventDetails: EventDetail[] = [
     description:
       "Yuvaan is a youth conclave designed to encourage structured discussion, critical thinking, public speaking, questioning and constructive disagreement. The format combines prepared individual speeches with direct questioning and open interactive discussion, treating the committee as an intellectual discussion rather than a personal confrontation.",
     prizePool: "₹30,000",
-    prizes: [{ position: 1 }, { position: 2 }, { position: 3 }],
+    prizes: [
+      { position: 1, label: "Winner", amount: "₹15,000" },
+      { position: 2, label: "1st Runner-Up", amount: "₹10,000" },
+      { position: 3, label: "2nd Runner-Up", amount: "₹5,000" },
+    ],
     stages: [
       {
         name: "Conclave",
-        when: "26 Oct 2026, 10:00 AM – 6:00 PM",
+        when: "26 Oct 2026, 12:00 PM – 6:00 PM",
         mode: "Offline",
         detail:
           "Prepared individual speeches followed by direct questioning and open interactive discussion, at IIIT Nagpur.",
@@ -1488,15 +1534,15 @@ export const eventDetails: EventDetail[] = [
     registrationOpens: "2026-10-11T12:00:00+05:30",
     registrationDeadline: "2026-10-24T23:59:00+05:30",
     registrationFee: "₹300 per person",
-    entryFeeLabel: "₹300 per participant; team leader pays for all members",
+    entryFeeLabel: "₹300 per participant",
     feeMode: "per_participant",
     meals: "1 Snack",
     participationKit: true,
     teamSize: { min: 1, max: 1 },
     mode: "Offline",
-    startDate: "2026-10-26T10:00:00+05:30",
+    startDate: "2026-10-26T12:00:00+05:30",
     endDate: "2026-10-26T18:00:00+05:30",
-    venue: IIITN,
+    venue: "CR 201, 202 & Admin Hall 2, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "keep-alive-26",
@@ -1553,7 +1599,7 @@ export const eventDetails: EventDetail[] = [
       },
       {
         name: "Finale — KEEP ALIVE Live",
-        when: "26 Oct 2026, 9:00 AM – 7:00 PM",
+        when: "26 Oct 2026, 9:00 AM – 6:00 PM",
         mode: "Offline",
         detail:
           "On campus at IIIT Nagpur. A hands-on session on the platform, Grafana and the report form, with one practice incident. Phase 1, First Responder: 6 incidents in 90 minutes. Phase 2, Deep Dive: 3 intermediate incidents and 1 critical, cascading incident in 90 minutes. You never change the system — you read its signals and submit a short solution report for each incident covering the root cause, the evidence and the fix. Each team then presents its findings to the judges in a 10-minute slot.",
@@ -1596,8 +1642,8 @@ export const eventDetails: EventDetail[] = [
     teamSize: { min: 2, max: 3 },
     mode: "Hybrid",
     startDate: "2026-10-11T09:00:00+05:30",
-    endDate: "2026-10-26T19:00:00+05:30",
-    venue: IIITN,
+    endDate: "2026-10-26T18:00:00+05:30",
+    venue: "CR 203, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "digital-time-capsule",
@@ -1677,7 +1723,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Workshop Session",
-        when: "Day 2, 9:00 AM – 4:00 PM",
+        when: "Day 2, 9:00 AM – 2:00 PM",
         mode: "Offline",
         detail:
           "Hands-on VLSI design workshop in CR 204. Interactive lecture, EDA tool walkthrough, and simulation.",
@@ -1689,28 +1735,28 @@ export const eventDetails: EventDetail[] = [
       "Hands-on mentoring by experienced electronics engineers.",
     ],
     eligibility: [
+      "Solo participation only.",
       "Open to all college students interested in electronics and semiconductor systems.",
-      "Team size: 2–4 members.",
     ],
     rules: [
       "Participants must carry their own laptops with required software installed prior to the session.",
       "Organizers' decisions and safety protocols are binding during all lab modules.",
     ],
     organizers: [
-      { name: "Iotics Coordinator", phone: "+91 99999 99999", email: "iotics@iiitn.ac.in" },
+      { name: "IoTics Coordinator", phone: "+91 99601 22268", email: "iotics@iiitn.ac.in" },
     ],
     registrationOpens: "2026-10-10T12:00:00+05:30",
     registrationDeadline: "2026-10-25T23:59:00+05:30",
-    registrationFee: "₹250 per person",
-    entryFeeLabel: "₹250 per participant",
+    registrationFee: "₹150 per person",
+    entryFeeLabel: "₹150 per participant",
     feeMode: "per_participant",
-    meals: "1 Meal + 1 Snack",
+    meals: "1 Snack",
     participationKit: true,
-    teamSize: { min: 2, max: 4 },
+    teamSize: { min: 1, max: 1 },
     mode: "Offline",
     startDate: "2026-10-26T09:00:00+05:30",
-    endDate: "2026-10-26T16:00:00+05:30",
-    venue: "CR 204",
+    endDate: "2026-10-26T14:00:00+05:30",
+    venue: "CR 204, Indian Institute of Information Technology, Nagpur",
   },
 ];
 

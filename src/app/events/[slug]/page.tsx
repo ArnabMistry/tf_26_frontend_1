@@ -29,11 +29,12 @@ export async function generateStaticParams() {
 function fromPublicEvent(event: PublicEvent): EventDetailData {
   const local = getEventDetail(event.slug);
   const isFree = !event.price || event.price === 0 || event.paymentTrigger === "free";
+  const isTeam = event.isTeamEvent ?? (local?.teamSize ? local.teamSize.max > 1 : false);
   const entryFeeLabel = isFree
     ? "Free"
     : event.paymentTrigger === "after_round"
-      ? `₹${event.price} ${event.feeMode === "per_participant" ? "per participant" : "per team"} (free to enter; payable upon Round 2 promotion)`
-      : event.isTeamEvent
+      ? `₹${event.price} ${isTeam && event.feeMode === "per_team" ? "per team" : "per participant"} (free to enter; payable upon Round 2 promotion)`
+      : isTeam
         ? `₹${event.price} ${event.feeMode === "per_participant" ? "per participant (team leader pays for all members)" : "per team (team leader pays once)"}`
         : `₹${event.price} per participant`;
 
@@ -45,7 +46,7 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
   // neither may win over the price the backend is actually charging.
   const registrationFee = isFree
     ? "Free"
-    : `₹${event.price} ${event.feeMode === "per_team" ? "per team" : "per person"}`;
+    : `₹${event.price} ${isTeam && event.feeMode === "per_team" ? "per team" : "per person"}`;
 
   return {
     ...local,
@@ -53,7 +54,7 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
     name: event.name,
     // Joint clubs are supplied by the normalized API contract.
     clubs: event.clubs || [event.club],
-    description: local?.description || event.description || event.shortDescription || "",
+    description: event.description || local?.description || event.shortDescription || "",
     poster: event.image || local?.image || local?.poster,
     image: event.image || local?.image,
     prizePool: event.prizePool || local?.prizePool,
