@@ -37,7 +37,15 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
         ? `₹${event.price} ${event.feeMode === "per_participant" ? "per participant (team leader pays for all members)" : "per team (team leader pays once)"}`
         : `₹${event.price} per participant`;
 
-  const registrationFee = event.registrationFee || (isFree ? "Free" : `₹${event.price}${event.feeMode === "per_team" ? " / team" : " / person"}`);
+  // Derived from the live price every time, never from a stored string.
+  // `event.registrationFee` comes from the event's `requirements` JSON, which
+  // is a snapshot written when the event was created and does not follow an
+  // admin's later price edits; `local.registrationFee` is a build-time
+  // constant in eventDetails.ts. Both go stale the moment a fee changes, so
+  // neither may win over the price the backend is actually charging.
+  const registrationFee = isFree
+    ? "Free"
+    : `₹${event.price} ${event.feeMode === "per_team" ? "per team" : "per person"}`;
 
   return {
     ...local,
@@ -63,7 +71,7 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
     registrationDeadline: event.registrationDeadline,
     startDate: event.startDate || undefined,
     endDate: event.endDate,
-    registrationFee: registrationFee || local?.registrationFee,
+    registrationFee,
     feeMode: event.feeMode || local?.feeMode,
     meals: event.meals || local?.meals,
     participationKit: event.participationKit !== undefined ? event.participationKit : local?.participationKit,

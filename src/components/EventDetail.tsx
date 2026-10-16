@@ -156,33 +156,6 @@ export function EventDetail({ event }: EventDetailProps) {
                 text={`${joinClubNames(event.clubs)} is still putting together the brief for ${event.name}. Check back shortly.`}
               />
             )}
-            <div className={styles.feeOverviewCard}>
-              <div className={styles.feeOverviewHeader}>
-                <div className={styles.feeBadge}>
-                  <span className={styles.feeBadgeLabel}>Registration Fee</span>
-                  <span className={styles.feeBadgeAmount}>
-                    {event.registrationFee || event.entryFeeLabel || "Free"}
-                  </span>
-                </div>
-                {event.entryFeeLabel && event.entryFeeLabel !== "Free" && (
-                  <p className={styles.feeOverviewDetail}>{event.entryFeeLabel}</p>
-                )}
-              </div>
-              {(event.meals || event.participationKit !== undefined) && (
-                <div className={styles.perksRow}>
-                  {event.meals && (
-                    <span className={styles.perkChip}>
-                      <span aria-hidden="true">🍽️</span> {formatMealsLabel(event.meals)}
-                    </span>
-                  )}
-                  {event.participationKit && (
-                    <span className={styles.perkChip}>
-                      <span aria-hidden="true">🎒</span> Participation Kit Included
-                    </span>
-                  )}
-                </div>
-              )}
-            </div>
             <PrizeBox event={event} />
           </div>
           <Poster event={event} />
