@@ -53,7 +53,7 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
     name: event.name,
     // Joint clubs are supplied by the normalized API contract.
     clubs: event.clubs || [event.club],
-    description: local?.description || event.description || event.shortDescription || "",
+    description: event.description || local?.description || event.shortDescription || "",
     poster: event.image || local?.image || local?.poster,
     image: event.image || local?.image,
     prizePool: event.prizePool || local?.prizePool,
