@@ -8,7 +8,6 @@ import { hasSessionHint, logout } from '@/lib/session';
 import { participantRequest, fullName, formatDate, type Profile, type Inbox, type Notification, type MealPass, type Registration } from '@/lib/participant';
 import { payForEvent } from '@/lib/payments';
 import s from './Portal.module.css';
-import { MealPassItem } from './MealPassItem';
 import { AccommodationSection } from './AccommodationSection';
 
 export function PortalSkeleton() {
@@ -447,6 +446,38 @@ export function UserPortal() {
                           {item.metadata?.themes?.length ? item.metadata.themes.join(', ') : item.metadata?.theme}
                         </span>
                       </p>
+                    )}
+                    {Boolean(item.metadata?.preferences?.length || item.preferences?.length || item.metadata?.committeePreferences?.length || item.committeePreferences?.length) && (
+                      <div className="mt-2 text-xs space-y-1.5 bg-black/25 p-2.5 rounded-lg border border-[#faff52]/20">
+                        <p className="text-[#faff52] font-semibold">
+                          Yuvaan Conclave Preferences:
+                        </p>
+                        {(item.metadata?.preferences || item.preferences) ? (
+                          <div className="space-y-0.5 text-white/90">
+                            {((item.metadata?.preferences || item.preferences) as { committee: string; motion: string }[]).map((pref, idx) => (
+                              <p key={idx}>
+                                <span className="text-[#b8afcf]">{idx + 1}. </span>
+                                {pref.committee} <span className="text-[#83ebba] font-mono">({pref.motion})</span>
+                              </p>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-white/90">
+                            <span className="text-[#b8afcf]">Committees: </span>
+                            {(item.metadata?.committeePreferences || item.committeePreferences || []).join(' → ')}
+                            {(item.metadata?.motionPreference || item.motionPreference) && (
+                              <span className="text-[#83ebba] font-mono ml-2">({item.metadata?.motionPreference || item.motionPreference})</span>
+                            )}
+                          </p>
+                        )}
+                        {(item.metadata?.schoolCollege || item.schoolCollege) && (
+                          <p className="text-white/90 pt-0.5 border-t border-white/10">
+                            <span className="text-[#b8afcf]">Institution: </span>
+                            {item.metadata?.schoolCollege || item.schoolCollege}
+                            {(item.metadata?.classYear || item.classYear) ? ` (${item.metadata?.classYear || item.classYear})` : ''}
+                          </p>
+                        )}
+                      </div>
                     )}
                     {/* Undecided rounds are hidden: every event has a Round 1
                         from creation, so "awaiting result" would be noise. */}

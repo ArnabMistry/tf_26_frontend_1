@@ -7,6 +7,14 @@ import { authRequest, ApiError } from '@/lib/auth';
 import { hasSessionHint } from '@/lib/session';
 import { participantRequest, formatDate, fullName, type EventInfo, type Team, type Registration, type Person, type Profile } from '@/lib/participant';
 import { payForEvent } from '@/lib/payments';
+import {
+  YUVAAN_EVENT_ID,
+  isYuvaanIdentifier,
+  validateYuvaanForm,
+  type YuvaanFormData,
+  type YuvaanValidationErrors,
+} from '@/lib/yuvaan';
+import { YuvaanAddonSection } from './YuvaanAddonSection';
 import s from './Portal.module.css';
 
 export const CASCADE_THEMES = [
@@ -100,6 +108,17 @@ export function EventRegistration() {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [selectedThemes, setSelectedThemes] = useState<string[]>([]);
   const [themeError, setThemeError] = useState<string>('');
+  const [yuvaanData, setYuvaanData] = useState<YuvaanFormData>({
+    pref1Committee: '',
+    pref1Motion: 'For',
+    pref2Committee: '',
+    pref2Motion: 'For',
+    pref3Committee: '',
+    pref3Motion: 'For',
+    schoolCollege: '',
+    classYear: '',
+  });
+  const [yuvaanErrors, setYuvaanErrors] = useState<YuvaanValidationErrors>({});
   const refresh = useCallback(async () => {
     if (!user || !requestedEvent) return;
     const token = hasSessionHint() ? 'session' : null;
@@ -124,6 +143,44 @@ export function EventRegistration() {
         ? mine.metadata.theme.split(',').map(s => s.trim()).filter(Boolean)
         : [];
       if (themesFromMeta.length > 0) setSelectedThemes(themesFromMeta);
+
+      const meta = mine?.metadata;
+      const rawPreferences = (meta?.preferences || (mine as unknown as { preferences?: { committee?: string; motion?: string }[] })?.preferences) as { committee?: string; motion?: string }[] | undefined;
+      const legacyPrefs = (meta?.committeePreferences || mine?.committeePreferences) as string[] | undefined;
+      const legacyMotion = ((meta?.motionPreference || mine?.motionPreference || 'For') as 'For' | 'Against');
+      const school = (meta?.schoolCollege || mine?.schoolCollege) as string | undefined;
+      const cy = (meta?.classYear || mine?.classYear) as string | undefined;
+      const currentCollege = profile.user.collegeName || user.collegeName || '';
+
+      if (Array.isArray(rawPreferences) && rawPreferences.length >= 3) {
+        setYuvaanData({
+          pref1Committee: rawPreferences[0]?.committee || '',
+          pref1Motion: (rawPreferences[0]?.motion as 'For' | 'Against') || 'For',
+          pref2Committee: rawPreferences[1]?.committee || '',
+          pref2Motion: (rawPreferences[1]?.motion as 'For' | 'Against') || 'For',
+          pref3Committee: rawPreferences[2]?.committee || '',
+          pref3Motion: (rawPreferences[2]?.motion as 'For' | 'Against') || 'For',
+          schoolCollege: school || currentCollege,
+          classYear: cy || '',
+        });
+      } else if (Array.isArray(legacyPrefs) && legacyPrefs.length >= 3) {
+        setYuvaanData({
+          pref1Committee: legacyPrefs[0] || '',
+          pref1Motion: legacyMotion,
+          pref2Committee: legacyPrefs[1] || '',
+          pref2Motion: legacyMotion,
+          pref3Committee: legacyPrefs[2] || '',
+          pref3Motion: legacyMotion,
+          schoolCollege: school || currentCollege,
+          classYear: cy || '',
+        });
+      } else if (currentCollege) {
+        setYuvaanData(prev => ({
+          ...prev,
+          schoolCollege: prev.schoolCollege || currentCollege,
+        }));
+      }
+
       setReady(true); setError('');
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) router.replace(`/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`);
@@ -227,6 +284,29 @@ export function EventRegistration() {
   const handlePayFee = () => runPayment(`Payment verified! Your place in ${feeRoundName || 'the next round'} is confirmed.`);
 
   const isCascade = event?.id === 'tf26_cascade' || event?.slug === 'cascade' || requestedEvent?.toLowerCase() === 'cascade' || requestedEvent?.toLowerCase() === 'tf26_cascade';
+  const isYuvaan = isYuvaanIdentifier(event?.id) || isYuvaanIdentifier(event?.slug) || isYuvaanIdentifier(requestedEvent);
+
+  const isYuvaanComplete =
+    Boolean(yuvaanData.pref1Committee) &&
+    Boolean(yuvaanData.pref2Committee) &&
+    Boolean(yuvaanData.pref3Committee) &&
+    yuvaanData.pref1Committee !== yuvaanData.pref2Committee &&
+    yuvaanData.pref1Committee !== yuvaanData.pref3Committee &&
+    yuvaanData.pref2Committee !== yuvaanData.pref3Committee &&
+    Boolean(yuvaanData.pref1Motion) &&
+    Boolean(yuvaanData.pref2Motion) &&
+    Boolean(yuvaanData.pref3Motion) &&
+    Boolean(yuvaanData.schoolCollege.trim()) &&
+    Boolean(yuvaanData.classYear.trim());
+
+  const handleYuvaanChange = <K extends keyof YuvaanFormData>(field: K, value: YuvaanFormData[K]) => {
+    setYuvaanData(prev => ({ ...prev, [field]: value }));
+    setYuvaanErrors(prev => ({
+      ...prev,
+      [field]: undefined,
+      ...(field.includes('Committee') ? { committees: undefined } : {}),
+    }));
+  };
 
   const toggleTheme = (themeTitle: string) => {
     setSelectedThemes(prev => {
@@ -245,16 +325,38 @@ export function EventRegistration() {
       return;
     }
     setThemeError('');
+
+    if (isYuvaan) {
+      const validation = validateYuvaanForm(yuvaanData);
+      if (!validation.valid) {
+        setYuvaanErrors(validation.errors);
+        const el = document.getElementById('yuvaan-addon-form');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+    }
+
     if (paymentRequired) {
       return handlePaymentAndRegistration();
     }
     return mutate(
       () =>
         participantRequest('/api/user/registrations', {
-          eventId: event!.id,
+          eventId: isYuvaan ? YUVAAN_EVENT_ID : event!.id,
           ...(team ? { teamId: team.id } : {}),
           ...(isCascade && selectedThemes.length > 0
             ? { themes: selectedThemes, theme: selectedThemes.join(', ') }
+            : {}),
+          ...(isYuvaan
+            ? {
+                preferences: [
+                  { committee: yuvaanData.pref1Committee, motion: yuvaanData.pref1Motion },
+                  { committee: yuvaanData.pref2Committee, motion: yuvaanData.pref2Motion },
+                  { committee: yuvaanData.pref3Committee, motion: yuvaanData.pref3Motion },
+                ],
+                schoolCollege: yuvaanData.schoolCollege.trim(),
+                classYear: yuvaanData.classYear.trim(),
+              }
             : {}),
         }),
       'Registration confirmed!'
@@ -312,10 +414,56 @@ export function EventRegistration() {
             </div>
           </div>
         )}
+        {isYuvaan && (
+          <div className="mt-4 p-4 rounded-xl bg-white/[0.04] border border-[#faff52]/20">
+            <p className="text-xs uppercase tracking-wider text-[#b8afcf] font-mono mb-2">
+              Registered Delegate Preferences
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-sm">
+              <div className="p-2.5 rounded-lg bg-black/20 border border-[#faff52]/15">
+                <p className="text-xs text-[#b8afcf] font-mono uppercase">1st Preference</p>
+                <p className="text-sm font-semibold text-[#faff52] mt-0.5">{yuvaanData.pref1Committee || '1st Preference'}</p>
+                <span className="inline-block mt-1 text-[11px] font-mono px-2 py-0.5 rounded bg-[#faff52]/15 text-[#faff52] border border-[#faff52]/30">
+                  Motion: {yuvaanData.pref1Motion}
+                </span>
+              </div>
+              <div className="p-2.5 rounded-lg bg-black/20 border border-[#faff52]/15">
+                <p className="text-xs text-[#b8afcf] font-mono uppercase">2nd Preference</p>
+                <p className="text-sm font-semibold text-[#faff52] mt-0.5">{yuvaanData.pref2Committee || '2nd Preference'}</p>
+                <span className="inline-block mt-1 text-[11px] font-mono px-2 py-0.5 rounded bg-[#faff52]/15 text-[#faff52] border border-[#faff52]/30">
+                  Motion: {yuvaanData.pref2Motion}
+                </span>
+              </div>
+              <div className="p-2.5 rounded-lg bg-black/20 border border-[#faff52]/15">
+                <p className="text-xs text-[#b8afcf] font-mono uppercase">3rd Preference</p>
+                <p className="text-sm font-semibold text-[#faff52] mt-0.5">{yuvaanData.pref3Committee || '3rd Preference'}</p>
+                <span className="inline-block mt-1 text-[11px] font-mono px-2 py-0.5 rounded bg-[#faff52]/15 text-[#faff52] border border-[#faff52]/30">
+                  Motion: {yuvaanData.pref3Motion}
+                </span>
+              </div>
+              <div className="p-2.5 rounded-lg bg-black/20 border border-[#faff52]/15 sm:col-span-3">
+                <p className="text-xs text-[#b8afcf] font-mono uppercase">Institution &amp; Class</p>
+                <p className="text-sm font-semibold text-white mt-0.5">
+                  {yuvaanData.schoolCollege || (registration?.metadata?.schoolCollege || registration?.schoolCollege as string) || 'Not provided'}
+                  {yuvaanData.classYear || (registration?.metadata?.classYear || registration?.classYear as string) ? ` · ${yuvaanData.classYear || (registration?.metadata?.classYear || registration?.classYear as string)}` : ''}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
         {/* Only decided rounds are worth showing - every event carries a
             Round 1 from creation, so undecided ones say nothing. */}
         {!!decidedRounds.length && <div className="flex flex-wrap gap-2 mt-4">{decidedRounds.map(round => <span key={round.roundId} className={`${s.badge} ${round.status === 'QUALIFIED' ? s.accepted : ''}`}>{round.name}: {round.status === 'QUALIFIED' ? 'Promoted' : 'Not promoted'}</span>)}</div>}
         <Link className={`${s.button} mt-5`} href="/profile">Go to my portal</Link></section> : null}
+
+      {isYuvaan && !registered && !team?.stats.isRegistered && (
+        <YuvaanAddonSection
+          data={yuvaanData}
+          onChange={handleYuvaanChange}
+          errors={yuvaanErrors}
+          disabled={busy}
+        />
+      )}
 
       {isCascade && !registered && !team?.stats.isRegistered && (
         <section id="cascade-theme-selection" className={s.card}>
@@ -416,6 +564,42 @@ export function EventRegistration() {
           </h3>
         </div>
       )}
+      {isYuvaan && (
+        <div className={s.entry}>
+          <p className={s.muted}>Yuvaan Preferences</p>
+          <div className="mt-1 space-y-2 text-xs">
+            <div className="space-y-1">
+              <p className="text-[#b8afcf]">Preferences &amp; Stances:</p>
+              <div className="space-y-0.5">
+                <p className={yuvaanData.pref1Committee ? 'text-white' : 'text-pink-300'}>
+                  <strong className="text-[#faff52]">1. </strong>{yuvaanData.pref1Committee || 'Pending'}
+                  {yuvaanData.pref1Committee && <span className="text-[#83ebba] font-mono ml-1.5">({yuvaanData.pref1Motion})</span>}
+                </p>
+                <p className={yuvaanData.pref2Committee ? 'text-white' : 'text-pink-300'}>
+                  <strong className="text-[#faff52]">2. </strong>{yuvaanData.pref2Committee || 'Pending'}
+                  {yuvaanData.pref2Committee && <span className="text-[#83ebba] font-mono ml-1.5">({yuvaanData.pref2Motion})</span>}
+                </p>
+                <p className={yuvaanData.pref3Committee ? 'text-white' : 'text-pink-300'}>
+                  <strong className="text-[#faff52]">3. </strong>{yuvaanData.pref3Committee || 'Pending'}
+                  {yuvaanData.pref3Committee && <span className="text-[#83ebba] font-mono ml-1.5">({yuvaanData.pref3Motion})</span>}
+                </p>
+              </div>
+            </div>
+            <div>
+              <p className="text-[#b8afcf]">School / College:</p>
+              <p className={yuvaanData.schoolCollege.trim() ? 'text-white' : 'text-pink-300'}>
+                {yuvaanData.schoolCollege.trim() || 'Required'}
+              </p>
+            </div>
+            <div>
+              <p className="text-[#b8afcf]">Class / Year:</p>
+              <p className={yuvaanData.classYear.trim() ? 'text-white' : 'text-pink-300'}>
+                {yuvaanData.classYear.trim() || 'Required'}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
       <div className={s.entry}><p className={s.muted}>Entry fee</p><h3>{feeCharged ? `₹${feeTotal}${event.paymentTrigger === 'after_round' ? (feePaid ? ' · paid' : feeDueNow ? ' · due now' : notPromoted ? ' · not applicable' : ' · after qualification') : ''}` : 'Free registration'}</h3>{feeIsPerHead && <p className={s.fine}>{team ? `₹${event.price} × ${teamSize} member${teamSize === 1 ? '' : 's'} · paid once by the team leader` : `₹${event.price} per participant · paid once by the team leader`}</p>}{!feeIsPerHead && event.isTeamEvent && feeCharged && <p className={s.fine}>Flat fee for the whole team · paid once by the team leader</p>}</div>
       {closed && <p className={s.error}>Registration is closed.</p>}
       
@@ -443,6 +627,9 @@ export function EventRegistration() {
         <>
           {isCascade && selectedThemes.length === 0 && !registered && (
             <p className={`${s.fine} text-[#FFFF1A] mb-2`}>⚠️ Please select at least one theme to register.</p>
+          )}
+          {isYuvaan && !isYuvaanComplete && !registered && (
+            <p className={`${s.fine} text-[#FFFF1A] mb-2`}>⚠️ Complete all 4 Yuvaan fields to register.</p>
           )}
           <button className={`${s.button} w-full`} disabled={busy || !canRegister} onClick={handleAction}>
             {busy
