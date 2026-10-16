@@ -295,6 +295,9 @@ function Poster({ event }: { event: EventDetailData }) {
 function PrizeBox({ event }: { event: EventDetailData }) {
   // The ₹ is styled separately, so drop one if the source value already carries it.
   const prizePool = (event.prizePool ?? "XX,XXX").replace(/^\s*₹\s*/, "");
+  const isTeam = Boolean(event.teamSize && event.teamSize.max > 1);
+  const internalRegisterHref = `${isTeam ? "/register/team" : "/register/event"}?eventId=${encodeURIComponent(event.slug)}`;
+  const unstopUrl = event.registrationUrl && /^https?:\/\//i.test(event.registrationUrl) ? event.registrationUrl : null;
 
   return (
     <div className={styles.prizeBox}>
@@ -322,12 +325,23 @@ function PrizeBox({ event }: { event: EventDetailData }) {
 
       <div className={styles.actionArea}>
         <Link
-          href={event.registrationUrl || `/register/event?eventId=${encodeURIComponent(event.slug)}`}
+          href={internalRegisterHref}
           className={styles.register}
           aria-label={`Register now for ${event.name}`}
         >
           Register Now <span aria-hidden="true">↗</span>
         </Link>
+        {unstopUrl && (
+          <a
+            href={unstopUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.unstopRegister}
+            aria-label={`Unstop page for ${event.name}`}
+          >
+            Unstop <span aria-hidden="true">↗</span>
+          </a>
+        )}
       </div>
     </div>
   );

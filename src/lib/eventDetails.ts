@@ -113,6 +113,7 @@ const IIITN = "Indian Institute of Information Technology, Nagpur";
 export const eventDetails: EventDetail[] = [
   {
     slug: "cascade",
+    registrationUrl: "https://unstop.com/hackathons/cascade26-flagship-hackathon-tantrafiesta26-iiitn-1766233",
     name: "Cascade",
     tagline: "The flagship 24-hour hackathon",
     image: "/event-posters/Cas-Cade.webp",
@@ -203,6 +204,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "ragnarok",
+    registrationUrl: "https://unstop.com/hackathons/ragnarok-tantrafiesta26-iiitn-1767921",
     name: "Ragnarok",
     tagline: "The agentic hackathon",
     image: "/event-posters/ragnarok.webp",
@@ -278,6 +280,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "last-man-standing",
+    registrationUrl: "https://unstop.com/competitions/last-man-standing-40-tantrafiesta26-iiitn-1765830",
     name: "Last Man Standing 4.0",
     tagline: "The tech quiz where only one team walks out alive",
     image: "/event-posters/LMS.webp",
@@ -300,7 +303,7 @@ export const eventDetails: EventDetail[] = [
       },
       {
         name: "Offline finale",
-        when: "26 Oct 2026, 12:00 PM – 5:00 PM",
+        when: "26 Oct 2026, 1:00 PM – 6:00 PM",
         mode: "Offline",
         detail:
           "Two rounds at IIIT Nagpur: a non-stop survival quiz that runs until only the Top 5 teams remain, then a high-risk Tiles round to crown the champion.",
@@ -342,6 +345,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "algorithmia",
+    registrationUrl: "https://unstop.com/hackathons/algorithmia-the-icpc-style-coding-challenge-iiitn-1768266",
     name: "Algorithmia",
     tagline: "The ICPC-style coding challenge",
     image: "/event-posters/Algorithmia.webp",
@@ -416,6 +420,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "flashcode",
+    registrationUrl: "https://unstop.com/hackathons/flashcode-tantrafiesta26-iiitn-1765827",
     name: "FlashCode",
     tagline: "Three surprise mini coding games",
     image: "/event-posters/FlashCode.webp",
@@ -482,6 +487,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "bugwars",
+    registrationUrl: "https://unstop.com/hackathons/bugwars-the-coding-challenge-tantrafiesta26-iiitn-1768954",
     name: "BugWars",
     tagline: "The debugging challenge",
     image: "/event-posters/BugWars.webp",
@@ -540,6 +546,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "design-a-thon",
+    registrationUrl: "https://unstop.com/hackathons/designathon-tantrafiesta26-iiitn-1767529",
     name: "Design-A-Thon",
     tagline: "UI/UX design hackathon",
     image: "/event-posters/Design-A-Thon.webp",
@@ -610,6 +617,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "brandxperience",
+    registrationUrl: "https://unstop.com/competitions/brand-xperience-tantrafiesta26-iiitn-1766416",
     name: "Brand Xperience",
     tagline: "Innovative branding challenge",
     image: "/event-posters/Brand-Xperience.webp",
@@ -696,6 +704,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "firestorm-rampage",
+    registrationUrl: "https://unstop.com/events/firestorm-rampage-tantrafiesta26-iiitn-1766235",
     name: "Firestorm Rampage",
     tagline: "Free Fire — Battle Royale squads",
     image: "/event-posters/firstom-rampage.webp",
@@ -764,6 +773,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "combat-carnage",
+    registrationUrl: "https://unstop.com/events/combat-carnage-tantrafiesta26-iiitn-1767679",
     name: "Combat Carnage",
     tagline: "BGMI — Squad TPP",
     image: "/event-posters/combact-carnage.webp",
@@ -829,6 +839,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "crown-clash",
+    registrationUrl: "https://unstop.com/events/crown-clash-tantrafiesta26-iiitn-1766244",
     name: "Crown Clash",
     tagline: "Clash Royale — 1v1 knockout",
     image: "/event-posters/crown-clash.webp",
@@ -889,6 +900,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "phoenix-cup",
+    registrationUrl: "https://unstop.com/events/pheonix-cup-tantrafiesta26-iiitn-1766240",
     name: "Phoenix Cup",
     tagline: "Valorant — 5v5",
     image: "/event-posters/phoenix-cup.webp",
@@ -954,6 +966,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "rc-24",
+    registrationUrl: "https://unstop.com/events/rc24-esports-tournament-tantrafiesta26-iiitn-1768504",
     name: "RC 24",
     tagline: "Real Cricket 24 — 1v1 knockout",
     clubs: [{ name: "Synergy", slug: "synergy" }],
@@ -1018,6 +1031,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "knights-legacy",
+    registrationUrl: "https://unstop.com/events/knights-legacy-tantrafiesta26-iiitn-1766245",
     name: "Knights Legacy",
     tagline: "Chess — Blitz qualifiers, Rapid final",
     image: "/event-posters/knights-legacy.webp",
@@ -1079,6 +1093,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "critical-ops",
+    registrationUrl: "https://unstop.com/events/critical-ops-tantrafiesta26-iiitn-1766242",
     name: "Critical Ops",
     tagline: "Call of Duty: Mobile — 5v5",
     image: "/event-posters/critical-ops.webp",
@@ -1129,6 +1144,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "the-game-jam",
+    registrationUrl: "https://unstop.com/hackathons/game-jam-tantrafiesta-2026-iiitn-1758206",
     name: "The Game Jam™",
     tagline: "Theme: Plot Twist",
     image: "/event-posters/The-Game-Jam.webp",
@@ -1203,6 +1219,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "pitch-please",
+    registrationUrl: "https://unstop.com/competitions/pitch-please-tantrafiesta26-iiitn-1765831",
     name: "Pitch, Please!",
     tagline: "6-hour game concept pitching",
     image: "/event-posters/Pitch-Please.webp",
@@ -1256,6 +1273,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "rann-bhoomi",
+    registrationUrl: "https://unstop.com/competitions/rann-bhoomi-20-tantrafiesta26-iiitn-1768975",
     name: "Rann Bhoomi 2.0",
     tagline: "The Robowars",
     image: "/event-posters/Rann-Bhoomi.webp",
@@ -1347,6 +1365,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "the-lost-pathways",
+    registrationUrl: "https://unstop.com/hackathons/the-lost-pathways-a-micromouse-event-tantrafiesta26-iiitn-1767543",
     name: "The Lost Pathways",
     tagline: "A micromouse event",
     image: "/event-posters/The-Lost-Pathways.webp",
@@ -1418,6 +1437,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "line-o-mania",
+    registrationUrl: "https://unstop.com/hackathons/line-o-mania-tantrafiesta26-iiitn-1767447",
     name: "Line-O-Mania",
     tagline: "A line follower competition",
     image: "/event-posters/Line-O-Mania.webp",
@@ -1496,6 +1516,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "yuvaan",
+    registrationUrl: "https://unstop.com/conferences/yuvaan-youth-conclave-iiitn-1766418",
     name: "Yuvaan: Youth Conclave",
     tagline: "Structured debate and discussion",
     image: "/event-posters/yuvaan.webp",
@@ -1548,6 +1569,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "keep-alive-26",
+    registrationUrl: "https://unstop.com/hackathons/keep-alive-26-iiitn-1766226",
     name: "Keep Alive '26",
     tagline: "National incident response championship",
     image: "/event-posters/Keep-Alive.webp",
@@ -1608,7 +1630,7 @@ export const eventDetails: EventDetail[] = [
       },
     ],
     highlights: [
-      "₹25,000 in cash prizes for the top three teams and the Sharpest RCA award.",
+      "₹50,000 in cash prizes for the top three teams and the Sharpest RCA award.",
       "Investigate real incidents on a real observability stack: Grafana dashboards, Prometheus metrics, logs and traces.",
       "No production experience needed — a 30-minute hands-on session at the finale teaches every tool you will use.",
       "After the finale, the platform team walks everyone through all 10 incidents and how they were solved.",
@@ -1649,6 +1671,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "digital-time-capsule",
+    registrationUrl: "https://unstop.com/events/digital-time-capsule-dtc-tantrafiesta26-iiitn-1766419",
     name: "Digital Time Capsule",
     tagline: "Photography & videography challenge",
     image: "/event-posters/digital-timecapsule.webp",
@@ -1712,6 +1735,7 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "vlsi-workshop",
+    registrationUrl: "https://unstop.com/workshops-webinars/silicon-rush-tantrafiesta26-iiitn-1770343",
     name: "Silicon Rush — VLSI Workshop",
     tagline: "Hands-on silicon design and semiconductor workshop",
     image: "/event-posters/Iotics.webp",

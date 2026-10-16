@@ -57,8 +57,8 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
     description: event.description || local?.description || event.shortDescription || "",
     poster: event.image || local?.image || local?.poster,
     image: event.image || local?.image,
-    prizePool: event.prizePool || local?.prizePool,
-    prizeNote: event.prizeNote || local?.prizeNote,
+    prizePool: local?.prizePool || event.prizePool,
+    prizeNote: local?.prizeNote || event.prizeNote,
     prizes: event.prizeBreakdown?.length ? event.prizeBreakdown : (local?.prizes ?? []),
     stages: local?.stages ?? [],
     organizers: local?.organizers ?? [],
@@ -67,7 +67,7 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
     // as one free-text string rather than the bullet list the page renders.
     highlights: local?.highlights ?? [],
     eligibility: event.eligibility ? [event.eligibility] : (local?.eligibility ?? []),
-    registrationUrl: event.registrationUrl,
+    registrationUrl: local?.registrationUrl || event.registrationUrl,
     entryFeeLabel: entryFeeLabel || local?.entryFeeLabel,
     registrationDeadline: event.registrationDeadline,
     startDate: event.startDate || undefined,
@@ -234,6 +234,9 @@ export default async function EventPage(props: PageProps<"/events/[slug]">) {
     registrationOpens: event.registrationOpens,
   });
 
+  const isTeam = Boolean(event.teamSize && event.teamSize.max > 1);
+  const internalRegisterHref = `${isTeam ? "/register/team" : "/register/event"}?eventId=${encodeURIComponent(event.slug)}`;
+
   return (
     <div className={styles.page}>
       <script
@@ -257,7 +260,7 @@ export default async function EventPage(props: PageProps<"/events/[slug]">) {
       <a href="#event-content" className={styles.skipLink}>
         Skip to event details
       </a>
-      <Navbar currentPath="/events" registrationHref={event.registrationUrl ?? "/register"} />
+      <Navbar currentPath="/events" registrationHref={internalRegisterHref} />
       <EventDetail event={event} />
       <Footer variant="yellow" />
     </div>
