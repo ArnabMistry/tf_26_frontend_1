@@ -378,6 +378,14 @@
   color: #ff2485;
 }
 
+.prizeNote {
+  font-family: var(--font-futura);
+  font-size: 0.85rem;
+  color: #d5cfe7;
+  text-align: center;
+  margin-top: 4px;
+}
+
 .prizeList {
   display: flex;
   flex-direction: column;

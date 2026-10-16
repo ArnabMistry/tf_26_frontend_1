@@ -67,7 +67,7 @@ export function AboutPeople() {
             <h2 className="font-tantra">{group.title}</h2>
             <span aria-hidden="true" />
           </div>
-          <div className={styles.grid}>
+          <div className={`${styles.grid} ${group.title === "College Dignitaries" ? styles.dignitariesGrid : ""}`}>
             {group.people.map((person) => (
               <article className={styles.card} key={person.name}>
                 <div className={styles.portrait}>
