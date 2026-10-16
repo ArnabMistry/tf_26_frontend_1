@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -433,6 +433,11 @@ export function UserPortal() {
                   <article key={item.id} className={s.entry}>
                     <div className={s.row}><div><p className={s.eyebrow}>{item.event.club}</p><h3 className="mt-2">{item.event.name}</h3></div><span className={s.badge}>{item.status.replaceAll('_',' ')}</span></div>
                     <p className={s.muted}>{item.team?.name || 'Individual entry'} • {item.event.venue || 'Venue to be announced'}</p>
+                    {item.metadata?.theme && (
+                      <p className="text-xs text-[#faff52] mt-1.5 font-medium">
+                        Theme: <span className="text-white/90">{item.metadata.theme}</span>
+                      </p>
+                    )}
                     {/* Undecided rounds are hidden: every event has a Round 1
                         from creation, so "awaiting result" would be noise. */}
                     <div className="flex flex-wrap gap-2 mt-3">{item.roundProgress?.filter(round => round.status !== 'PENDING').map(round => <span key={round.roundId} className={`${s.badge} ${round.status === 'QUALIFIED' ? s.accepted : ''}`}>{round.name}: {round.status === 'QUALIFIED' ? 'Promoted' : 'Not promoted'}</span>)}</div>

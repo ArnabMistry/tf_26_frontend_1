@@ -303,7 +303,7 @@ export const eventDetails: EventDetail[] = [
       },
       {
         name: "Offline finale",
-        when: "26 Oct 2026, 12:00 PM – 5:00 PM",
+        when: "26 Oct 2026, 1:00 PM – 6:00 PM",
         mode: "Offline",
         detail:
           "Two rounds at IIIT Nagpur: a non-stop survival quiz that runs until only the Top 5 teams remain, then a high-risk Tiles round to crown the champion.",

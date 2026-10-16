@@ -9,6 +9,25 @@ import { participantRequest, formatDate, fullName, type EventInfo, type Team, ty
 import { payForEvent } from '@/lib/payments';
 import s from './Portal.module.css';
 
+export const CASCADE_THEMES = [
+  {
+    title: 'The Forgotten Population',
+    description: 'Technology for underserved groups.',
+  },
+  {
+    title: 'Crisis Before Crisis',
+    description: 'Predict disasters before they happen.',
+  },
+  {
+    title: 'Attention Economy',
+    description: 'Protect attention, not exploit it.',
+  },
+  {
+    title: 'Information Asymmetry',
+    description: 'Make hidden information accessible to everyone.',
+  },
+] as const;
+
 export function EventRegistrationSkeleton({ message = 'Loading registration details…' }: { message?: string }) {
   return (
     <div aria-busy="true" aria-label={message} className="w-full">
@@ -79,6 +98,8 @@ export function EventRegistration() {
   const [teamName, setTeamName] = useState(''), [identifier, setIdentifier] = useState('');
   const [error, setError] = useState(''), [notice, setNotice] = useState(''), [busy, setBusy] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState<string>('');
+  const [themeError, setThemeError] = useState<string>('');
   const refresh = useCallback(async () => {
     if (!user || !requestedEvent) return;
     const token = hasSessionHint() ? 'session' : null;
@@ -97,6 +118,7 @@ export function EventRegistration() {
       if ((hasSessionHint() ? 'session' : null) !== token) return;
       const mine = registrations.registrations.find(item => item.eventId === current.id && item.status !== 'cancelled') || null;
       setEvent(current); setTeam(live); setRegistration(mine); setRegistered(!!mine); setProfileUser(profile.user);
+      if (mine?.metadata?.theme) setSelectedTheme(mine.metadata.theme);
       setReady(true); setError('');
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) router.replace(`/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`);
@@ -199,7 +221,29 @@ export function EventRegistration() {
   const handlePaymentAndRegistration = () => runPayment(`Payment verified! Registration confirmed for ${event?.name}.`);
   const handlePayFee = () => runPayment(`Payment verified! Your place in ${feeRoundName || 'the next round'} is confirmed.`);
 
-  const handleAction = paymentRequired ? handlePaymentAndRegistration : () => mutate(() => participantRequest('/api/user/registrations', { eventId: event!.id, ...(team ? { teamId: team.id } : {}) }), 'Registration confirmed!');
+  const isCascade = event?.id === 'tf26_cascade' || event?.slug === 'cascade' || requestedEvent?.toLowerCase() === 'cascade' || requestedEvent?.toLowerCase() === 'tf26_cascade';
+
+  const handleAction = () => {
+    if (isCascade && !selectedTheme) {
+      setThemeError('Please select a theme before completing Cascade registration.');
+      const el = document.getElementById('cascade-theme-selection');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    setThemeError('');
+    if (paymentRequired) {
+      return handlePaymentAndRegistration();
+    }
+    return mutate(
+      () =>
+        participantRequest('/api/user/registrations', {
+          eventId: event!.id,
+          ...(team ? { teamId: team.id } : {}),
+          ...(isCascade && selectedTheme ? { theme: selectedTheme } : {}),
+        }),
+      'Registration confirmed!'
+    );
+  };
   return <main className={s.shell}>
     <Link className={s.eyebrow} href="/events">← All events</Link>
     <header className={s.hero}><div><p className={`${s.eyebrow} mt-5`}>{event?.club || 'TantraFiesta 2026'}</p><h1>{event?.name || 'Your next challenge'}</h1><p className={s.muted}>{event?.isTeamEvent ? 'Build your squad. Invite with TF IDs. Register together.' : 'One participant. One challenge. Your next achievement.'}</p></div><Link className={s.secondary} href="/profile">My portal ↗</Link></header>
@@ -234,10 +278,91 @@ export function EventRegistration() {
         <Link className={`${s.button} mt-5`} href="/events">Explore events</Link>
       </section>}
       {registered || team?.stats.isRegistered ? <section className={s.card}><span className={`${s.badge} ${s.accepted}`}>Registered</span><h2 className="mt-4">You’re on the list.</h2><p className={s.muted}>Your registration is saved for {event.name}. Track your events and rounds in your portal.</p>
+        {isCascade && (registration?.metadata?.theme || selectedTheme) && (
+          <div className="mt-4 p-4 rounded-xl bg-white/[0.04] border border-[#faff52]/20">
+            <p className="text-xs uppercase tracking-wider text-[#b8afcf] font-mono mb-1">Registered Theme</p>
+            <p className="text-base font-semibold text-[#faff52]">{registration?.metadata?.theme || selectedTheme}</p>
+            {CASCADE_THEMES.find(t => t.title === (registration?.metadata?.theme || selectedTheme))?.description && (
+              <p className="text-sm text-[#b8afcf] mt-1">{CASCADE_THEMES.find(t => t.title === (registration?.metadata?.theme || selectedTheme))?.description}</p>
+            )}
+          </div>
+        )}
         {/* Only decided rounds are worth showing - every event carries a
             Round 1 from creation, so undecided ones say nothing. */}
         {!!decidedRounds.length && <div className="flex flex-wrap gap-2 mt-4">{decidedRounds.map(round => <span key={round.roundId} className={`${s.badge} ${round.status === 'QUALIFIED' ? s.accepted : ''}`}>{round.name}: {round.status === 'QUALIFIED' ? 'Promoted' : 'Not promoted'}</span>)}</div>}
         <Link className={`${s.button} mt-5`} href="/profile">Go to my portal</Link></section> : null}
+
+      {isCascade && !registered && !team?.stats.isRegistered && (
+        <section id="cascade-theme-selection" className={s.card}>
+          <div className={s.row}>
+            <div>
+              <p className={s.eyebrow}>Mandatory Theme Selection</p>
+              <h2 className="mt-2">Choose your Cascade Theme</h2>
+            </div>
+            <span className={`${s.badge} ${selectedTheme ? s.accepted : s.pending}`}>
+              {selectedTheme ? 'Theme Selected' : 'Required'}
+            </span>
+          </div>
+          <p className={`${s.muted} mb-4`}>
+            Select exactly one official theme for your hackathon submission. This theme will be associated with your team&rsquo;s registration.
+          </p>
+
+          {themeError && (
+            <div className="mb-4 p-3 rounded-xl bg-pink-500/15 border border-pink-500/40 text-pink-300 text-sm flex items-center gap-2" role="alert">
+              <span>⚠️</span>
+              <span>{themeError}</span>
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 gap-3">
+            {CASCADE_THEMES.map((t, idx) => {
+              const isSelected = selectedTheme === t.title;
+              const disabled = Boolean(registered || team?.stats.isRegistered || (event.isTeamEvent && team && !team.isLeader));
+              return (
+                <label
+                  key={t.title}
+                  className={`flex items-start gap-3.5 p-4 rounded-xl border transition-all cursor-pointer ${
+                    isSelected
+                      ? 'bg-[#faff52]/10 border-[#faff52] shadow-sm shadow-[#faff52]/20'
+                      : 'bg-black/20 border-[#65508266] hover:border-[#faff52]/40 hover:bg-white/[0.02]'
+                  } ${disabled ? 'opacity-80 cursor-default' : ''}`}
+                >
+                  <input
+                    type="radio"
+                    name="cascade-theme"
+                    value={t.title}
+                    checked={isSelected}
+                    disabled={disabled}
+                    onChange={() => {
+                      setSelectedTheme(t.title);
+                      setThemeError('');
+                    }}
+                    className="mt-1 accent-[#faff52] w-4 h-4 cursor-pointer"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-mono font-bold text-[#faff52]/80">{idx + 1}.</span>
+                      <span className={`text-base font-bold ${isSelected ? 'text-[#faff52]' : 'text-white'}`}>
+                        {t.title}
+                      </span>
+                    </div>
+                    <p className="text-xs sm:text-sm text-[#b8afcf] mt-1 leading-relaxed">
+                      {t.description}
+                    </p>
+                  </div>
+                </label>
+              );
+            })}
+          </div>
+
+          {event.isTeamEvent && team && !team.isLeader && (
+            <p className={`${s.fine} mt-3 text-[#b8afcf]`}>
+              ℹ️ Only your team leader can submit the final theme selection for the team.
+            </p>
+          )}
+        </section>
+      )}
+
       {event.isTeamEvent ? !team ? <section className={s.card}><h2>Create your team</h2><p className={`${s.muted} mb-5`}>You’ll be the leader. Invite teammates after creating your draft.</p><form className={s.form} onSubmit={e => { e.preventDefault(); void mutate(() => participantRequest('/api/user/teams', { eventId: event.id, name: teamName, members: [] }), 'Team created. Invite your teammates below.'); }}>
         <label>Team name<input required maxLength={80} value={teamName} onChange={e => setTeamName(e.target.value)} placeholder="Give your squad a name"/></label><label>Team leader<input readOnly value={`${fullName(participant)} · ${participant.festId || participant.email}`}/></label><button disabled={busy || closed || registered || !isVerified || isProfileIncomplete} className={s.button}>{busy ? 'Creating…' : 'Create team'}</button>
         {!isVerified && <p className={`${s.fine} text-pink-300 mt-2`}>Please verify your email before creating a team.</p>}
@@ -252,7 +377,16 @@ export function EventRegistration() {
         </section>
         {team.isLeader && !team.stats.rosterLocked && <section className={s.card}><h2>Invite a teammate</h2><p className={`${s.muted} mb-4`}>Ask for their TF ID from their profile. They’ll receive an invitation in their portal.</p><form className={s.form} onSubmit={e => { e.preventDefault(); void mutate(async () => { await participantRequest(`/api/user/teams/${team.id}/invites`, { identifier: identifier.trim().toUpperCase() }); setIdentifier(''); }, 'Invitation sent. Your teammate can accept or decline in their inbox.'); }}><label>Teammate’s TF ID<input required pattern="[Tt][Ff][0-9]{6}" placeholder="TF123456" value={identifier} onChange={e => setIdentifier(e.target.value.toUpperCase())}/></label><button className={s.button} disabled={busy || closed || team.members.length + team.stats.pendingCount >= (event.maxTeamSize || 4)}>Send invitation</button></form></section>}
       </> : <section className={s.card}><h2>Your participant details</h2><h3>{fullName(participant)}</h3><p className={s.muted}>{participant.email}</p><p className={s.id}>{participant.festId}</p><p className={s.muted}>{participant.collegeName || 'You can add your college in your profile.'}</p></section>}
-    </div><aside className={s.card}><p className={s.eyebrow}>Registration summary</p><h2 className="mt-4">{event.name}</h2><div className={s.entry}><p className={s.muted}>Format</p><h3>{event.isTeamEvent ? `Team · ${event.minTeamSize}–${event.maxTeamSize} members` : 'Individual'}</h3></div><div className={s.entry}><p className={s.muted}>Registration closes</p><h3>{formatDate(event.registrationEndTime)} IST</h3></div><div className={s.entry}><p className={s.muted}>Entry fee</p><h3>{feeCharged ? `₹${feeTotal}${event.paymentTrigger === 'after_round' ? (feePaid ? ' · paid' : feeDueNow ? ' · due now' : notPromoted ? ' · not applicable' : ' · after qualification') : ''}` : 'Free registration'}</h3>{feeIsPerHead && <p className={s.fine}>{team ? `₹${event.price} × ${teamSize} member${teamSize === 1 ? '' : 's'} · paid once by the team leader` : `₹${event.price} per participant · paid once by the team leader`}</p>}{!feeIsPerHead && event.isTeamEvent && feeCharged && <p className={s.fine}>Flat fee for the whole team · paid once by the team leader</p>}</div>
+    </div><aside className={s.card}><p className={s.eyebrow}>Registration summary</p><h2 className="mt-4">{event.name}</h2><div className={s.entry}><p className={s.muted}>Format</p><h3>{event.isTeamEvent ? `Team · ${event.minTeamSize}–${event.maxTeamSize} members` : 'Individual'}</h3></div><div className={s.entry}><p className={s.muted}>Registration closes</p><h3>{formatDate(event.registrationEndTime)} IST</h3></div>
+      {isCascade && (
+        <div className={s.entry}>
+          <p className={s.muted}>Cascade Theme</p>
+          <h3 className={selectedTheme || registration?.metadata?.theme ? 'text-[#faff52]' : 'text-pink-300'}>
+            {registration?.metadata?.theme || selectedTheme || 'Not selected (Required)'}
+          </h3>
+        </div>
+      )}
+      <div className={s.entry}><p className={s.muted}>Entry fee</p><h3>{feeCharged ? `₹${feeTotal}${event.paymentTrigger === 'after_round' ? (feePaid ? ' · paid' : feeDueNow ? ' · due now' : notPromoted ? ' · not applicable' : ' · after qualification') : ''}` : 'Free registration'}</h3>{feeIsPerHead && <p className={s.fine}>{team ? `₹${event.price} × ${teamSize} member${teamSize === 1 ? '' : 's'} · paid once by the team leader` : `₹${event.price} per participant · paid once by the team leader`}</p>}{!feeIsPerHead && event.isTeamEvent && feeCharged && <p className={s.fine}>Flat fee for the whole team · paid once by the team leader</p>}</div>
       {closed && <p className={s.error}>Registration is closed.</p>}
       
       {event.isTeamEvent && !registered && <p className={`${s.muted} mb-4`}>{!team ? 'Create a team first.' : !team.isLeader ? 'Your team leader completes registration for everyone.' : !team.stats.isReadyForRegistration ? 'Meet the minimum team size and resolve all pending invitations before registering.' : 'Your team is ready to register.'}</p>}
@@ -276,17 +410,22 @@ export function EventRegistration() {
           <p className={s.fine}>{leadsTheTeam ? `You were promoted to ${feeRoundName || 'the next round'}. Pay to confirm your place.` : 'Your team leader pays this fee on behalf of the whole team.'}</p>
         </>
       ) : (
-        <button className={`${s.button} w-full`} disabled={busy || !canRegister} onClick={handleAction}>
-          {busy
-            ? paymentRequired ? 'Processing payment…' : 'Please wait…'
-            : feePaid
-            ? 'Fee paid'
-            : registered
-            ? 'Registered'
-            : paymentRequired
-            ? event?.isTeamEvent ? `Pay ₹${feeTotal} & Register team` : `Pay ₹${feeTotal} & Register`
-            : event?.isTeamEvent ? 'Register team' : 'Confirm registration'}
-        </button>
+        <>
+          {isCascade && !selectedTheme && !registered && (
+            <p className={`${s.fine} text-[#FFFF1A] mb-2`}>⚠️ Please select a theme to register.</p>
+          )}
+          <button className={`${s.button} w-full`} disabled={busy || !canRegister} onClick={handleAction}>
+            {busy
+              ? paymentRequired ? 'Processing payment…' : 'Please wait…'
+              : feePaid
+              ? 'Fee paid'
+              : registered
+              ? 'Registered'
+              : paymentRequired
+              ? event?.isTeamEvent ? `Pay ₹${feeTotal} & Register team` : `Pay ₹${feeTotal} & Register`
+              : event?.isTeamEvent ? 'Register team' : 'Confirm registration'}
+          </button>
+        </>
       )}
       <p className={s.fine}>Joining a team does not register it. The leader confirms registration once everyone is ready.</p>
     </aside></div>}
