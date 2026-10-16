@@ -344,20 +344,22 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 28px;
+  gap: 16px 28px;
   margin-top: 28px;
   border: 1px solid rgb(255 255 255 / 18%);
   border-radius: 18px;
   background: rgb(255 255 255 / 8%);
-  padding: 18px 24px 22px;
+  padding: 22px 24px;
 }
 
 .prizeSummary {
+  grid-column: 1;
+  grid-row: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  padding-left: clamp(170px, 15vw, 210px);
+  min-width: 0;
 }
 
 .trophy {
@@ -381,12 +383,17 @@
 .prizeNote {
   font-family: var(--font-futura);
   font-size: 0.85rem;
+  line-height: 1.45;
   color: #d5cfe7;
   text-align: center;
-  margin-top: 4px;
+  margin-top: 6px;
+  max-width: 520px;
 }
 
 .prizeList {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -414,11 +421,11 @@
   height: 26px;
 }
 
-/* Lower-left action area: registration fee info + Register Now CTA */
+/* Lower-left action area: Register CTA in normal grid flow below prize summary */
 .actionArea {
-  position: absolute;
-  bottom: 14px;
-  left: 14px;
+  grid-column: 1;
+  grid-row: 2;
+  align-self: end;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -600,19 +607,31 @@
     padding-inline: 24px;
   }
 
+  .prizeBox {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: 18px;
+    padding-bottom: 22px;
+  }
+
   .prizeSummary {
-    padding-left: 0;
+    grid-column: 1;
+    grid-row: auto;
+    width: 100%;
+  }
+
+  .prizeList {
+    grid-column: 1;
+    grid-row: auto;
+    width: 100%;
   }
 
   .actionArea {
-    position: static;
-    margin-top: 16px;
+    grid-column: 1;
+    grid-row: auto;
     width: 100%;
     align-items: center;
-  }
-
-  .prizeBox {
-    padding-bottom: 18px;
+    margin-top: 4px;
   }
 }
 
