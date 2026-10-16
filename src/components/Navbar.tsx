@@ -142,6 +142,7 @@ export function Navbar({
             <Link
               href={registrationHref}
               className="whitespace-nowrap bg-[#E7137D] px-5 py-2 text-white transition-colors hover:bg-[#c60f69] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ffe43b]"
+              {...(registrationHref.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
             >
               Register Now
             </Link>
@@ -260,6 +261,7 @@ export function Navbar({
                       href={registrationHref}
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="flex items-center justify-center gap-2 rounded-xl bg-[#E7137D] px-4 py-3 text-center text-xs font-bold uppercase tracking-wider text-white shadow-lg transition-all hover:bg-[#c60f69] active:scale-[0.98]"
+                      {...(registrationHref.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                     >
                       Register Now
                     </Link>

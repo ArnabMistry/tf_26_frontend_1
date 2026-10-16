@@ -67,7 +67,7 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
     // as one free-text string rather than the bullet list the page renders.
     highlights: local?.highlights ?? [],
     eligibility: event.eligibility ? [event.eligibility] : (local?.eligibility ?? []),
-    registrationUrl: event.registrationUrl,
+    registrationUrl: local?.registrationUrl || event.registrationUrl,
     entryFeeLabel: entryFeeLabel || local?.entryFeeLabel,
     registrationDeadline: event.registrationDeadline,
     startDate: event.startDate || undefined,
