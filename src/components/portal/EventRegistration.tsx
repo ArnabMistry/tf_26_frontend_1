@@ -98,7 +98,7 @@ export function EventRegistration() {
   const [teamName, setTeamName] = useState(''), [identifier, setIdentifier] = useState('');
   const [error, setError] = useState(''), [notice, setNotice] = useState(''), [busy, setBusy] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
-  const [selectedTheme, setSelectedTheme] = useState<string>('');
+  const [selectedThemes, setSelectedThemes] = useState<string[]>([]);
   const [themeError, setThemeError] = useState<string>('');
   const refresh = useCallback(async () => {
     if (!user || !requestedEvent) return;
@@ -118,7 +118,12 @@ export function EventRegistration() {
       if ((hasSessionHint() ? 'session' : null) !== token) return;
       const mine = registrations.registrations.find(item => item.eventId === current.id && item.status !== 'cancelled') || null;
       setEvent(current); setTeam(live); setRegistration(mine); setRegistered(!!mine); setProfileUser(profile.user);
-      if (mine?.metadata?.theme) setSelectedTheme(mine.metadata.theme);
+      const themesFromMeta = mine?.metadata?.themes && Array.isArray(mine.metadata.themes)
+        ? mine.metadata.themes.filter(Boolean)
+        : mine?.metadata?.theme
+        ? mine.metadata.theme.split(',').map(s => s.trim()).filter(Boolean)
+        : [];
+      if (themesFromMeta.length > 0) setSelectedThemes(themesFromMeta);
       setReady(true); setError('');
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) router.replace(`/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`);
@@ -223,9 +228,18 @@ export function EventRegistration() {
 
   const isCascade = event?.id === 'tf26_cascade' || event?.slug === 'cascade' || requestedEvent?.toLowerCase() === 'cascade' || requestedEvent?.toLowerCase() === 'tf26_cascade';
 
+  const toggleTheme = (themeTitle: string) => {
+    setSelectedThemes(prev => {
+      const exists = prev.includes(themeTitle);
+      const next = exists ? prev.filter(t => t !== themeTitle) : [...prev, themeTitle];
+      if (next.length > 0) setThemeError('');
+      return next;
+    });
+  };
+
   const handleAction = () => {
-    if (isCascade && !selectedTheme) {
-      setThemeError('Please select a theme before completing Cascade registration.');
+    if (isCascade && selectedThemes.length === 0) {
+      setThemeError('Please select at least one theme before completing Cascade registration.');
       const el = document.getElementById('cascade-theme-selection');
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
@@ -239,7 +253,9 @@ export function EventRegistration() {
         participantRequest('/api/user/registrations', {
           eventId: event!.id,
           ...(team ? { teamId: team.id } : {}),
-          ...(isCascade && selectedTheme ? { theme: selectedTheme } : {}),
+          ...(isCascade && selectedThemes.length > 0
+            ? { themes: selectedThemes, theme: selectedThemes.join(', ') }
+            : {}),
         }),
       'Registration confirmed!'
     );
@@ -278,13 +294,22 @@ export function EventRegistration() {
         <Link className={`${s.button} mt-5`} href="/events">Explore events</Link>
       </section>}
       {registered || team?.stats.isRegistered ? <section className={s.card}><span className={`${s.badge} ${s.accepted}`}>Registered</span><h2 className="mt-4">You’re on the list.</h2><p className={s.muted}>Your registration is saved for {event.name}. Track your events and rounds in your portal.</p>
-        {isCascade && (registration?.metadata?.theme || selectedTheme) && (
+        {isCascade && (selectedThemes.length > 0 || registration?.metadata?.theme || registration?.metadata?.themes?.length) && (
           <div className="mt-4 p-4 rounded-xl bg-white/[0.04] border border-[#faff52]/20">
-            <p className="text-xs uppercase tracking-wider text-[#b8afcf] font-mono mb-1">Registered Theme</p>
-            <p className="text-base font-semibold text-[#faff52]">{registration?.metadata?.theme || selectedTheme}</p>
-            {CASCADE_THEMES.find(t => t.title === (registration?.metadata?.theme || selectedTheme))?.description && (
-              <p className="text-sm text-[#b8afcf] mt-1">{CASCADE_THEMES.find(t => t.title === (registration?.metadata?.theme || selectedTheme))?.description}</p>
-            )}
+            <p className="text-xs uppercase tracking-wider text-[#b8afcf] font-mono mb-2">
+              Registered Theme{((registration?.metadata?.themes?.length ?? selectedThemes.length) > 1) ? 's' : ''}
+            </p>
+            <div className="flex flex-col gap-2">
+              {(registration?.metadata?.themes ?? (selectedThemes.length > 0 ? selectedThemes : (registration?.metadata?.theme ? registration.metadata.theme.split(',').map(s => s.trim()) : []))).map((tTitle) => {
+                const info = CASCADE_THEMES.find(t => t.title === tTitle);
+                return (
+                  <div key={tTitle} className="p-2.5 rounded-lg bg-black/20 border border-[#faff52]/15">
+                    <p className="text-sm font-semibold text-[#faff52]">{tTitle}</p>
+                    {info?.description && <p className="text-xs text-[#b8afcf] mt-0.5">{info.description}</p>}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
         {/* Only decided rounds are worth showing - every event carries a
@@ -296,15 +321,17 @@ export function EventRegistration() {
         <section id="cascade-theme-selection" className={s.card}>
           <div className={s.row}>
             <div>
-              <p className={s.eyebrow}>Mandatory Theme Selection</p>
-              <h2 className="mt-2">Choose your Cascade Theme</h2>
+              <p className={s.eyebrow}>Theme Selection</p>
+              <h2 className="mt-2">Choose your Cascade Themes</h2>
             </div>
-            <span className={`${s.badge} ${selectedTheme ? s.accepted : s.pending}`}>
-              {selectedTheme ? 'Theme Selected' : 'Required'}
+            <span className={`${s.badge} ${selectedThemes.length > 0 ? s.accepted : s.pending}`}>
+              {selectedThemes.length > 0
+                ? `${selectedThemes.length} Theme${selectedThemes.length > 1 ? 's' : ''} Selected`
+                : 'At least 1 Required'}
             </span>
           </div>
           <p className={`${s.muted} mb-4`}>
-            Select exactly one official theme for your hackathon submission. This theme will be associated with your team&rsquo;s registration.
+            Select one or more official themes for your hackathon submission. You can choose multiple themes if your team plans to compete across multiple tracks.
           </p>
 
           {themeError && (
@@ -316,7 +343,7 @@ export function EventRegistration() {
 
           <div className="grid grid-cols-1 gap-3">
             {CASCADE_THEMES.map((t, idx) => {
-              const isSelected = selectedTheme === t.title;
+              const isSelected = selectedThemes.includes(t.title);
               const disabled = Boolean(registered || team?.stats.isRegistered || (event.isTeamEvent && team && !team.isLeader));
               return (
                 <label
@@ -328,16 +355,13 @@ export function EventRegistration() {
                   } ${disabled ? 'opacity-80 cursor-default' : ''}`}
                 >
                   <input
-                    type="radio"
+                    type="checkbox"
                     name="cascade-theme"
                     value={t.title}
                     checked={isSelected}
                     disabled={disabled}
-                    onChange={() => {
-                      setSelectedTheme(t.title);
-                      setThemeError('');
-                    }}
-                    className="mt-1 accent-[#faff52] w-4 h-4 cursor-pointer"
+                    onChange={() => toggleTheme(t.title)}
+                    className="mt-1 accent-[#faff52] w-4 h-4 rounded cursor-pointer"
                   />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
@@ -380,9 +404,15 @@ export function EventRegistration() {
     </div><aside className={s.card}><p className={s.eyebrow}>Registration summary</p><h2 className="mt-4">{event.name}</h2><div className={s.entry}><p className={s.muted}>Format</p><h3>{event.isTeamEvent ? `Team · ${event.minTeamSize}–${event.maxTeamSize} members` : 'Individual'}</h3></div><div className={s.entry}><p className={s.muted}>Registration closes</p><h3>{formatDate(event.registrationEndTime)} IST</h3></div>
       {isCascade && (
         <div className={s.entry}>
-          <p className={s.muted}>Cascade Theme</p>
-          <h3 className={selectedTheme || registration?.metadata?.theme ? 'text-[#faff52]' : 'text-pink-300'}>
-            {registration?.metadata?.theme || selectedTheme || 'Not selected (Required)'}
+          <p className={s.muted}>Cascade Themes</p>
+          <h3 className={selectedThemes.length > 0 || registration?.metadata?.theme || registration?.metadata?.themes?.length ? 'text-[#faff52]' : 'text-pink-300'}>
+            {registration?.metadata?.themes?.length
+              ? registration.metadata.themes.join(', ')
+              : registration?.metadata?.theme
+              ? registration.metadata.theme
+              : selectedThemes.length > 0
+              ? selectedThemes.join(', ')
+              : 'None selected (Required)'}
           </h3>
         </div>
       )}
@@ -411,8 +441,8 @@ export function EventRegistration() {
         </>
       ) : (
         <>
-          {isCascade && !selectedTheme && !registered && (
-            <p className={`${s.fine} text-[#FFFF1A] mb-2`}>⚠️ Please select a theme to register.</p>
+          {isCascade && selectedThemes.length === 0 && !registered && (
+            <p className={`${s.fine} text-[#FFFF1A] mb-2`}>⚠️ Please select at least one theme to register.</p>
           )}
           <button className={`${s.button} w-full`} disabled={busy || !canRegister} onClick={handleAction}>
             {busy
