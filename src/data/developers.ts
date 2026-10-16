@@ -17,7 +17,7 @@ export const heads: Developer[] = [
   },
   {
     name: "ARNAB",
-    role: "UI/UX Director",
+    role: "Web Architect",
     image: "/developers/arnab_mistry_pic.webp",
   },
 ];
