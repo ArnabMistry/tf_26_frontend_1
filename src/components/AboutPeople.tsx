@@ -17,7 +17,7 @@ const groups: { title: string; people: Person[] }[] = [
     title: "Associate Deans",
     people: [
       { name: "Dr. Tausif Diwan", role: "Academic", image: "academic dean.webp" },
-      { name: "Dr. Nileshchandra Pikle", role: "Student Welfare" },
+      { name: "Dr. Nileshchandra Pikle", role: "Student Welfare", image: "nileshchandra_pikle.webp" },
       { name: "Dr. Aatish Daryapurkar", role: "Planning & Development", image: "planning_and_developement.webp" },
       { name: "Dr. Rashmi Pandhare", role: "Research & Development", image: "research_and_dev.webp" },
     ],
