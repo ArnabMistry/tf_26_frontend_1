@@ -9,6 +9,7 @@ import { participantRequest, fullName, formatDate, type Profile, type Inbox, typ
 import { payForEvent } from '@/lib/payments';
 import s from './Portal.module.css';
 import { MealPassItem } from './MealPassItem';
+import { AccommodationSection } from './AccommodationSection';
 
 export function PortalSkeleton() {
   return (
@@ -23,7 +24,7 @@ export function PortalSkeleton() {
       </div>
 
       <div className={s.tabs} aria-label="Portal sections placeholder">
-        {[1, 2, 3, 4].map(i => (
+        {[1, 2, 3, 4, 5].map(i => (
           <div key={i} className={`${s.skeleton} ${s.skeletonTabItem}`} />
         ))}
       </div>
@@ -305,6 +306,7 @@ export function UserPortal() {
           ['overview', 'Overview'],
           ['notifications', `Notifications${inbox?.unreadCount ? ` (${inbox.unreadCount})` : ''}`],
           ['meals', `Meal Passes${availableMealsCount ? ` (${availableMealsCount})` : ''}`],
+          ['accommodation', 'Accommodation'],
           ['settings', 'Edit profile']
         ].map(([key, label]) => (
           <Link
@@ -414,6 +416,11 @@ export function UserPortal() {
                 ))
               )}
             </section>
+          ) : tab === 'accommodation' ? (
+            <AccommodationSection
+              user={profile.user}
+              profileComplete={!!profile.user.collegeName?.trim() && !!profile.user.phoneNumber?.trim()}
+            />
           ) : tab === 'settings' ? (
             <section className={s.card}>
               <h2>Make it yours</h2>
