@@ -10,6 +10,7 @@ import { PortalNav } from "@/components/portal/PortalNav";
 const navigation = [
   { href: "/admin", label: "Admin" },
   { href: "/about", label: "About" },
+  { href: "/teams", label: "Team" },
   { href: "/sponsors", label: "Sponsors" },
   { href: "/events", label: "Events" },
   { href: "/speakers", label: "Speakers" },
