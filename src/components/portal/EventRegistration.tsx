@@ -280,7 +280,6 @@ export function EventRegistration() {
     }
   }
 
-  const handlePaymentAndRegistration = () => runPayment(`Payment verified! Registration confirmed for ${event?.name}.`);
   const handlePayFee = () => runPayment(`Payment verified! Your place in ${feeRoundName || 'the next round'} is confirmed.`);
 
   const isCascade = event?.id === 'tf26_cascade' || event?.slug === 'cascade' || requestedEvent?.toLowerCase() === 'cascade' || requestedEvent?.toLowerCase() === 'tf26_cascade';
@@ -343,7 +342,30 @@ export function EventRegistration() {
     }
 
     if (paymentRequired) {
-      return handlePaymentAndRegistration();
+      return mutate(
+        async () => {
+          await participantRequest('/api/user/registrations', {
+            eventId: isYuvaan ? YUVAAN_EVENT_ID : event!.id,
+            ...(team ? { teamId: team.id } : {}),
+            ...(isCascade && selectedThemes.length > 0
+              ? { themes: selectedThemes, theme: selectedThemes.join(', ') }
+              : {}),
+            ...(isYuvaan
+              ? {
+                  preferences: [
+                    { committee: yuvaanData.pref1Committee, motion: yuvaanData.pref1Motion },
+                    { committee: yuvaanData.pref2Committee, motion: yuvaanData.pref2Motion },
+                    { committee: yuvaanData.pref3Committee, motion: yuvaanData.pref3Motion },
+                  ],
+                  schoolCollege: yuvaanData.schoolCollege.trim(),
+                  classYear: yuvaanData.classYear.trim(),
+                }
+              : {}),
+          });
+          await runPayment(`Payment verified! Registration confirmed for ${event?.name}.`);
+        },
+        'Registration submitted! Complete payment to confirm your place.'
+      );
     }
     return mutate(
       () =>
