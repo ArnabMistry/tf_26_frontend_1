@@ -312,15 +312,23 @@ function PrizeBox({ event }: { event: EventDetailData }) {
       </div>
 
       <ul className={styles.prizeList}>
-        {event.prizes.map((prize) => (
-          <li key={prize.position} className={styles.prizeRow}>
-            <MedalIcon position={prize.position} />
-            <span>
-              <span className="sr-only">{ordinal(prize.position)} place: </span>
-              {prize.amount ?? "XX,XXX"}
-            </span>
-          </li>
-        ))}
+        {event.prizes.map((prize, idx) => {
+          const isSpecial = prize.label?.toLowerCase().includes("special") || prize.position > 3;
+          return (
+            <li key={`${prize.position}-${idx}`} className={styles.prizeRow}>
+              <MedalIcon position={prize.position} isSpecial={isSpecial} />
+              <span>
+                <span className="sr-only">
+                  {isSpecial ? "Special mention: " : `${ordinal(prize.position)} place: `}
+                </span>
+                {isSpecial && prize.label && !prize.amount?.toLowerCase().includes("special")
+                  ? `${prize.label}: `
+                  : ""}
+                {prize.amount ?? "XX,XXX"}
+              </span>
+            </li>
+          );
+        })}
       </ul>
 
       <div className={styles.actionArea}>
@@ -415,7 +423,7 @@ function TrophyIcon() {
   );
 }
 
-function MedalIcon({ position }: { position: number }) {
+function MedalIcon({ position, isSpecial }: { position: number; isSpecial?: boolean }) {
   return (
     <svg className={styles.medal} viewBox="0 0 24 24" aria-hidden="true">
       <path d="M7.5 1h3l3.2 7h-3Z" fill="#c9c4e4" />
@@ -424,15 +432,15 @@ function MedalIcon({ position }: { position: number }) {
       <circle cx="12" cy="15.5" r="5.3" fill="#b9b2dd" />
       <text
         x="12"
-        y="15.9"
+        y={isSpecial ? "16.1" : "15.9"}
         textAnchor="middle"
         dominantBaseline="central"
         fill="#241a4c"
-        fontSize="7"
+        fontSize={isSpecial ? "6" : "7"}
         fontWeight="700"
         fontFamily="var(--font-futura)"
       >
-        {position}
+        {isSpecial ? "★" : position}
       </text>
     </svg>
   );
