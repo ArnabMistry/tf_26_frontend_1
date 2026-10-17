@@ -125,11 +125,11 @@ export const eventDetails: EventDetail[] = [
       "CASCADE is the flagship hackathon of TantraFiesta 2026 at IIIT Nagpur, organised by CRISPR × ELEVATE. It is a 24-hour offline hackathon with a prize pool of up to ₹2 lakh including cash and goodies, where teams build practical solutions to real-world problems across four themes.",
     prizePool: "₹2,00,000",
     prizeNote:
-      "The pool includes cash prizes and goodies across four themes, the Side Quest, and the Best Women in Tech Team Award. Teams may compete in multiple themes and win in more than one — prize stacking is allowed where the team meets each award's eligibility criteria.",
+      "₹2,00,000 total prize pool across 4 themes: 1st Prize is ₹30,000 into 4 diff themes, 2nd Prize is ₹15,000 into 4 themes, and Special Mention is ₹10,000 × 2.",
     prizes: [
-      { position: 1, label: "1st Prize (Across 4 Themes)", amount: "₹1,20,000", note: "₹30,000 × 4 themes." },
-      { position: 2, label: "2nd Prize (Across 4 Themes)", amount: "₹60,000", note: "₹15,000 × 4 themes." },
-      { position: 3, label: "Special Mention", amount: "₹20,000", note: "₹10,000 × 2." },
+      { position: 1, label: "1st Prize", amount: "₹30,000 × 4 Themes", note: "₹30,000 for each of the 4 themes." },
+      { position: 2, label: "2nd Prize", amount: "₹15,000 × 4 Themes", note: "₹15,000 for each of the 4 themes." },
+      { position: 3, label: "Special Mention", amount: "₹10,000 × 2", note: "₹10,000 × 2 for Special Mentions." },
     ],
     stages: [
       {
@@ -429,14 +429,14 @@ export const eventDetails: EventDetail[] = [
       "Flash Code is a unique and exciting coding challenge hosted by DotSlash, IIIT Nagpur, designed to test participants in a fun, fast, and competitive way. Unlike traditional contests, Flash Code features 3 surprise mini coding games revealed only on the event day. Each game has its own winner, runner-up and second runner-up — giving everyone multiple chances to shine.",
     prizePool: "₹35,000",
     prizeNote:
-      "Nine winners in all: each of the three mini games has its own winner, runner-up and second runner-up, with goodies, prizes and certificates for every one of them.",
+      "₹35,000 total prize pool: 1st Prize is ₹15,000, 2nd Prize is ₹12,000, and 3rd Prize is ₹8,000, with goodies and certificates for winners.",
     prizes: [
-      { position: 1, label: "Winner (per mini game)", amount: "₹4,000", note: "Goodies and certificate." },
-      { position: 2, label: "Runner-up (per mini game)", amount: "₹3,000", note: "Goodies and certificate." },
+      { position: 1, label: "1st Prize", amount: "₹15,000", note: "Goodies and certificate." },
+      { position: 2, label: "2nd Prize", amount: "₹12,000", note: "Goodies and certificate." },
       {
         position: 3,
-        label: "2nd Runner-up (per mini game)",
-        amount: "₹2,000",
+        label: "3rd Prize",
+        amount: "₹8,000",
         note: "Goodies and certificate.",
       },
     ],
@@ -463,7 +463,7 @@ export const eventDetails: EventDetail[] = [
       "Individual participation only.",
       "Only 1st and 2nd year students pursuing a B.E./B.Tech. degree are allowed.",
       "3 surprise mini coding games are revealed on the event day.",
-      "Nine winners in total across the three games, for a prize pool worth ₹35,000.",
+      "1st (₹15,000), 2nd (₹12,000), and 3rd (₹8,000) place winners share the prize pool worth ₹35,000.",
       "Separate winners, runners-up and 2nd runners-up for each game.",
       "Scoring rewards speed, adaptability and creativity.",
       "Goodies, prizes and certificates for all winners.",

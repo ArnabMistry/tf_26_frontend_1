@@ -59,7 +59,7 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
     image: event.image || local?.image,
     prizePool: local?.prizePool || event.prizePool,
     prizeNote: local?.prizeNote || event.prizeNote,
-    prizes: event.prizeBreakdown?.length ? event.prizeBreakdown : (local?.prizes ?? []),
+    prizes: local?.prizes?.length ? local.prizes : (event.prizeBreakdown ?? []),
     stages: local?.stages ?? [],
     organizers: local?.organizers ?? [],
     rules: event.rules ?? local?.rules ?? [],
