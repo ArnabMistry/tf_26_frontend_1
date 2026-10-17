@@ -16,7 +16,7 @@ export const heads: Developer[] = [
     image: "/developers/sambodhi.webp",
   },
   {
-    name: "ARNAB",
+    name: "ARNAB MISTRY",
     role: "Web Architect",
     image: "/developers/arnab_mistry_pic.webp",
   },

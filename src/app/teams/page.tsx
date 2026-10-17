@@ -6,7 +6,7 @@ import { breadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { TeamsContent } from "@/components/teams/TeamsContent";
 
 export const metadata: Metadata = pageMetadata(
-  "Team",
+  "Teams",
   "Meet the passionate team of students behind TantraFiesta 2026 — the organizers, domain leads, and co-leads making IIIT Nagpur's annual tech fest a reality.",
   "/teams",
   {
@@ -25,7 +25,7 @@ export const metadata: Metadata = pageMetadata(
 export default function TeamsPage() {
   const breadcrumbs = breadcrumbJsonLd([
     { name: "Home", path: "/" },
-    { name: "Team", path: "/teams" },
+    { name: "Teams", path: "/teams" },
   ]);
 
   return (

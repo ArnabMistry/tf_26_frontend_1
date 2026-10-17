@@ -37,47 +37,47 @@ const divisions: Division[] = [
       {
         domain: "Stage",
         members: [
-          { name: "Prathamesh Kale",  btid: "BT24CSE159", position: "Lead",    image: "Head Of Execution_Stage Lead.jpg" },
-          { name: "Darpan Jain",       btid: "BT24CSE212", position: "Co-lead", image: "STAGE COLEAD.jpg" },
+          { name: "Prathamesh Kale",  btid: "BT24CSE159", position: "Lead",    image: "Stage_lead_Prathamesh.jpg" },
+          { name: "Darpan Jain",       btid: "BT24CSE212", position: "Co-lead", image: "STAGE_COLEAD_Darpan.jpg" },
         ],
       },
       {
         domain: "Logistics",
         members: [
-          { name: "Ayush Kathal",     btid: "BT24CSD064", position: "Lead",    image: "Logistics Lead.jpg" },
-          { name: "Kartik Magar",     btid: "BT24ECE094", position: "Co-lead", image: "Logistics Co-Lead.jpg" },
-          { name: "Harshal Mestri",   btid: "BT24CSE088", position: "Co-lead", image: "Logistics Co-Lead.jpeg" },
+          { name: "Ayush Kathal",     btid: "BT24CSD064", position: "Lead",    image: "Logistics_Lead_Keshav.jpg" },
+          { name: "Kartik Magar",     btid: "BT24ECE094", position: "Co-lead", image: "Logistics_Co-Lead_Kartik.jpeg" },
+          { name: "Harshal Mestri",   btid: "BT24CSE088", position: "Co-lead", image: "Logistics_Co-Lead_Harshal.jpg" },
         ],
       },
       {
         domain: "Hospitality",
         members: [
-          { name: "Keshav Shukla",    btid: "BT24ECI049", position: "Lead",    image: "Hospitality lead.jpg" },
+          { name: "Keshav Shukla",    btid: "BT24ECI049", position: "Lead",    image: "Hospitality_lead_keshav.jpg" },
           { name: "Hansraj Mannase",  btid: "BT24CSE116", position: "Co-lead", image: "Hospitality_CO-LEAD_HANSRAJ.jpg" },
-          { name: "Gobinath M",       btid: "BT24CSH060", position: "Co-lead" },
+          { name: "Gobinath M",       btid: "BT24CSH060", position: "Co-lead", image: "Hospitality-Colead-Gobinath.jpg" },
         ],
       },
       {
         domain: "EM & Operations",
         members: [
           { name: "Narasimha",              btid: "BT24ECE100", position: "Lead",    image: "EM & OPS LEAD.png" },
-          { name: "Gaurav Nilesh Borikar",  btid: "BT24ECE028", position: "Co-lead", image: "EM&OPS- CO-LEAD.jpg" },
-          { name: "Aditya Gupta",           btid: "BT24ECI026", position: "Co-lead" },
+          { name: "Gaurav Nilesh Borikar",  btid: "BT24ECE028", position: "Co-lead", image: "EM&OPS- CO-LEAD_Gaurav.jpg" },
+          { name: "Aditya Gupta",           btid: "BT24ECI026", position: "Co-lead", image: "em_co-lead_aditya_gupta.jpg" },
         ],
       },
       {
         domain: "Stalls",
         members: [
-          { name: "Mohit Rathore",   btid: "BT24CSE184", position: "Lead",    image: "Stalls Lead.jpg" },
-          { name: "Tanishq Kamble",  btid: "BT24CSE140", position: "Co-lead", image: "Stalls Co-lead.jpeg" },
-          { name: "Yashraj Nikam",   btid: "BT24CSE151", position: "Co-lead" },
+          { name: "Mohit Rathore",   btid: "BT24CSE184", position: "Lead",    image: "Stalls_Lead_Mohit.jpg" },
+          { name: "Tanishq Kamble",  btid: "BT24CSE140", position: "Co-lead" },
+          { name: "Yashraj Nikam",   btid: "BT24CSE151", position: "Co-lead", image: "Stalls_Co-lead_Yashraj.jpeg" },
         ],
       },
       {
         domain: "Discipline",
         members: [
-          { name: "Shivam Khedkar",   btid: "BT24CSA003", position: "Lead",    image: "Discipline Lead.jpg" },
-          { name: "Gyanish Dwivedi",  btid: "BT24CSE168", position: "Co-lead", image: "Discipline co-lead.jpg" },
+          { name: "Shivam Khedkar",   btid: "BT24CSA003", position: "Lead",    image: "Discipline_Lead_Shivam.jpg" },
+          { name: "Gyanish Dwivedi",  btid: "BT24CSE168", position: "Co-lead", image: "Discipline_co-lead_Gyanish.jpg" },
         ],
       },
     ],
@@ -89,39 +89,39 @@ const divisions: Division[] = [
       {
         domain: "Design",
         members: [
-          { name: "Sarthak Gupta",          btid: "BT24ECE087", position: "Lead",    image: "Head_of_Planning.jpg" },
-          { name: "Pavankumar Vanacharla",   btid: "BT24CSD038", position: "Co-lead", image: "DESIGN CO-LEAD.jpg" },
-          { name: "Rutva Gandhi",            btid: "BT24ECE068", position: "Co-lead", image: "Design_Colead.jpg" },
+          { name: "Sarthak Gupta",          btid: "BT24ECE087", position: "Lead",    image: "Design_lead_Sarthak.webp" },
+          { name: "Pavankumar Vanacharla",   btid: "BT24CSD038", position: "Co-lead", image: "DESIGN_CO-LEAD_Pavan.jpg" },
+          { name: "Rutva Gandhi",            btid: "BT24ECE068", position: "Co-lead", image: "Design_Colead_Rutva.jpg" },
         ],
       },
       {
         domain: "Decor",
         members: [
-          { name: "Rhythem Gupta",      btid: "BT24ECE064", position: "Lead",    image: "Decor Lead IMG_20260712_183158487.jpg" },
-          { name: "Charan Satya Nakka", btid: "BT24CSE142", position: "Co-lead", image: "Decor Co-Lead.webp" },
-          { name: "Diya Hitesh Patel",  btid: "BT24CSE176", position: "Co-lead", image: "Decor co-lead.jpg" },
+          { name: "Rhythem Gupta",      btid: "BT24ECE064", position: "Lead",    image: "Decor_Lead_Rhythem.jpg" },
+          { name: "Charan Satya Nakka", btid: "BT24CSE142", position: "Co-lead", image: "Decor_Co-Lead_Charan.webp" },
+          { name: "Diya Hitesh Patel",  btid: "BT24CSE176", position: "Co-lead", image: "Decor_co-lead_Diya.jpg" },
         ],
       },
       {
         domain: "Content & Anchoring",
         members: [
-          { name: "Shantanu Wankhede", btid: "BT24CSE150", position: "Lead", image: "Anchoring Lead.jpg" },
+          { name: "Shantanu Wankhede", btid: "BT24CSE150", position: "Lead", image: "Anchoring_Lead_Shantanu.jpg" },
         ],
       },
       {
         domain: "Website",
         members: [
-          { name: "Sambodhi Bhowal", btid: "BT24CSD065", position: "Lead" },
-          { name: "Arnab Mistry",    btid: "BT24CSE010", position: "Co-lead" },
+          { name: "Sambodhi Bhowal", btid: "BT24CSD065", position: "Lead",    image: "webdev_lead_sambodhi.webp" },
+          { name: "Arnab Mistry",    btid: "BT24CSE010", position: "Co-lead", image: "webdev_co-lead_arnab_mistry.webp" },
         ],
       },
       {
         domain: "Multimedia",
         members: [
-          { name: "Manu Shrivastava",  btid: "BT24CSH008", position: "Lead",              image: "Multimedia_Lead.JPG" },
-          { name: "Akshit Yadav",      btid: "BT24CSE098", position: "Co-lead (Video)",    image: "MULTIMEDIA_CO-LEAD.jpg", objectPosition: "center 75%" },
-          { name: "Dilkhush Choubey",  btid: "BT24ECE065", position: "Co-lead (Photo)",    image: "Multimedia_co-lead.jpeg" },
-          { name: "Suraj Pratap Singh",btid: "BT24CSH041", position: "Co-lead (Editing)" },
+          { name: "Manu Shrivastava",  btid: "BT24CSH008", position: "Lead",              image: "Multimedia_Lead_Manu.JPG" },
+          { name: "Akshit Yadav",      btid: "BT24CSE098", position: "Co-lead (Video)" },
+          { name: "Dilkhush Choubey",  btid: "BT24ECE065", position: "Co-lead (Photo)",    image: "Multimedia_co-lead_Dilkhush.jpeg" },
+          { name: "Suraj Pratap Singh",btid: "BT24CSH041", position: "Co-lead (Editing)",  image: "MULTIMEDIA_CO-LEAD_Suraj.jpg" },
         ],
       },
       {
@@ -140,16 +140,16 @@ const divisions: Division[] = [
       {
         domain: "PR Outreach",
         members: [
-          { name: "Pranay Ukey",  btid: "BT24ECI045", position: "Lead",    image: "PR_Lead.jpg" },
-          { name: "Kumar Aryan",  btid: "BT24ECI052", position: "Co-lead", image: "PR__Co-Lead.jpg" },
+          { name: "Pranay Ukey",  btid: "BT24ECI045", position: "Lead",    image: "PR_Lead_Pranav.jpg" },
+          { name: "Kumar Aryan",  btid: "BT24ECI052", position: "Co-lead", image: "PR__Co-Lead_Aryan.jpg" },
         ],
       },
       {
         domain: "Marketing",
         members: [
-          { name: "Abdul Malik",          btid: "BT24CSA046", position: "Lead",    image: "Marketing Co-Lead.jpg" },
+          { name: "Abdul Malik",          btid: "BT24CSA046", position: "Lead" },
           { name: "Debapallab Das",        btid: "BT24CSA032", position: "Co-lead" },
-          { name: "Sangyan Hari Pushkar",  btid: "BT24ECE128", position: "Co-lead" },
+          { name: "Sangyan Hari Pushkar",  btid: "BT24ECE128", position: "Co-lead", image: "Marketing_Co-Lead_Sangyan.jpg" },
         ],
       },
     ],
@@ -160,12 +160,18 @@ const divisions: Division[] = [
 
 function MemberCard({ member }: { member: Member }) {
   const isLead = member.position === "Lead";
+  const imageSrc = member.image
+    ? member.image.startsWith("/")
+      ? member.image
+      : `${BASE}${encodeURIComponent(member.image)}`
+    : undefined;
+
   return (
     <article className={styles.card}>
       <div className={`${styles.portrait} ${isLead ? styles.leadPortrait : styles.coleadPortrait}`}>
-        {member.image ? (
+        {imageSrc ? (
           <Image
-            src={`${BASE}${encodeURIComponent(member.image)}`}
+            src={imageSrc}
             alt={member.name}
             fill
             sizes="(max-width: 640px) 26vw, 148px"
@@ -263,7 +269,7 @@ export function TeamsContent() {
       <Reveal variant="scale" animateOnMount className={styles.pageHeading}>
         <header>
           <h1 className="font-tantra text-7xl uppercase leading-none tracking-wide text-white sm:text-8xl md:text-9xl">
-            Our Team
+            Teams
           </h1>
           <p className={styles.pageSubheading}>
             The minds and muscle behind TantraFiesta 2026
