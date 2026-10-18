@@ -746,7 +746,77 @@
   }
 }
 
+.documentCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  margin: 0 0 24px;
+  padding: 18px 20px;
+  border: 1px solid rgba(255, 124, 196, 0.45);
+  border-radius: 16px;
+  background: linear-gradient(120deg, rgba(235, 0, 139, 0.14), rgba(255, 255, 255, 0.04));
+  color: #fff;
+  text-decoration: none;
+  transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+
+.documentCard:hover {
+  border-color: #ff7cc4;
+  background: linear-gradient(120deg, rgba(235, 0, 139, 0.24), rgba(255, 255, 255, 0.08));
+  box-shadow: 0 6px 24px rgba(235, 0, 139, 0.12);
+}
+
+.documentCard:focus-visible {
+  outline: 2px solid #ff9dd3;
+  outline-offset: 4px;
+}
+
+.documentIcon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  flex-shrink: 0;
+  width: 52px;
+  height: 62px;
+  border-radius: 12px;
+  background: rgba(255, 105, 180, 0.14);
+  color: #ff9dd3;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.documentCopy {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.documentName {
+  font-size: 1rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.documentHint {
+  color: #d3c9e9;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.documentArrow {
+  margin-left: auto;
+  color: #ff9dd3;
+  font-size: 1.6rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .documentCard,
   .tab,
   .register,
   .unstopRegister {
