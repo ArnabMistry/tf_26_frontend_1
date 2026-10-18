@@ -57,7 +57,7 @@ const CATEGORIES_BY_SLUG: Record<string, string[]> = {
   "knights-legacy": ["gaming"],
   yuvaan: ["speaking"],
   "pitch-please": ["creative"],
-  "keep-alive-26": ["creative"],
+  "keep-alive-26": ["hackathon"],
   "digital-time-capsule": ["creative"],
 };
 

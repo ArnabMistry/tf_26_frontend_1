@@ -1610,7 +1610,7 @@ export const eventDetails: EventDetail[] = [
     registrationUrl: "https://unstop.com/hackathons/keep-alive-26-iiitn-1766226",
     name: "Keep Alive '26",
     tagline: "National incident response championship",
-    image: "/event-posters/Keep-Alive.webp",
+    image: "/event-posters/Keep-Alive-20261019.webp",
     clubs: [{ name: "GDG on Campus", slug: "gdg" }],
     description:
       "An alert just fired. Checkout is failing. Can your team find out why before the clock runs out? KEEP ALIVE '26 is a national incident response championship for students who have been learning DevOps. You've practised Linux, Docker and Kubernetes — now test it in the field: read the alerts, dashboards, logs and traces of a live microservices system, find what broke and why, and explain how you would fix it. It runs on the same incident platform as Panic at the Pod, the live Kubernetes incident challenge by CNCG Noida, our Community Partner, hosted by GDG on Campus IIIT Nagpur at TantraFiesta 2026.",
