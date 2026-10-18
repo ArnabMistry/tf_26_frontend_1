@@ -116,7 +116,7 @@ export const eventDetails: EventDetail[] = [
     registrationUrl: "https://unstop.com/hackathons/cascade26-flagship-hackathon-tantrafiesta26-iiitn-1766233",
     name: "Cascade",
     tagline: "The flagship 24-hour hackathon",
-    image: "/event-posters/cas-cade.webp",
+    image: "/event-posters/Cas-Cade.webp",
     clubs: [
       { name: "CRISPR", slug: "crispr" },
       { name: "Elevate", slug: "elevate" },
@@ -364,7 +364,7 @@ export const eventDetails: EventDetail[] = [
     registrationUrl: "https://unstop.com/hackathons/algorithmia-the-icpc-style-coding-challenge-iiitn-1768266",
     name: "Algorithmia",
     tagline: "The ICPC-style coding challenge",
-    image: "/event-posters/algorithmia.webp",
+    image: "/event-posters/Algorithmia.webp",
     clubs: [{ name: "DotSlash", slug: "dotslash" }],
     description:
       "Get ready to embark on an exciting journey into the world of algorithms and programming with Algorithmia, a prestigious ICPC-style coding competition by DotSlash, the coding club of IIIT Nagpur. Teams of two to three battle to solve challenging algorithmic problems, testing their teamwork, creativity, and coding speed at a national level during TantraFiesta.",
@@ -1536,7 +1536,7 @@ export const eventDetails: EventDetail[] = [
     registrationUrl: "https://unstop.com/conferences/yuvaan-youth-conclave-iiitn-1766418",
     name: "Yuvaan: Youth Conclave",
     tagline: "Structured debate and discussion",
-    image: "/event-posters/Yuvaan.webp",
+    image: "/event-posters/yuvaan.webp",
     clubs: [{ name: "Orator", slug: "orator" }],
     description:
       "Yuvaan is a youth conclave designed to encourage structured discussion, critical thinking, public speaking, questioning and constructive disagreement. The format combines prepared individual speeches with direct questioning and open interactive discussion, treating the committee as an intellectual discussion rather than a personal confrontation.",
