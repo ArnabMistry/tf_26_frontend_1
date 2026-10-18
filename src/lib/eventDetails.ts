@@ -122,7 +122,7 @@ export const eventDetails: EventDetail[] = [
       { name: "Elevate", slug: "elevate" },
     ],
     description:
-      "CASCADE is the flagship hackathon of TantraFiesta 2026 at IIIT Nagpur, organised by CRISPR × ELEVATE. It is a 24-hour offline hackathon with a prize pool of up to ₹2 lakh including cash and goodies, where teams build practical solutions to real-world problems across four themes.",
+      "CASCADE is the flagship hackathon of TantraFiesta 2026 at IIIT Nagpur, organised by CRISPR × ELEVATE. It is a 24-hour offline hackathon with a prize pool of up to ₹2 lakh including cash and goodies, where teams build practical solutions to real-world problems across four themes. Stacking of themes is allowed.",
     prizePool: "₹2,00,000",
     prizeNote:
       "₹2,00,000 total prize pool across 4 themes: 1st Prize is ₹45,000 for each of the 4 themes, ₹10,000 for the Side Quest, and ₹10,000 for the Best Women Team.",
@@ -192,7 +192,7 @@ export const eventDetails: EventDetail[] = [
       "Teams must have 3–4 members and provide accurate registration details.",
       "All submitted work must be original or appropriately credited — plagiarism and misrepresentation are prohibited.",
       "Teams may compete in multiple themes and win multiple awards, subject to each award's eligibility criteria.",
-      "**STACKING ALLOWED**",
+      "**STACKING ALLOWED —** Participants may choose multiple themes on the day of the hackathon.",
       "Self-voting in the Stars system is not allowed.",
       "Participants must follow organiser instructions and maintain respectful conduct.",
       "Judges' decisions are final, subject to the officially published event rules.",
@@ -1302,8 +1302,8 @@ export const eventDetails: EventDetail[] = [
     prizeNote: "Winners are declared across 3 weight categories: 1.5 kg, 8 kg, and 15 kg.",
     prizes: [
       { position: 1, label: "15 kg Winner", amount: "₹60,000 (15 kg)" },
-      { position: 2, label: "8 kg Winner", amount: "₹40,000 (8 kg)" },
-      { position: 3, label: "1.5 kg Winner", amount: "₹20,000 (1.5 kg)" },
+      { position: 1, label: "8 kg Winner", amount: "₹40,000 (8 kg)" },
+      { position: 1, label: "1.5 kg Winner", amount: "₹20,000 (1.5 kg)" },
       { position: 4, label: "Best Design", amount: "Best Design", note: "Special recognition across all weight classes" },
       { position: 5, label: "Best Warrior", amount: "Best Warrior", note: "Special recognition across all weight classes" },
     ],
