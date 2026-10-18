@@ -116,7 +116,7 @@ export const eventDetails: EventDetail[] = [
     registrationUrl: "https://unstop.com/hackathons/cascade26-flagship-hackathon-tantrafiesta26-iiitn-1766233",
     name: "Cascade",
     tagline: "The flagship 24-hour hackathon",
-    image: "/event-posters/Cas-Cade.webp",
+    image: "/event-posters/cas-cade.webp",
     clubs: [
       { name: "CRISPR", slug: "crispr" },
       { name: "Elevate", slug: "elevate" },
@@ -348,7 +348,7 @@ export const eventDetails: EventDetail[] = [
     registrationUrl: "https://unstop.com/hackathons/algorithmia-the-icpc-style-coding-challenge-iiitn-1768266",
     name: "Algorithmia",
     tagline: "The ICPC-style coding challenge",
-    image: "/event-posters/Algorithmia.webp",
+    image: "/event-posters/algorithmia.webp",
     clubs: [{ name: "DotSlash", slug: "dotslash" }],
     description:
       "Get ready to embark on an exciting journey into the world of algorithms and programming with Algorithmia, a prestigious ICPC-style coding competition by DotSlash, the coding club of IIIT Nagpur. Teams of two to three battle to solve challenging algorithmic problems, testing their teamwork, creativity, and coding speed at a national level during TantraFiesta.",
@@ -969,6 +969,7 @@ export const eventDetails: EventDetail[] = [
     registrationUrl: "https://unstop.com/events/rc24-esports-tournament-tantrafiesta26-iiitn-1768504",
     name: "RC 24",
     tagline: "Real Cricket 24 — 1v1 knockout",
+    image: "/event-posters/rc-24.webp",
     clubs: [{ name: "Synergy", slug: "synergy" }],
     description:
       "The RC24 Esports Tournament is the official Real Cricket 24 competition of TantraFiesta, hosted by IIIT Nagpur. Players from any college face off 1v1 in a knockout bracket — first in the Open Rounds and then in the Finals — to prove their batting, bowling and game sense and win the championship title and prizes.",
@@ -1519,7 +1520,7 @@ export const eventDetails: EventDetail[] = [
     registrationUrl: "https://unstop.com/conferences/yuvaan-youth-conclave-iiitn-1766418",
     name: "Yuvaan: Youth Conclave",
     tagline: "Structured debate and discussion",
-    image: "/event-posters/yuvaan.webp",
+    image: "/event-posters/Yuvaan.webp",
     clubs: [{ name: "Orator", slug: "orator" }],
     description:
       "Yuvaan is a youth conclave designed to encourage structured discussion, critical thinking, public speaking, questioning and constructive disagreement. The format combines prepared individual speeches with direct questioning and open interactive discussion, treating the committee as an intellectual discussion rather than a personal confrontation.",
