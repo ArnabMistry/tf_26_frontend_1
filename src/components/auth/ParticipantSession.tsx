@@ -4,6 +4,8 @@ import { authRequest, ApiError } from '@/lib/auth';
 import { AUTH_CHANGE_EVENT, clearSignedIn, hasSessionHint } from '@/lib/session';
 import type { Person } from '@/lib/participant';
 
+const MEALS_EMAIL = 'meals@iiitn.ac.in';
+
 const Context = createContext<{ user: Person | null; loading: boolean }>({ user: null, loading: true });
 export const useParticipant = () => useContext(Context);
 
@@ -27,6 +29,14 @@ export function ParticipantSession({ children }: { children: ReactNode }) {
         const { data } = await authRequest('/api/auth/me');
         if (active && request === sequence) {
           setState({ user: data.user, loading: false });
+
+          // Restriction: meals account must ONLY access the meal scanner page
+          const email = (data?.user?.email || '').trim().toLowerCase();
+          if ((email === MEALS_EMAIL || email.startsWith('meals@')) && typeof window !== 'undefined') {
+            if (window.location.pathname !== '/meal-scanner') {
+              window.location.replace('/meal-scanner');
+            }
+          }
         }
       } catch (err) {
         if (active && request === sequence) {
@@ -51,6 +61,13 @@ export function ParticipantSession({ children }: { children: ReactNode }) {
       window.removeEventListener('storage', onStorage);
     };
   }, []);
+
+  // Strict UI isolation: If signed in as meals staff, do not show any other page
+  const userEmail = (state.user?.email || '').trim().toLowerCase();
+  const isMealsStaff = userEmail === MEALS_EMAIL || userEmail.startsWith('meals@');
+  if (isMealsStaff && typeof window !== 'undefined' && window.location.pathname !== '/meal-scanner') {
+    return <div style={{ minHeight: '100dvh', background: '#06060c' }} />;
+  }
 
   return <Context.Provider value={state}>{children}</Context.Provider>;
 }

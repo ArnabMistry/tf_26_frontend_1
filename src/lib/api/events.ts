@@ -161,7 +161,14 @@ function normaliseBackendEvent(raw: BackendEvent): PublicEvent {
     feeMode: raw.feeMode,
     paymentTrigger: raw.paymentTrigger,
     isPaid: raw.price !== undefined && raw.price > 0,
-    registrationFee: raw.requirements?.registrationFee || (raw.price === undefined || raw.price === 0 ? "Free" : `₹${raw.price}${raw.feeMode === "per_team" ? " per team" : " per participant"}`),
+    // Always derived from `price`. The `requirements` JSON also carries a
+    // registrationFee string, but it is seeded data that no price edit
+    // rewrites, so preferring it showed a stale fee forever. The only value
+    // the backend itself writes there is "Free", on an event whose price is
+    // already 0 - which this expression reports as "Free" anyway.
+    registrationFee: raw.price === undefined || raw.price === 0
+      ? "Free"
+      : `₹${raw.price}${raw.isTeamEvent && raw.feeMode === "per_team" ? " per team" : " per participant"}`,
     meals: raw.requirements?.meals ? formatMealsLabel(raw.requirements.meals) : undefined,
     participationKit: raw.requirements?.participationKit !== undefined ? Boolean(raw.requirements.participationKit) : undefined,
     requirements: raw.requirements,

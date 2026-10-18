@@ -29,15 +29,24 @@ export async function generateStaticParams() {
 function fromPublicEvent(event: PublicEvent): EventDetailData {
   const local = getEventDetail(event.slug);
   const isFree = !event.price || event.price === 0 || event.paymentTrigger === "free";
+  const isTeam = event.isTeamEvent ?? (local?.teamSize ? local.teamSize.max > 1 : false);
   const entryFeeLabel = isFree
     ? "Free"
     : event.paymentTrigger === "after_round"
-      ? `₹${event.price} ${event.feeMode === "per_participant" ? "per participant" : "per team"} (free to enter; payable upon Round 2 promotion)`
-      : event.isTeamEvent
+      ? `₹${event.price} ${isTeam && event.feeMode === "per_team" ? "per team" : "per participant"} (free to enter; payable upon Round 2 promotion)`
+      : isTeam
         ? `₹${event.price} ${event.feeMode === "per_participant" ? "per participant (team leader pays for all members)" : "per team (team leader pays once)"}`
         : `₹${event.price} per participant`;
 
-  const registrationFee = event.registrationFee || (isFree ? "Free" : `₹${event.price}${event.feeMode === "per_team" ? " / team" : " / person"}`);
+  // Derived from the live price every time, never from a stored string.
+  // `event.registrationFee` comes from the event's `requirements` JSON, which
+  // is a snapshot written when the event was created and does not follow an
+  // admin's later price edits; `local.registrationFee` is a build-time
+  // constant in eventDetails.ts. Both go stale the moment a fee changes, so
+  // neither may win over the price the backend is actually charging.
+  const registrationFee = isFree
+    ? "Free"
+    : `₹${event.price} ${isTeam && event.feeMode === "per_team" ? "per team" : "per person"}`;
 
   return {
     ...local,
@@ -45,12 +54,12 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
     name: event.name,
     // Joint clubs are supplied by the normalized API contract.
     clubs: event.clubs || [event.club],
-    description: local?.description || event.description || event.shortDescription || "",
+    description: event.description || local?.description || event.shortDescription || "",
     poster: event.image || local?.image || local?.poster,
     image: event.image || local?.image,
-    prizePool: event.prizePool || local?.prizePool,
-    prizeNote: event.prizeNote || local?.prizeNote,
-    prizes: event.prizeBreakdown?.length ? event.prizeBreakdown : (local?.prizes ?? []),
+    prizePool: local?.prizePool || event.prizePool,
+    prizeNote: local?.prizeNote || event.prizeNote,
+    prizes: local?.prizes?.length ? local.prizes : (event.prizeBreakdown ?? []),
     stages: local?.stages ?? [],
     organizers: local?.organizers ?? [],
     rules: event.rules ?? local?.rules ?? [],
@@ -58,15 +67,16 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
     // as one free-text string rather than the bullet list the page renders.
     highlights: local?.highlights ?? [],
     eligibility: event.eligibility ? [event.eligibility] : (local?.eligibility ?? []),
-    registrationUrl: event.registrationUrl,
+    registrationUrl: local?.registrationUrl || event.registrationUrl,
     entryFeeLabel: entryFeeLabel || local?.entryFeeLabel,
     registrationDeadline: event.registrationDeadline,
     startDate: event.startDate || undefined,
     endDate: event.endDate,
-    registrationFee: registrationFee || local?.registrationFee,
+    registrationFee,
     feeMode: event.feeMode || local?.feeMode,
     meals: event.meals || local?.meals,
     participationKit: event.participationKit !== undefined ? event.participationKit : local?.participationKit,
+    accommodation: (event as unknown as { accommodation?: string }).accommodation || local?.accommodation,
     teamSize: event.minTeamSize && event.maxTeamSize ? { min: event.minTeamSize, max: event.maxTeamSize } : local?.teamSize,
     venue: event.venue || local?.venue,
   };
@@ -224,6 +234,9 @@ export default async function EventPage(props: PageProps<"/events/[slug]">) {
     registrationOpens: event.registrationOpens,
   });
 
+  const isTeam = Boolean(event.teamSize && event.teamSize.max > 1);
+  const internalRegisterHref = `${isTeam ? "/register/team" : "/register/event"}?eventId=${encodeURIComponent(event.slug)}`;
+
   return (
     <div className={styles.page}>
       <script
@@ -247,7 +260,7 @@ export default async function EventPage(props: PageProps<"/events/[slug]">) {
       <a href="#event-content" className={styles.skipLink}>
         Skip to event details
       </a>
-      <Navbar currentPath="/events" registrationHref={event.registrationUrl ?? "/register"} />
+      <Navbar currentPath="/events" registrationHref={internalRegisterHref} />
       <EventDetail event={event} />
       <Footer variant="yellow" />
     </div>

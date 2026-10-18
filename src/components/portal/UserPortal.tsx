@@ -8,6 +8,7 @@ import { hasSessionHint, logout } from '@/lib/session';
 import { participantRequest, fullName, formatDate, type Profile, type Inbox, type Notification, type MealPass, type Registration } from '@/lib/participant';
 import { payForEvent } from '@/lib/payments';
 import s from './Portal.module.css';
+import { AccommodationSection } from './AccommodationSection';
 
 export function PortalSkeleton() {
   return (
@@ -22,7 +23,7 @@ export function PortalSkeleton() {
       </div>
 
       <div className={s.tabs} aria-label="Portal sections placeholder">
-        {[1, 2, 3, 4].map(i => (
+        {[1, 2, 3, 4, 5].map(i => (
           <div key={i} className={`${s.skeleton} ${s.skeletonTabItem}`} />
         ))}
       </div>
@@ -304,6 +305,7 @@ export function UserPortal() {
           ['overview', 'Overview'],
           ['notifications', `Notifications${inbox?.unreadCount ? ` (${inbox.unreadCount})` : ''}`],
           ['meals', `Meal Passes${availableMealsCount ? ` (${availableMealsCount})` : ''}`],
+          ['accommodation', 'Accommodation'],
           ['settings', 'Edit profile']
         ].map(([key, label]) => (
           <Link
@@ -413,6 +415,11 @@ export function UserPortal() {
                 ))
               )}
             </section>
+          ) : tab === 'accommodation' ? (
+            <AccommodationSection
+              user={profile.user}
+              profileComplete={!!profile.user.collegeName?.trim() && !!profile.user.phoneNumber?.trim()}
+            />
           ) : tab === 'settings' ? (
             <section className={s.card}>
               <h2>Make it yours</h2>
@@ -432,6 +439,46 @@ export function UserPortal() {
                   <article key={item.id} className={s.entry}>
                     <div className={s.row}><div><p className={s.eyebrow}>{item.event.club}</p><h3 className="mt-2">{item.event.name}</h3></div><span className={s.badge}>{item.status.replaceAll('_',' ')}</span></div>
                     <p className={s.muted}>{item.team?.name || 'Individual entry'} • {item.event.venue || 'Venue to be announced'}</p>
+                    {(item.metadata?.themes?.length || item.metadata?.theme) && (
+                      <p className="text-xs text-[#faff52] mt-1.5 font-medium">
+                        Theme{item.metadata?.themes && item.metadata.themes.length > 1 ? 's' : ''}:{' '}
+                        <span className="text-white/90">
+                          {item.metadata?.themes?.length ? item.metadata.themes.join(', ') : item.metadata?.theme}
+                        </span>
+                      </p>
+                    )}
+                    {Boolean(item.metadata?.preferences?.length || item.preferences?.length || item.metadata?.committeePreferences?.length || item.committeePreferences?.length) && (
+                      <div className="mt-2 text-xs space-y-1.5 bg-black/25 p-2.5 rounded-lg border border-[#faff52]/20">
+                        <p className="text-[#faff52] font-semibold">
+                          Yuvaan Conclave Preferences:
+                        </p>
+                        {(item.metadata?.preferences || item.preferences) ? (
+                          <div className="space-y-0.5 text-white/90">
+                            {((item.metadata?.preferences || item.preferences) as { committee: string; motion: string }[]).map((pref, idx) => (
+                              <p key={idx}>
+                                <span className="text-[#b8afcf]">{idx + 1}. </span>
+                                {pref.committee} <span className="text-[#83ebba] font-mono">({pref.motion})</span>
+                              </p>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-white/90">
+                            <span className="text-[#b8afcf]">Committees: </span>
+                            {(item.metadata?.committeePreferences || item.committeePreferences || []).join(' → ')}
+                            {(item.metadata?.motionPreference || item.motionPreference) && (
+                              <span className="text-[#83ebba] font-mono ml-2">({item.metadata?.motionPreference || item.motionPreference})</span>
+                            )}
+                          </p>
+                        )}
+                        {(item.metadata?.schoolCollege || item.schoolCollege) && (
+                          <p className="text-white/90 pt-0.5 border-t border-white/10">
+                            <span className="text-[#b8afcf]">Institution: </span>
+                            {item.metadata?.schoolCollege || item.schoolCollege}
+                            {(item.metadata?.classYear || item.classYear) ? ` (${item.metadata?.classYear || item.classYear})` : ''}
+                          </p>
+                        )}
+                      </div>
+                    )}
                     {/* Undecided rounds are hidden: every event has a Round 1
                         from creation, so "awaiting result" would be noise. */}
                     <div className="flex flex-wrap gap-2 mt-3">{item.roundProgress?.filter(round => round.status !== 'PENDING').map(round => <span key={round.roundId} className={`${s.badge} ${round.status === 'QUALIFIED' ? s.accepted : ''}`}>{round.name}: {round.status === 'QUALIFIED' ? 'Promoted' : 'Not promoted'}</span>)}</div>
@@ -543,3 +590,4 @@ export function UserPortal() {
     </>}
   </main>;
 }
+

@@ -17,7 +17,7 @@ const TABS = [
   { id: "descriptions", label: "Descriptions" },
   { id: "stages", label: "Stages & Timeline" },
   { id: "rules", label: "Rules & Regulations" },
-  { id: "contact", label: "Contact Organizers" },
+  { id: "contact", label: "Contact Us" },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -100,6 +100,13 @@ export function EventDetail({ event }: EventDetailProps) {
               </div>
             )}
 
+            {event.accommodation && (
+              <div className={styles.metaChip}>
+                <span className={styles.metaIcon}>🏨</span>
+                <span className={styles.metaValue}>Accommodation: {event.accommodation}</span>
+              </div>
+            )}
+
             {event.venue && (
               <div className={styles.metaChip}>
                 <span className={styles.metaIcon}>📍</span>
@@ -156,33 +163,6 @@ export function EventDetail({ event }: EventDetailProps) {
                 text={`${joinClubNames(event.clubs)} is still putting together the brief for ${event.name}. Check back shortly.`}
               />
             )}
-            <div className={styles.feeOverviewCard}>
-              <div className={styles.feeOverviewHeader}>
-                <div className={styles.feeBadge}>
-                  <span className={styles.feeBadgeLabel}>Registration Fee</span>
-                  <span className={styles.feeBadgeAmount}>
-                    {event.registrationFee || event.entryFeeLabel || "Free"}
-                  </span>
-                </div>
-                {event.entryFeeLabel && event.entryFeeLabel !== "Free" && (
-                  <p className={styles.feeOverviewDetail}>{event.entryFeeLabel}</p>
-                )}
-              </div>
-              {(event.meals || event.participationKit !== undefined) && (
-                <div className={styles.perksRow}>
-                  {event.meals && (
-                    <span className={styles.perkChip}>
-                      <span aria-hidden="true">🍽️</span> {formatMealsLabel(event.meals)}
-                    </span>
-                  )}
-                  {event.participationKit && (
-                    <span className={styles.perkChip}>
-                      <span aria-hidden="true">🎒</span> Participation Kit Included
-                    </span>
-                  )}
-                </div>
-              )}
-            </div>
             <PrizeBox event={event} />
           </div>
           <Poster event={event} />
@@ -228,7 +208,7 @@ export function EventDetail({ event }: EventDetailProps) {
         {event.rules.length > 0 ? (
           <ul className={styles.ruleList}>
             {event.rules.map((rule) => (
-              <li key={rule}>{rule}</li>
+              <li key={rule}>{formatRule(rule)}</li>
             ))}
           </ul>
         ) : (
@@ -247,7 +227,7 @@ export function EventDetail({ event }: EventDetailProps) {
         tabIndex={0}
         className={styles.panel}
       >
-        <h2 className={styles.sectionHeading}>Contact Organizers</h2>
+        <h2 className={styles.sectionHeading}>Contact Us</h2>
         {event.organizers.length > 0 ? (
           <ul className={styles.organizerList}>
             {event.organizers.map((organizer) => (
@@ -315,6 +295,9 @@ function Poster({ event }: { event: EventDetailData }) {
 function PrizeBox({ event }: { event: EventDetailData }) {
   // The ₹ is styled separately, so drop one if the source value already carries it.
   const prizePool = (event.prizePool ?? "XX,XXX").replace(/^\s*₹\s*/, "");
+  const isTeam = Boolean(event.teamSize && event.teamSize.max > 1);
+  const internalRegisterHref = `${isTeam ? "/register/team" : "/register/event"}?eventId=${encodeURIComponent(event.slug)}`;
+  const unstopUrl = event.registrationUrl && /^https?:\/\//i.test(event.registrationUrl) ? event.registrationUrl : null;
 
   return (
     <div className={styles.prizeBox}>
@@ -325,28 +308,48 @@ function PrizeBox({ event }: { event: EventDetailData }) {
           <span className={styles.rupee}>₹</span>
           {prizePool}
         </p>
+        {event.prizeNote && <p className={styles.prizeNote}>{event.prizeNote}</p>}
       </div>
 
       <ul className={styles.prizeList}>
-        {event.prizes.map((prize) => (
-          <li key={prize.position} className={styles.prizeRow}>
-            <MedalIcon position={prize.position} />
-            <span>
-              <span className="sr-only">{ordinal(prize.position)} place: </span>
-              {prize.amount ?? "XX,XXX"}
-            </span>
-          </li>
-        ))}
+        {event.prizes.map((prize, idx) => {
+          const isSpecial = prize.position === 0 || prize.label?.toLowerCase().includes("special") || prize.position > 3;
+          return (
+            <li key={`${prize.position}-${idx}`} className={styles.prizeRow}>
+              <MedalIcon position={prize.position} isSpecial={isSpecial} />
+              <span>
+                <span className="sr-only">
+                  {prize.position === 0 ? `${prize.label}: ` : isSpecial ? "Special mention: " : `${ordinal(prize.position)} place: `}
+                </span>
+                {isSpecial && prize.label && !prize.amount?.toLowerCase().includes("special")
+                  ? `${prize.label}: `
+                  : ""}
+                {prize.amount ?? "XX,XXX"}
+              </span>
+            </li>
+          );
+        })}
       </ul>
 
       <div className={styles.actionArea}>
         <Link
-          href={event.registrationUrl || `/register/event?eventId=${encodeURIComponent(event.slug)}`}
+          href={internalRegisterHref}
           className={styles.register}
           aria-label={`Register now for ${event.name}`}
         >
           Register Now <span aria-hidden="true">↗</span>
         </Link>
+        {unstopUrl && (
+          <a
+            href={unstopUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.unstopRegister}
+            aria-label={`Unstop page for ${event.name}`}
+          >
+            Unstop <span aria-hidden="true">↗</span>
+          </a>
+        )}
       </div>
     </div>
   );
@@ -420,7 +423,8 @@ function TrophyIcon() {
   );
 }
 
-function MedalIcon({ position }: { position: number }) {
+function MedalIcon({ position, isSpecial }: { position: number; isSpecial?: boolean }) {
+  const isAsterisk = position === 0;
   return (
     <svg className={styles.medal} viewBox="0 0 24 24" aria-hidden="true">
       <path d="M7.5 1h3l3.2 7h-3Z" fill="#c9c4e4" />
@@ -429,18 +433,34 @@ function MedalIcon({ position }: { position: number }) {
       <circle cx="12" cy="15.5" r="5.3" fill="#b9b2dd" />
       <text
         x="12"
-        y="15.9"
+        y={isAsterisk ? "17.2" : isSpecial ? "16.1" : "15.9"}
         textAnchor="middle"
         dominantBaseline="central"
         fill="#241a4c"
-        fontSize="7"
+        fontSize={isAsterisk ? "8" : isSpecial ? "6" : "7"}
         fontWeight="700"
         fontFamily="var(--font-futura)"
       >
-        {position}
+        {isAsterisk ? "*" : isSpecial ? "★" : position}
       </text>
     </svg>
   );
+}
+
+function formatRule(rule: string) {
+  if (rule === "**STACKING ALLOWED**" || rule === "STACKING ALLOWED") {
+    return <strong>STACKING ALLOWED</strong>;
+  }
+  if (rule.includes("**")) {
+    const parts = rule.split(/(\*\*[^*]+\*\*)/g);
+    return parts.map((part, i) => {
+      if (part.startsWith("**") && part.endsWith("**")) {
+        return <strong key={i}>{part.slice(2, -2)}</strong>;
+      }
+      return part;
+    });
+  }
+  return rule;
 }
 
 function ordinal(n: number): string {

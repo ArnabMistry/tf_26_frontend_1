@@ -7,7 +7,36 @@ import { authRequest, ApiError } from '@/lib/auth';
 import { hasSessionHint } from '@/lib/session';
 import { participantRequest, formatDate, fullName, type EventInfo, type Team, type Registration, type Person, type Profile } from '@/lib/participant';
 import { payForEvent } from '@/lib/payments';
+import {
+  YUVAAN_EVENT_ID,
+  isYuvaanIdentifier,
+  validateYuvaanForm,
+  yuvaanPreferencesFromMetadata,
+  yuvaanRegistrationPayload,
+  type YuvaanFormData,
+  type YuvaanValidationErrors,
+} from '@/lib/yuvaan';
+import { YuvaanAddonSection } from './YuvaanAddonSection';
 import s from './Portal.module.css';
+
+export const CASCADE_THEMES = [
+  {
+    title: 'The Forgotten Population',
+    description: 'Technology for underserved groups.',
+  },
+  {
+    title: 'Crisis Before Crisis',
+    description: 'Predict disasters before they happen.',
+  },
+  {
+    title: 'Attention Economy',
+    description: 'Protect attention, not exploit it.',
+  },
+  {
+    title: 'Information Asymmetry',
+    description: 'Make hidden information accessible to everyone.',
+  },
+] as const;
 
 export function EventRegistrationSkeleton({ message = 'Loading registration details…' }: { message?: string }) {
   return (
@@ -79,6 +108,19 @@ export function EventRegistration() {
   const [teamName, setTeamName] = useState(''), [identifier, setIdentifier] = useState('');
   const [error, setError] = useState(''), [notice, setNotice] = useState(''), [busy, setBusy] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState<string>('');
+  const [themeError, setThemeError] = useState<string>('');
+  const [yuvaanData, setYuvaanData] = useState<YuvaanFormData>({
+    pref1Committee: '',
+    pref1Motion: 'For',
+    pref2Committee: '',
+    pref2Motion: 'For',
+    pref3Committee: '',
+    pref3Motion: 'For',
+    schoolCollege: '',
+    classYear: '',
+  });
+  const [yuvaanErrors, setYuvaanErrors] = useState<YuvaanValidationErrors>({});
   const refresh = useCallback(async () => {
     if (!user || !requestedEvent) return;
     const token = hasSessionHint() ? 'session' : null;
@@ -97,6 +139,56 @@ export function EventRegistration() {
       if ((hasSessionHint() ? 'session' : null) !== token) return;
       const mine = registrations.registrations.find(item => item.eventId === current.id && item.status !== 'cancelled') || null;
       setEvent(current); setTeam(live); setRegistration(mine); setRegistered(!!mine); setProfileUser(profile.user);
+      const themesFromMeta = mine?.metadata?.themes && Array.isArray(mine.metadata.themes)
+        ? mine.metadata.themes.filter(Boolean)
+        : mine?.metadata?.theme
+        ? mine.metadata.theme.split(',').map(s => s.trim()).filter(Boolean)
+        : [];
+      if (themesFromMeta.length > 0) setSelectedTheme(themesFromMeta[0]);
+
+      const meta = mine?.metadata;
+      // A stored registration files its answers as committeePreference1..3,
+      // which is what the admin panel reads. Fall back to the array shape for
+      // anything written before that was settled on.
+      const storedPreferences = yuvaanPreferencesFromMetadata(meta as Record<string, unknown> | null | undefined);
+      const rawPreferences = (storedPreferences.length >= 3
+        ? storedPreferences
+        : meta?.preferences || (mine as unknown as { preferences?: { committee?: string; motion?: string }[] })?.preferences) as { committee?: string; motion?: string }[] | undefined;
+      const legacyPrefs = (meta?.committeePreferences || mine?.committeePreferences) as string[] | undefined;
+      const legacyMotion = ((meta?.motionPreference || mine?.motionPreference || 'For') as 'For' | 'Against');
+      const school = (meta?.schoolCollege || mine?.schoolCollege) as string | undefined;
+      const cy = (meta?.classYear || mine?.classYear) as string | undefined;
+      const currentCollege = profile.user.collegeName || user.collegeName || '';
+
+      if (Array.isArray(rawPreferences) && rawPreferences.length >= 3) {
+        setYuvaanData({
+          pref1Committee: rawPreferences[0]?.committee || '',
+          pref1Motion: (rawPreferences[0]?.motion as 'For' | 'Against') || 'For',
+          pref2Committee: rawPreferences[1]?.committee || '',
+          pref2Motion: (rawPreferences[1]?.motion as 'For' | 'Against') || 'For',
+          pref3Committee: rawPreferences[2]?.committee || '',
+          pref3Motion: (rawPreferences[2]?.motion as 'For' | 'Against') || 'For',
+          schoolCollege: school || currentCollege,
+          classYear: cy || '',
+        });
+      } else if (Array.isArray(legacyPrefs) && legacyPrefs.length >= 3) {
+        setYuvaanData({
+          pref1Committee: legacyPrefs[0] || '',
+          pref1Motion: legacyMotion,
+          pref2Committee: legacyPrefs[1] || '',
+          pref2Motion: legacyMotion,
+          pref3Committee: legacyPrefs[2] || '',
+          pref3Motion: legacyMotion,
+          schoolCollege: school || currentCollege,
+          classYear: cy || '',
+        });
+      } else if (currentCollege) {
+        setYuvaanData(prev => ({
+          ...prev,
+          schoolCollege: prev.schoolCollege || currentCollege,
+        }));
+      }
+
       setReady(true); setError('');
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) router.replace(`/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`);
@@ -181,6 +273,10 @@ export function EventRegistration() {
         eventName: event.name,
         user: participant,
         teamId: team?.id ?? null,
+        // On an event charged before registration the registration row is
+        // created by the payment itself, so the form answers have to travel
+        // with the order — otherwise they are gone once the fee is taken.
+        ...(isYuvaan ? { addons: yuvaanRegistrationPayload(yuvaanData) } : {}),
         onProgress: setNotice,
       });
       if (!completed) { setNotice(''); return; } // Checkout dismissed without paying.
@@ -199,7 +295,81 @@ export function EventRegistration() {
   const handlePaymentAndRegistration = () => runPayment(`Payment verified! Registration confirmed for ${event?.name}.`);
   const handlePayFee = () => runPayment(`Payment verified! Your place in ${feeRoundName || 'the next round'} is confirmed.`);
 
-  const handleAction = paymentRequired ? handlePaymentAndRegistration : () => mutate(() => participantRequest('/api/user/registrations', { eventId: event!.id, ...(team ? { teamId: team.id } : {}) }), 'Registration confirmed!');
+  const isCascade = event?.id === 'tf26_cascade' || event?.slug === 'cascade' || requestedEvent?.toLowerCase() === 'cascade' || requestedEvent?.toLowerCase() === 'tf26_cascade';
+  const isYuvaan = isYuvaanIdentifier(event?.id) || isYuvaanIdentifier(event?.slug) || isYuvaanIdentifier(requestedEvent);
+
+  // Cascade is single-theme: new registrations always carry exactly one. Older registrations
+  // may still hold several, so the confirmation view renders whatever the server has.
+  const registeredThemes = registration?.metadata?.themes?.length
+    ? registration.metadata.themes
+    : registration?.metadata?.theme
+    ? registration.metadata.theme.split(',').map(t => t.trim()).filter(Boolean)
+    : selectedTheme
+    ? [selectedTheme]
+    : [];
+
+  const isYuvaanComplete =
+    Boolean(yuvaanData.pref1Committee) &&
+    Boolean(yuvaanData.pref2Committee) &&
+    Boolean(yuvaanData.pref3Committee) &&
+    yuvaanData.pref1Committee !== yuvaanData.pref2Committee &&
+    yuvaanData.pref1Committee !== yuvaanData.pref3Committee &&
+    yuvaanData.pref2Committee !== yuvaanData.pref3Committee &&
+    Boolean(yuvaanData.pref1Motion) &&
+    Boolean(yuvaanData.pref2Motion) &&
+    Boolean(yuvaanData.pref3Motion) &&
+    Boolean(yuvaanData.schoolCollege.trim()) &&
+    Boolean(yuvaanData.classYear.trim());
+
+  const handleYuvaanChange = <K extends keyof YuvaanFormData>(field: K, value: YuvaanFormData[K]) => {
+    setYuvaanData(prev => ({ ...prev, [field]: value }));
+    setYuvaanErrors(prev => ({
+      ...prev,
+      [field]: undefined,
+      ...(field.includes('Committee') ? { committees: undefined } : {}),
+    }));
+  };
+
+  const selectTheme = (themeTitle: string) => {
+    setSelectedTheme(themeTitle);
+    setThemeError('');
+  };
+
+  const handleAction = () => {
+    if (isCascade && !selectedTheme) {
+      setThemeError('Please select a theme before completing Cascade registration.');
+      const el = document.getElementById('cascade-theme-selection');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    setThemeError('');
+
+    if (isYuvaan) {
+      const validation = validateYuvaanForm(yuvaanData);
+      if (!validation.valid) {
+        setYuvaanErrors(validation.errors);
+        const el = document.getElementById('yuvaan-addon-form');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+    }
+
+    if (paymentRequired) {
+      return handlePaymentAndRegistration();
+    }
+    return mutate(
+      () =>
+        participantRequest('/api/user/registrations', {
+          eventId: isYuvaan ? YUVAAN_EVENT_ID : event!.id,
+          ...(team ? { teamId: team.id } : {}),
+          ...(isCascade && selectedTheme
+            ? { themes: [selectedTheme], theme: selectedTheme }
+            : {}),
+          ...(isYuvaan ? yuvaanRegistrationPayload(yuvaanData) : {}),
+        }),
+      'Registration confirmed!'
+    );
+  };
   return <main className={s.shell}>
     <Link className={s.eyebrow} href="/events">← All events</Link>
     <header className={s.hero}><div><p className={`${s.eyebrow} mt-5`}>{event?.club || 'TantraFiesta 2026'}</p><h1>{event?.name || 'Your next challenge'}</h1><p className={s.muted}>{event?.isTeamEvent ? 'Build your squad. Invite with TF IDs. Register together.' : 'One participant. One challenge. Your next achievement.'}</p></div><Link className={s.secondary} href="/profile">My portal ↗</Link></header>
@@ -234,10 +404,143 @@ export function EventRegistration() {
         <Link className={`${s.button} mt-5`} href="/events">Explore events</Link>
       </section>}
       {registered || team?.stats.isRegistered ? <section className={s.card}><span className={`${s.badge} ${s.accepted}`}>Registered</span><h2 className="mt-4">You’re on the list.</h2><p className={s.muted}>Your registration is saved for {event.name}. Track your events and rounds in your portal.</p>
+        {isCascade && registeredThemes.length > 0 && (
+          <div className="mt-4 p-4 rounded-xl bg-white/[0.04] border border-[#faff52]/20">
+            <p className="text-xs uppercase tracking-wider text-[#b8afcf] font-mono mb-2">
+              Registered Theme{registeredThemes.length > 1 ? 's' : ''}
+            </p>
+            <div className="flex flex-col gap-2">
+              {registeredThemes.map((tTitle) => {
+                const info = CASCADE_THEMES.find(t => t.title === tTitle);
+                return (
+                  <div key={tTitle} className="p-2.5 rounded-lg bg-black/20 border border-[#faff52]/15">
+                    <p className="text-sm font-semibold text-[#faff52]">{tTitle}</p>
+                    {info?.description && <p className="text-xs text-[#b8afcf] mt-0.5">{info.description}</p>}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+        {isYuvaan && (
+          <div className="mt-4 p-4 rounded-xl bg-white/[0.04] border border-[#faff52]/20">
+            <p className="text-xs uppercase tracking-wider text-[#b8afcf] font-mono mb-2">
+              Registered Delegate Preferences
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-sm">
+              <div className="p-2.5 rounded-lg bg-black/20 border border-[#faff52]/15">
+                <p className="text-xs text-[#b8afcf] font-mono uppercase">1st Preference</p>
+                <p className="text-sm font-semibold text-[#faff52] mt-0.5">{yuvaanData.pref1Committee || '1st Preference'}</p>
+                <span className="inline-block mt-1 text-[11px] font-mono px-2 py-0.5 rounded bg-[#faff52]/15 text-[#faff52] border border-[#faff52]/30">
+                  Motion: {yuvaanData.pref1Motion}
+                </span>
+              </div>
+              <div className="p-2.5 rounded-lg bg-black/20 border border-[#faff52]/15">
+                <p className="text-xs text-[#b8afcf] font-mono uppercase">2nd Preference</p>
+                <p className="text-sm font-semibold text-[#faff52] mt-0.5">{yuvaanData.pref2Committee || '2nd Preference'}</p>
+                <span className="inline-block mt-1 text-[11px] font-mono px-2 py-0.5 rounded bg-[#faff52]/15 text-[#faff52] border border-[#faff52]/30">
+                  Motion: {yuvaanData.pref2Motion}
+                </span>
+              </div>
+              <div className="p-2.5 rounded-lg bg-black/20 border border-[#faff52]/15">
+                <p className="text-xs text-[#b8afcf] font-mono uppercase">3rd Preference</p>
+                <p className="text-sm font-semibold text-[#faff52] mt-0.5">{yuvaanData.pref3Committee || '3rd Preference'}</p>
+                <span className="inline-block mt-1 text-[11px] font-mono px-2 py-0.5 rounded bg-[#faff52]/15 text-[#faff52] border border-[#faff52]/30">
+                  Motion: {yuvaanData.pref3Motion}
+                </span>
+              </div>
+              <div className="p-2.5 rounded-lg bg-black/20 border border-[#faff52]/15 sm:col-span-3">
+                <p className="text-xs text-[#b8afcf] font-mono uppercase">Institution &amp; Class</p>
+                <p className="text-sm font-semibold text-white mt-0.5">
+                  {yuvaanData.schoolCollege || (registration?.metadata?.schoolCollege || registration?.schoolCollege as string) || 'Not provided'}
+                  {yuvaanData.classYear || (registration?.metadata?.classYear || registration?.classYear as string) ? ` · ${yuvaanData.classYear || (registration?.metadata?.classYear || registration?.classYear as string)}` : ''}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
         {/* Only decided rounds are worth showing - every event carries a
             Round 1 from creation, so undecided ones say nothing. */}
         {!!decidedRounds.length && <div className="flex flex-wrap gap-2 mt-4">{decidedRounds.map(round => <span key={round.roundId} className={`${s.badge} ${round.status === 'QUALIFIED' ? s.accepted : ''}`}>{round.name}: {round.status === 'QUALIFIED' ? 'Promoted' : 'Not promoted'}</span>)}</div>}
         <Link className={`${s.button} mt-5`} href="/profile">Go to my portal</Link></section> : null}
+
+      {isYuvaan && !registered && !team?.stats.isRegistered && (
+        <YuvaanAddonSection
+          data={yuvaanData}
+          onChange={handleYuvaanChange}
+          errors={yuvaanErrors}
+          disabled={busy}
+        />
+      )}
+
+      {isCascade && !registered && !team?.stats.isRegistered && (
+        <section id="cascade-theme-selection" className={s.card}>
+          <div className={s.row}>
+            <div>
+              <p className={s.eyebrow}>Theme Selection</p>
+              <h2 className="mt-2">Choose your Cascade Theme</h2>
+            </div>
+            <span className={`${s.badge} ${selectedTheme ? s.accepted : s.pending}`}>
+              {selectedTheme ? 'Theme Selected' : 'Required'}
+            </span>
+          </div>
+          <p className={`${s.muted} mb-4`}>
+            Pick the single official theme your hackathon submission will compete under. You can change your pick until you register.
+          </p>
+
+          {themeError && (
+            <div className="mb-4 p-3 rounded-xl bg-pink-500/15 border border-pink-500/40 text-pink-300 text-sm flex items-center gap-2" role="alert">
+              <span>⚠️</span>
+              <span>{themeError}</span>
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 gap-3">
+            {CASCADE_THEMES.map((t, idx) => {
+              const isSelected = selectedTheme === t.title;
+              const disabled = Boolean(registered || team?.stats.isRegistered || (event.isTeamEvent && team && !team.isLeader));
+              return (
+                <label
+                  key={t.title}
+                  className={`flex items-start gap-3.5 p-4 rounded-xl border transition-all cursor-pointer ${
+                    isSelected
+                      ? 'bg-[#faff52]/10 border-[#faff52] shadow-sm shadow-[#faff52]/20'
+                      : 'bg-black/20 border-[#65508266] hover:border-[#faff52]/40 hover:bg-white/[0.02]'
+                  } ${disabled ? 'opacity-80 cursor-default' : ''}`}
+                >
+                  <input
+                    type="radio"
+                    name="cascade-theme"
+                    value={t.title}
+                    checked={isSelected}
+                    disabled={disabled}
+                    onChange={() => selectTheme(t.title)}
+                    className="mt-1 accent-[#faff52] w-4 h-4 cursor-pointer"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-mono font-bold text-[#faff52]/80">{idx + 1}.</span>
+                      <span className={`text-base font-bold ${isSelected ? 'text-[#faff52]' : 'text-white'}`}>
+                        {t.title}
+                      </span>
+                    </div>
+                    <p className="text-xs sm:text-sm text-[#b8afcf] mt-1 leading-relaxed">
+                      {t.description}
+                    </p>
+                  </div>
+                </label>
+              );
+            })}
+          </div>
+
+          {event.isTeamEvent && team && !team.isLeader && (
+            <p className={`${s.fine} mt-3 text-[#b8afcf]`}>
+              ℹ️ Only your team leader can submit the final theme selection for the team.
+            </p>
+          )}
+        </section>
+      )}
+
       {event.isTeamEvent ? !team ? <section className={s.card}><h2>Create your team</h2><p className={`${s.muted} mb-5`}>You’ll be the leader. Invite teammates after creating your draft.</p><form className={s.form} onSubmit={e => { e.preventDefault(); void mutate(() => participantRequest('/api/user/teams', { eventId: event.id, name: teamName, members: [] }), 'Team created. Invite your teammates below.'); }}>
         <label>Team name<input required maxLength={80} value={teamName} onChange={e => setTeamName(e.target.value)} placeholder="Give your squad a name"/></label><label>Team leader<input readOnly value={`${fullName(participant)} · ${participant.festId || participant.email}`}/></label><button disabled={busy || closed || registered || !isVerified || isProfileIncomplete} className={s.button}>{busy ? 'Creating…' : 'Create team'}</button>
         {!isVerified && <p className={`${s.fine} text-pink-300 mt-2`}>Please verify your email before creating a team.</p>}
@@ -252,7 +555,54 @@ export function EventRegistration() {
         </section>
         {team.isLeader && !team.stats.rosterLocked && <section className={s.card}><h2>Invite a teammate</h2><p className={`${s.muted} mb-4`}>Ask for their TF ID from their profile. They’ll receive an invitation in their portal.</p><form className={s.form} onSubmit={e => { e.preventDefault(); void mutate(async () => { await participantRequest(`/api/user/teams/${team.id}/invites`, { identifier: identifier.trim().toUpperCase() }); setIdentifier(''); }, 'Invitation sent. Your teammate can accept or decline in their inbox.'); }}><label>Teammate’s TF ID<input required pattern="[Tt][Ff][0-9]{6}" placeholder="TF123456" value={identifier} onChange={e => setIdentifier(e.target.value.toUpperCase())}/></label><button className={s.button} disabled={busy || closed || team.members.length + team.stats.pendingCount >= (event.maxTeamSize || 4)}>Send invitation</button></form></section>}
       </> : <section className={s.card}><h2>Your participant details</h2><h3>{fullName(participant)}</h3><p className={s.muted}>{participant.email}</p><p className={s.id}>{participant.festId}</p><p className={s.muted}>{participant.collegeName || 'You can add your college in your profile.'}</p></section>}
-    </div><aside className={s.card}><p className={s.eyebrow}>Registration summary</p><h2 className="mt-4">{event.name}</h2><div className={s.entry}><p className={s.muted}>Format</p><h3>{event.isTeamEvent ? `Team · ${event.minTeamSize}–${event.maxTeamSize} members` : 'Individual'}</h3></div><div className={s.entry}><p className={s.muted}>Registration closes</p><h3>{formatDate(event.registrationEndTime)} IST</h3></div><div className={s.entry}><p className={s.muted}>Entry fee</p><h3>{feeCharged ? `₹${feeTotal}${event.paymentTrigger === 'after_round' ? (feePaid ? ' · paid' : feeDueNow ? ' · due now' : notPromoted ? ' · not applicable' : ' · after qualification') : ''}` : 'Free registration'}</h3>{feeIsPerHead && <p className={s.fine}>{team ? `₹${event.price} × ${teamSize} member${teamSize === 1 ? '' : 's'} · paid once by the team leader` : `₹${event.price} per participant · paid once by the team leader`}</p>}{!feeIsPerHead && event.isTeamEvent && feeCharged && <p className={s.fine}>Flat fee for the whole team · paid once by the team leader</p>}</div>
+    </div><aside className={s.card}><p className={s.eyebrow}>Registration summary</p><h2 className="mt-4">{event.name}</h2><div className={s.entry}><p className={s.muted}>Format</p><h3>{event.isTeamEvent ? `Team · ${event.minTeamSize}–${event.maxTeamSize} members` : 'Individual'}</h3></div><div className={s.entry}><p className={s.muted}>Registration closes</p><h3>{formatDate(event.registrationEndTime)} IST</h3></div>
+      {isCascade && (
+        <div className={s.entry}>
+          <p className={s.muted}>Cascade Theme</p>
+          <h3 className={registeredThemes.length > 0 || selectedTheme ? 'text-[#faff52]' : 'text-pink-300'}>
+            {registeredThemes.length > 0
+              ? registeredThemes.join(', ')
+              : selectedTheme || 'None selected (Required)'}
+          </h3>
+        </div>
+      )}
+      {isYuvaan && (
+        <div className={s.entry}>
+          <p className={s.muted}>Yuvaan Preferences</p>
+          <div className="mt-1 space-y-2 text-xs">
+            <div className="space-y-1">
+              <p className="text-[#b8afcf]">Preferences &amp; Stances:</p>
+              <div className="space-y-0.5">
+                <p className={yuvaanData.pref1Committee ? 'text-white' : 'text-pink-300'}>
+                  <strong className="text-[#faff52]">1. </strong>{yuvaanData.pref1Committee || 'Pending'}
+                  {yuvaanData.pref1Committee && <span className="text-[#83ebba] font-mono ml-1.5">({yuvaanData.pref1Motion})</span>}
+                </p>
+                <p className={yuvaanData.pref2Committee ? 'text-white' : 'text-pink-300'}>
+                  <strong className="text-[#faff52]">2. </strong>{yuvaanData.pref2Committee || 'Pending'}
+                  {yuvaanData.pref2Committee && <span className="text-[#83ebba] font-mono ml-1.5">({yuvaanData.pref2Motion})</span>}
+                </p>
+                <p className={yuvaanData.pref3Committee ? 'text-white' : 'text-pink-300'}>
+                  <strong className="text-[#faff52]">3. </strong>{yuvaanData.pref3Committee || 'Pending'}
+                  {yuvaanData.pref3Committee && <span className="text-[#83ebba] font-mono ml-1.5">({yuvaanData.pref3Motion})</span>}
+                </p>
+              </div>
+            </div>
+            <div>
+              <p className="text-[#b8afcf]">School / College:</p>
+              <p className={yuvaanData.schoolCollege.trim() ? 'text-white' : 'text-pink-300'}>
+                {yuvaanData.schoolCollege.trim() || 'Required'}
+              </p>
+            </div>
+            <div>
+              <p className="text-[#b8afcf]">Class / Year:</p>
+              <p className={yuvaanData.classYear.trim() ? 'text-white' : 'text-pink-300'}>
+                {yuvaanData.classYear.trim() || 'Required'}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      <div className={s.entry}><p className={s.muted}>Entry fee</p><h3>{feeCharged ? `₹${feeTotal}${event.paymentTrigger === 'after_round' ? (feePaid ? ' · paid' : feeDueNow ? ' · due now' : notPromoted ? ' · not applicable' : ' · after qualification') : ''}` : 'Free registration'}</h3>{feeIsPerHead && <p className={s.fine}>{team ? `₹${event.price} × ${teamSize} member${teamSize === 1 ? '' : 's'} · paid once by the team leader` : `₹${event.price} per participant · paid once by the team leader`}</p>}{!feeIsPerHead && event.isTeamEvent && feeCharged && <p className={s.fine}>Flat fee for the whole team · paid once by the team leader</p>}</div>
       {closed && <p className={s.error}>Registration is closed.</p>}
       
       {event.isTeamEvent && !registered && <p className={`${s.muted} mb-4`}>{!team ? 'Create a team first.' : !team.isLeader ? 'Your team leader completes registration for everyone.' : !team.stats.isReadyForRegistration ? 'Meet the minimum team size and resolve all pending invitations before registering.' : 'Your team is ready to register.'}</p>}
@@ -276,17 +626,25 @@ export function EventRegistration() {
           <p className={s.fine}>{leadsTheTeam ? `You were promoted to ${feeRoundName || 'the next round'}. Pay to confirm your place.` : 'Your team leader pays this fee on behalf of the whole team.'}</p>
         </>
       ) : (
-        <button className={`${s.button} w-full`} disabled={busy || !canRegister} onClick={handleAction}>
-          {busy
-            ? paymentRequired ? 'Processing payment…' : 'Please wait…'
-            : feePaid
-            ? 'Fee paid'
-            : registered
-            ? 'Registered'
-            : paymentRequired
-            ? event?.isTeamEvent ? `Pay ₹${feeTotal} & Register team` : `Pay ₹${feeTotal} & Register`
-            : event?.isTeamEvent ? 'Register team' : 'Confirm registration'}
-        </button>
+        <>
+          {isCascade && !selectedTheme && !registered && (
+            <p className={`${s.fine} text-[#FFFF1A] mb-2`}>⚠️ Please select a theme to register.</p>
+          )}
+          {isYuvaan && !isYuvaanComplete && !registered && (
+            <p className={`${s.fine} text-[#FFFF1A] mb-2`}>⚠️ Complete all 4 Yuvaan fields to register.</p>
+          )}
+          <button className={`${s.button} w-full`} disabled={busy || !canRegister} onClick={handleAction}>
+            {busy
+              ? paymentRequired ? 'Processing payment…' : 'Please wait…'
+              : feePaid
+              ? 'Fee paid'
+              : registered
+              ? 'Registered'
+              : paymentRequired
+              ? event?.isTeamEvent ? `Pay ₹${feeTotal} & Register team` : `Pay ₹${feeTotal} & Register`
+              : event?.isTeamEvent ? 'Register team' : 'Confirm registration'}
+          </button>
+        </>
       )}
       <p className={s.fine}>Joining a team does not register it. The leader confirms registration once everyone is ready.</p>
     </aside></div>}

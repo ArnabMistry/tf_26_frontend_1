@@ -27,15 +27,19 @@ export function Footer({ variant = "purple" }: FooterProps) {
         const isIntersecting = entries[0]?.isIntersecting ?? false;
         if (isIntersecting && !wasVisibleRef.current) {
           setAnimationRun((run) => run + 1);
+          setIsVisible(true);
         }
         wasVisibleRef.current = isIntersecting;
-        setIsVisible(isIntersecting);
+        if (isIntersecting) {
+          setIsVisible(true);
+        }
       },
-      { threshold: 0.5, rootMargin: "0px 0px -100px 0px" }
+      { threshold: 0.15 }
     );
 
-    if (headingRef.current) {
-      observer.observe(headingRef.current);
+    const target = containerRef.current || headingRef.current;
+    if (target) {
+      observer.observe(target);
     }
 
     return () => observer.disconnect();
@@ -118,6 +122,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
                   <Link href="/" className="hover:text-black hover:underline py-0.5 transition-colors">Home</Link>
                   <Link href="/about" className="hover:text-black hover:underline py-0.5 transition-colors">About</Link>
                   <Link href="/events" className="hover:text-black hover:underline py-0.5 transition-colors">Events</Link>
+                  {/* <Link href="/teams" className="hover:text-black hover:underline py-0.5 transition-colors">Teams</Link> */}
                   <Link href="/contact" className="hover:text-black hover:underline py-0.5 transition-colors">How to reach?</Link>
                   <Link href="/faqs" className="hover:text-black hover:underline py-0.5 transition-colors">FAQs</Link>
                   <Link href="/refund-policy" className="hover:text-black hover:underline py-0.5 transition-colors">Refund Policy</Link>
@@ -251,6 +256,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
                   <Link href="/" className="hover:text-white hover:underline py-0.5 transition-colors">Home</Link>
                   <Link href="/about" className="hover:text-white hover:underline py-0.5 transition-colors">About</Link>
                   <Link href="/events" className="hover:text-white hover:underline py-0.5 transition-colors">Events</Link>
+                  {/* <Link href="/teams" className="hover:text-white hover:underline py-0.5 transition-colors">Teams</Link> */}
                   <Link href="/contact" className="hover:text-white hover:underline py-0.5 transition-colors">How to reach?</Link>
                   <Link href="/faqs" className="hover:text-white hover:underline py-0.5 transition-colors">FAQs</Link>
                   <Link href="/refund-policy" className="hover:text-white hover:underline py-0.5 transition-colors">Refund Policy</Link>
