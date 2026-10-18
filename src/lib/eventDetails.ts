@@ -1301,14 +1301,14 @@ export const eventDetails: EventDetail[] = [
       },
       {
         name: "Round 2 — Knockout Elimination: Arena Battle",
-        when: "25 Oct 2026, 3:00 PM – 6:00 PM & 8:00 PM – 11:00 PM",
+        when: "25 Oct 2026, 5:00 PM – 11:00 PM",
         mode: "Offline",
         detail:
           "Five-minute matches in an elimination format. The losing bot is eliminated and the winner advances, continuing until the top 6 teams qualify for the finals — 2 from 1.5 kg, 2 from 8 kg and 2 from 15 kg. Victory by knock-out: the opposing bot fails to move 6 inches within 30 seconds. Scored on aggression, damage, control and strategy.",
       },
       {
         name: "Round 3 — Finals: Championship Battles",
-        when: "26 Oct 2026, 12:00 PM – 6:00 PM",
+        when: "26 Oct 2026, 10:00 AM – 6:00 PM",
         mode: "Offline",
         detail:
           "Three championship matches, one final per weight category: 1.5 kg, 8 kg, and 15 kg, consisting of two rounds of 3 minutes each, with a 5-minute break after Round 1 for technical repairs. Winners of each weight category are declared on final-match performance.",
@@ -1739,18 +1739,18 @@ export const eventDetails: EventDetail[] = [
     registrationUrl: "https://unstop.com/workshops-webinars/silicon-rush-tantrafiesta26-iiitn-1770343",
     name: "Silicon Rush — VLSI Workshop",
     tagline: "Hands-on silicon design and semiconductor workshop",
-    image: "/event-posters/Iotics.webp",
+    image: "/event-posters/VLSI.webp",
     clubs: [{ name: "Iotics", slug: "iotics" }],
     description:
       "A comprehensive, hands-on workshop on Very Large Scale Integration (VLSI) and semiconductor design organized by Iotics, the robotics and IoT club of IIIT Nagpur. Learn modern EDA workflows, digital circuit modeling, and silicon architecture fundamentals.",
-    prizePool: "₹0",
+    prizePool: "₹1,00,000+",
     prizeNote:
       "Certificates, kits, and workshop goodies for all attendees. Participation and learning-focused with no cash prize.",
     prizes: [],
     stages: [
       {
         name: "Workshop Session",
-        when: "Day 2, 9:00 AM – 2:00 PM",
+        when: "26 Oct 2026, 9:00 AM – 2:00 PM",
         mode: "Offline",
         detail:
           "Hands-on VLSI design workshop in CR 204. Interactive lecture, EDA tool walkthrough, and simulation.",
