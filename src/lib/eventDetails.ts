@@ -213,8 +213,8 @@ export const eventDetails: EventDetail[] = [
       "RAGNAROK is the flagship agentic hackathon of TantraFiesta 2026, organized by AIRA, the AI/ML domain at CRISPR, IIIT Nagpur. The age of passive AI is ending: the next wave of software is built from agents that reason, plan, use tools, and act on their own. RAGNAROK brings together the sharpest student builders in India to design, ship, and battle-test such systems under real pressure. Qualify online, then reach the IIIT Nagpur campus for a 24-hour build where only the best agents survive.",
     prizePool: "₹50,000",
     prizes: [
-      { position: 1, label: "Winner", amount: "₹26,000", note: "Including cash and goodies." },
-      { position: 2, label: "1st Runner Up", amount: "₹14,000", note: "Including cash and goodies." },
+      { position: 1, label: "Winner", amount: "₹25,000", note: "Including cash and goodies." },
+      { position: 2, label: "1st Runner Up", amount: "₹15,000", note: "Including cash and goodies." },
       { position: 3, label: "2nd Runner Up", amount: "₹10,000", note: "Including cash and goodies." },
     ],
     stages: [
@@ -1524,11 +1524,7 @@ export const eventDetails: EventDetail[] = [
     description:
       "Yuvaan is a youth conclave designed to encourage structured discussion, critical thinking, public speaking, questioning and constructive disagreement. The format combines prepared individual speeches with direct questioning and open interactive discussion, treating the committee as an intellectual discussion rather than a personal confrontation.",
     prizePool: "₹30,000",
-    prizes: [
-      { position: 1, label: "Winner", amount: "₹15,000" },
-      { position: 2, label: "1st Runner-Up", amount: "₹10,000" },
-      { position: 3, label: "2nd Runner-Up", amount: "₹5,000" },
-    ],
+    prizes: [],
     stages: [
       {
         name: "Conclave",
