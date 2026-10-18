@@ -125,11 +125,26 @@ export const eventDetails: EventDetail[] = [
       "CASCADE is the flagship hackathon of TantraFiesta 2026 at IIIT Nagpur, organised by CRISPR × ELEVATE. It is a 24-hour offline hackathon with a prize pool of up to ₹2 lakh including cash and goodies, where teams build practical solutions to real-world problems across four themes.",
     prizePool: "₹2,00,000",
     prizeNote:
-      "₹2,00,000 total prize pool across 4 themes: 1st Prize is ₹30,000 into 4 diff themes, 2nd Prize is ₹15,000 into 4 themes, and Special Mention is ₹10,000 × 2.",
+      "₹2,00,000 total prize pool across 4 themes: 1st Prize is ₹45,000 for each of the 4 themes, ₹10,000 for the Side Quest, and ₹10,000 for the Best Women Team.",
     prizes: [
-      { position: 1, label: "1st Prize", amount: "₹30,000 × 4 Themes", note: "₹30,000 for each of the 4 themes." },
-      { position: 2, label: "2nd Prize", amount: "₹15,000 × 4 Themes", note: "₹15,000 for each of the 4 themes." },
-      { position: 3, label: "Special Mention", amount: "₹10,000 × 2", note: "₹10,000 × 2 for Special Mentions." },
+      {
+        position: 1,
+        label: "1st Prize",
+        amount: "₹45,000 × 4 Themes",
+        note: "₹45,000 for each of the 4 themes.",
+      },
+      {
+        position: 0,
+        label: "Side Quest",
+        amount: "₹10,000",
+        note: "₹10,000 for the Side Quest.",
+      },
+      {
+        position: 0,
+        label: "Best Women Team",
+        amount: "₹10,000",
+        note: "₹10,000 for the Best Women Team.",
+      },
     ],
     stages: [
       {
@@ -177,6 +192,7 @@ export const eventDetails: EventDetail[] = [
       "Teams must have 3–4 members and provide accurate registration details.",
       "All submitted work must be original or appropriately credited — plagiarism and misrepresentation are prohibited.",
       "Teams may compete in multiple themes and win multiple awards, subject to each award's eligibility criteria.",
+      "**STACKING ALLOWED**",
       "Self-voting in the Stars system is not allowed.",
       "Participants must follow organiser instructions and maintain respectful conduct.",
       "Judges' decisions are final, subject to the officially published event rules.",
@@ -1434,7 +1450,7 @@ export const eventDetails: EventDetail[] = [
     mode: "Offline",
     startDate: "2026-10-26T09:00:00+05:30",
     endDate: "2026-10-26T14:00:00+05:30",
-    venue: "Amphi Garden, Indian Institute of Information Technology, Nagpur",
+    venue: "Besides Amphitheatre, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "line-o-mania",
