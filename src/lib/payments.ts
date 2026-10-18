@@ -33,6 +33,13 @@ export type PayForEventOptions = {
   user: Person;
   /** Team events: the team the fee is being paid for. Only the leader may pay. */
   teamId?: number | null;
+  /**
+   * Registration answers to record with the payment. An event charged before
+   * registration has no registration row yet — it is created once the fee is
+   * captured — so anything collected on the form (Yuvaan's committee
+   * preferences) has to travel with the order or it is lost.
+   */
+  addons?: Record<string, unknown>;
   /** Progress copy for the caller to surface while the gateway opens. */
   onProgress?: (message: string) => void;
 };
@@ -49,13 +56,14 @@ export type PayForEventOptions = {
  * portal (fees that fall due after a round promotion) so both go through the
  * identical create → checkout → verify sequence.
  */
-export async function payForEvent({ eventId, eventName, user, teamId, onProgress }: PayForEventOptions): Promise<boolean> {
+export async function payForEvent({ eventId, eventName, user, teamId, addons, onProgress }: PayForEventOptions): Promise<boolean> {
   const notify = onProgress || (() => {});
 
   notify('Creating secure payment order…');
   const order = await participantRequest<OrderResponse>('/api/payments/orders', {
     eventId,
     ...(teamId ? { teamData: { teamId } } : {}),
+    ...(addons ? { addons } : {}),
   });
 
   notify('Opening payment gateway…');

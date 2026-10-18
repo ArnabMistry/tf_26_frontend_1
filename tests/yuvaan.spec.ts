@@ -186,49 +186,18 @@ test.describe('Yuvaan (Youth Conclave) Registration Add-on Form with Per-Prefere
     });
   });
 
-  test('modal registration on EventDetail works with per-preference motions', async ({ page }) => {
-    const fixture = await mockYuvaan(page);
+  test('the event page sends entrants to the registration page, not a popup', async ({ page }) => {
+    await mockYuvaan(page);
     await page.goto('/events/yuvaan');
 
     // Verify that the static debate tracks card is NOT displayed on the page
     await expect(page.getByRole('heading', { name: 'Yuvaan Debate Tracks' })).not.toBeVisible();
 
-    // Click the "Register Now" button in the prize/action box
-    await page.getByRole('button', { name: 'Register now for Yuvaan: Youth Conclave' }).click();
-
-    // Modal should open
-    const modal = page.getByRole('dialog', { name: 'Yuvaan Conclave Preferences' });
-    await expect(modal).toBeVisible();
-
-    // Fill modal fields: Pref 1: Human Development (For), Pref 2: Press (Against), Pref 3: Civic laws (For)
-    await modal.locator('#yuvaan-pref-1-committee').selectOption('Human Development');
-    await modal.locator('#yuvaan-pref-1-motion-for').check();
-
-    await modal.locator('#yuvaan-pref-2-committee').selectOption('Press');
-    await modal.locator('#yuvaan-pref-2-motion-against').check();
-
-    await modal.locator('#yuvaan-pref-3-committee').selectOption('Civic laws and policies');
-    await modal.locator('#yuvaan-pref-3-motion-for').check();
-
-    await modal.locator('#yuvaan-school-college').fill('IIIT Nagpur');
-    await modal.locator('#yuvaan-class-year').fill('3rd Year');
-
-    // Submit modal
-    await modal.getByRole('button', { name: 'Confirm Registration' }).click();
-
-    // Modal success state
-    await expect(page.getByText('Registration Confirmed!')).toBeVisible();
-
-    const payload = fixture.getLastPayload();
-    expect(payload).toEqual({
-      eventId: 'tf26_yuvaan',
-      preferences: [
-        { committee: 'Human Development', motion: 'For' },
-        { committee: 'Press', motion: 'Against' },
-        { committee: 'Civic laws and policies', motion: 'For' },
-      ],
-      schoolCollege: 'IIIT Nagpur',
-      classYear: '3rd Year',
-    });
+    // Yuvaan used to open its own registration dialog here, which meant two
+    // copies of the preferences form to keep in step. There is now one, on
+    // the registration page, and Register Now is an ordinary link to it.
+    const register = page.getByRole('link', { name: 'Register now for Yuvaan: Youth Conclave' });
+    await expect(register).toHaveAttribute('href', '/register/event?eventId=yuvaan');
+    await expect(page.getByRole('dialog', { name: 'Yuvaan Conclave Preferences' })).toHaveCount(0);
   });
 });
