@@ -116,7 +116,7 @@ export const eventDetails: EventDetail[] = [
     registrationUrl: "https://unstop.com/hackathons/cascade26-flagship-hackathon-tantrafiesta26-iiitn-1766233",
     name: "Cascade",
     tagline: "The flagship 24-hour hackathon",
-    image: "/event-posters/Cas-Cade.webp",
+    image: "/event-posters/cas-cade.webp",
     clubs: [
       { name: "CRISPR", slug: "crispr" },
       { name: "Elevate", slug: "elevate" },
@@ -125,11 +125,26 @@ export const eventDetails: EventDetail[] = [
       "CASCADE is the flagship hackathon of TantraFiesta 2026 at IIIT Nagpur, organised by CRISPR × ELEVATE. It is a 24-hour offline hackathon with a prize pool of up to ₹2 lakh including cash and goodies, where teams build practical solutions to real-world problems across four themes.",
     prizePool: "₹2,00,000",
     prizeNote:
-      "₹2,00,000 total prize pool across 4 themes: 1st Prize is ₹30,000 into 4 diff themes, 2nd Prize is ₹15,000 into 4 themes, and Special Mention is ₹10,000 × 2.",
+      "₹2,00,000 total prize pool across 4 themes: 1st Prize is ₹45,000 for each of the 4 themes, ₹10,000 for the Side Quest, and ₹10,000 for the Best Women Team.",
     prizes: [
-      { position: 1, label: "1st Prize", amount: "₹30,000 × 4 Themes", note: "₹30,000 for each of the 4 themes." },
-      { position: 2, label: "2nd Prize", amount: "₹15,000 × 4 Themes", note: "₹15,000 for each of the 4 themes." },
-      { position: 3, label: "Special Mention", amount: "₹10,000 × 2", note: "₹10,000 × 2 for Special Mentions." },
+      {
+        position: 1,
+        label: "1st Prize",
+        amount: "₹45,000 × 4 Themes",
+        note: "₹45,000 for each of the 4 themes.",
+      },
+      {
+        position: 0,
+        label: "Side Quest",
+        amount: "₹10,000",
+        note: "₹10,000 for the Side Quest.",
+      },
+      {
+        position: 0,
+        label: "Best Women Team",
+        amount: "₹10,000",
+        note: "₹10,000 for the Best Women Team.",
+      },
     ],
     stages: [
       {
@@ -177,6 +192,7 @@ export const eventDetails: EventDetail[] = [
       "Teams must have 3–4 members and provide accurate registration details.",
       "All submitted work must be original or appropriately credited — plagiarism and misrepresentation are prohibited.",
       "Teams may compete in multiple themes and win multiple awards, subject to each award's eligibility criteria.",
+      "**STACKING ALLOWED**",
       "Self-voting in the Stars system is not allowed.",
       "Participants must follow organiser instructions and maintain respectful conduct.",
       "Judges' decisions are final, subject to the officially published event rules.",
@@ -348,7 +364,7 @@ export const eventDetails: EventDetail[] = [
     registrationUrl: "https://unstop.com/hackathons/algorithmia-the-icpc-style-coding-challenge-iiitn-1768266",
     name: "Algorithmia",
     tagline: "The ICPC-style coding challenge",
-    image: "/event-posters/Algorithmia.webp",
+    image: "/event-posters/algorithmia.webp",
     clubs: [{ name: "DotSlash", slug: "dotslash" }],
     description:
       "Get ready to embark on an exciting journey into the world of algorithms and programming with Algorithmia, a prestigious ICPC-style coding competition by DotSlash, the coding club of IIIT Nagpur. Teams of two to three battle to solve challenging algorithmic problems, testing their teamwork, creativity, and coding speed at a national level during TantraFiesta.",
@@ -969,6 +985,7 @@ export const eventDetails: EventDetail[] = [
     registrationUrl: "https://unstop.com/events/rc24-esports-tournament-tantrafiesta26-iiitn-1768504",
     name: "RC 24",
     tagline: "Real Cricket 24 — 1v1 knockout",
+    image: "/event-posters/rc-24.webp",
     clubs: [{ name: "Synergy", slug: "synergy" }],
     description:
       "The RC24 Esports Tournament is the official Real Cricket 24 competition of TantraFiesta, hosted by IIIT Nagpur. Players from any college face off 1v1 in a knockout bracket — first in the Open Rounds and then in the Finals — to prove their batting, bowling and game sense and win the championship title and prizes.",
@@ -1300,14 +1317,14 @@ export const eventDetails: EventDetail[] = [
       },
       {
         name: "Round 2 — Knockout Elimination: Arena Battle",
-        when: "25 Oct 2026, 3:00 PM – 6:00 PM & 8:00 PM – 11:00 PM",
+        when: "25 Oct 2026, 5:00 PM – 11:00 PM",
         mode: "Offline",
         detail:
           "Five-minute matches in an elimination format. The losing bot is eliminated and the winner advances, continuing until the top 6 teams qualify for the finals — 2 from 1.5 kg, 2 from 8 kg and 2 from 15 kg. Victory by knock-out: the opposing bot fails to move 6 inches within 30 seconds. Scored on aggression, damage, control and strategy.",
       },
       {
         name: "Round 3 — Finals: Championship Battles",
-        when: "26 Oct 2026, 12:00 PM – 6:00 PM",
+        when: "26 Oct 2026, 10:00 AM – 6:00 PM",
         mode: "Offline",
         detail:
           "Three championship matches, one final per weight category: 1.5 kg, 8 kg, and 15 kg, consisting of two rounds of 3 minutes each, with a 5-minute break after Round 1 for technical repairs. Winners of each weight category are declared on final-match performance.",
@@ -1433,7 +1450,7 @@ export const eventDetails: EventDetail[] = [
     mode: "Offline",
     startDate: "2026-10-26T09:00:00+05:30",
     endDate: "2026-10-26T14:00:00+05:30",
-    venue: "Amphi Garden, Indian Institute of Information Technology, Nagpur",
+    venue: "Besides Amphitheatre, Indian Institute of Information Technology, Nagpur",
   },
   {
     slug: "line-o-mania",
@@ -1519,7 +1536,7 @@ export const eventDetails: EventDetail[] = [
     registrationUrl: "https://unstop.com/conferences/yuvaan-youth-conclave-iiitn-1766418",
     name: "Yuvaan: Youth Conclave",
     tagline: "Structured debate and discussion",
-    image: "/event-posters/yuvaan.webp",
+    image: "/event-posters/Yuvaan.webp",
     clubs: [{ name: "Orator", slug: "orator" }],
     description:
       "Yuvaan is a youth conclave designed to encourage structured discussion, critical thinking, public speaking, questioning and constructive disagreement. The format combines prepared individual speeches with direct questioning and open interactive discussion, treating the committee as an intellectual discussion rather than a personal confrontation.",
@@ -1738,18 +1755,18 @@ export const eventDetails: EventDetail[] = [
     registrationUrl: "https://unstop.com/workshops-webinars/silicon-rush-tantrafiesta26-iiitn-1770343",
     name: "Silicon Rush — VLSI Workshop",
     tagline: "Hands-on silicon design and semiconductor workshop",
-    image: "/event-posters/Iotics.webp",
+    image: "/event-posters/VLSI.webp",
     clubs: [{ name: "Iotics", slug: "iotics" }],
     description:
       "A comprehensive, hands-on workshop on Very Large Scale Integration (VLSI) and semiconductor design organized by Iotics, the robotics and IoT club of IIIT Nagpur. Learn modern EDA workflows, digital circuit modeling, and silicon architecture fundamentals.",
-    prizePool: "₹0",
+    prizePool: "₹1,00,000+",
     prizeNote:
       "Certificates, kits, and workshop goodies for all attendees. Participation and learning-focused with no cash prize.",
     prizes: [],
     stages: [
       {
         name: "Workshop Session",
-        when: "Day 2, 9:00 AM – 2:00 PM",
+        when: "26 Oct 2026, 9:00 AM – 2:00 PM",
         mode: "Offline",
         detail:
           "Hands-on VLSI design workshop in CR 204. Interactive lecture, EDA tool walkthrough, and simulation.",
