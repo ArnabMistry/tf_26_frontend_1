@@ -1675,7 +1675,11 @@ export const eventDetails: EventDetail[] = [
     description:
       "The Digital Time Capsule gives participants a platform to document and interpret the vibrant spirit of TantraFiesta through photography and videography. It encourages original visual storytelling, creative observation and thoughtful curation of festival moments, preserving them as a digital archive that future audiences can revisit — a curated visual record of the festival, captured from the perspectives of the people in it.",
     prizePool: "₹10,000",
-    prizes: [{ position: 1, label: "1st Prize", amount: "₹10,000" }],
+    prizes: [
+      { position: 1, label: "Winner", amount: "₹5,000" },
+      { position: 2, label: "1st Runner-Up", amount: "₹3,000" },
+      { position: 3, label: "2nd Runner-Up", amount: "₹2,000" },
+    ],
     stages: [
       {
         name: "Registration",
