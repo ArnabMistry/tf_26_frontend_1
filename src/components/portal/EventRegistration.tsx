@@ -7,6 +7,7 @@ import { authRequest, ApiError } from '@/lib/auth';
 import { hasSessionHint } from '@/lib/session';
 import { participantRequest, formatDate, fullName, type EventInfo, type Team, type Registration, type Person, type Profile } from '@/lib/participant';
 import { payForEvent } from '@/lib/payments';
+import { isCollegeEmail, unitPriceFor } from '@/lib/collegeFee';
 import {
   YUVAAN_EVENT_ID,
   isYuvaanIdentifier,
@@ -217,8 +218,14 @@ export function EventRegistration() {
   if (loading || !user) return <EventRegistrationLoadingShell message="Checking your account…" />;
   const participant = profileUser?.id === user.id ? profileUser : user;
   const closed = !!event && new Date(event.registrationEndTime) <= new Date();
-  const paymentRequired = !!event && event.price > 0 && event.paymentTrigger === 'before_registration';
-  const feeCharged = !!event && event.price > 0 && event.paymentTrigger !== 'free';
+  // This participant's own rate. An event may charge students of the host
+  // college a different fee, so "is there a fee here" is a question about
+  // who is asking. The backend decides the real charge from the same account
+  // email; this only keeps the screen honest before they reach checkout.
+  const onCollegeRate = isCollegeEmail(participant.email);
+  const unitFee = event ? unitPriceFor(event, onCollegeRate) : 0;
+  const paymentRequired = !!event && unitFee > 0 && event.paymentTrigger === 'before_registration';
+  const feeCharged = !!event && unitFee > 0 && event.paymentTrigger !== 'free';
   const isVerified = Boolean(participant.verified);
   const isProfileIncomplete = !participant.collegeName?.trim() || !participant.phoneNumber?.trim();
   const canRegister = !!event && !registered && !closed && !isProfileIncomplete && isVerified && (!event.isTeamEvent || (!!team?.isLeader && team.stats.isReadyForRegistration && !team.stats.isRegistered));
@@ -240,7 +247,10 @@ export function EventRegistration() {
   // before any registration exists.
   const teamSize = team?.members.length ?? 0;
   const feeIsPerHead = feeCharged && !!event?.isTeamEvent && event.feeMode === 'per_participant';
-  const feeTotal = payment?.amount ?? (feeIsPerHead ? (event?.price ?? 0) * Math.max(1, teamSize) : (event?.price ?? 0));
+  const feeTotal = payment?.amount ?? (feeIsPerHead ? unitFee * Math.max(1, teamSize) : unitFee);
+  // Worth saying out loud: a total below the advertised fee otherwise reads
+  // as a bug rather than the college rate being applied.
+  const showsCollegeRate = feeCharged && onCollegeRate && unitFee < (event?.price ?? 0);
   // On a team event the backend only accepts the fee from the team leader.
   const leadsTheTeam = !event?.isTeamEvent || !!team?.isLeader;
   const canPayFee = feeDueNow && leadsTheTeam && isVerified && !isProfileIncomplete;
@@ -602,7 +612,7 @@ export function EventRegistration() {
           </div>
         </div>
       )}
-      <div className={s.entry}><p className={s.muted}>Entry fee</p><h3>{feeCharged ? `₹${feeTotal}${event.paymentTrigger === 'after_round' ? (feePaid ? ' · paid' : feeDueNow ? ' · due now' : notPromoted ? ' · not applicable' : ' · after qualification') : ''}` : 'Free registration'}</h3>{feeIsPerHead && <p className={s.fine}>{team ? `₹${event.price} × ${teamSize} member${teamSize === 1 ? '' : 's'} · paid once by the team leader` : `₹${event.price} per participant · paid once by the team leader`}</p>}{!feeIsPerHead && event.isTeamEvent && feeCharged && <p className={s.fine}>Flat fee for the whole team · paid once by the team leader</p>}</div>
+      <div className={s.entry}><p className={s.muted}>Entry fee</p><h3>{feeCharged ? `₹${feeTotal}${event.paymentTrigger === 'after_round' ? (feePaid ? ' · paid' : feeDueNow ? ' · due now' : notPromoted ? ' · not applicable' : ' · after qualification') : ''}` : 'Free registration'}</h3>{feeIsPerHead && <p className={s.fine}>{team ? `₹${unitFee} × ${teamSize} member${teamSize === 1 ? '' : 's'} · paid once by the team leader` : `₹${unitFee} per participant · paid once by the team leader`}</p>}{showsCollegeRate && <p className={s.fine}>IIITN Nagpur student rate · ₹{event.price} for everyone else</p>}{!feeIsPerHead && event.isTeamEvent && feeCharged && <p className={s.fine}>Flat fee for the whole team · paid once by the team leader</p>}</div>
       {closed && <p className={s.error}>Registration is closed.</p>}
       
       {event.isTeamEvent && !registered && <p className={`${s.muted} mb-4`}>{!team ? 'Create a team first.' : !team.isLeader ? 'Your team leader completes registration for everyone.' : !team.stats.isReadyForRegistration ? 'Meet the minimum team size and resolve all pending invitations before registering.' : 'Your team is ready to register.'}</p>}

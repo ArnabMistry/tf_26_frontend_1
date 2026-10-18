@@ -33,6 +33,12 @@ const eventFields: Field[] = [
   { name: 'isTeamEvent', label: 'Team event', type: 'checkbox' },
   { name: 'minTeamSize', label: 'Minimum team size', type: 'number', min: 1 }, { name: 'maxTeamSize', label: 'Maximum team size', type: 'number', min: 1 },
   { name: 'price', label: 'Fee', type: 'number', min: 0, value: 0, required: true }, { name: 'isPaid', label: 'Paid event', type: 'checkbox' },
+  // What an @iiitn.ac.in participant pays instead of the fee above. Left
+  // blank the event has no separate college rate and everyone pays the same,
+  // which is how every event behaved before this field existed. A number
+  // field sends null when empty, so clearing it removes the rate; 0 is a
+  // real value and makes the event free for IIITN students.
+  { name: 'collegePrice', label: 'IIITN fee (@iiitn.ac.in) \u2014 blank for none', type: 'number', min: 0 },
   // Only applied on team events. A solo event always charges the fee once, so
   // the backend normalises this to 'per team' there regardless of what is sent.
   { name: 'feeMode', label: 'Fee applies to (team events)', options: [
@@ -72,6 +78,9 @@ export function EventTools({ eventId, superAdmin, changed }: { eventId: string; 
       fields: [...(create ? [{ name: 'id', label: 'Event ID', required: true }, { name: 'festId', label: 'Fest ID', type: 'number', min: 1, value: 1, required: true }] : []), ...eventFields],
       transform: data => {
         if (data.isTeamEvent && (!data.minTeamSize || !data.maxTeamSize || Number(data.minTeamSize) > Number(data.maxTeamSize))) throw new Error('Enter valid minimum and maximum team sizes.');
+        // The IIITN rate replaces the standard fee rather than adding to it,
+        // so a higher one is always a typo.
+        if (data.collegePrice !== null && data.collegePrice !== undefined && Number(data.collegePrice) > Number(data.price)) throw new Error('The IIITN fee cannot be higher than the standard fee.');
         return {
           ...data,
           minTeamSize: data.isTeamEvent ? data.minTeamSize : null,
@@ -103,7 +112,7 @@ export function EventTools({ eventId, superAdmin, changed }: { eventId: string; 
       {/* The event list is only refreshed on the way out, so this summary is
           not torn down by the re-render that drops the deleted event. */}
       <div className="admin-actions"><button className="primary" onClick={() => { setDeleted(null); changed(); }}>Back to events</button></div></article>}
-    {!deleted && !!resource.data && <><article className="admin-card"><h3>{text(event.name)}</h3><p>{text(event.description)}</p><p>{text(event.club)} · {text(event.venue)}</p><p>Fee: {event.paymentTrigger === 'free' || !Number(event.price) ? 'Free' : `₹${text(event.price)}${event.isTeamEvent ? event.feeMode === 'per_participant' ? ' per participant' : ' per team' : ''}`} · Registration closes: {new Date(String(event.registrationEndTime)).toLocaleString()}</p>
+    {!deleted && !!resource.data && <><article className="admin-card"><h3>{text(event.name)}</h3><p>{text(event.description)}</p><p>{text(event.club)} · {text(event.venue)}</p><p>Fee: {event.paymentTrigger === 'free' || !Number(event.price) ? 'Free' : `₹${text(event.price)}${event.isTeamEvent ? event.feeMode === 'per_participant' ? ' per participant' : ' per team' : ''}`}{event.paymentTrigger !== 'free' && event.collegePrice !== null && event.collegePrice !== undefined && ` · IIITN: ${Number(event.collegePrice) === 0 ? 'free' : `₹${text(event.collegePrice)}`}`} · Registration closes: {new Date(String(event.registrationEndTime)).toLocaleString()}</p>
       <div className="admin-actions"><button onClick={() => editEvent(false)}>Edit event</button>{superAdmin && <button disabled={busy} className="danger" onClick={() => remove(`/api/admin/events/${enc(eventId)}`, deleteEventWarning(), setDeleted)}>Delete event</button>}</div></article>
       <div className="admin-section-heading"><h3>Rounds</h3><button onClick={() => editRound()}>Add round</button></div><LoadState {...roundsResource} />
       <Table headings={['Round', 'Name', 'Deadline', 'Actions']} empty={!roundsList.length}>{roundsList.map(round => <tr key={text(round.id)}><td>{text(round.roundNumber)}</td><td>{text(round.name)}</td><td>{new Date(String(round.roundEndTime)).toLocaleString()}</td><td><div className="admin-actions"><button onClick={() => editRound(round)}>Edit</button><button className="danger" disabled={busy} onClick={() => remove(`/api/admin/events/${enc(eventId)}/rounds/${enc(round.roundNumber)}`, 'Delete this round and its participant results? This cannot be undone.')}>Delete</button></div></td></tr>)}</Table>
@@ -149,7 +158,7 @@ export function Registrations({ eventId }: { eventId: string }) {
   return <section><div className="admin-section-heading"><h2>Registrations</h2><button disabled={busy || resource.loading} onClick={exportAll}>Export all filtered rows</button></div>
     <label>Status<select value={status} onChange={e => { setStatus(e.target.value); setPage(1); setDetails(null); }}><option value="">All statuses</option>{options(['registered', 'in_round', 'shortlisted', 'eliminated', 'confirmed', 'cancelled']).map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select></label>
     <LoadState {...resource} />{error && <p role="alert" className="admin-error">{error}</p>}
-    {feeRequired && <p>Entry fee ₹{text(data.feeAmount)}{data.feePerHead ? ' per participant; team totals appear below' : data.isTeamEvent ? ' per team' : ''} · {text(list.filter(r => record(r.payment).status === 'PAID').length)} of {list.length} on this page have paid.</p>}
+    {feeRequired && <p>Entry fee ₹{text(data.feeAmount)}{data.feePerHead ? ' per participant; team totals appear below' : data.isTeamEvent ? ' per team' : ''}{collegeRateNote(data)} · {text(list.filter(r => record(r.payment).status === 'PAID').length)} of {list.length} on this page have paid.</p>}
     <Table headings={['ID', 'Participant / Team', 'Email', 'Status', ...(feeRequired ? ['Entry fee'] : []), ...(showPreferences ? ['Committee preferences'] : []), 'Details']} empty={!list.length}>{list.map(r => {
       const p = record(r.payment); const fee = paymentLabel(p); const picks = preferencesOf(r);
       return <tr key={text(r.id)}><td>{text(r.id)}</td><td>{text(record(r.team).name || person(r.user))}</td><td>{text(record(r.user).email)}</td><td><span className="admin-badge">{text(r.status)}</span></td>{feeRequired && <td><span className={`admin-badge ${fee.tone}`} title={p.paidAt ? `Paid ${new Date(String(p.paidAt)).toLocaleString()}${p.paymentId ? ` · ${text(p.paymentId)}` : ''}` : undefined}>{fee.label}</span></td>}
@@ -176,6 +185,17 @@ export function Promotion({ eventId }: { eventId: string }) {
     {!resource.loading && !roundList.length && <p>Create a round in Event management first.</p>}
     {selectedRound && <RoundParticipants key={`${eventId}-${selectedRound}`} eventId={eventId} round={selectedRound} />}
   </section>;
+}
+
+/**
+ * The second rate, where the event has one. Without it a team paying the
+ * IIITN fee looks like a shortfall on these tables rather than the rate the
+ * admin themselves configured.
+ */
+function collegeRateNote(data: Row): string {
+  const college = data.feeCollegeAmount;
+  if (college === null || college === undefined) return '';
+  return `; ₹${text(college)} for @iiitn.ac.in participants`;
 }
 
 // How each participant's entry fee reads in the table.
@@ -225,7 +245,7 @@ function RoundParticipants({ eventId, round }: { eventId: string; round: string 
   const headings = ['Select', 'Participant / Team', 'ID', 'Status', ...(feeRequired ? ['Entry fee'] : []), 'Score'];
   return <><LoadState {...resource} /><p>Choose the participants or teams who qualify. Unselected eligible entries will be rejected when you promote. To reverse a promotion, select those entries and use Demote — that only affects who you select.</p>
     {error && <p role="alert" className="admin-error">{error}</p>}{message && <p role="status" className="admin-success">{message}</p>}
-    {feeRequired && <p>Entry fee ₹{text(data.feeAmount)}{data.feePerHead ? ' per participant; team totals appear below' : data.isTeamEvent ? ' per team' : ''} · {text(data.paidCount)} of {list.length} have paid.</p>}
+    {feeRequired && <p>Entry fee ₹{text(data.feeAmount)}{data.feePerHead ? ' per participant; team totals appear below' : data.isTeamEvent ? ' per team' : ''}{collegeRateNote(data)} · {text(data.paidCount)} of {list.length} have paid.</p>}
     <div className="admin-actions"><button disabled={busy || !list.length} onClick={() => setSelected(selected.length === list.length ? [] : list.map(key))}>Select / clear all</button><button disabled={!list.length} onClick={() => downloadCsv(`${eventId}-round-${round}.csv`, [['ID', 'Name', 'Status', 'Entry fee', 'Paid at', 'Payment ID', 'Score'], ...list.map(r => { const p = record(r.payment); return [r.teamId || r.userId, r.teamName || r.name, r.status, paymentLabel(p).label, p.paidAt, p.paymentId, r.score]; })])}>Export results</button></div>
     <Table headings={headings} empty={!list.length}>{list.map(r => { const p = record(r.payment); const fee = paymentLabel(p); return <tr key={key(r)}><td><input type="checkbox" aria-label={`Select ${text(r.teamName || r.name)}`} disabled={busy} checked={selected.includes(key(r))} onChange={e => setSelected(previous => e.target.checked ? [...previous, key(r)] : previous.filter(id => id !== key(r)))} /></td><td>{text(r.teamName || r.name)}</td><td>{text(r.teamId || r.userId)}</td><td><span className="admin-badge">{text(r.status)}</span></td>{feeRequired && <td><span className={`admin-badge ${fee.tone}`} title={p.paidAt ? `Paid ${new Date(String(p.paidAt)).toLocaleString()}${p.paymentId ? ` · ${text(p.paymentId)}` : ''}` : undefined}>{fee.label}</span></td>}<td>{text(r.score)}</td></tr>; })}</Table>
     <div className="admin-actions">
