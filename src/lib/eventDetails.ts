@@ -125,11 +125,11 @@ export const eventDetails: EventDetail[] = [
       "CASCADE is the flagship hackathon of TantraFiesta 2026 at IIIT Nagpur, organised by CRISPR × ELEVATE. It is a 24-hour offline hackathon with a prize pool of up to ₹2 lakh including cash and goodies, where teams build practical solutions to real-world problems across four themes. Stacking of themes is allowed.",
     prizePool: "₹2,00,000",
     prizeNote:
-      "₹2,00,000 total prize pool across 4 themes: 1st Prize is ₹45,000 for each of the 4 themes, ₹10,000 for the Side Quest, and ₹10,000 for the Best Women Team.",
+      "₹2,00,000 total prize pool across 4 themes: ₹45,000 for each of the 4 themes, ₹10,000 for the Side Quest, and ₹10,000 for the Best Women Team.",
     prizes: [
       {
-        position: 1,
-        label: "1st Prize",
+        position: 0,
+        label: "",
         amount: "₹45,000 × 4 Themes",
         note: "₹45,000 for each of the 4 themes.",
       },
