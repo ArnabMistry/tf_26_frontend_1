@@ -11,6 +11,8 @@ import {
   YUVAAN_EVENT_ID,
   isYuvaanIdentifier,
   validateYuvaanForm,
+  yuvaanPreferencesFromMetadata,
+  yuvaanRegistrationPayload,
   type YuvaanFormData,
   type YuvaanValidationErrors,
 } from '@/lib/yuvaan';
@@ -145,7 +147,13 @@ export function EventRegistration() {
       if (themesFromMeta.length > 0) setSelectedTheme(themesFromMeta[0]);
 
       const meta = mine?.metadata;
-      const rawPreferences = (meta?.preferences || (mine as unknown as { preferences?: { committee?: string; motion?: string }[] })?.preferences) as { committee?: string; motion?: string }[] | undefined;
+      // A stored registration files its answers as committeePreference1..3,
+      // which is what the admin panel reads. Fall back to the array shape for
+      // anything written before that was settled on.
+      const storedPreferences = yuvaanPreferencesFromMetadata(meta as Record<string, unknown> | null | undefined);
+      const rawPreferences = (storedPreferences.length >= 3
+        ? storedPreferences
+        : meta?.preferences || (mine as unknown as { preferences?: { committee?: string; motion?: string }[] })?.preferences) as { committee?: string; motion?: string }[] | undefined;
       const legacyPrefs = (meta?.committeePreferences || mine?.committeePreferences) as string[] | undefined;
       const legacyMotion = ((meta?.motionPreference || mine?.motionPreference || 'For') as 'For' | 'Against');
       const school = (meta?.schoolCollege || mine?.schoolCollege) as string | undefined;
@@ -265,6 +273,10 @@ export function EventRegistration() {
         eventName: event.name,
         user: participant,
         teamId: team?.id ?? null,
+        // On an event charged before registration the registration row is
+        // created by the payment itself, so the form answers have to travel
+        // with the order — otherwise they are gone once the fee is taken.
+        ...(isYuvaan ? { addons: yuvaanRegistrationPayload(yuvaanData) } : {}),
         onProgress: setNotice,
       });
       if (!completed) { setNotice(''); return; } // Checkout dismissed without paying.
@@ -353,17 +365,7 @@ export function EventRegistration() {
           ...(isCascade && selectedTheme
             ? { themes: [selectedTheme], theme: selectedTheme }
             : {}),
-          ...(isYuvaan
-            ? {
-                preferences: [
-                  { committee: yuvaanData.pref1Committee, motion: yuvaanData.pref1Motion },
-                  { committee: yuvaanData.pref2Committee, motion: yuvaanData.pref2Motion },
-                  { committee: yuvaanData.pref3Committee, motion: yuvaanData.pref3Motion },
-                ],
-                schoolCollege: yuvaanData.schoolCollege.trim(),
-                classYear: yuvaanData.classYear.trim(),
-              }
-            : {}),
+          ...(isYuvaan ? yuvaanRegistrationPayload(yuvaanData) : {}),
         }),
       'Registration confirmed!'
     );

@@ -116,3 +116,43 @@ export function isYuvaanIdentifier(idOrSlug?: string | null): boolean {
   const lower = idOrSlug.toLowerCase().trim();
   return lower === YUVAAN_SLUG || lower === YUVAAN_EVENT_ID;
 }
+
+/**
+ * What the server is told about a Yuvaan entrant, from the form state.
+ *
+ * Shared by both submission paths — registering directly, and registering by
+ * paying first — so an entrant's answers reach the backend in one shape
+ * whichever way the event is configured to charge.
+ */
+export function yuvaanRegistrationPayload(data: YuvaanFormData) {
+  return {
+    preferences: [
+      { committee: data.pref1Committee, motion: data.pref1Motion },
+      { committee: data.pref2Committee, motion: data.pref2Motion },
+      { committee: data.pref3Committee, motion: data.pref3Motion },
+    ],
+    schoolCollege: data.schoolCollege.trim(),
+    classYear: data.classYear.trim(),
+  };
+}
+
+/**
+ * Pull a registration's stored answers back out. The backend files them as
+ * numbered keys (`committeePreference1`…) because that is what the admin
+ * table sorts and filters on, so the portal has to read that shape rather
+ * than the `preferences` array it sends.
+ */
+export function yuvaanPreferencesFromMetadata(
+  metadata: Record<string, unknown> | null | undefined
+): YuvaanPreferenceItem[] {
+  if (!metadata) return [];
+  const out: YuvaanPreferenceItem[] = [];
+  for (const rank of [1, 2, 3] as const) {
+    const committee = metadata[`committeePreference${rank}`];
+    const motion = metadata[`motionPreference${rank}`];
+    if (typeof committee === 'string' && committee) {
+      out.push({ committee, motion: motion === 'Against' ? 'Against' : 'For' });
+    }
+  }
+  return out;
+}
