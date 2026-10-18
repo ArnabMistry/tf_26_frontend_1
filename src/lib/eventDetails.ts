@@ -985,7 +985,8 @@ export const eventDetails: EventDetail[] = [
     registrationUrl: "https://unstop.com/events/rc24-esports-tournament-tantrafiesta26-iiitn-1768504",
     name: "RC 24",
     tagline: "Real Cricket 24 — 1v1 knockout",
-    image: "/event-posters/rc-24.webp",
+    image: "/event-posters/RC-24.webp",
+    poster: "/event-posters/RC-24.webp",
     clubs: [{ name: "Synergy", slug: "synergy" }],
     description:
       "The RC24 Esports Tournament is the official Real Cricket 24 competition of TantraFiesta, hosted by IIIT Nagpur. Players from any college face off 1v1 in a knockout bracket — first in the Open Rounds and then in the Finals — to prove their batting, bowling and game sense and win the championship title and prizes.",
