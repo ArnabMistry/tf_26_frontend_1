@@ -1657,7 +1657,7 @@ export const eventDetails: EventDetail[] = [
       },
       {
         name: "Finalists confirm their seats",
-        when: "By 20 Oct 2026, 11:59 PM",
+        when: "By 20 Oct 2026, 6:00 PM IST. Waitlist offers from 7:00 PM; final list fixed 21 Oct, 11:59 PM",
       },
       {
         name: "Finale — KEEP ALIVE Live",
