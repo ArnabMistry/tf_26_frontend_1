@@ -549,6 +549,24 @@ export function EventRegistration() {
           <div className={s.progress} aria-label={`${team.members.length} of ${event.maxTeamSize || 4} slots filled`}>{Array.from({length: Math.min(event.maxTeamSize || 4, 20)}, (_,i) => <span key={i} className={i < team.members.length ? s.filled : ''}/>)}</div>
           <p className={s.muted}>{team.members.length} accepted · {team.stats.pendingCount} pending · {event.minTeamSize}–{event.maxTeamSize} members required</p>
           {team.stats.rosterLocked && !team.stats.isRegistered && <p className={s.fine}>Your roster is locked because a payment order has been created. Contact the organisers if it must change.</p>}
+          {team.isLeader && team.stats.isRegistered && team.stats.hasPaid && <p className={s.fine}>Payment completed. Paid teams cannot deregister.</p>}
+          {team.isLeader && team.stats.canDeregister && <div className={s.entry}>
+            <h3>Need to rebuild your team?</h3>
+            <p className={s.fine}>Deregistering removes your event registration and all teammates except you. Previous invitations are cancelled. Send new invitations and wait for acceptance before registering again. Payment orders, round results or event check-in require organiser assistance.</p>
+            <button className={s.button} disabled={busy || closed} onClick={() => {
+              if (!window.confirm('Deregister this team? Your registration will be removed, teammates will leave the roster, and all invitations will be cancelled. You will remain team leader and must invite teammates again.')) return;
+              void mutate(() => participantRequest(`/api/user/teams/${team.id}/registration`, undefined, 'DELETE'), 'Team deregistered. Send new invitations below; teammates must accept again.');
+            }}>{busy ? 'Please wait…' : 'Deregister team'}</button>
+            {closed && <p className={s.fine}>Registration has closed. Contact the organisers for changes.</p>}
+          </div>}
+          {team.isLeader && !team.stats.rosterLocked && team.invites.some(invite => invite.status === 'CANCELLED' || invite.status === 'REJECTED') && <div className={s.entry}>
+            <h3>Invite previous teammates again</h3>
+            <p className={s.fine}>Each teammate must accept the new request to rejoin.</p>
+            {team.invites.filter(invite => invite.status === 'CANCELLED' || invite.status === 'REJECTED').map(invite => <div className={s.row} key={invite.id}>
+              <span>{invite.user ? fullName(invite.user) : invite.email}</span>
+              <button className={s.secondary} disabled={busy || closed || team.members.length + team.stats.pendingCount >= (event.maxTeamSize || 4)} onClick={() => void mutate(() => participantRequest(`/api/user/teams/${team.id}/invites`, { identifier: invite.email }), 'Invitation sent again. Waiting for your teammate to accept.')}>Send again</button>
+            </div>)}
+          </div>}
           {team.members.map(member => <div className={s.entry} key={member.id}><div className={s.row}><div><h3>{fullName(member)}</h3><p className={s.fine}>{member.festId}</p></div><span className={`${s.badge} ${s.accepted}`}>{member.isLeader ? 'Leader' : 'Accepted'}</span>{team.isLeader && !member.isLeader && !team.stats.rosterLocked && <button disabled={busy} className={s.secondary} onClick={() => mutate(() => participantRequest(`/api/user/teams/${team.id}/members`, { userId: member.id }, 'DELETE'), 'Member removed.')}>Remove</button>}</div></div>)}
           {team.invites.filter(invite => invite.status !== 'ACCEPTED').map(invite => <div className={s.entry} key={invite.id}><div className={s.row}><div><h3>{invite.user ? fullName(invite.user) : invite.email}</h3><p className={s.fine}>{invite.user?.festId}</p></div><span className={`${s.badge} ${invite.status === 'PENDING' ? s.pending : ''}`}>{invite.status}</span>{team.isLeader && invite.status === 'PENDING' && !team.stats.rosterLocked && <button className={s.secondary} disabled={busy} onClick={() => mutate(() => participantRequest(`/api/user/teams/${team.id}/members`, { inviteId: invite.id }, 'DELETE'), 'Invitation cancelled.')}>Cancel invite</button>}</div></div>)}
           {team.isLeader && !team.stats.isRegistered && team.stats.isReadyForRegistration && <div className="mt-4 p-4 rounded-xl bg-[#faff52]/15 border border-[#faff52]/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"><div><h4 className="font-bold text-[#faff52]">Team is ready!</h4><p className={s.fine}>Minimum team size reached. Finalize your registration below.</p></div><button disabled={busy} className={s.button} onClick={handleAction}>{busy ? (paymentRequired ? 'Processing payment…' : 'Registering…') : (paymentRequired ? `Pay ₹${feeTotal} & Register team` : 'Register team now')}</button></div>}

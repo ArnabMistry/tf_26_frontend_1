@@ -1,7 +1,8 @@
 'use client';
 import { useState } from 'react';
 import { adminRequest, downloadCsv, enc, person, record, rows, text, type Row } from '@/lib/admin';
-import { Details, EditorDialog, LoadState, Table, useAdminData, type Editor, type Field } from './AdminUI';
+import { EditorDialog, LoadState, Table, useAdminData, type Editor, type Field } from './AdminUI';
+import { RegistrationDetails } from './RegistrationDetails';
 
 const options = (values: string[]) => values.map(value => ({ value, label: value.replaceAll('_', ' ') }));
 
@@ -126,14 +127,39 @@ export function Registrations({ eventId }: { eventId: string }) {
       // Preferences are exported as their own columns, so the sheet can be
       // sorted and filtered by committee or by stance.
       const withPreferences = hasPreferences(all);
+      const memberProfiles = (r: Row) => {
+        const team = record(r.team);
+        return rows(team.members).map(member => record(member.user))
+          .filter(member => member.id !== record(team.leader).id);
+      };
+      const memberCount = all.reduce((max, r) => Math.max(max, memberProfiles(r).length), 0);
+      const profileHeadings = (prefix: string) => ['User ID', 'Fest ID', 'Name', 'Email', 'Phone', 'College', 'Email verified'].map(field => `${prefix} ${field}`);
+      const profileCells = (value: unknown) => {
+        const user = record(value);
+        return [user.id, user.festId, [user.firstName, user.lastName].filter(Boolean).join(' '), user.email, user.phoneNumber, user.collegeName,
+          user.verified == null ? '' : user.verified ? 'Yes' : 'No'];
+      };
       const preferenceHeadings = withPreferences
         ? ['Preference 1', 'Stance 1', 'Preference 2', 'Stance 2', 'Preference 3', 'Stance 3', 'School / College', 'Class / Year']
         : [];
       downloadCsv(`${eventId}-registrations.csv`, [
-        ['ID', 'Participant / Team', 'Email', 'Status', 'Entry fee', 'Paid at', 'Payment ID', 'Created', ...preferenceHeadings],
+        ['ID', 'Participant / Team', 'Email', 'Status', 'Entry fee', 'Paid at', 'Payment ID', 'Created',
+          'Event ID', 'Team ID', 'Team code', 'Team size', 'Payment amount (INR)', 'Updated',
+          ...profileHeadings('Participant'), ...profileHeadings('Team lead'),
+          ...Array.from({ length: memberCount }, (_, i) => profileHeadings(`Member ${i + 2}`)).flat(),
+          'Registration metadata (JSON)', ...preferenceHeadings],
         ...all.map(r => {
           const p = record(r.payment);
-          const base = [r.id, record(r.team).name || person(r.user), record(r.user).email, r.status, paymentLabel(p).label, p.paidAt, p.paymentId, r.createdAt];
+          const team = record(r.team);
+          const members = memberProfiles(r);
+          const user = record(r.user);
+          const leader = record(team.leader);
+          const base = [r.id, team.name || [user.firstName, user.lastName].filter(Boolean).join(' ') || user.email,
+            user.email || leader.email, r.status, paymentLabel(p).label, p.paidAt, p.paymentId, r.createdAt,
+            r.eventId || eventId, team.id, team.teamCode, team.id ? members.length + (leader.id ? 1 : 0) : '', p.amount, r.updatedAt,
+            ...profileCells(user), ...profileCells(leader),
+            ...Array.from({ length: memberCount }, (_, i) => profileCells(members[i])).flat(),
+            r.metadata == null ? '' : JSON.stringify(r.metadata)];
           if (!withPreferences) return base;
           const meta = record(r.metadata);
           const picks = preferencesOf(r);
@@ -163,7 +189,7 @@ export function Registrations({ eventId }: { eventId: string }) {
           : <span className="admin-badge">Not provided</span>}</td>}
         <td><button onClick={async () => { setError(''); try { setDetails(await adminRequest(`/api/admin/registrations/${enc(r.id)}`)); } catch (err) { setError(err instanceof Error ? err.message : 'Unable to load details.'); } }}>View</button></td></tr>; })}</Table>
     <div className="admin-actions"><button disabled={page === 1 || resource.loading} onClick={() => setPage(p => p - 1)}>Previous</button><span>Page {page} of {Number(pagination.totalPages) || 1} · {text(pagination.total)} records</span><button disabled={resource.loading || page >= (Number(pagination.totalPages) || 1)} onClick={() => setPage(p => p + 1)}>Next</button></div>
-    {!!details && <article className="admin-card"><button onClick={() => setDetails(null)}>Close details</button><Details value={details} /></article>}
+    {!!details && <RegistrationDetails value={details} close={() => setDetails(null)} />}
   </section>;
 }
 
