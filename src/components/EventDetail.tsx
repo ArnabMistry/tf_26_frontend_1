@@ -205,6 +205,27 @@ export function EventDetail({ event }: EventDetailProps) {
         className={styles.panel}
       >
         <h2 className={styles.sectionHeading}>Rules &amp; Regulations</h2>
+        {event.rulesDocument && (
+            <a
+              href={event.rulesDocument.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.documentCard}
+            >
+              <span className={styles.documentIcon} aria-hidden="true">
+                <svg width="26" height="30" viewBox="0 0 24 28" fill="none">
+                  <path d="M14 2H5a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9l-7-7Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                  <path d="M14 2v7h7M7 15h10M7 19h7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span>PDF</span>
+              </span>
+              <span className={styles.documentCopy}>
+                <span className={styles.documentName}>{event.rulesDocument.name}</span>
+                <span className={styles.documentHint}>View document · Opens in a new tab</span>
+              </span>
+              <span className={styles.documentArrow} aria-hidden="true">↗</span>
+            </a>
+        )}
         {event.rules.length > 0 ? (
           <ul className={styles.ruleList}>
             {event.rules.map((rule) => (

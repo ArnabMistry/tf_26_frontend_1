@@ -65,6 +65,7 @@ export interface EventDetail {
   prizes: EventPrize[];
   stages: EventStage[];
   rules: string[];
+  rulesDocument?: { name: string; url: string };
   /** "What we're looking for" / key details — the brochure's own bullets. */
   highlights: string[];
   /** Who may enter, one bullet per condition. */
@@ -1243,7 +1244,7 @@ export const eventDetails: EventDetail[] = [
     image: "/event-posters/Pitch-Please.webp",
     clubs: [{ name: "Dimension", slug: "dimension" }],
     description:
-      "Pitch, Please! gives student creators and designers a formal platform to pitch original game concepts to an expert panel of judges and industry veterans. Participants are evaluated on gameplay design, core mechanics, narrative structure, art direction, target-audience feasibility and monetization potential, and receive direct constructive feedback that refines their ideas into viable commercial or indie production blueprints.",
+    "Pitch, Please! is a game idea pitching competition organized as part of TantraFiesta’26, the annual technical fest of IIIT Nagpur. The event brings together game developers, designers, and innovators to showcase their creativity and present their original game concepts.",
     prizePool: "₹20,000",
     prizes: [
       { position: 1, label: "1st", amount: "₹10,000", note: "Certificate included." },
@@ -1256,21 +1257,40 @@ export const eventDetails: EventDetail[] = [
         when: "25 Oct 2026, 12:00 PM – 6:00 PM",
         mode: "Offline",
         detail:
-          "Held in CR 204, equipped with AV projection, audio output and judge evaluation seating. Time-capped pitch presentations per team — roughly a 10-minute pitch plus 3–5 minutes of Q&A — evaluated live by the judging panel.",
+          "Round 1: Game Pitch Presentation — Participants will have 15 minutes to present their complete game concept to the judges and fellow competitors. The presentation must cover all major aspects of the game, including gameplay mechanics, visual theme, storyline, and other relevant elements. Selection will be based on the judges’ evaluation and audience voting.",
+      },
+      {
+        name: "Round 2 & Round 3",
+        detail:
+          "The formats and requirements for the subsequent rounds will be revealed on the day of the event, while maintaining the overall game-pitching format.",
+      },
+      {
+        name: "Theme Announcement",
+        detail:
+          "The theme will be announced on 20 October 2026, and all participants must develop their game concepts according to the given theme.",
       },
     ],
     highlights: [
-      "Pitch original game concepts to an expert panel of judges and industry veterans.",
-      "Evaluated on gameplay design, core mechanics, narrative structure, art direction, target-audience feasibility and monetization potential.",
-      "Direct constructive feedback that refines ideas into viable commercial or indie production blueprints.",
+      "Pitch, Please! is a game idea pitching competition organized as part of TantraFiesta’26, the annual technical fest of IIIT Nagpur.",
+      "The event brings together game developers, designers, and innovators to showcase their creativity and present ",
+      "their original game concepts.",
     ],
     eligibility: [
       "Open to students across disciplines.",
       "Teams of 1–4 members.",
     ],
     rules: [
-      "Time-capped pitch presentations per team: roughly a 10-minute pitch plus 3–5 minutes of Q&A.",
-      "Pitches are evaluated live by the judging panel.",
+      "Teams must consist of 1–4 members, with at least 3 members recommended.",
+      "Participants may compete in only one team.",
+      "Inter-college and inter-university teams are permitted.",
+      "The Round 1 presentation must be submitted as a Google Drive link before 11:59 PM on 24 October 2026.",
+      "Presentations must be in PPT, PPTX, or PDF format.",
+      "A maximum of 4 text-heavy slides is allowed. Additional image slides are permitted, containing only images and minimal text.",
+      "Participants may edit their presentation until the competition begins. The final version must be uploaded to the same Google Drive link.",
+      "External assets may be used only with appropriate legal rights or licenses and must be properly credited.",
+      "AI tools are permitted.",
+      "The decisions of the judges and organizers are final and binding.",
+     
     ],
     organizers: [
       { name: "Akshat Vyas", phone: "+91 78801 45151", email: "dimensions@iiitn.ac.in" },
@@ -1583,10 +1603,14 @@ export const eventDetails: EventDetail[] = [
   },
   {
     slug: "keep-alive-26",
+    rulesDocument: {
+      name: "Finalist_kit",
+      url: "https://drive.google.com/drive/folders/1Np8FfD9jSm5RVci8Fm5VsyViebPrQgrd?usp=sharing",
+    },
     registrationUrl: "https://unstop.com/hackathons/keep-alive-26-iiitn-1766226",
     name: "Keep Alive '26",
     tagline: "National incident response championship",
-    image: "/event-posters/Keep-Alive.webp",
+    image: "/event-posters/Keep-Alive-20261019.webp",
     clubs: [{ name: "GDG on Campus", slug: "gdg" }],
     description:
       "An alert just fired. Checkout is failing. Can your team find out why before the clock runs out? KEEP ALIVE '26 is a national incident response championship for students who have been learning DevOps. You've practised Linux, Docker and Kubernetes — now test it in the field: read the alerts, dashboards, logs and traces of a live microservices system, find what broke and why, and explain how you would fix it. It runs on the same incident platform as Panic at the Pod, the live Kubernetes incident challenge by CNCG Noida, our Community Partner, hosted by GDG on Campus IIIT Nagpur at TantraFiesta 2026.",
@@ -1595,25 +1619,25 @@ export const eventDetails: EventDetail[] = [
       {
         position: 1,
         label: "Winner",
-        amount: "₹12,000",
+        amount: "₹12,000 + SWAGS",
         note: "Cash prize, merit certificates and goodies.",
       },
       {
         position: 2,
         label: "1st Runner-up",
-        amount: "₹7,000",
+        amount: "₹7,000 + SWAGS",
         note: "Cash prize, merit certificates and goodies.",
       },
       {
         position: 3,
         label: "2nd Runner-up",
-        amount: "₹4,000",
+        amount: "₹4,000 + SWAGS",
         note: "Cash prize, merit certificates and goodies.",
       },
       {
         position: 4,
         label: "Sharpest RCA Award",
-        amount: "₹2,000",
+        amount: "₹2,000 + SWAGS",
         note: "Highest total root-cause accuracy across all 10 finale incidents, among teams outside the top 3.",
       },
     ],
@@ -1622,7 +1646,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Round 1 — The Night Shift",
-        when: "11 Oct, 9:00 AM – 18 Oct 2026, 11:59 PM",
+        when: "13 Oct, 9:00 AM – 18 Oct 2026, 11:59 PM",
         mode: "Online",
         detail:
           "One 30-minute assessment per team, taken once from the team leader's account: multiple-choice questions on DevOps and observability, one incident to investigate from screenshots of dashboards, logs and traces, and two short written answers. Proctored and taken in full screen — no AI tools, no search and no second device. The top 15 teams reach the finale; the next 10 form the waitlist.",
