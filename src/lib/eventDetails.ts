@@ -1419,7 +1419,7 @@ export const eventDetails: EventDetail[] = [
     stages: [
       {
         name: "Final Round",
-        when: "26 Oct 2026, 9:00 AM – 2:00 PM",
+        when: "25 Oct 2026, 9:00 AM – 2:00 PM",
         mode: "Offline",
         detail:
           "Each robot is allocated a total of 20 minutes of access to the final maze, including any time spent adjusting it between runs. Teams may perform as many runs as they want within that window; the fastest successful run is the official result. After the third run, a 1-minute penalty is added to each subsequent run. First place goes to the robot with the shortest official time; robots that do not finish are ranked by how close they got to the destination square.",
