@@ -913,3 +913,75 @@
     font-size: 16px;
   }
 }
+
+/* ── Edit-in-place cell ─────────────────────────────────────────────────────
+   Used in the merch catalogue for the two fields an organiser changes
+   mid-fest, the name and the price. Save/Undo appear only once the value is
+   actually dirty, so a table of them stays quiet until one is being edited. */
+.admin-inline-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.admin-inline-edit input {
+  background: #1b1430;
+  border: 1px solid #6c5a85;
+  border-radius: 8px;
+  color: #f6eeff;
+  font: inherit;
+  font-size: 13.5px;
+  padding: 7px 9px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.admin-inline-edit input:hover:not(:disabled) {
+  border-color: #9a84b5;
+}
+
+.admin-inline-edit input:focus-visible {
+  outline: 2px solid #faff52;
+  outline-offset: 2px;
+}
+
+.admin-inline-edit input:disabled {
+  opacity: 0.6;
+}
+
+/* Smaller than the standard admin button: several of these sit inside a cell. */
+.admin-inline-edit button {
+  padding: 6px 10px;
+  font-size: 11.5px;
+  border-radius: 8px;
+}
+
+.admin-inline-edit .admin-error {
+  flex-basis: 100%;
+  margin: 2px 0 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 11.5px;
+}
+
+/* Action buttons must not break mid-word. The merch catalogue is the widest
+   table in the panel, and "Take off sale" was wrapping to "Ta ke off sal e"
+   once the row also carried two edit-in-place fields. */
+.admin-table .admin-actions button {
+  white-space: nowrap;
+}
+
+/* Keep the compact size range on one line too. */
+.admin-table td {
+  vertical-align: top;
+}
+
+/* Prefix and input travel together; only the Save/Undo pair may wrap below. */
+.admin-inline-edit-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
