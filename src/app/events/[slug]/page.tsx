@@ -10,7 +10,6 @@ import {
   getEventDetail,
   type EventDetail as EventDetailData,
 } from "@/lib/eventDetails";
-import { hasCollegeRate, unitPriceFor } from "@/lib/collegeFee";
 import { generateEventJsonLd, breadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { siteConfig } from "@/lib/site";
 import styles from "./page.module.css";
@@ -31,19 +30,13 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
   const local = getEventDetail(event.slug);
   const isFree = !event.price || event.price === 0 || event.paymentTrigger === "free";
   const isTeam = event.isTeamEvent ?? (local?.teamSize ? local.teamSize.max > 1 : false);
-  // Nobody is signed in on a public event page, so when the event has a
-  // host-college rate both figures are shown and the reader picks their own.
-  const collegeFee = unitPriceFor(event, true);
-  const collegeNote = !isFree && hasCollegeRate(event) && collegeFee !== event.price
-    ? ` · ${collegeFee === 0 ? "Free" : `₹${collegeFee}`} for IIITN Nagpur students`
-    : "";
   const entryFeeLabel = isFree
     ? "Free"
     : event.paymentTrigger === "after_round"
-      ? `₹${event.price} ${isTeam && event.feeMode === "per_team" ? "per team" : "per participant"}${collegeNote} (free to enter; payable upon Round 2 promotion)`
+      ? `₹${event.price} ${isTeam && event.feeMode === "per_team" ? "per team" : "per participant"} (free to enter; payable upon Round 2 promotion)`
       : isTeam
-        ? `₹${event.price} ${event.feeMode === "per_participant" ? "per participant (team leader pays for all members)" : "per team (team leader pays once)"}${collegeNote}`
-        : `₹${event.price} per participant${collegeNote}`;
+        ? `₹${event.price} ${event.feeMode === "per_participant" ? "per participant (team leader pays for all members)" : "per team (team leader pays once)"}`
+        : `₹${event.price} per participant`;
 
   // Derived from the live price every time, never from a stored string.
   // `event.registrationFee` comes from the event's `requirements` JSON, which
@@ -53,7 +46,7 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
   // neither may win over the price the backend is actually charging.
   const registrationFee = isFree
     ? "Free"
-    : `₹${event.price} ${isTeam && event.feeMode === "per_team" ? "per team" : "per person"}${collegeNote}`;
+    : `₹${event.price} ${isTeam && event.feeMode === "per_team" ? "per team" : "per person"}`;
 
   return {
     ...local,
