@@ -61,7 +61,9 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
     name: event.name,
     // Joint clubs are supplied by the normalized API contract.
     clubs: event.clubs || [event.club],
-    description: event.description || local?.description || event.shortDescription || "",
+    // Pitch, Please!'s revised brochure copy supersedes the older API description.
+    description: (event.slug === "pitch-please" ? local?.description : undefined)
+      || event.description || local?.description || event.shortDescription || "",
     poster: event.image || local?.image || local?.poster,
     image: event.image || local?.image,
     prizePool: local?.prizePool || event.prizePool,

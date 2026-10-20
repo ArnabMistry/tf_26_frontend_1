@@ -205,10 +205,31 @@ export function EventDetail({ event }: EventDetailProps) {
         className={styles.panel}
       >
         <h2 className={styles.sectionHeading}>Rules &amp; Regulations</h2>
+        {event.rulesDocument && (
+            <a
+              href={event.rulesDocument.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.documentCard}
+            >
+              <span className={styles.documentIcon} aria-hidden="true">
+                <svg width="26" height="30" viewBox="0 0 24 28" fill="none">
+                  <path d="M14 2H5a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9l-7-7Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                  <path d="M14 2v7h7M7 15h10M7 19h7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span>PDF</span>
+              </span>
+              <span className={styles.documentCopy}>
+                <span className={styles.documentName}>{event.rulesDocument.name}</span>
+                <span className={styles.documentHint}>View document · Opens in a new tab</span>
+              </span>
+              <span className={styles.documentArrow} aria-hidden="true">↗</span>
+            </a>
+        )}
         {event.rules.length > 0 ? (
           <ul className={styles.ruleList}>
             {event.rules.map((rule) => (
-              <li key={rule}>{rule}</li>
+              <li key={rule}>{formatRule(rule)}</li>
             ))}
           </ul>
         ) : (
@@ -313,13 +334,13 @@ function PrizeBox({ event }: { event: EventDetailData }) {
 
       <ul className={styles.prizeList}>
         {event.prizes.map((prize, idx) => {
-          const isSpecial = prize.label?.toLowerCase().includes("special") || prize.position > 3;
+          const isSpecial = prize.position === 0 || prize.label?.toLowerCase().includes("special") || prize.position > 3;
           return (
             <li key={`${prize.position}-${idx}`} className={styles.prizeRow}>
               <MedalIcon position={prize.position} isSpecial={isSpecial} />
               <span>
                 <span className="sr-only">
-                  {isSpecial ? "Special mention: " : `${ordinal(prize.position)} place: `}
+                  {prize.position === 0 ? `${prize.label}: ` : isSpecial ? "Special mention: " : `${ordinal(prize.position)} place: `}
                 </span>
                 {isSpecial && prize.label && !prize.amount?.toLowerCase().includes("special")
                   ? `${prize.label}: `
@@ -424,6 +445,7 @@ function TrophyIcon() {
 }
 
 function MedalIcon({ position, isSpecial }: { position: number; isSpecial?: boolean }) {
+  const isAsterisk = position === 0;
   return (
     <svg className={styles.medal} viewBox="0 0 24 24" aria-hidden="true">
       <path d="M7.5 1h3l3.2 7h-3Z" fill="#c9c4e4" />
@@ -432,18 +454,34 @@ function MedalIcon({ position, isSpecial }: { position: number; isSpecial?: bool
       <circle cx="12" cy="15.5" r="5.3" fill="#b9b2dd" />
       <text
         x="12"
-        y={isSpecial ? "16.1" : "15.9"}
+        y={isAsterisk ? "17.2" : isSpecial ? "16.1" : "15.9"}
         textAnchor="middle"
         dominantBaseline="central"
         fill="#241a4c"
-        fontSize={isSpecial ? "6" : "7"}
+        fontSize={isAsterisk ? "8" : isSpecial ? "6" : "7"}
         fontWeight="700"
         fontFamily="var(--font-futura)"
       >
-        {isSpecial ? "★" : position}
+        {isAsterisk ? "*" : isSpecial ? "★" : position}
       </text>
     </svg>
   );
+}
+
+function formatRule(rule: string) {
+  if (rule === "**STACKING ALLOWED**" || rule === "STACKING ALLOWED") {
+    return <strong>STACKING ALLOWED</strong>;
+  }
+  if (rule.includes("**")) {
+    const parts = rule.split(/(\*\*[^*]+\*\*)/g);
+    return parts.map((part, i) => {
+      if (part.startsWith("**") && part.endsWith("**")) {
+        return <strong key={i}>{part.slice(2, -2)}</strong>;
+      }
+      return part;
+    });
+  }
+  return rule;
 }
 
 function ordinal(n: number): string {
