@@ -46,7 +46,6 @@ export default function RefundPolicyPage() {
           <p className={styles.subtitle}>
             TantraFiesta 2026 is committed to fair, transparent, and prompt handling of participant fees, cancellations, and transaction disputes.
           </p>
-          <span className={styles.lastUpdated}>Effective for TantraFiesta 2026 (Updated October 2026)</span>
         </header>
 
         {/* Quick Summary Cards */}
@@ -56,13 +55,6 @@ export default function RefundPolicyPage() {
             <h2 className={styles.highlightTitle}>100% Cancellation Refund</h2>
             <p className={styles.highlightText}>
               Full refund if any event or competition is cancelled by the organizing committee.
-            </p>
-          </div>
-          <div className={styles.highlightCard}>
-            <div className={styles.highlightIcon} aria-hidden="true">⏱️</div>
-            <h2 className={styles.highlightTitle}>5–7 Business Days</h2>
-            <p className={styles.highlightText}>
-              Approved refunds are disbursed directly to your original source account via Razorpay.
             </p>
           </div>
           <div className={styles.highlightCard}>
@@ -84,7 +76,7 @@ export default function RefundPolicyPage() {
             </h2>
             <div className={styles.sectionContent}>
               <p>
-                This policy governs all registration fees, workshop passes, competitive entry fees, and hospitality bookings paid through the official TantraFiesta portal (<strong>tantrafiesta.in</strong>) or authorized payment gateways for the 2026 edition of TantraFiesta, hosted by the Indian Institute of Information Technology, Nagpur (IIIT Nagpur).
+                This policy governs all registration fees, workshop passes, competitive entry fees, merchandise orders, and accommodation/hospitality bookings paid through the official TantraFiesta portal (<strong>tantrafiesta.in</strong>) or authorized payment gateways for the 2026 edition of TantraFiesta, hosted by the Indian Institute of Information Technology, Nagpur (IIIT Nagpur).
               </p>
               <p>
                 By completing an event registration or fee transaction, the participant (and in the case of team events, the team leader and all registered members) acknowledges and accepts the terms outlined below.
@@ -180,6 +172,12 @@ export default function RefundPolicyPage() {
             <div className={styles.sectionContent}>
               <p>Refunds will strictly NOT be granted under the following circumstances:</p>
               <ul className={styles.sectionList}>
+                <li>
+                  <strong>Merchandise Purchases:</strong> All payments for official TantraFiesta merchandise (t-shirts, hoodies, stickers, and kits) are strictly non-refundable and non-cancellable once payment is confirmed.
+                </li>
+                <li>
+                  <strong>Accommodation Bookings:</strong> All campus accommodation, hostel stay, and hospitality bookings are strictly non-refundable once reserved.
+                </li>
                 <li>
                   <strong>No-shows:</strong> Failure to arrive on the IIIT Nagpur campus or join an online contest at the scheduled reporting time.
                 </li>
