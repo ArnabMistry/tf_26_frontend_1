@@ -1,0 +1,696 @@
+/* The merch drop page. Unlisted by design — reachable at /merch, absent from
+   every nav — so it reads as a standalone drop rather than a site section. */
+
+.page {
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: clip;
+  color: #fff;
+  background-color: #241a4c;
+}
+
+.page::before {
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  background: #241a4c url("/assets/bg.webp") center / cover no-repeat;
+  pointer-events: none;
+}
+
+.skipLink {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  padding: 10px 16px;
+  background: #ffff1a;
+  color: #241a4c;
+  font-weight: 700;
+  border-radius: 0 0 10px 0;
+  z-index: 100;
+}
+.skipLink:focus {
+  left: 0;
+}
+
+.main {
+  width: min(100% - 32px, 1240px);
+  margin-inline: auto;
+  padding-top: 48px;
+  padding-bottom: 160px;
+}
+
+/* ── Masthead ─────────────────────────────────────────────────────────── */
+
+.header {
+  text-align: center;
+  margin-bottom: 44px;
+}
+
+.eyebrow {
+  display: inline-block;
+  padding: 5px 16px;
+  margin-bottom: 18px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 26, 0.45);
+  background: rgba(255, 255, 26, 0.1);
+  color: #ffff1a;
+  font-family: var(--font-futura, sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0 0 16px;
+  text-transform: uppercase;
+  font-family: var(--font-tantra, sans-serif);
+  font-size: clamp(2.6rem, 7vw, 5.4rem);
+  font-weight: 400;
+  line-height: 1.02;
+  color: #ffff1a;
+  letter-spacing: 0.04em;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+}
+
+.subtitle {
+  font-family: var(--font-futura, sans-serif);
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 620px;
+  margin-inline: auto;
+  line-height: 1.6;
+}
+
+/* ── Messages ─────────────────────────────────────────────────────────── */
+
+.error,
+.notice,
+.gate {
+  width: min(100%, 760px);
+  margin: 0 auto 24px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-family: var(--font-futura, sans-serif);
+  font-size: 0.93rem;
+  line-height: 1.6;
+}
+
+.error {
+  border: 1px solid rgba(255, 110, 148, 0.45);
+  background: rgba(155, 34, 72, 0.3);
+  color: #ffc2d4;
+}
+
+.notice {
+  border: 1px solid rgba(131, 235, 186, 0.4);
+  background: rgba(21, 94, 66, 0.3);
+  color: #a9f3ce;
+}
+
+.gate {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.gate a {
+  color: #ffff1a;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── Colour filter ────────────────────────────────────────────────────── */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto 28px;
+}
+
+.filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 16px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.85);
+  font-family: var(--font-futura, sans-serif);
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.filter:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.filterActive {
+  background: rgba(255, 255, 26, 0.16);
+  border-color: rgba(255, 255, 26, 0.6);
+  color: #ffff1a;
+}
+
+/* ── Product grid ─────────────────────────────────────────────────────── */
+
+/* `stretch`, not `start`: equal-height cards put every Add button on the same
+   line, which is what stops a row of products looking ragged when one has a
+   size picker and another does not. `.actions` has margin-top:auto to suit. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 22px;
+  background: linear-gradient(150deg, rgba(58, 38, 107, 0.92), rgba(30, 20, 60, 0.94));
+  box-shadow: 0 18px 50px rgba(8, 4, 24, 0.4);
+  overflow: hidden;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 26, 0.35);
+  box-shadow: 0 26px 60px rgba(8, 4, 24, 0.55);
+}
+
+.soldOutCard {
+  opacity: 0.62;
+}
+
+/* The product shot, or the drawn garment mockup when there is no photo yet. */
+.shot {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.1), transparent 62%),
+    radial-gradient(circle at 18% 12%, rgba(237, 22, 134, 0.3), transparent 55%),
+    radial-gradient(circle at 84% 84%, rgba(0, 229, 255, 0.18), transparent 52%),
+    #1b1236;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The drawn tee. Floated slightly and given a ground shadow so the card reads
+   as a product shot rather than as a flat icon. */
+.mockup {
+  width: 86%;
+  height: 86%;
+  display: grid;
+  place-items: center;
+  filter: drop-shadow(0 18px 26px rgba(0, 0, 0, 0.45));
+  transition: transform 0.35s ease;
+}
+
+.card:hover .mockup {
+  transform: translateY(-5px) scale(1.03);
+}
+
+.ribbon {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-family: var(--font-futura, sans-serif);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: rgba(10, 6, 24, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #fff;
+  backdrop-filter: blur(6px);
+}
+
+.ribbonOwned {
+  border-color: rgba(131, 235, 186, 0.6);
+  color: #a9f3ce;
+}
+
+.ribbonLow {
+  border-color: rgba(255, 255, 26, 0.6);
+  color: #ffff1a;
+}
+
+.ribbonSold {
+  border-color: rgba(255, 110, 148, 0.6);
+  color: #ffb3c9;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 12px;
+  padding: 22px;
+}
+
+/* Name and price share a line, with the price pinned right so a row of cards
+   has its prices aligned however long the names run. */
+.heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.name {
+  margin: 0;
+  font-family: var(--font-tantra, sans-serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #fff;
+  min-width: 0;
+}
+
+.tagline {
+  margin: -6px 0 0;
+  font-family: var(--font-futura, sans-serif);
+  font-size: 0.86rem;
+  color: #ffff1a;
+}
+
+/* Colour swatch plus its name, so black and white are told apart by more than
+   the picture alone. */
+.colourway {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-family: var(--font-futura, sans-serif);
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.swatch {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.description {
+  margin: 0;
+  font-family: var(--font-futura, sans-serif);
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.price {
+  flex: none;
+  font-family: var(--font-tantra, sans-serif);
+  font-size: 1.6rem;
+  color: #ffff1a;
+  letter-spacing: 0.02em;
+}
+
+.owned {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(131, 235, 186, 0.3);
+  background: rgba(131, 235, 186, 0.08);
+  font-family: var(--font-futura, sans-serif);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: #a9f3ce;
+}
+
+/* ── Size & quantity ──────────────────────────────────────────────────── */
+
+.fieldLabel {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-futura, sans-serif);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* XS through XXXL is seven buttons. A wrapping auto-fit grid keeps them an
+   even width on every card, instead of XXXL stretching its own row. */
+.sizes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
+  gap: 7px;
+}
+
+.size {
+  padding: 9px 6px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  font-family: var(--font-futura, sans-serif);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.size:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.sizeActive {
+  background: #ffff1a;
+  border-color: #ffff1a;
+  color: #241a4c;
+}
+
+.sizeBlock {
+  margin-top: 2px;
+}
+
+/* The chosen size echoed into the label, so the card still answers "which
+   size am I adding?" when the buttons are scrolled out of view on mobile. */
+.chosenSize {
+  color: #ffff1a;
+}
+
+.qtyRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qtyButton {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.qtyButton:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.13);
+}
+
+.qtyValue {
+  min-width: 26px;
+  text-align: center;
+  font-family: var(--font-futura, sans-serif);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.actions {
+  margin-top: auto;
+  padding-top: 6px;
+}
+
+.addButton,
+.payButton,
+.ghostButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px 20px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  font-family: var(--font-futura, sans-serif);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s ease, transform 0.12s ease;
+}
+
+.addButton {
+  background: #ed1686;
+  color: #fff;
+}
+
+.addButton:hover:not(:disabled) {
+  background: #cc126f;
+}
+
+.ghostButton {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #fff;
+}
+
+.ghostButton:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.inBasket {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 26, 0.14);
+  border: 1px solid rgba(255, 255, 26, 0.5);
+  color: #ffff1a;
+  font-family: var(--font-futura, sans-serif);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-align: center;
+  min-width: 0;
+}
+
+.addButton:disabled,
+.payButton:disabled,
+.ghostButton:disabled,
+.size:disabled,
+.qtyButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── Basket bar ───────────────────────────────────────────────────────── */
+
+/* Docked to the bottom so the total and the Pay button stay reachable while
+   scrolling a long drop. Cleared by the main's bottom padding. */
+.basket {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 60;
+  width: min(100% - 24px, 820px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(20, 13, 44, 0.96);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(14px);
+}
+
+.basketSummary {
+  font-family: var(--font-futura, sans-serif);
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.6;
+  min-width: 0;
+}
+
+.basketTotal {
+  display: block;
+  font-family: var(--font-tantra, sans-serif);
+  font-size: 1.7rem;
+  color: #ffff1a;
+  letter-spacing: 0.02em;
+}
+
+.basketActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.basketActions .payButton,
+.basketActions .ghostButton {
+  width: auto;
+  min-width: 150px;
+}
+
+.payButton {
+  background: #ffff1a;
+  color: #241a4c;
+}
+
+.payButton:hover:not(:disabled) {
+  background: #e8e800;
+}
+
+/* ── States ───────────────────────────────────────────────────────────── */
+
+.empty,
+.loading {
+  width: min(100%, 680px);
+  margin: 60px auto;
+  padding: 32px;
+  text-align: center;
+  border-radius: 20px;
+  border: 1px dashed rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.04);
+  font-family: var(--font-futura, sans-serif);
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* Placeholder cards while the catalogue loads, so the page does not jump from
+   one line of text to a full grid. */
+.skeleton {
+  min-height: 460px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(150deg, rgba(58, 38, 107, 0.5), rgba(30, 20, 60, 0.5));
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.75; }
+  50% { opacity: 0.38; }
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.fine {
+  width: min(100%, 760px);
+  margin: 40px auto 0;
+  text-align: center;
+  font-family: var(--font-futura, sans-serif);
+  font-size: 0.8rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.fine a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.page :is(button, a, input):focus-visible {
+  outline: 2px solid #ffff1a;
+  outline-offset: 3px;
+}
+
+/* Below Tailwind's `md`, the site shows its own floating bottom nav
+   (MobileBottomNav, ~56px tall sitting 12px from the bottom). The basket has
+   to clear it, or the two bars overlap and the Pay button is unreachable. */
+@media (max-width: 767px) {
+  .basket {
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    justify-content: center;
+    text-align: center;
+  }
+  .basketActions {
+    width: 100%;
+    justify-content: center;
+  }
+  .basketActions .payButton,
+  .basketActions .ghostButton {
+    flex: 1;
+    min-width: 0;
+  }
+  /* Room for both bars, so the last card is never trapped behind them. */
+  .main {
+    padding-bottom: 260px;
+  }
+}
+
+@media (max-width: 640px) {
+  .main {
+    padding-top: 32px;
+  }
+  .body {
+    padding: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .addButton,
+  .payButton,
+  .ghostButton,
+  .size,
+  .filter,
+  .card,
+  .mockup {
+    transition: none;
+  }
+  .card:hover {
+    transform: none;
+  }
+  .card:hover .mockup {
+    transform: none;
+  }
+  .skeleton {
+    animation: none;
+  }
+}
