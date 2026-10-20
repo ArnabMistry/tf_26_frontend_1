@@ -7,6 +7,8 @@ import {
   isConfirmed,
   isPending,
   isPayable,
+  isFull,
+  isNearlyFull,
   type AccommodationNight,
 } from '@/lib/accommodation';
 import s from './Portal.module.css';
@@ -59,6 +61,9 @@ export function AccommodationSection({ user, profileComplete }: { user: Person |
 
   const confirmed = (nights || []).filter(isConfirmed);
   const payable = (nights || []).filter(isPayable);
+  // Every night on offer has sold out. Said once at the top rather than
+  // repeated on each card.
+  const allFull = (nights || []).length > 0 && !payable.length && !confirmed.length;
 
   function toggle(night: AccommodationNight) {
     setError(''); setNotice('');
@@ -93,8 +98,10 @@ export function AccommodationSection({ user, profileComplete }: { user: Person |
           <h2>Accommodation</h2>
           <p className={s.muted}>Pick the nights you need a bed for and pay for them together.</p>
         </div>
-        <span className={`${s.badge} ${confirmed.length ? s.accepted : ''}`}>
-          {confirmed.length ? `${confirmed.length} night${confirmed.length === 1 ? '' : 's'} booked` : 'Not booked'}
+        <span className={`${s.badge} ${confirmed.length ? s.accepted : allFull ? s.pending : ''}`}>
+          {confirmed.length
+            ? `${confirmed.length} night${confirmed.length === 1 ? '' : 's'} booked`
+            : allFull ? 'Filled' : 'Not booked'}
         </span>
       </div>
 
@@ -117,6 +124,7 @@ export function AccommodationSection({ user, profileComplete }: { user: Person |
           {nights.map(night => {
             const booked = isConfirmed(night);
             const pending = isPending(night);
+            const full = isFull(night);
             const checked = pickedIds.includes(night.id);
             return (
               <article className={s.entry} key={night.id}>
@@ -125,8 +133,8 @@ export function AccommodationSection({ user, profileComplete }: { user: Person |
                     <span className={s.eyebrow}>{nightDate(night.date)}</span>
                     <h3 className="mt-1 text-base sm:text-lg font-bold">{night.label}</h3>
                   </div>
-                  <span className={`${s.badge} ${booked ? s.accepted : pending ? s.pending : ''}`}>
-                    {booked ? 'CONFIRMED' : pending ? 'NOT PAID' : `₹${night.priceInr}`}
+                  <span className={`${s.badge} ${booked ? s.accepted : pending || full ? s.pending : ''}`}>
+                    {booked ? 'CONFIRMED' : full ? 'FILLED' : pending ? 'NOT PAID' : `₹${night.priceInr}`}
                   </span>
                 </div>
 
@@ -135,6 +143,13 @@ export function AccommodationSection({ user, profileComplete }: { user: Person |
                     Paid ₹{night.booking?.amountPaid ?? night.priceInr}
                     {night.booking?.paidAt ? ` on ${formatDate(night.booking.paidAt)} IST` : ''}. Show your Fest ID at the
                     accommodation desk.
+                  </p>
+                ) : full ? (
+                  /* Closed on its own the moment the last bed went — no admin
+                     action needed, and no checkbox to raise false hope. */
+                  <p className={`${s.fine} mt-2`}>
+                    Accommodation is filled for this night — all {night.capacity} beds are taken. If someone cancels it
+                    will reopen here, so do check back.
                   </p>
                 ) : (
                   <label className={`${s.row} mt-2 cursor-pointer`} style={{ justifyContent: 'flex-start', gap: '0.6rem' }}>
@@ -148,6 +163,7 @@ export function AccommodationSection({ user, profileComplete }: { user: Person |
                     <span className={s.muted}>
                       Add this night — ₹{night.priceInr}
                       {pending ? ' (selected earlier but never paid for)' : ''}
+                      {isNearlyFull(night) ? ` · only ${night.remaining} bed${night.remaining === 1 ? '' : 's'} left` : ''}
                     </span>
                   </label>
                 )}
@@ -175,6 +191,13 @@ export function AccommodationSection({ user, profileComplete }: { user: Person |
           {!payable.length && confirmed.length > 0 && (
             <p className={`${s.fine} mt-3`}>
               You are booked for every night on offer. To change or cancel a paid booking, contact the organisers.
+            </p>
+          )}
+
+          {allFull && (
+            <p className={s.empty}>
+              Accommodation is filled — every night is fully booked. Beds are released if someone cancels, so it is
+              worth checking back closer to the fest.
             </p>
           )}
         </>

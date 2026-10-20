@@ -10,6 +10,7 @@
  */
 
 import { formatMealsLabel } from "@/lib/eventDetails";
+import { describeBothRates } from "@/lib/collegeFee";
 
 export interface EventClubReference {
   name: string;
@@ -34,6 +35,8 @@ export interface PublicEvent {
   minTeamSize?: number | null;
   maxTeamSize?: number | null;
   price?: number;
+  /** What an @iiitn.ac.in participant pays instead of `price`; null if the event has no separate rate. */
+  collegePrice?: number | null;
   /** Team events only: whether `price` is charged per head or once per team. */
   feeMode?: 'per_team' | 'per_participant';
   paymentTrigger?: string;
@@ -85,6 +88,7 @@ interface BackendEvent {
   registrationEndTime?: string;
   paymentPageLink?: string | null;
   price?: number;
+  collegePrice?: number | null;
   feeMode?: 'per_team' | 'per_participant';
   isTeamEvent?: boolean;
   minTeamSize?: number | null;
@@ -158,6 +162,7 @@ function normaliseBackendEvent(raw: BackendEvent): PublicEvent {
     prizeBreakdown: raw.requirements?.prizes ?? raw.prizeBreakdown,
     prizes: prizePool,
     price: raw.price,
+    collegePrice: raw.collegePrice ?? null,
     feeMode: raw.feeMode,
     paymentTrigger: raw.paymentTrigger,
     isPaid: raw.price !== undefined && raw.price > 0,
@@ -166,9 +171,12 @@ function normaliseBackendEvent(raw: BackendEvent): PublicEvent {
     // rewrites, so preferring it showed a stale fee forever. The only value
     // the backend itself writes there is "Free", on an event whose price is
     // already 0 - which this expression reports as "Free" anyway.
+    // Both rates when the event has a host-college one, because a listing is
+    // read by people who are not signed in and an IIITN student should still
+    // see what they will actually pay.
     registrationFee: raw.price === undefined || raw.price === 0
       ? "Free"
-      : `₹${raw.price}${raw.isTeamEvent && raw.feeMode === "per_team" ? " per team" : " per participant"}`,
+      : describeBothRates(raw, raw.isTeamEvent && raw.feeMode === "per_team" ? " per team" : " per participant"),
     meals: raw.requirements?.meals ? formatMealsLabel(raw.requirements.meals) : undefined,
     participationKit: raw.requirements?.participationKit !== undefined ? Boolean(raw.requirements.participationKit) : undefined,
     requirements: raw.requirements,

@@ -2,10 +2,11 @@ import { test, expect, type Page } from '@playwright/test';
 
 const user = { id: 'person-1', firstName: 'Vinay', lastName: 'Kumar', email: 'vinay@example.test', role: 'participant', festId: 'TF123456', collegeName: 'IIIT Nagpur', phoneNumber: '9876543210', verified: true, allowedEventIds: [] };
 
+/** `capacity`/`booked` drive the 15-bed cap; these nights have room. */
 const NIGHTS = [
-  { id: 1, date: '2026-10-24T00:00:00.000Z', label: 'Night of 24th Oct', priceInr: 500, isAvailable: true },
-  { id: 2, date: '2026-10-25T00:00:00.000Z', label: 'Night of 25th Oct', priceInr: 500, isAvailable: true },
-  { id: 3, date: '2026-10-26T00:00:00.000Z', label: 'Night of 26th Oct', priceInr: 600, isAvailable: true },
+  { id: 1, date: '2026-10-24T00:00:00.000Z', label: 'Night of 24th Oct', priceInr: 500, isAvailable: true, capacity: 15, booked: 2, remaining: 13, isFull: false },
+  { id: 2, date: '2026-10-25T00:00:00.000Z', label: 'Night of 25th Oct', priceInr: 500, isAvailable: true, capacity: 15, booked: 0, remaining: 15, isFull: false },
+  { id: 3, date: '2026-10-26T00:00:00.000Z', label: 'Night of 26th Oct', priceInr: 600, isAvailable: true, capacity: 15, booked: 0, remaining: 15, isFull: false },
 ];
 
 /**
@@ -192,7 +193,7 @@ async function mockAdmin(page: Page) {
     else if (path === '/api/admin/dashboard') data = { totals: { events: 0, registrations: 0, teams: 0, users: 3 }, perEventStats: [], recentRegistrations: [] };
     else if (path === '/api/admin/accommodation/summary') {
       data = {
-        perNight: NIGHTS.map((n, i) => ({ configId: n.id, label: n.label, date: n.date, priceInr: n.priceInr, isAvailable: n.id !== 3, confirmed: i === 0 ? 1 : 0, pending: i === 1 ? 1 : 0, cancelled: 0, revenueInr: i === 0 ? 500 : 0 })),
+        perNight: NIGHTS.map((n, i) => ({ configId: n.id, label: n.label, date: n.date, priceInr: n.priceInr, isAvailable: n.id !== 3, capacity: 15, taken: i === 0 ? 1 : 0, remaining: i === 0 ? 14 : 15, isFull: false, confirmed: i === 0 ? 1 : 0, pending: i === 1 ? 1 : 0, cancelled: 0, revenueInr: i === 0 ? 500 : 0 })),
         totals: { confirmedGuests: 1, pendingGuests: 1, confirmedBookings: 1, pendingBookings: 1, revenueInr: 500 },
       };
     } else if (path === '/api/admin/accommodation/configs') {
@@ -296,4 +297,75 @@ test('event admins cannot reach the accommodation section', async ({ page }) => 
 
   await page.goto('/admin/events/event1');
   await expect(page.getByRole('link', { name: 'Accommodation' })).toHaveCount(0);
+});
+
+// ── Capacity: 15 beds a night ───────────────────────────────────────────────
+
+/** Serves the nights exactly as given, with no booking of the user's own. */
+async function mockNights(page: Page, nights: unknown[]) {
+  await page.addInitScript(() => localStorage.setItem('tf_signed_in', '1'));
+  await page.route('**/api/**', async route => {
+    const path = new URL(route.request().url()).pathname;
+    let data: unknown = {};
+    if (path === '/api/auth/me') data = { user };
+    else if (path === '/api/user/profile') data = { user, stats: { totalRegisteredEvents: 0, totalTeams: 0, totalQualifiedRounds: 0 }, registeredEvents: [], teams: [], activities: [] };
+    else if (path === '/api/user/notifications') data = { notifications: [], unreadCount: 0, page: 1, totalPages: 1 };
+    else if (path === '/api/user/meals') data = { meals: [] };
+    else if (path === '/api/accommodation/nights') data = nights;
+    await route.fulfill({ json: { success: true, data } });
+  });
+}
+
+const full = (n: typeof NIGHTS[number]) => ({ ...n, booked: n.capacity, remaining: 0, isFull: true, booking: null });
+
+test('a night with every bed taken closes itself and says so', async ({ page }) => {
+  await mockNights(page, [full(NIGHTS[0]), { ...NIGHTS[1], booking: null }, { ...NIGHTS[2], booking: null }]);
+  await page.goto('/profile?tab=accommodation');
+  const section = page.locator('#accommodation');
+
+  // The filled night offers no way to select it.
+  await expect(section.getByText('FILLED', { exact: true })).toBeVisible();
+  await expect(section.getByText(/Accommodation is filled for this night — all 15 beds are taken/)).toBeVisible();
+  await expect(section.getByLabel('Select Night of 24th Oct for ₹500')).toHaveCount(0);
+
+  // The nights that still have beds are unaffected.
+  await expect(section.getByLabel('Select Night of 25th Oct for ₹500')).toBeVisible();
+  await expect(section.getByLabel('Select Night of 26th Oct for ₹600')).toBeVisible();
+});
+
+test('when every night is filled the whole section says accommodation is filled', async ({ page }) => {
+  await mockNights(page, NIGHTS.map(full));
+  await page.goto('/profile?tab=accommodation');
+  const section = page.locator('#accommodation');
+
+  await expect(section.getByText('Filled', { exact: true })).toBeVisible();
+  await expect(section.getByText(/Accommodation is filled — every night is fully booked/)).toBeVisible();
+  await expect(section.getByRole('checkbox')).toHaveCount(0);
+  await expect(section.getByRole('button', { name: /^Pay/ })).toHaveCount(0);
+});
+
+test('a bed already held is still payable on a night that is otherwise full', async ({ page }) => {
+  // The participant is one of the fifteen, with an unpaid checkout.
+  await mockNights(page, [
+    { ...full(NIGHTS[0]), isFull: false, booking: { id: 9, status: 'pending_payment', amountPaid: 500, paidAt: null, orderId: 'accom_x' } },
+    { ...NIGHTS[1], booking: null },
+    { ...NIGHTS[2], booking: null },
+  ]);
+  await page.goto('/profile?tab=accommodation');
+  const section = page.locator('#accommodation');
+
+  // Refusing them would strand the bed being held for them.
+  await expect(section.getByText('NOT PAID')).toBeVisible();
+  await expect(section.getByLabel('Select Night of 24th Oct for ₹500')).toBeVisible();
+  await expect(section.getByText(/Accommodation is filled for this night/)).toHaveCount(0);
+});
+
+test('a night running low says how many beds are left', async ({ page }) => {
+  await mockNights(page, [
+    { ...NIGHTS[0], booked: 13, remaining: 2, isFull: false, booking: null },
+    { ...NIGHTS[1], booking: null },
+    { ...NIGHTS[2], booking: null },
+  ]);
+  await page.goto('/profile?tab=accommodation');
+  await expect(page.locator('#accommodation').getByText(/only 2 beds left/)).toBeVisible();
 });
