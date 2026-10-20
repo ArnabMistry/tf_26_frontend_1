@@ -77,13 +77,7 @@ export const FAQS_DATA: FAQItem[] = [
   },
 
   // ── Accommodation & Food ──
-  {
-    id: "accommodation-available",
-    category: "accommodation",
-    question: "Is accommodation provided for outstation participants?",
-    answer:
-      "Yes, limited on-campus hostel accommodation is available on a first-come, first-served basis for outstation participants. Accommodation can be booked through the hospitality desk or by emailing tantrafiesta.hospitality@iiitn.ac.in.",
-  },
+
   {
     id: "meals-included",
     category: "accommodation",
@@ -123,13 +117,7 @@ export const FAQS_DATA: FAQItem[] = [
     answer:
       "Payment gateway reconciliation usually completes within 10–15 minutes. If your registration is not confirmed within 2 hours, email us at contact@tantrafiesta.in with your transaction screenshot, Razorpay payment ID, registered email, and event name. Duplicate debits are automatically refunded within 5–7 business days.",
   },
-  {
-    id: "free-vs-paid-events",
-    category: "payments",
-    question: "Are all events paid?",
-    answer:
-      "No. TantraFiesta offers both free and paid competitions. Some events (like Algorithmia) feature completely free online preliminary rounds, while other flagship hackathons with meals, goodies kits, and large cash prize pools charge a nominal entry fee.",
-  },
+
 
   // ── Prizes & Certificates ──
   {
@@ -138,19 +126,5 @@ export const FAQS_DATA: FAQItem[] = [
     question: "When and how do participants receive certificates?",
     answer:
       "Verified digital certificates of participation and merit certificates for winners are published directly on the TantraFiesta portal within 7 to 10 days following the festival. Participants can download cryptographically verified PDF certificates anytime.",
-  },
-  {
-    id: "prize-disbursement",
-    category: "prizes",
-    question: "How and when are cash prizes disbursed to winners?",
-    answer:
-      "Cash prizes are disbursed directly via bank transfer (NEFT/RTGS/UPI) to the verified bank account of the winning team leader or individual winners within 14 to 21 business days after tax compliance and account verification.",
-  },
-  {
-    id: "participation-kit",
-    category: "prizes",
-    question: "What does the official TantraFiesta Participation Kit include?",
-    answer:
-      "Eligible registered participants receive the official TantraFiesta 2026 kit upon campus check-in. The kit includes the official fest drawstring bag, personalized delegate ID badge, custom stickers, sponsor goodies, and event merchandise.",
   },
 ];
