@@ -37,9 +37,8 @@ type Secretary = {
 const BASE = "/Domain-leads-photos/";
 
 const secretaries: Secretary[] = [
-  { role: "General Secretary" },
-  { role: "Technical Secretary" },
-  { role: "Cultural Secretary" },
+  { role: "General Secretary", name: "Apoorva Mundada" },
+  { role: "Technical Secretary", name: "Amulya Yadav" },
 ];
 
 const divisions: Division[] = [
@@ -279,7 +278,7 @@ function SecretaryCard({
   const imageSrc = shouldLoad && secretary.image ? secretary.image : null;
 
   return (
-    <article className={styles.card} id={`secretary-card-${index}`}>
+    <article className={`${styles.card} ${styles.secretaryCard}`} id={`secretary-card-${index}`}>
       <div className={`${styles.portrait} ${styles.secretaryPortrait}`}>
         {imageSrc ? (
           <>
@@ -295,7 +294,7 @@ function SecretaryCard({
               src={imageSrc}
               alt={secretary.name ?? "Secretary"}
               fill
-              sizes="132px"
+              sizes="(max-width: 680px) 28vw, 160px"
               className={`${styles.photo} ${isLoaded ? styles.photoLoaded : styles.photoLoading}`}
               onLoad={() => setIsLoaded(true)}
             />
@@ -312,7 +311,7 @@ function SecretaryCard({
           {secretary.role ?? "Secretary"}
         </span>
       </div>
-      <h4 className={styles.memberName}>{secretary.name ?? "Coming Soon"}</h4>
+      <h4 className={styles.memberName}>{secretary.name}</h4>
     </article>
   );
 }
