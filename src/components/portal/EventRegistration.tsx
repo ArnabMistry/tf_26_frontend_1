@@ -217,11 +217,14 @@ export function EventRegistration() {
   if (loading || !user) return <EventRegistrationLoadingShell message="Checking your account…" />;
   const participant = profileUser?.id === user.id ? profileUser : user;
   const closed = !!event && new Date(event.registrationEndTime) <= new Date();
+  const maxPaid = event?.maxPaidRegistrations ?? (event as unknown as { requirements?: { maxPaidRegistrations?: number } })?.requirements?.maxPaidRegistrations ?? null;
+  const paidCount = event?.paidOrdersCount ?? 0;
+  const isCapReached = Boolean(event?.isRegistrationFull || (maxPaid && maxPaid > 0 && paidCount >= maxPaid));
   const paymentRequired = !!event && event.price > 0 && event.paymentTrigger === 'before_registration';
   const feeCharged = !!event && event.price > 0 && event.paymentTrigger !== 'free';
   const isVerified = Boolean(participant.verified);
   const isProfileIncomplete = !participant.collegeName?.trim() || !participant.phoneNumber?.trim();
-  const canRegister = !!event && !registered && !closed && !isProfileIncomplete && isVerified && (!event.isTeamEvent || (!!team?.isLeader && team.stats.isReadyForRegistration && !team.stats.isRegistered));
+  const canRegister = !!event && !registered && !closed && !isCapReached && !isProfileIncomplete && isVerified && (!event.isTeamEvent || (!!team?.isLeader && team.stats.isReadyForRegistration && !team.stats.isRegistered));
 
   // `after_round` events are free to enter; the fee only opens once an admin
   // has promoted this participant into the round the fee is gated on.
@@ -569,9 +572,9 @@ export function EventRegistration() {
           </div>}
           {team.members.map(member => <div className={s.entry} key={member.id}><div className={s.row}><div><h3>{fullName(member)}</h3><p className={s.fine}>{member.festId}</p></div><span className={`${s.badge} ${s.accepted}`}>{member.isLeader ? 'Leader' : 'Accepted'}</span>{team.isLeader && !member.isLeader && !team.stats.rosterLocked && <button disabled={busy} className={s.secondary} onClick={() => mutate(() => participantRequest(`/api/user/teams/${team.id}/members`, { userId: member.id }, 'DELETE'), 'Member removed.')}>Remove</button>}</div></div>)}
           {team.invites.filter(invite => invite.status !== 'ACCEPTED').map(invite => <div className={s.entry} key={invite.id}><div className={s.row}><div><h3>{invite.user ? fullName(invite.user) : invite.email}</h3><p className={s.fine}>{invite.user?.festId}</p></div><span className={`${s.badge} ${invite.status === 'PENDING' ? s.pending : ''}`}>{invite.status}</span>{team.isLeader && invite.status === 'PENDING' && !team.stats.rosterLocked && <button className={s.secondary} disabled={busy} onClick={() => mutate(() => participantRequest(`/api/user/teams/${team.id}/members`, { inviteId: invite.id }, 'DELETE'), 'Invitation cancelled.')}>Cancel invite</button>}</div></div>)}
-          {team.isLeader && !team.stats.isRegistered && team.stats.isReadyForRegistration && <div className="mt-4 p-4 rounded-xl bg-[#faff52]/15 border border-[#faff52]/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"><div><h4 className="font-bold text-[#faff52]">Team is ready!</h4><p className={s.fine}>Minimum team size reached. Finalize your registration below.</p></div><button disabled={busy} className={s.button} onClick={handleAction}>{busy ? (paymentRequired ? 'Processing payment…' : 'Registering…') : (paymentRequired ? `Pay ₹${feeTotal} & Register team` : 'Register team now')}</button></div>}
+          {team.isLeader && !team.stats.isRegistered && team.stats.isReadyForRegistration && <div className="mt-4 p-4 rounded-xl bg-[#faff52]/15 border border-[#faff52]/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"><div><h4 className="font-bold text-[#faff52]">{isCapReached ? 'Registration full' : 'Team is ready!'}</h4><p className={s.fine}>{isCapReached ? 'Paid registration limit reached for this event.' : 'Minimum team size reached. Finalize your registration below.'}</p></div><button disabled={busy || isCapReached} className={s.button} onClick={handleAction}>{isCapReached ? 'Registration full' : busy ? (paymentRequired ? 'Processing payment…' : 'Registering…') : (paymentRequired ? `Pay ₹${feeTotal} & Register team` : 'Register team now')}</button></div>}
         </section>
-        {team.isLeader && !team.stats.rosterLocked && <section className={s.card}><h2>Invite a teammate</h2><p className={`${s.muted} mb-4`}>Ask for their TF ID from their profile. They’ll receive an invitation in their portal.</p><form className={s.form} onSubmit={e => { e.preventDefault(); void mutate(async () => { await participantRequest(`/api/user/teams/${team.id}/invites`, { identifier: identifier.trim().toUpperCase() }); setIdentifier(''); }, 'Invitation sent. Your teammate can accept or decline in their inbox.'); }}><label>Teammate’s TF ID<input required pattern="[Tt][Ff][0-9]{6}" placeholder="TF123456" value={identifier} onChange={e => setIdentifier(e.target.value.toUpperCase())}/></label><button className={s.button} disabled={busy || closed || team.members.length + team.stats.pendingCount >= (event.maxTeamSize || 4)}>Send invitation</button></form></section>}
+        {team.isLeader && !team.stats.rosterLocked && <section className={s.card}><h2>Invite a teammate</h2><p className={`${s.muted} mb-4`}>Ask for their TF ID from their profile. They’ll receive an invitation in their portal.</p><form className={s.form} onSubmit={e => { e.preventDefault(); void mutate(async () => { await participantRequest(`/api/user/teams/${team.id}/invites`, { identifier: identifier.trim().toUpperCase() }); setIdentifier(''); }, 'Invitation sent. Your teammate can accept or decline in their inbox.'); }}><label>Teammate’s TF ID<input required pattern="[Tt][Ff][0-9]{6}" placeholder="TF123456" value={identifier} onChange={e => setIdentifier(e.target.value.toUpperCase())}/></label><button className={s.button} disabled={busy || closed || isCapReached || team.members.length + team.stats.pendingCount >= (event.maxTeamSize || 4)}>Send invitation</button></form></section>}
       </> : <section className={s.card}><h2>Your participant details</h2><h3>{fullName(participant)}</h3><p className={s.muted}>{participant.email}</p><p className={s.id}>{participant.festId}</p><p className={s.muted}>{participant.collegeName || 'You can add your college in your profile.'}</p></section>}
     </div><aside className={s.card}><p className={s.eyebrow}>Registration summary</p><h2 className="mt-4">{event.name}</h2><div className={s.entry}><p className={s.muted}>Format</p><h3>{event.isTeamEvent ? `Team · ${event.minTeamSize}–${event.maxTeamSize} members` : 'Individual'}</h3></div><div className={s.entry}><p className={s.muted}>Registration closes</p><h3>{formatDate(event.registrationEndTime)} IST</h3></div>
       {isCascade && (
@@ -651,8 +654,10 @@ export function EventRegistration() {
           {isYuvaan && !isYuvaanComplete && !registered && (
             <p className={`${s.fine} text-[#FFFF1A] mb-2`}>⚠️ Complete all 4 Yuvaan fields to register.</p>
           )}
-          <button className={`${s.button} w-full`} disabled={busy || !canRegister} onClick={handleAction}>
-            {busy
+          <button className={`${s.button} w-full`} disabled={busy || !canRegister || (isCapReached && !registered)} onClick={handleAction}>
+            {isCapReached && !registered
+              ? 'Registration full (Cap reached)'
+              : busy
               ? paymentRequired ? 'Processing payment…' : 'Please wait…'
               : feePaid
               ? 'Fee paid'
@@ -662,6 +667,11 @@ export function EventRegistration() {
               ? event?.isTeamEvent ? `Pay ₹${feeTotal} & Register team` : `Pay ₹${feeTotal} & Register`
               : event?.isTeamEvent ? 'Register team' : 'Confirm registration'}
           </button>
+          {isCapReached && !registered && (
+            <p className={`${s.fine} text-pink-300 mt-2 text-center`}>
+              This event has reached its maximum paid registration capacity.
+            </p>
+          )}
         </>
       )}
       <p className={s.fine}>Joining a team does not register it. The leader confirms registration once everyone is ready.</p>

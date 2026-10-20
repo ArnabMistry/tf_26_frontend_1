@@ -43,6 +43,7 @@ const eventFields: Field[] = [
   // No "payment round" here on purpose: an `after_round` fee falls due on the
   // first promotion, whichever round that is, so there is nothing to pick.
   { name: 'paymentTrigger', label: 'Payment trigger', options: options(['free', 'before_registration', 'after_round']) },
+  { name: 'maxPaidRegistrations', label: 'Paid registration cap (blank or 0 for unlimited)', type: 'number', min: 0 },
   { name: 'paymentPageLink', label: 'Payment page URL', type: 'url' },
 ];
 
@@ -69,7 +70,7 @@ export function EventTools({ eventId, superAdmin, changed }: { eventId: string; 
     return `Delete ${text(event.name)}?\n\nThis permanently removes the event along with:\n· ${parts.join('\n· ')}\n· every order and payment record for this event\n\nPayments already collected are reconciled in Razorpay, not here — this only erases our copy. This cannot be undone.`;
   }
   function editEvent(create: boolean) {
-    setEditor({ title: create ? 'Create event' : 'Edit event', path: create ? '/api/admin/events' : `/api/admin/events/${enc(eventId)}`, method: create ? 'POST' : 'PATCH', initial: create ? {} : event,
+    setEditor({ title: create ? 'Create event' : 'Edit event', path: create ? '/api/admin/events' : `/api/admin/events/${enc(eventId)}`, method: create ? 'POST' : 'PATCH', initial: create ? {} : { ...event, maxPaidRegistrations: event.maxPaidRegistrations ?? (record(event.requirements).maxPaidRegistrations || '') },
       fields: [...(create ? [{ name: 'id', label: 'Event ID', required: true }, { name: 'festId', label: 'Fest ID', type: 'number', min: 1, value: 1, required: true }] : []), ...eventFields],
       transform: data => {
         if (data.isTeamEvent && (!data.minTeamSize || !data.maxTeamSize || Number(data.minTeamSize) > Number(data.maxTeamSize))) throw new Error('Enter valid minimum and maximum team sizes.');
@@ -80,6 +81,7 @@ export function EventTools({ eventId, superAdmin, changed }: { eventId: string; 
           // A solo event charges its fee once; sending per-participant there
           // would store a setting that is never applied.
           feeMode: data.isTeamEvent ? (data.feeMode || 'per_team') : 'per_team',
+          maxPaidRegistrations: data.maxPaidRegistrations ? Number(data.maxPaidRegistrations) : null,
           paymentPageLink: data.paymentPageLink || null,
         };
       },
@@ -104,7 +106,7 @@ export function EventTools({ eventId, superAdmin, changed }: { eventId: string; 
       {/* The event list is only refreshed on the way out, so this summary is
           not torn down by the re-render that drops the deleted event. */}
       <div className="admin-actions"><button className="primary" onClick={() => { setDeleted(null); changed(); }}>Back to events</button></div></article>}
-    {!deleted && !!resource.data && <><article className="admin-card"><h3>{text(event.name)}</h3><p>{text(event.description)}</p><p>{text(event.club)} · {text(event.venue)}</p><p>Fee: {event.paymentTrigger === 'free' || !Number(event.price) ? 'Free' : `₹${text(event.price)}${event.isTeamEvent ? event.feeMode === 'per_participant' ? ' per participant' : ' per team' : ''}`} · Registration closes: {new Date(String(event.registrationEndTime)).toLocaleString()}</p>
+    {!deleted && !!resource.data && <><article className="admin-card"><h3>{text(event.name)}</h3><p>{text(event.description)}</p><p>{text(event.club)} · {text(event.venue)}</p><p>Fee: {event.paymentTrigger === 'free' || !Number(event.price) ? 'Free' : `₹${text(event.price)}${event.isTeamEvent ? event.feeMode === 'per_participant' ? ' per participant' : ' per team' : ''}`} · Paid cap: {event.maxPaidRegistrations ? `${text(event.paidOrdersCount || 0)} / ${text(event.maxPaidRegistrations)}` : 'Unlimited'} · Registration closes: {new Date(String(event.registrationEndTime)).toLocaleString()}</p>
       <div className="admin-actions"><button onClick={() => editEvent(false)}>Edit event</button>{superAdmin && <button disabled={busy} className="danger" onClick={() => remove(`/api/admin/events/${enc(eventId)}`, deleteEventWarning(), setDeleted)}>Delete event</button>}</div></article>
       <div className="admin-section-heading"><h3>Rounds</h3><button onClick={() => editRound()}>Add round</button></div><LoadState {...roundsResource} />
       <Table headings={['Round', 'Name', 'Deadline', 'Actions']} empty={!roundsList.length}>{roundsList.map(round => <tr key={text(round.id)}><td>{text(round.roundNumber)}</td><td>{text(round.name)}</td><td>{new Date(String(round.roundEndTime)).toLocaleString()}</td><td><div className="admin-actions"><button onClick={() => editRound(round)}>Edit</button><button className="danger" disabled={busy} onClick={() => remove(`/api/admin/events/${enc(eventId)}/rounds/${enc(round.roundNumber)}`, 'Delete this round and its participant results? This cannot be undone.')}>Delete</button></div></td></tr>)}</Table>
