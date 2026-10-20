@@ -8,6 +8,9 @@ import dynamic from 'next/dynamic';
 import { enc, person, record, text, type Dashboard } from '@/lib/admin';
 import { LoadState, Table, useAdminData } from '@/components/admin/AdminUI';
 
+const BulkEmail = dynamic(() => import('@/components/admin/BulkEmail').then(m => m.BulkEmail), {
+  loading: () => <p className="admin-loading-card">Loading bulk email…</p>,
+});
 const EventTools = dynamic(() => import('@/components/admin/EventTools').then(m => m.EventTools), {
   loading: () => <p className="admin-loading-card">Loading event tools…</p>,
 });
@@ -60,14 +63,14 @@ function AdminGate({ superAdmin = false, eventId }: { superAdmin?: boolean; even
 function Workspace({ user, eventId }: { user: AuthUser; eventId?: string }) {
   const router = useRouter(); const params = useSearchParams(); const superAdmin = user.role === 'super';
   const resource = useAdminData('/api/admin/dashboard'); const dashboard = resource.data as Dashboard | null;
-  const tabs = [{ id: 'overview', name: 'Overview' }, { id: 'events', name: 'Event management' }, { id: 'registrations', name: 'Registrations' }, { id: 'promotion', name: 'Round promotion' }, { id: 'meals', name: 'Food counter' }, ...(superAdmin ? [{ id: 'accommodation', name: 'Accommodation' }, { id: 'users', name: 'User governance' }, { id: 'staff', name: 'Coordinators' }] : [])];
+  const tabs = [{ id: 'overview', name: 'Overview' }, { id: 'events', name: 'Event management' }, { id: 'registrations', name: 'Registrations' }, { id: 'promotion', name: 'Round promotion' }, { id: 'bulk-email', name: 'Bulk Email' }, { id: 'meals', name: 'Food counter' }, ...(superAdmin ? [{ id: 'accommodation', name: 'Accommodation' }, { id: 'users', name: 'User governance' }, { id: 'staff', name: 'Coordinators' }] : [])];
   const view = tabs.some(t => t.id === params.get('view')) ? params.get('view')! : 'overview';
   const events = dashboard?.perEventStats || [];
   const selectedId = eventId || (events.some(e => e.id === params.get('event')) ? params.get('event')! : events[0]?.id || '');
   const selected = events.find(e => e.id === selectedId);
   const recent = dashboard?.recentRegistrations?.filter(r => superAdmin || r.eventId === selectedId || record(r.event).id === selectedId) || [];
   function href(tab: string, id = selectedId) { return superAdmin ? `/admin/super?view=${tab}${id ? `&event=${enc(id)}` : ''}` : `${id ? `/admin/events/${enc(id)}` : '/admin/events'}?view=${tab}`; }
-  const eventRequired = ['registrations', 'promotion'].includes(view);
+  const eventRequired = ['registrations', 'promotion', 'bulk-email'].includes(view);
   return <main className="admin-workspace"><div className="admin-layout">
     <aside className="admin-sidebar">
       <div className="admin-sidebar-header">
@@ -123,6 +126,7 @@ function Workspace({ user, eventId }: { user: AuthUser; eventId?: string }) {
           {view === 'events' && <EventTools eventId={selectedId} superAdmin={superAdmin} changed={resource.reload} />}
           {view === 'registrations' && <Registrations eventId={selectedId} />}
           {view === 'promotion' && <Promotion eventId={selectedId} />}
+          {view === 'bulk-email' && <BulkEmail eventId={selectedId} superAdmin={superAdmin} />}
           {view === 'meals' && <Meals events={events} />}
           {view === 'accommodation' && superAdmin && <Accommodation />}
           {view === 'users' && superAdmin && <Users currentUserId={user.id} />}
