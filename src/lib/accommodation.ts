@@ -8,6 +8,13 @@ export type AccommodationNight = {
   label: string;
   priceInr: number;
   isAvailable: boolean;
+  /** Beds this night has in total. */
+  capacity: number;
+  /** Beds taken — confirmed bookings plus live checkouts. */
+  booked: number;
+  remaining: number;
+  /** No beds left, and none held for you. The night is closed. */
+  isFull: boolean;
   booking: {
     id: number;
     status: 'pending_payment' | 'confirmed' | 'cancelled';
@@ -44,8 +51,22 @@ export const accommodationNights = () =>
 export const isPending = (night: AccommodationNight) => night.booking?.status === 'pending_payment';
 export const isConfirmed = (night: AccommodationNight) => night.booking?.status === 'confirmed';
 
-/** A night the participant may still pay for — unbooked, pending or cancelled. */
-export const isPayable = (night: AccommodationNight) => night.isAvailable && !isConfirmed(night);
+/**
+ * A night the participant may still pay for.
+ *
+ * A full night is closed to newcomers, but someone who already has a bed held
+ * by an unpaid checkout must still be able to settle it — their bed is one of
+ * the ones counted as taken, so refusing them would strand it.
+ */
+export const isPayable = (night: AccommodationNight) =>
+  night.isAvailable && !isConfirmed(night) && (!night.isFull || isPending(night));
+
+/** Nights closed because every bed is taken. */
+export const isFull = (night: AccommodationNight) => night.isFull && !isConfirmed(night);
+
+/** Shown when a night is nearly gone, to make the cap visible before it bites. */
+export const isNearlyFull = (night: AccommodationNight) =>
+  !night.isFull && night.remaining > 0 && night.remaining <= 3;
 
 /**
  * Pay for every selected night in one visit to Razorpay.
