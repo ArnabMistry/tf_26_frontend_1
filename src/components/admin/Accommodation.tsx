@@ -215,6 +215,7 @@ export function Accommodation() {
               { name: 'date', label: 'Date of the night', type: 'date', required: true },
               { name: 'label', label: 'Label shown to participants', required: true },
               { name: 'priceInr', label: 'Price (₹)', type: 'number', min: 0, required: true },
+              { name: 'capacity', label: 'Beds available this night', type: 'number', min: 0, required: true, value: 15 },
               { name: 'isAvailable', label: 'Open for booking', type: 'checkbox', value: true },
             ],
             transform: data => ({ ...data, date: new Date(`${String(data.date)}T00:00:00.000Z`).toISOString() }),
@@ -222,19 +223,26 @@ export function Accommodation() {
         </div>
       </div>
       <p className="admin-hint">
-        Changing a price never re-bills anyone: each booking stores the price it was sold at. Closing a night hides it
-        from participants without touching the bookings already made for it.
+        Each night has a bed count — <strong>15 by default</strong>. Once they are taken the night closes itself on the
+        participant&rsquo;s profile and shows as filled, with no action needed here; a cancellation reopens it just as
+        automatically. A bed counts as taken by a paid booking or by a checkout still in progress, so two people cannot
+        be sold the last one. Changing a price never re-bills anyone: each booking stores the price it was sold at.
+        Lowering the bed count below what is already booked never evicts anyone — it just stops new bookings.
       </p>
 
       <LoadState {...configsRes} />
-      <Table headings={['Night', 'Date', 'Price', 'Open', 'Confirmed', 'Unpaid', 'Revenue', 'Actions']} empty={!perNight.length}>
+      <Table headings={['Night', 'Date', 'Price', 'Beds', 'Open', 'Confirmed', 'Unpaid', 'Revenue', 'Actions']} empty={!perNight.length}>
         {perNight.map(n => {
           const id = text(n.configId);
           return <tr key={id}>
             <td>{text(n.label)}</td>
             <td>{nightDate(n.date)}</td>
             <td>{rupees(n.priceInr)}</td>
-            <td><span className="admin-badge">{n.isAvailable ? 'OPEN' : 'CLOSED'}</span></td>
+            <td>
+              {text(n.taken)} / {text(n.capacity)}
+              <br /><small>{n.isFull ? 'FILLED' : `${text(n.remaining)} left`}</small>
+            </td>
+            <td><span className="admin-badge">{n.isFull ? 'FILLED' : n.isAvailable ? 'OPEN' : 'CLOSED'}</span></td>
             <td>{text(n.confirmed)}</td>
             <td>{text(n.pending)}</td>
             <td>{rupees(n.revenueInr)}</td>
@@ -243,10 +251,11 @@ export function Accommodation() {
                 title: `Edit ${text(n.label)}`,
                 path: '/api/admin/accommodation/configs',
                 method: 'PUT',
-                initial: { label: n.label, priceInr: n.priceInr, isAvailable: n.isAvailable },
+                initial: { label: n.label, priceInr: n.priceInr, capacity: n.capacity, isAvailable: n.isAvailable },
                 fields: [
                   { name: 'label', label: 'Label', required: true },
                   { name: 'priceInr', label: 'Price (₹)', type: 'number', min: 0, required: true },
+                  { name: 'capacity', label: 'Beds available this night', type: 'number', min: 0, required: true },
                   { name: 'isAvailable', label: 'Open for booking', type: 'checkbox' },
                 ],
                 // The date identifies the row, so it is sent back unchanged
