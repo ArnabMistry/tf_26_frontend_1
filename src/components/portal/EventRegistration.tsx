@@ -552,16 +552,7 @@ export function EventRegistration() {
           <div className={s.progress} aria-label={`${team.members.length} of ${event.maxTeamSize || 4} slots filled`}>{Array.from({length: Math.min(event.maxTeamSize || 4, 20)}, (_,i) => <span key={i} className={i < team.members.length ? s.filled : ''}/>)}</div>
           <p className={s.muted}>{team.members.length} accepted · {team.stats.pendingCount} pending · {event.minTeamSize}–{event.maxTeamSize} members required</p>
           {team.stats.rosterLocked && !team.stats.isRegistered && <p className={s.fine}>Your roster is locked because a payment order has been created. Contact the organisers if it must change.</p>}
-          {team.isLeader && team.stats.isRegistered && team.stats.hasPaid && <p className={s.fine}>Payment completed. Paid teams cannot be deregistered or deleted.</p>}
-          {team.isLeader && team.stats.canDeregister && <div className={s.entry}>
-            <h3>Need to rebuild your team?</h3>
-            <p className={s.fine}>Deregistering removes your event registration and all teammates except you. Previous invitations are cancelled. Send new invitations and wait for acceptance before registering again. Payment orders, round results or event check-in require organiser assistance.</p>
-            <button className={s.button} disabled={busy || closed} onClick={() => {
-              if (!window.confirm('Deregister this team? Your registration will be removed, teammates will leave the roster, and all invitations will be cancelled. You will remain team leader and must invite teammates again.')) return;
-              void mutate(() => participantRequest(`/api/user/teams/${team.id}/registration`, undefined, 'DELETE'), 'Team deregistered. Send new invitations below; teammates must accept again.');
-            }}>{busy ? 'Please wait…' : 'Deregister team'}</button>
-            {closed && <p className={s.fine}>Registration has closed. Contact the organisers for changes.</p>}
-          </div>}
+          {team.isLeader && team.stats.isRegistered && team.stats.hasPaid && <p className={s.fine}>Payment completed. Paid teams cannot be deleted.</p>}
           {team.isLeader && team.stats.canDelete && <div className={s.entry}>
             <h3>Want a different team?</h3>
             <p className={s.fine}>Deleting removes this team for good — the roster, every invitation and any registration go with it, and your teammates are free to join another team. You can create a new team for this event straight afterwards. Payment orders, round results or event check-in require organiser assistance.</p>

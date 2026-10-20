@@ -225,7 +225,7 @@ function RoundParticipants({ eventId, round }: { eventId: string; round: string 
   const chosen = () => list.filter(r => selected.includes(key(r)));
   const ids = (picked: Row[]) => ({ userIds: picked.filter(r => !r.teamId).map(r => r.userId), teamIds: picked.filter(r => r.teamId).map(r => Number(r.teamId)) });
   // Only entries currently in the round can be taken back out of it.
-  const promotedSelection = () => chosen().filter(r => r.status === 'QUALIFIED');
+  const promotedSelection = () => (Number(round) > 1 ? chosen() : chosen().filter(r => r.status === 'QUALIFIED'));
 
   async function act(path: string, body: Row, warning: string, describe: (result: Row) => string) {
     if (!window.confirm(warning)) return;
