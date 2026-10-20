@@ -18,7 +18,7 @@ const primaryItems = [
 const expandedItems = [
   { href: "/admin", label: "Admin panel" },
   { href: "/about", label: "About" },
-  // { href: "/teams", label: "Teams" }, // Temporarily hidden for production
+  { href: "/teams", label: "Teams" },
   { href: "/sponsors", label: "Sponsors" },
   { href: "/speakers", label: "Speakers" },
 ];

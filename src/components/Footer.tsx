@@ -122,7 +122,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
                   <Link href="/" className="hover:text-black hover:underline py-0.5 transition-colors">Home</Link>
                   <Link href="/about" className="hover:text-black hover:underline py-0.5 transition-colors">About</Link>
                   <Link href="/events" className="hover:text-black hover:underline py-0.5 transition-colors">Events</Link>
-                  {/* <Link href="/teams" className="hover:text-black hover:underline py-0.5 transition-colors">Teams</Link> */}
+                  <Link href="/teams" className="hover:text-black hover:underline py-0.5 transition-colors">Teams</Link>
                   <Link href="/contact" className="hover:text-black hover:underline py-0.5 transition-colors">How to reach?</Link>
                   <Link href="/faqs" className="hover:text-black hover:underline py-0.5 transition-colors">FAQs</Link>
                   <Link href="/refund-policy" className="hover:text-black hover:underline py-0.5 transition-colors">Refund Policy</Link>
@@ -256,7 +256,7 @@ export function Footer({ variant = "purple" }: FooterProps) {
                   <Link href="/" className="hover:text-white hover:underline py-0.5 transition-colors">Home</Link>
                   <Link href="/about" className="hover:text-white hover:underline py-0.5 transition-colors">About</Link>
                   <Link href="/events" className="hover:text-white hover:underline py-0.5 transition-colors">Events</Link>
-                  {/* <Link href="/teams" className="hover:text-white hover:underline py-0.5 transition-colors">Teams</Link> */}
+                  <Link href="/teams" className="hover:text-white hover:underline py-0.5 transition-colors">Teams</Link>
                   <Link href="/contact" className="hover:text-white hover:underline py-0.5 transition-colors">How to reach?</Link>
                   <Link href="/faqs" className="hover:text-white hover:underline py-0.5 transition-colors">FAQs</Link>
                   <Link href="/refund-policy" className="hover:text-white hover:underline py-0.5 transition-colors">Refund Policy</Link>
