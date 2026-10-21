@@ -48,7 +48,7 @@ export default function MerchPage() {
         <MerchStore />
       </main>
 
-      <Footer />
+      <Footer variant="yellow" />
     </div>
   );
 }

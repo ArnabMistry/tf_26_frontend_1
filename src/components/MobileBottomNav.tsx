@@ -21,6 +21,7 @@ const expandedItems = [
   { href: "/teams", label: "Teams" },
   { href: "/sponsors", label: "Sponsors" },
   { href: "/speakers", label: "Speakers" },
+  { href: "/merch", label: "Merch" },
 ];
 
 export function MobileBottomNav({

@@ -14,6 +14,7 @@ const navigation = [
   { href: "/sponsors", label: "Sponsors" },
   { href: "/events", label: "Events" },
   { href: "/speakers", label: "Speakers" },
+  { href: "/merch", label: "Merch" },
 ];
 
 interface NavbarProps {
