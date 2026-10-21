@@ -10,12 +10,20 @@ const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
 const BLACK = { colorway: 'Midnight Black', colorHex: '#101014' };
 const WHITE = { colorway: 'Off White', colorHex: '#f4f1ea' };
 
-/** Mirrors the seeded catalogue: four tees, two black and two white. */
+/**
+ * Mirrors the seeded catalogue: four tees, two black and two white.
+ *
+ * The signature pair is marked down from 699 and carries both product shots,
+ * as the seed sets them; the glitch pair is left undiscounted and photoless so
+ * the same run also covers a card with no "was" price and no view toggle.
+ * The figures themselves are the fixture's own — the basket arithmetic below
+ * is checked against them, not against whatever the drop is priced at today.
+ */
 const ITEMS = [
-  { id: 1, slug: 'tf-26-signature-tee-black', name: 'TF 26 Signature Tee — Black', tagline: 'The flagship drop', description: '240 GSM combed cotton.', priceInr: 599, imageUrl: null, ...BLACK, sizes: SIZES, isAvailable: true, stockRemaining: null, soldOut: false },
-  { id: 2, slug: 'tf-26-glitch-tee-black', name: 'TF 26 Glitch Tee — Black', tagline: 'Static and neon', description: null, priceInr: 649, imageUrl: null, ...BLACK, sizes: SIZES, isAvailable: true, stockRemaining: 3, soldOut: false },
-  { id: 3, slug: 'tf-26-signature-tee-white', name: 'TF 26 Signature Tee — White', tagline: 'The flagship drop', description: null, priceInr: 599, imageUrl: null, ...WHITE, sizes: SIZES, isAvailable: true, stockRemaining: null, soldOut: false },
-  { id: 4, slug: 'tf-26-glitch-tee-white', name: 'TF 26 Glitch Tee — White', tagline: 'Static and neon', description: null, priceInr: 649, imageUrl: null, ...WHITE, sizes: SIZES, isAvailable: true, stockRemaining: 0, soldOut: true },
+  { id: 1, slug: 'tf-26-signature-tee-black', name: 'TF 26 Signature Tee — Black', tagline: 'The flagship drop', description: '240 GSM combed cotton.', priceInr: 599, mrpInr: 699, imageUrl: '/merch/black_front1.webp', imageBackUrl: '/merch/black_back1.webp', ...BLACK, sizes: SIZES, isAvailable: true, stockRemaining: null, soldOut: false },
+  { id: 2, slug: 'tf-26-glitch-tee-black', name: 'TF 26 Glitch Tee — Black', tagline: 'Static and neon', description: null, priceInr: 649, mrpInr: null, imageUrl: null, imageBackUrl: null, ...BLACK, sizes: SIZES, isAvailable: true, stockRemaining: 3, soldOut: false },
+  { id: 3, slug: 'tf-26-signature-tee-white', name: 'TF 26 Signature Tee — White', tagline: 'The flagship drop', description: null, priceInr: 599, mrpInr: 699, imageUrl: '/merch/white_front1.webp', imageBackUrl: '/merch/white_back1.webp', ...WHITE, sizes: SIZES, isAvailable: true, stockRemaining: null, soldOut: false },
+  { id: 4, slug: 'tf-26-glitch-tee-white', name: 'TF 26 Glitch Tee — White', tagline: 'Static and neon', description: null, priceInr: 649, mrpInr: null, imageUrl: null, imageBackUrl: null, ...WHITE, sizes: SIZES, isAvailable: true, stockRemaining: 0, soldOut: true },
 ];
 
 /**
@@ -123,11 +131,56 @@ test('all four tees are shown with their price, colour and full size range', asy
     }
   }
 
-  // Each tee is drawn in its own colour rather than sharing one placeholder.
-  await expect(page.getByRole('img', { name: `${SIG_BLACK} t-shirt` })).toBeVisible();
-  await expect(page.getByRole('img', { name: `${SIG_WHITE} t-shirt` })).toBeVisible();
+  // A tee with no photography still draws in its own colour rather than
+  // sharing one placeholder with the rest of the drop.
+  await expect(page.getByRole('img', { name: `${GLITCH_BLACK} t-shirt` })).toBeVisible();
+  await expect(page.getByRole('img', { name: `${GLITCH_WHITE} t-shirt` })).toBeVisible();
 
   await expect(page.getByRole('link', { name: /log in or sign up/i })).toBeVisible();
+});
+
+test('a photographed tee can be flipped from its front to its back', async ({ page }) => {
+  await mockStore(page, { signedIn: false });
+  await page.goto('/merch');
+
+  const article = card(page, SIG_BLACK);
+  const views = article.getByRole('group', { name: `Views of ${SIG_BLACK}` });
+  const front = article.locator('img[src="/merch/black_front1.webp"]');
+  const back = article.locator('img[src="/merch/black_back1.webp"]');
+
+  // Both shots are present from the start — the card opens on the front and
+  // cross-fades, rather than fetching the back on the first click.
+  await expect(front).toHaveCSS('opacity', '1');
+  await expect(back).toHaveCSS('opacity', '0');
+  await expect(views.getByRole('button', { name: 'Front' })).toHaveAttribute('aria-pressed', 'true');
+
+  await views.getByRole('button', { name: 'Back' }).click();
+
+  await expect(back).toHaveCSS('opacity', '1');
+  await expect(front).toHaveCSS('opacity', '0');
+  await expect(views.getByRole('button', { name: 'Back' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(views.getByRole('button', { name: 'Front' })).toHaveAttribute('aria-pressed', 'false');
+
+  // Flipping one card leaves the rest of the drop as it was.
+  await expect(card(page, SIG_WHITE).locator('img[src="/merch/white_front1.webp"]')).toHaveCSS('opacity', '1');
+
+  // A tee with no photography has nothing to flip to, so it offers no toggle.
+  await expect(card(page, GLITCH_BLACK).getByRole('group', { name: `Views of ${GLITCH_BLACK}` })).toHaveCount(0);
+});
+
+test('a marked-down tee shows what it costs beside what it used to', async ({ page }) => {
+  await mockStore(page, { signedIn: false });
+  await page.goto('/merch');
+
+  const article = card(page, SIG_BLACK);
+  // The price charged is the plain one; the old price is struck through, and
+  // the basket and the Add button both quote the price actually charged.
+  await expect(article.getByText('₹599', { exact: true })).toBeVisible();
+  await expect(article.locator('s')).toHaveText('Reduced from ₹699');
+  await expect(article.getByRole('button', { name: 'Add to order — ₹599' })).toBeVisible();
+
+  // An undiscounted tee strikes nothing through at all.
+  await expect(card(page, GLITCH_BLACK).locator('s')).toHaveCount(0);
 });
 
 test('the colour filter narrows the drop to black or to white', async ({ page }) => {

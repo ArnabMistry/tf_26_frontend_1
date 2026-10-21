@@ -286,7 +286,19 @@ function ItemCard({
 }) {
   const size = item.sizes.length ? chosenSize : null;
   const inBasket = quantityOf(item.id, size);
+  const [view, setView] = useState<'front' | 'back'>('front');
   const owned = item.purchases.reduce((n, p) => n + p.quantity, 0);
+
+  // The shots this item actually has, in the order they are offered. An item
+  // photographed from one side gets no toggle; one with neither falls back to
+  // the drawn mockup, exactly as it did before there was any photography.
+  const views = [
+    item.imageUrl ? { key: 'front' as const, src: item.imageUrl, label: 'Front' } : null,
+    item.imageBackUrl ? { key: 'back' as const, src: item.imageBackUrl, label: 'Back' } : null,
+  ].filter(v => v !== null);
+  // Falls back to the first available view, so an item whose back shot is
+  // pulled while the card is flipped shows its front rather than nothing.
+  const shownView = views.some(v => v.key === view) ? view : views[0]?.key;
   const lowStock = item.stockRemaining != null && item.stockRemaining > 0 && item.stockRemaining <= 10;
   // Adding is blocked only by stock and by the sale being open — a logged-out
   // visitor may still build a basket and is asked to sign in at the Pay step.
@@ -295,9 +307,38 @@ function ItemCard({
   return (
     <article className={`${s.card} ${item.soldOut ? s.soldOutCard : ''}`}>
       <div className={s.shot}>
-        {item.imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.imageUrl} alt={item.name} loading="lazy" />
+        {views.length ? (
+          <>
+            {/* Both views are stacked and cross-faded rather than swapped in
+                the src, so flipping a card never shows an empty frame while
+                the other photo loads. */}
+            {views.map(v => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={v.key}
+                src={v.src}
+                alt={`${item.name}, ${v.label.toLowerCase()} view`}
+                loading="lazy"
+                className={`${s.shotImage} ${v.key === shownView ? s.shotImageOn : ''}`}
+                aria-hidden={v.key === shownView ? undefined : true}
+              />
+            ))}
+            {views.length > 1 && (
+              <div className={s.views} role="group" aria-label={`Views of ${item.name}`}>
+                {views.map(v => (
+                  <button
+                    key={v.key}
+                    type="button"
+                    className={`${s.viewButton} ${v.key === shownView ? s.viewButtonActive : ''}`}
+                    aria-pressed={v.key === shownView}
+                    onClick={() => setView(v.key)}
+                  >
+                    {v.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </>
         ) : (
           <div className={s.mockup}>
             <TeeMockup colorHex={item.colorHex} label={item.name} variant={mockupVariant(item.slug)} />
@@ -315,7 +356,14 @@ function ItemCard({
       <div className={s.body}>
         <div className={s.heading}>
           <h2 className={s.name}>{item.name}</h2>
-          <span className={s.price}>₹{item.priceInr}</span>
+          <span className={s.price}>
+            <span className={s.priceNow}>₹{item.priceInr}</span>
+            {item.mrpInr ? (
+              <s className={s.wasPrice}>
+                <span className={s.srOnly}>Reduced from </span>₹{item.mrpInr}
+              </s>
+            ) : null}
+          </span>
         </div>
         {item.tagline && <p className={s.tagline}>{item.tagline}</p>}
 

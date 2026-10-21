@@ -10,7 +10,11 @@ export type MerchItem = {
   tagline: string | null;
   description: string | null;
   priceInr: number;
+  /** What it cost before the drop, shown struck through. Null when undiscounted. */
+  mrpInr: number | null;
   imageUrl: string | null;
+  /** The same garment from behind, where the artwork is. Null when there is one shot. */
+  imageBackUrl: string | null;
   /** Colour name shown to the buyer, e.g. "Midnight Black". */
   colorway: string | null;
   /** Fabric colour of the drawn mockup, as a CSS hex. */
