@@ -93,7 +93,7 @@ const DEFAULT_SHORTLIST_HTML = `<p>Dear Participant,</p>
 </p>`;
 
 export function BulkEmail({ eventId, superAdmin }: BulkEmailProps) {
-  const [activeTab, setActiveTab] = useState<'compose' | 'templates' | 'history'>('compose');
+  const [activeTab, setActiveTab] = useState<'compose' | 'direct' | 'templates' | 'history'>('compose');
   const [eventData, setEventData] = useState<Row | null>(null);
 
   // Composer Form State
@@ -109,6 +109,7 @@ export function BulkEmail({ eventId, superAdmin }: BulkEmailProps) {
   const [attachments, setAttachments] = useState<EmailAttachment[]>([]);
   const [attachmentError, setAttachmentError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const directFileInputRef = useRef<HTMLInputElement>(null);
 
   // Live Recipient Count & Target List State
   const [recipientCount, setRecipientCount] = useState<number | null>(null);
@@ -155,10 +156,16 @@ export function BulkEmail({ eventId, superAdmin }: BulkEmailProps) {
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Direct Shortlist Email Sender State
+  // Direct email state — the one composer that writes to addresses typed by
+  // hand rather than to anyone the database knows about.
   const [directEmailsInput, setDirectEmailsInput] = useState('');
-  const [directSubject, setDirectSubject] = useState('Congratulations! You are shortlisted for TantraFiesta 2026 🎉');
-  const [directBodyHtml, setDirectBodyHtml] = useState(DEFAULT_SHORTLIST_HTML);
+  const [directSubject, setDirectSubject] = useState('');
+  const [directBodyHtml, setDirectBodyHtml] = useState('');
+  /** Only a send explicitly marked as a shortlist gets the shortlist footer. */
+  const [directIsShortlist, setDirectIsShortlist] = useState(false);
+  const [directTemplateId, setDirectTemplateId] = useState<number | ''>('');
+  const [directAttachments, setDirectAttachments] = useState<EmailAttachment[]>([]);
+  const [directAttachmentError, setDirectAttachmentError] = useState('');
   const [directSending, setDirectSending] = useState(false);
   const [directResult, setDirectResult] = useState<{
     success: boolean;
@@ -170,20 +177,50 @@ export function BulkEmail({ eventId, superAdmin }: BulkEmailProps) {
   } | null>(null);
   const [directPreviewOpen, setDirectPreviewOpen] = useState(false);
 
+  /**
+   * Mirrors `parseRecipientList` on the server, so the count shown here is the
+   * count that will actually be written to. Accepts bare addresses and the
+   * `Name <address>` form, separated by commas, semicolons or line breaks.
+   */
   const parsedDirectEmails = useMemo(() => {
-    if (!directEmailsInput.trim()) return [];
-    const tokens = directEmailsInput.split(/[\r\n,; \t]+/);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const clean = tokens
-      .map((t) => t.trim().toLowerCase())
-      .filter((t) => t.length > 0 && emailRegex.test(t));
-    return Array.from(new Set(clean));
+    const entries: Array<{ email: string; name: string | null }> = [];
+
+    for (const chunk of directEmailsInput.split(/[\r\n,;]+/)) {
+      const trimmed = chunk.trim();
+      if (!trimmed) continue;
+      const angled = trimmed.match(/^(.*)<([^<>]+)>$/);
+      if (angled) {
+        entries.push({ name: angled[1].trim().replace(/^["']|["']$/g, '').trim() || null, email: angled[2].trim() });
+        continue;
+      }
+      for (const token of trimmed.split(/\s+/)) {
+        if (token) entries.push({ name: null, email: token });
+      }
+    }
+
+    const byEmail = new Map<string, { email: string; name: string | null }>();
+    for (const entry of entries) {
+      const email = entry.email.toLowerCase();
+      if (!emailRegex.test(email)) continue;
+      const seen = byEmail.get(email);
+      if (!seen) byEmail.set(email, { email, name: entry.name });
+      else if (!seen.name && entry.name) seen.name = entry.name;
+    }
+    return [...byEmail.values()];
   }, [directEmailsInput]);
 
-  const handleSendDirectShortlist = async () => {
+  const handleSendDirectEmail = async () => {
     if (parsedDirectEmails.length === 0) return;
     const confirmSend = window.confirm(
-      `Send shortlist email to ${parsedDirectEmails.length} recipient(s) from contact@tantrafiesta.in?\n\nSubject: ${directSubject}`
+      `Send this email to ${parsedDirectEmails.length} recipient(s) from contact@tantrafiesta.in?\n\nSubject: ${directSubject}\n\nTo: ${parsedDirectEmails
+        .slice(0, 5)
+        .map((r) => r.email)
+        .join(', ')}${parsedDirectEmails.length > 5 ? ` and ${parsedDirectEmails.length - 5} more` : ''}${
+        directAttachments.length
+          ? `\n\nAttached: ${directAttachments.map((a) => a.filename).join(', ')}`
+          : ''
+      }`
     );
     if (!confirmSend) return;
 
@@ -192,9 +229,17 @@ export function BulkEmail({ eventId, superAdmin }: BulkEmailProps) {
 
     try {
       const res = (await adminRequest(`/api/admin/bulk-email/events/${eventId}/send-direct`, {
-        emails: parsedDirectEmails,
+        // Sent in the `Name <address>` form so the server keeps the names.
+        emails: parsedDirectEmails.map((r) => (r.name ? `${r.name} <${r.email}>` : r.email)),
         subject: directSubject,
         bodyHtml: directBodyHtml,
+        kind: directIsShortlist ? 'shortlist' : 'general',
+        attachments: directAttachments.map((a) => ({
+          filename: a.filename,
+          contentType: a.contentType,
+          content: a.content,
+          size: a.size,
+        })),
       })) as {
         success: boolean;
         message: string;
@@ -215,11 +260,15 @@ export function BulkEmail({ eventId, superAdmin }: BulkEmailProps) {
 
       if (res.failedCount === 0) {
         setDirectEmailsInput('');
+        setDirectAttachments([]);
+        setDirectAttachmentError('');
       }
-    } catch (err: any) {
+    } catch (err) {
       setDirectResult({
         success: false,
-        message: err.message || 'Failed to send shortlist emails. Please verify SMTP settings and try again.',
+        message:
+          (err instanceof Error && err.message) ||
+          'Failed to send. Please verify SMTP settings and try again.',
       });
     } finally {
       setDirectSending(false);
@@ -347,6 +396,36 @@ export function BulkEmail({ eventId, superAdmin }: BulkEmailProps) {
     }
   };
 
+  /**
+   * Load a saved template into the direct composer.
+   *
+   * The same templates the broadcast composer offers, since a message worth
+   * keeping is worth sending either way. The shortlist footer is deliberately
+   * left alone: a template says what the mail is, not what it claims about
+   * why the recipient is being written to.
+   */
+  const handleSelectDirectTemplate = (id: number | '') => {
+    setDirectTemplateId(id);
+    if (!id) return;
+    const t = templates.find((tpl) => tpl.id === id);
+    if (t) {
+      setDirectSubject(t.subject);
+      setDirectBodyHtml(t.bodyHtml);
+    }
+  };
+
+  /** Keep what is in the direct composer as a reusable template. */
+  const handleSaveDirectAsTemplate = () => {
+    setTemplateForm({
+      name: '',
+      subject: directSubject,
+      bodyHtml: directBodyHtml,
+      bodyText: '',
+      isGlobal: false,
+    });
+    setTemplateModal({ open: true, template: null });
+  };
+
   // Quick-insert variable into textarea at cursor position
   const insertVariable = (varName: string) => {
     const textarea = textareaRef.current;
@@ -396,42 +475,52 @@ export function BulkEmail({ eventId, superAdmin }: BulkEmailProps) {
     return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
   };
 
-  // Handle Document Attachment Selection (.pdf and .docx)
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAttachmentError('');
+  /**
+   * Document attachment picker (.pdf / .docx), shared by both composers.
+   *
+   * The broadcast and the direct composer keep separate lists — a file picked
+   * for one must never ride along on the other — but the limits are the
+   * server's, so they are enforced in one place here rather than twice.
+   */
+  const makeFileSelectHandler = (
+    current: EmailAttachment[],
+    setList: React.Dispatch<React.SetStateAction<EmailAttachment[]>>,
+    setError: (message: string) => void
+  ) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError('');
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    if (attachments.length + files.length > 3) {
-      setAttachmentError('Maximum 3 attachments allowed per email campaign.');
+    if (current.length + files.length > 3) {
+      setError('Maximum 3 attachments allowed per email.');
       e.target.value = '';
       return;
     }
 
-    let runningTotalSize = attachments.reduce((sum, a) => sum + a.size, 0);
+    let runningTotalSize = current.reduce((sum, a) => sum + a.size, 0);
 
     Array.from(files).forEach((file) => {
       const ext = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
       if (ext !== '.pdf' && ext !== '.docx') {
-        setAttachmentError(`Unsupported file format "${ext}". Only .pdf and .docx are permitted.`);
+        setError(`Unsupported file format "${ext}". Only .pdf and .docx are permitted.`);
         return;
       }
 
       if (file.size > 5 * 1024 * 1024) {
-        setAttachmentError(`"${file.name}" exceeds the 5MB size limit.`);
+        setError(`"${file.name}" exceeds the 5MB size limit.`);
         return;
       }
 
       runningTotalSize += file.size;
       if (runningTotalSize > 10 * 1024 * 1024) {
-        setAttachmentError('Total attachments size exceeds the 10MB limit.');
+        setError('Total attachments size exceeds the 10MB limit.');
         return;
       }
 
       const reader = new FileReader();
       reader.onload = () => {
         const base64 = reader.result as string;
-        setAttachments((prev) => [
+        setList((prev) => [
           ...prev,
           {
             id: Math.random().toString(36).substring(2, 9),
@@ -452,8 +541,19 @@ export function BulkEmail({ eventId, superAdmin }: BulkEmailProps) {
     e.target.value = '';
   };
 
+  const handleFileSelect = makeFileSelectHandler(attachments, setAttachments, setAttachmentError);
+  const handleDirectFileSelect = makeFileSelectHandler(
+    directAttachments,
+    setDirectAttachments,
+    setDirectAttachmentError
+  );
+
   const handleRemoveAttachment = (id: string) => {
     setAttachments((prev) => prev.filter((a) => a.id !== id));
+  };
+
+  const handleRemoveDirectAttachment = (id: string) => {
+    setDirectAttachments((prev) => prev.filter((a) => a.id !== id));
   };
 
   // Handle Test Email Send
@@ -672,6 +772,13 @@ export function BulkEmail({ eventId, superAdmin }: BulkEmailProps) {
             onClick={() => setActiveTab('compose')}
           >
             ✉️ Compose Broadcast
+          </button>
+          <button
+            className={activeTab === 'direct' ? 'primary' : ''}
+            onClick={() => setActiveTab('direct')}
+            title="Type any email addresses by hand and write to them"
+          >
+            📧 Direct Email
           </button>
           <button
             className={activeTab === 'templates' ? 'primary' : ''}
@@ -1209,263 +1316,429 @@ export function BulkEmail({ eventId, superAdmin }: BulkEmailProps) {
               )}
             </div>
 
-            {/* ── Direct Shortlist Email Sender (Custom Recipient List) ── */}
-            <div className="admin-card" style={{ marginTop: 24, border: '1px solid #43327a', background: '#150f2e' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10, flexWrap: 'wrap', gap: 8 }}>
-                <h4 style={{ margin: 0, color: '#FFFF1A', display: 'flex', alignItems: 'center', gap: 8, fontSize: 16 }}>
-                  <span>✉️</span> Direct Shortlist Email Sender
-                </h4>
-                <span
-                  style={{
-                    fontSize: 11,
-                    background: '#241a4c',
-                    color: '#55efc4',
-                    padding: '3px 8px',
-                    borderRadius: 4,
-                    border: '1px solid #3d2f6d',
-                    fontWeight: 600,
-                  }}
-                >
-                  From: contact@tantrafiesta.in
-                </span>
-              </div>
-
-              <p style={{ fontSize: 12, color: '#A49FBD', marginBottom: 16, lineHeight: 1.5 }}>
-                Enter custom email addresses to instantly send an official shortlist notification directing recipients to register on the website (
-                <a href="https://www.tantrafiesta.in" target="_blank" rel="noreferrer" style={{ color: '#FFFF1A', textDecoration: 'underline' }}>
-                  https://www.tantrafiesta.in
-                </a>
-                ).
-              </p>
-
-              {/* Recipient Emails Placeholder / Input */}
-              <div style={{ marginBottom: 14 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                  <label style={{ fontSize: 12, fontWeight: 600, color: '#e8e6f2' }}>
-                    Recipient Emails List
-                  </label>
-                  <span
-                    style={{
-                      fontSize: 11,
-                      fontWeight: 600,
-                      color: parsedDirectEmails.length > 0 ? '#55efc4' : '#A49FBD',
-                    }}
-                  >
-                    {parsedDirectEmails.length > 0
-                      ? `✓ ${parsedDirectEmails.length} recipient${parsedDirectEmails.length > 1 ? 's' : ''} detected`
-                      : 'Separate with commas, spaces, or line breaks'}
-                  </span>
-                </div>
-                <textarea
-                  rows={4}
-                  value={directEmailsInput}
-                  onChange={(e) => setDirectEmailsInput(e.target.value)}
-                  placeholder="Paste several emails separated by commas, spaces, or line breaks...&#10;e.g.&#10;participant1@gmail.com, participant2@college.edu&#10;shortlisted_student@outlook.com"
-                  style={{
-                    width: '100%',
-                    padding: '10px 12px',
-                    background: '#1c143a',
-                    border: '1px solid #3d2f6d',
-                    color: '#fff',
-                    borderRadius: 8,
-                    fontSize: 12,
-                    fontFamily: 'monospace',
-                    resize: 'vertical',
-                    boxSizing: 'border-box',
-                  }}
-                />
-              </div>
-
-              {/* Subject Input */}
-              <div style={{ marginBottom: 14 }}>
-                <label style={{ fontSize: 12, fontWeight: 600, color: '#e8e6f2', display: 'block', marginBottom: 6 }}>
-                  Email Subject
-                </label>
-                <input
-                  type="text"
-                  value={directSubject}
-                  onChange={(e) => setDirectSubject(e.target.value)}
-                  placeholder="e.g. Congratulations! You are shortlisted for TantraFiesta 2026"
-                  style={{
-                    width: '100%',
-                    padding: '8px 12px',
-                    background: '#1c143a',
-                    border: '1px solid #3d2f6d',
-                    color: '#fff',
-                    borderRadius: 8,
-                    fontSize: 13,
-                    boxSizing: 'border-box',
-                  }}
-                />
-              </div>
-
-              {/* Body HTML Textarea */}
-              <div style={{ marginBottom: 14 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                  <label style={{ fontSize: 12, fontWeight: 600, color: '#e8e6f2' }}>
-                    Email Body (HTML)
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setDirectSubject('Congratulations! You are shortlisted for TantraFiesta 2026 🎉');
-                      setDirectBodyHtml(DEFAULT_SHORTLIST_HTML);
-                    }}
-                    style={{
-                      background: 'transparent',
-                      border: 'none',
-                      color: '#FFFF1A',
-                      fontSize: 11,
-                      cursor: 'pointer',
-                      textDecoration: 'underline',
-                      padding: 0,
-                    }}
-                  >
-                    Reset to Default Message
-                  </button>
-                </div>
-                <textarea
-                  rows={6}
-                  value={directBodyHtml}
-                  onChange={(e) => setDirectBodyHtml(e.target.value)}
-                  placeholder="Enter message body here..."
-                  style={{
-                    width: '100%',
-                    padding: '10px 12px',
-                    background: '#1c143a',
-                    border: '1px solid #3d2f6d',
-                    color: '#fff',
-                    borderRadius: 8,
-                    fontSize: 12,
-                    fontFamily: 'monospace',
-                    resize: 'vertical',
-                    boxSizing: 'border-box',
-                  }}
-                />
-              </div>
-
-              {/* Preview & Send Button Controls */}
-              <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
-                <button
-                  type="button"
-                  onClick={() => setDirectPreviewOpen(!directPreviewOpen)}
-                  style={{
-                    background: '#241a4c',
-                    color: '#fff',
-                    border: '1px solid #3d2f6d',
-                    padding: '8px 14px',
-                    borderRadius: 8,
-                    fontSize: 12,
-                    cursor: 'pointer',
-                  }}
-                >
-                  {directPreviewOpen ? 'Hide Preview' : '👁️ Preview Shortlist Email'}
-                </button>
-
-                <button
-                  type="button"
-                  disabled={
-                    directSending ||
-                    parsedDirectEmails.length === 0 ||
-                    !directSubject.trim() ||
-                    !directBodyHtml.trim()
-                  }
-                  onClick={handleSendDirectShortlist}
-                  style={{
-                    flex: 1,
-                    background: parsedDirectEmails.length > 0 && !directSending ? '#E7137D' : '#4d2042',
-                    color: '#fff',
-                    border: 'none',
-                    padding: '9px 18px',
-                    borderRadius: 8,
-                    fontSize: 13,
-                    fontWeight: 600,
-                    cursor: parsedDirectEmails.length > 0 && !directSending ? 'pointer' : 'not-allowed',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 6,
-                  }}
-                >
-                  {directSending ? (
-                    'Sending Shortlist Emails…'
-                  ) : (
-                    `🚀 Send Email${parsedDirectEmails.length > 0 ? ` to ${parsedDirectEmails.length} Recipient${parsedDirectEmails.length > 1 ? 's' : ''}` : ''}`
-                  )}
-                </button>
-              </div>
-
-              {/* Accordion Preview */}
-              {directPreviewOpen && (
-                <div style={{ marginTop: 14, border: '1px solid #3d2f6d', borderRadius: 8, overflow: 'hidden' }}>
-                  <div
-                    style={{
-                      padding: '8px 12px',
-                      background: '#1c143a',
-                      fontSize: 12,
-                      borderBottom: '1px solid #3d2f6d',
-                      color: '#A49FBD',
-                    }}
-                  >
-                    <div><strong style={{ color: '#fff' }}>From:</strong> contact@tantrafiesta.in</div>
-                    <div><strong style={{ color: '#fff' }}>Subject:</strong> {directSubject}</div>
-                    <div><strong style={{ color: '#fff' }}>Target Website:</strong> https://www.tantrafiesta.in</div>
-                  </div>
-                  <div
-                    style={{
-                      padding: 16,
-                      background: '#0d081f',
-                      color: '#e8e6f2',
-                      fontSize: 13,
-                      maxHeight: 280,
-                      overflowY: 'auto',
-                    }}
-                    dangerouslySetInnerHTML={{ __html: directBodyHtml }}
-                  />
-                </div>
-              )}
-
-              {/* Results & Delivery Feedback */}
-              {directResult && (
-                <div
-                  style={{
-                    marginTop: 14,
-                    padding: '12px 14px',
-                    borderRadius: 8,
-                    fontSize: 12,
-                    background: directResult.success ? 'rgba(85, 239, 196, 0.08)' : 'rgba(255, 118, 117, 0.08)',
-                    border: `1px solid ${directResult.success ? '#55efc4' : '#ff7675'}`,
-                    color: directResult.success ? '#55efc4' : '#ff7675',
-                  }}
-                >
-                  <div style={{ fontWeight: 600, fontSize: 13 }}>{directResult.message}</div>
-                  {directResult.total !== undefined && (
-                    <div style={{ marginTop: 4, color: '#A49FBD', fontSize: 11 }}>
-                      Total: {directResult.total} &bull; Delivered: {directResult.sentCount} &bull; Failed: {directResult.failedCount}
-                    </div>
-                  )}
-                  {directResult.failed && directResult.failed.length > 0 && (
-                    <div style={{ marginTop: 8, color: '#ff7675', fontSize: 11 }}>
-                      <strong>Failed addresses:</strong>
-                      <ul style={{ margin: '4px 0 0', paddingLeft: 18 }}>
-                        {directResult.failed.map((f, i) => (
-                          <li key={i}>
-                            <strong>{f.email}:</strong> {f.error}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
 
           </div>
 
         </div>
       )}
 
-      {/* ── TAB 2: SAVED TEMPLATES ── */}
+      {/* ── TAB 2: DIRECT EMAIL TO ANY ADDRESS ── */}
+      {activeTab === 'direct' && (
+        <div style={{ maxWidth: 860 }}>
+          {/* ── Direct email to any address ── */}
+          <div className="admin-card" style={{ marginTop: 24, border: '1px solid #43327a', background: '#150f2e' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10, flexWrap: 'wrap', gap: 8 }}>
+              <h4 style={{ margin: 0, color: '#FFFF1A', display: 'flex', alignItems: 'center', gap: 8, fontSize: 16 }}>
+                <span>✉️</span> Write to any email address
+              </h4>
+              <span
+                style={{
+                  fontSize: 11,
+                  background: '#241a4c',
+                  color: '#55efc4',
+                  padding: '3px 8px',
+                  borderRadius: 4,
+                  border: '1px solid #3d2f6d',
+                  fontWeight: 600,
+                }}
+              >
+                From: contact@tantrafiesta.in
+              </span>
+            </div>
+
+            <p style={{ fontSize: 12, color: '#A49FBD', marginBottom: 16, lineHeight: 1.5 }}>
+                Type the addresses yourself and write whatever you like — they do not have to be
+                registered, or in the database at all. Everything goes out from contact@tantrafiesta.in,
+                one message per recipient, so nobody sees who else was written to.
+            </p>
+
+            {/* Saved templates — the same ones the broadcast composer offers,
+                so a message written once can be reused here. */}
+            <div style={{ marginBottom: 14 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6, gap: 8, flexWrap: 'wrap' }}>
+                <label htmlFor="direct-template" style={{ fontSize: 12, fontWeight: 600, color: '#e8e6f2' }}>
+                  Start from a template
+                </label>
+                <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDirectSubject('Congratulations! You are shortlisted for TantraFiesta 2026 🎉');
+                      setDirectBodyHtml(DEFAULT_SHORTLIST_HTML);
+                      setDirectIsShortlist(true);
+                      setDirectTemplateId('');
+                    }}
+                    style={{ background: 'transparent', border: 'none', color: '#FFFF1A', fontSize: 11, cursor: 'pointer', textDecoration: 'underline', padding: 0 }}
+                  >
+                    Use the shortlist template
+                  </button>
+                  <button
+                    type="button"
+                    disabled={!directSubject.trim() && !directBodyHtml.trim()}
+                    onClick={handleSaveDirectAsTemplate}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      color: directSubject.trim() || directBodyHtml.trim() ? '#55efc4' : '#4c4766',
+                      fontSize: 11,
+                      cursor: directSubject.trim() || directBodyHtml.trim() ? 'pointer' : 'not-allowed',
+                      textDecoration: 'underline',
+                      padding: 0,
+                    }}
+                  >
+                    Save this as a template
+                  </button>
+                </div>
+              </div>
+              <select
+                id="direct-template"
+                value={directTemplateId}
+                onChange={(e) => handleSelectDirectTemplate(e.target.value ? Number(e.target.value) : '')}
+                style={{ width: '100%', padding: '10px 12px', background: '#1c143a', border: '1px solid #3d2f6d', color: '#fff', borderRadius: 8, fontSize: 13 }}
+              >
+                <option value="">-- Write from scratch --</option>
+                {templates.map((tpl) => (
+                  <option key={tpl.id} value={tpl.id}>
+                    {tpl.name} {tpl.eventId ? '(Event Specific)' : '(Global Template)'}
+                  </option>
+                ))}
+              </select>
+              {templates.length === 0 && (
+                <p style={{ margin: '6px 0 0', fontSize: 11, color: '#A49FBD' }}>
+                  No saved templates yet — write a message below and use <strong>Save this as a template</strong>,
+                  or create one under the Templates tab.
+                </p>
+              )}
+            </div>
+
+            {/* Recipient Emails Placeholder / Input */}
+            <div style={{ marginBottom: 14 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                <label style={{ fontSize: 12, fontWeight: 600, color: '#e8e6f2' }}>
+                  To
+                </label>
+                <span
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 600,
+                    color: parsedDirectEmails.length > 0 ? '#55efc4' : '#A49FBD',
+                  }}
+                >
+                  {parsedDirectEmails.length > 0
+                    ? `✓ ${parsedDirectEmails.length} recipient${parsedDirectEmails.length > 1 ? 's' : ''}`
+                    : 'Separate with commas, spaces, or line breaks'}
+                </span>
+              </div>
+              <textarea
+                rows={4}
+                value={directEmailsInput}
+                onChange={(e) => setDirectEmailsInput(e.target.value)}
+                placeholder="someone@gmail.com, another@college.edu&#10;Asha Rao &lt;asha@example.com&gt;&#10;&#10;One per line or separated by commas — paste as many as you like."
+                style={{
+                  width: '100%',
+                  padding: '10px 12px',
+                  background: '#1c143a',
+                  border: '1px solid #3d2f6d',
+                  color: '#fff',
+                  borderRadius: 8,
+                  fontSize: 12,
+                  fontFamily: 'monospace',
+                  resize: 'vertical',
+                  boxSizing: 'border-box',
+                }}
+              />
+            </div>
+
+            {/* Subject Input */}
+            <div style={{ marginBottom: 14 }}>
+              <label style={{ fontSize: 12, fontWeight: 600, color: '#e8e6f2', display: 'block', marginBottom: 6 }}>
+                Email Subject
+              </label>
+              <input
+                type="text"
+                value={directSubject}
+                onChange={(e) => setDirectSubject(e.target.value)}
+                placeholder="e.g. Congratulations! You are shortlisted for TantraFiesta 2026"
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  background: '#1c143a',
+                  border: '1px solid #3d2f6d',
+                  color: '#fff',
+                  borderRadius: 8,
+                  fontSize: 13,
+                  boxSizing: 'border-box',
+                }}
+              />
+            </div>
+
+            {/* Body HTML Textarea */}
+            <div style={{ marginBottom: 14 }}>
+              <label style={{ fontSize: 12, fontWeight: 600, color: '#e8e6f2', display: 'block', marginBottom: 6 }}>
+                Email Body (HTML)
+              </label>
+              <textarea
+                rows={6}
+                value={directBodyHtml}
+                onChange={(e) => setDirectBodyHtml(e.target.value)}
+                placeholder="<p>Hi {{name}},</p>&#10;<p>Write your message here. Basic HTML works.</p>"
+                style={{
+                  width: '100%',
+                  padding: '10px 12px',
+                  background: '#1c143a',
+                  border: '1px solid #3d2f6d',
+                  color: '#fff',
+                  borderRadius: 8,
+                  fontSize: 12,
+                  fontFamily: 'monospace',
+                  resize: 'vertical',
+                  boxSizing: 'border-box',
+                }}
+              />
+              <p style={{ margin: '6px 0 0', fontSize: 11, color: '#A49FBD', lineHeight: 1.5 }}>
+                {'{{name}}'} becomes the name you typed in <code>Name &lt;address&gt;</code> form, or
+                &ldquo;there&rdquo; when you gave only an address. {'{{event_name}}'}, {'{{event_venue}}'} and{' '}
+                {'{{year}}'} also work.
+              </p>
+            </div>
+
+            {/* Attachments — its own list, so a file picked for a broadcast
+                never rides along on a direct send, or the other way round. */}
+            <div style={{ marginBottom: 14, padding: '12px 14px', background: '#1c143a', border: '1px solid #3d2f6d', borderRadius: 8 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                <div>
+                  <span style={{ fontSize: 12, fontWeight: 600, color: '#fff', display: 'block' }}>
+                    📎 Attachments (.pdf / .docx)
+                  </span>
+                  <span style={{ fontSize: 11, color: '#A49FBD' }}>
+                    Up to 3 files, 5MB each, 10MB in total
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => directFileInputRef.current?.click()}
+                  disabled={directAttachments.length >= 3}
+                  style={{
+                    padding: '6px 12px',
+                    fontSize: 12,
+                    fontWeight: 600,
+                    background: directAttachments.length >= 3 ? '#291e54' : 'rgba(255, 255, 26, 0.12)',
+                    color: directAttachments.length >= 3 ? '#6f6a8d' : '#FFFF1A',
+                    border: '1px solid rgba(255, 255, 26, 0.3)',
+                    borderRadius: 6,
+                    cursor: directAttachments.length >= 3 ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  + Attach File
+                </button>
+                <input
+                  ref={directFileInputRef}
+                  type="file"
+                  multiple
+                  accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  style={{ display: 'none' }}
+                  onChange={handleDirectFileSelect}
+                />
+              </div>
+
+              {directAttachmentError && (
+                <div role="alert" style={{ marginTop: 8, padding: '6px 10px', background: 'rgba(255, 107, 107, 0.15)', border: '1px solid #ff6b6b', borderRadius: 6, color: '#ff8787', fontSize: 12 }}>
+                  ⚠️ {directAttachmentError}
+                </div>
+              )}
+
+              {directAttachments.length > 0 && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 12 }}>
+                  {directAttachments.map((att) => {
+                    const isPdf = att.filename.toLowerCase().endsWith('.pdf');
+                    return (
+                      <div
+                        key={att.id}
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', background: '#120c29', border: '1px solid #2e235a', borderRadius: 6 }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+                          <span
+                            style={{
+                              padding: '2px 6px',
+                              borderRadius: 4,
+                              fontSize: 10,
+                              fontWeight: 800,
+                              background: isPdf ? 'rgba(231, 19, 125, 0.2)' : 'rgba(74, 144, 226, 0.2)',
+                              color: isPdf ? '#ff7675' : '#74b9ff',
+                              border: `1px solid ${isPdf ? 'rgba(231, 19, 125, 0.4)' : 'rgba(74, 144, 226, 0.4)'}`,
+                            }}
+                          >
+                            {isPdf ? 'PDF' : 'DOCX'}
+                          </span>
+                          <span style={{ fontSize: 13, color: '#fff', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {att.filename}
+                          </span>
+                          <span style={{ fontSize: 11, color: '#8c86ab' }}>({formatFileSize(att.size)})</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveDirectAttachment(att.id)}
+                          title={`Remove ${att.filename}`}
+                          aria-label={`Remove ${att.filename}`}
+                          style={{ background: 'transparent', border: 'none', color: '#ff6b6b', fontSize: 14, cursor: 'pointer', padding: '2px 8px', lineHeight: 1 }}
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* The footer is the one thing this page says on the sender's behalf,
+                so what it claims is an explicit choice rather than a default. */}
+            <label
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: 8,
+                marginBottom: 14,
+                fontSize: 12,
+                color: '#e8e6f2',
+                cursor: 'pointer',
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={directIsShortlist}
+                onChange={(e) => setDirectIsShortlist(e.target.checked)}
+                style={{ marginTop: 2 }}
+              />
+              <span>
+                This is a shortlist notification
+                <span style={{ display: 'block', color: '#A49FBD', fontSize: 11, marginTop: 2 }}>
+                  {directIsShortlist
+                    ? 'Footer will say the recipient was shortlisted and point them at tantrafiesta.in.'
+                    : 'Footer will simply say the email is from the TantraFiesta organising team.'}
+                </span>
+              </span>
+            </label>
+
+            {/* Preview & Send Button Controls */}
+            <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                onClick={() => setDirectPreviewOpen(!directPreviewOpen)}
+                style={{
+                  background: '#241a4c',
+                  color: '#fff',
+                  border: '1px solid #3d2f6d',
+                  padding: '8px 14px',
+                  borderRadius: 8,
+                  fontSize: 12,
+                  cursor: 'pointer',
+                }}
+              >
+                {directPreviewOpen ? 'Hide Preview' : '👁️ Preview'}
+              </button>
+
+              <button
+                type="button"
+                disabled={
+                  directSending ||
+                  parsedDirectEmails.length === 0 ||
+                  !directSubject.trim() ||
+                  !directBodyHtml.trim()
+                }
+                onClick={handleSendDirectEmail}
+                style={{
+                  flex: 1,
+                  background: parsedDirectEmails.length > 0 && !directSending ? '#E7137D' : '#4d2042',
+                  color: '#fff',
+                  border: 'none',
+                  padding: '9px 18px',
+                  borderRadius: 8,
+                  fontSize: 13,
+                  fontWeight: 600,
+                  cursor: parsedDirectEmails.length > 0 && !directSending ? 'pointer' : 'not-allowed',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 6,
+                }}
+              >
+                {directSending ? (
+                  'Sending…'
+                ) : (
+                  `🚀 Send Email${parsedDirectEmails.length > 0 ? ` to ${parsedDirectEmails.length} Recipient${parsedDirectEmails.length > 1 ? 's' : ''}` : ''}`
+                )}
+              </button>
+            </div>
+
+            {/* Accordion Preview */}
+            {directPreviewOpen && (
+              <div style={{ marginTop: 14, border: '1px solid #3d2f6d', borderRadius: 8, overflow: 'hidden' }}>
+                <div
+                  style={{
+                    padding: '8px 12px',
+                    background: '#1c143a',
+                    fontSize: 12,
+                    borderBottom: '1px solid #3d2f6d',
+                    color: '#A49FBD',
+                  }}
+                >
+                  <div><strong style={{ color: '#fff' }}>From:</strong> contact@tantrafiesta.in</div>
+                  <div><strong style={{ color: '#fff' }}>Subject:</strong> {directSubject}</div>
+                  <div><strong style={{ color: '#fff' }}>To:</strong> {parsedDirectEmails.length ? parsedDirectEmails.map((r) => (r.name ? `${r.name} <${r.email}>` : r.email)).join(', ') : '—'}</div>
+                </div>
+                <div
+                  style={{
+                    padding: 16,
+                    background: '#0d081f',
+                    color: '#e8e6f2',
+                    fontSize: 13,
+                    maxHeight: 280,
+                    overflowY: 'auto',
+                  }}
+                  dangerouslySetInnerHTML={{ __html: directBodyHtml }}
+                />
+              </div>
+            )}
+
+            {/* Results & Delivery Feedback */}
+            {directResult && (
+              <div
+                style={{
+                  marginTop: 14,
+                  padding: '12px 14px',
+                  borderRadius: 8,
+                  fontSize: 12,
+                  background: directResult.success ? 'rgba(85, 239, 196, 0.08)' : 'rgba(255, 118, 117, 0.08)',
+                  border: `1px solid ${directResult.success ? '#55efc4' : '#ff7675'}`,
+                  color: directResult.success ? '#55efc4' : '#ff7675',
+                }}
+              >
+                <div style={{ fontWeight: 600, fontSize: 13 }}>{directResult.message}</div>
+                {directResult.total !== undefined && (
+                  <div style={{ marginTop: 4, color: '#A49FBD', fontSize: 11 }}>
+                    Total: {directResult.total} &bull; Delivered: {directResult.sentCount} &bull; Failed: {directResult.failedCount}
+                  </div>
+                )}
+                {directResult.failed && directResult.failed.length > 0 && (
+                  <div style={{ marginTop: 8, color: '#ff7675', fontSize: 11 }}>
+                    <strong>Failed addresses:</strong>
+                    <ul style={{ margin: '4px 0 0', paddingLeft: 18 }}>
+                      {directResult.failed.map((f, i) => (
+                        <li key={i}>
+                          <strong>{f.email}:</strong> {f.error}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ── TAB 3: SAVED TEMPLATES ── */}
       {activeTab === 'templates' && (
         <div>
           <div className="admin-section-heading" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -1536,7 +1809,7 @@ export function BulkEmail({ eventId, superAdmin }: BulkEmailProps) {
         </div>
       )}
 
-      {/* ── TAB 3: CAMPAIGN HISTORY & LOGS ── */}
+      {/* ── TAB 4: CAMPAIGN HISTORY & LOGS ── */}
       {activeTab === 'history' && (
         <div>
           <div className="admin-section-heading">

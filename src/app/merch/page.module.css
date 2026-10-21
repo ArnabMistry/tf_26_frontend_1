@@ -222,6 +222,57 @@
   object-fit: cover;
 }
 
+/* Front and back occupy the same cell and cross-fade between them, so the
+   card never collapses or flashes empty while the other shot decodes. */
+.shotImage {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.shotImageOn {
+  opacity: 1;
+}
+
+/* The view toggle, floated over the foot of the photo. */
+.views {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 9999px;
+  background: rgba(10, 6, 24, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(6px);
+}
+
+.viewButton {
+  padding: 5px 14px;
+  border: 0;
+  border-radius: 9999px;
+  background: transparent;
+  font-family: var(--font-futura, sans-serif);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.68);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.viewButton:hover {
+  color: #fff;
+}
+
+.viewButtonActive {
+  background: #ffff1a;
+  color: #140c2b;
+}
+
 /* The drawn tee. Floated slightly and given a ground shadow so the card reads
    as a product shot rather than as a flat icon. */
 .mockup {
@@ -335,10 +386,25 @@
 
 .price {
   flex: none;
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
   font-family: var(--font-tantra, sans-serif);
   font-size: 1.6rem;
   color: #ffff1a;
   letter-spacing: 0.02em;
+}
+
+.priceNow {
+  flex: none;
+}
+
+/* What the tee cost before the drop. Deliberately quieter than the price
+   that is actually charged, and struck so it can never be mistaken for it. */
+.wasPrice {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration-thickness: 1.5px;
 }
 
 .owned {
