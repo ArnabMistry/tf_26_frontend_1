@@ -9,6 +9,7 @@ import { participantRequest, fullName, formatDate, type Profile, type Inbox, typ
 import { payForEvent } from '@/lib/payments';
 import s from './Portal.module.css';
 import { AccommodationSection } from './AccommodationSection';
+import { MealQrScanner } from './MealQrScanner';
 
 export function PortalSkeleton() {
   return (
@@ -136,7 +137,7 @@ export function UserPortal() {
 
   useEffect(() => {
     if (!hasSessionHint() || (!loading && !user)) {
-      router.replace('/login?next=%2Fprofile');
+      router.replace(`/login?next=${encodeURIComponent(`/profile${window.location.search}`)}`);
       return;
     }
     const initial = window.setTimeout(() => void load(), 0);
@@ -220,29 +221,36 @@ export function UserPortal() {
   // the token from the URL so a refresh cannot replay it.
   const claimToken = params.get('claimMealToken');
   const [claiming, setClaiming] = useState(false);
+  const [scannerOpen, setScannerOpen] = useState(false);
+  const [claimFailure, setClaimFailure] = useState('');
+  const [claimAttempt, setClaimAttempt] = useState(0);
   const claimedRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (!claimToken || !user || claimedRef.current === claimToken) return;
     claimedRef.current = claimToken;
     setClaiming(true);
+    setClaimFailure('');
     (async () => {
       try {
         const claim = await participantRequest<{ typeOfMeal: string; mealId: number }>(
           '/api/user/meals/claim', { qrToken: claimToken }
         );
         setError('');
-        setNotice(`Redeemed. Enjoy your ${claim?.typeOfMeal === 'snack' ? 'snack' : 'meal'}!`);
+        setNotice(`Claimed. Enjoy your ${claim?.typeOfMeal === 'snack' ? 'snack' : 'meal'}!`);
+        router.replace('/profile?tab=meals');
       } catch (err) {
         setNotice('');
-        setError(err instanceof Error ? err.message : 'Could not redeem that pass.');
+        if (err instanceof ApiError && err.status === 401) {
+          router.replace(`/login?next=${encodeURIComponent(`/profile${window.location.search}`)}`);
+        }
+        setClaimFailure(err instanceof Error ? err.message : 'Could not redeem that pass. Retry to check its status.');
       } finally {
         setClaiming(false);
-        router.replace('/profile?tab=meals');
         void load();
       }
     })();
-  }, [claimToken, user, router, load]);
+  }, [claimToken, user, router, load, claimAttempt]);
 
   if (!hasSessionHint() && !loading && !user) {
     return <main className={s.shell}><p role="status" className={s.muted}>Redirecting to login…</p></main>;
@@ -289,6 +297,7 @@ export function UserPortal() {
 
     {error && <div role="alert" className={s.error}>{error} <button onClick={load} className={s.secondary}>Retry</button></div>}
     {claiming && <p role="status" className={s.notice}>Redeeming your pass at the counter…</p>}
+    {claimFailure && <div role="alert" className={s.error}>{claimFailure} <button className={s.secondary} disabled={claiming} onClick={() => { claimedRef.current = null; setClaimAttempt(value => value + 1); }}>Retry meal claim</button></div>}
     {notice && <p role="status" className={s.notice}>{notice}</p>}
 
     {!profile ? (
@@ -372,10 +381,17 @@ export function UserPortal() {
               <div className={s.row}>
                 <div>
                   <h2>Your Meal Passes</h2>
-                  <p className={s.muted}>Read your pass code to the staff at the food counter.</p>
+                  <p className={s.muted}>Open the camera below and scan the admin counter QR to claim your meal or snack. You can also read your pass code to the staff.</p>
                 </div>
                 <span className={s.badge}>{availableMealsCount} Available</span>
               </div>
+              {availableMealsCount > 0 && <button className={s.button} disabled={claiming} onClick={() => setScannerOpen(true)}>Scan Counter QR</button>}
+              {scannerOpen && <MealQrScanner onClose={() => setScannerOpen(false)} onScan={token => {
+                setScannerOpen(false);
+                claimedRef.current = null;
+                if (claimToken === token) setClaimAttempt(value => value + 1);
+                router.replace(`/profile?tab=meals&claimMealToken=${encodeURIComponent(token)}`);
+              }} />}
 
               
 
@@ -390,7 +406,7 @@ export function UserPortal() {
                         <h3 className="mt-1 text-lg font-bold">{pass.name.toUpperCase()}</h3>
                       </div>
                       <span className={`${s.badge} ${pass.status === 'CLAIMED' ? s.accepted : pass.isServingNow ? s.pending : ''}`}>
-                        {pass.status === 'CLAIMED' ? 'REDEEMED' : pass.isServingNow ? 'SERVING NOW' : 'AVAILABLE'}
+                        {pass.status === 'CLAIMED' ? 'CLAIMED' : pass.isServingNow ? 'SERVING NOW' : 'AVAILABLE'}
                       </span>
                     </div>
 
