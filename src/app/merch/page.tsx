@@ -28,6 +28,25 @@ export const metadata: Metadata = pageMetadata(
   }
 );
 
+const MARQUEE_ITEMS = Array.from({ length: 5 });
+
+function MarqueeMessage() {
+  return (
+    <span className={styles.marqueeItem}>
+      <span className={styles.marqueeHighlight}>
+        <span className={styles.bolt} aria-hidden="true">⚡</span> TF ’26 MERCH IS LIVE!
+      </span>
+      <span className={styles.marqueeSep} aria-hidden="true">✦</span>
+      <span className={styles.marqueeText}>WEAR THE FEST</span>
+      <span className={styles.marqueeSep} aria-hidden="true">✦</span>
+      <span className={styles.marqueeText}>REP THE VIBE</span>
+      <span className={styles.marqueeSep} aria-hidden="true">✦</span>
+      <span className={styles.marqueeText}>GRAB YOURS NOW!</span>
+      <span className={styles.bolt} aria-hidden="true">⚡</span>
+    </span>
+  );
+}
+
 export default function MerchPage() {
   return (
     <div className={styles.page}>
@@ -35,6 +54,21 @@ export default function MerchPage() {
         Skip to the merch
       </a>
       <Navbar currentPath="/merch" />
+
+      <aside className={styles.marqueeBanner} aria-label="Merch announcement">
+        <div className={styles.marqueeTrack}>
+          <div className={styles.marqueeGroup}>
+            {MARQUEE_ITEMS.map((_, i) => (
+              <MarqueeMessage key={i} />
+            ))}
+          </div>
+          <div className={styles.marqueeGroup} aria-hidden="true">
+            {MARQUEE_ITEMS.map((_, i) => (
+              <MarqueeMessage key={`clone-${i}`} />
+            ))}
+          </div>
+        </div>
+      </aside>
 
       <main id="merch-content" className={styles.main}>
         <header className={styles.header}>
