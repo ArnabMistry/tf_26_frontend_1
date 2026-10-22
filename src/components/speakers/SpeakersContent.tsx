@@ -38,7 +38,7 @@ const speakers: Speaker[] = [
     role: "Senior Software Engineer & AI Developer Advocate",
     company: "National Award-Winning Creator",
     companyTag: "Creator & AI Advocate",
-    portrait: "/speakers/vanshika-pandey.webp",
+    portrait: "/speakers/vanshika-pandey-v2.webp",
     cardImage: "/speakers/vanshika-pandey-card.webp",
     highlights: [
       "Senior Software Engineer & AI Developer Advocate",
@@ -71,7 +71,7 @@ const speakers: Speaker[] = [
     role: "Director of AI Innovation at Alta & Founder of InterviewCafe",
     company: "Alta School of Technology",
     companyTag: "Ex-Microsoft · VMware",
-    portrait: "/speakers/santosh-mishra.webp",
+    portrait: "/speakers/santosh-mishra-v2.webp",
     cardImage: "/speakers/santosh-mishra-card.webp",
     highlights: [
       "Director of AI Innovation at Alta School of Technology",
@@ -103,7 +103,7 @@ const speakers: Speaker[] = [
     role: "Associate Vice President at GeeksforGeeks (GFG)",
     company: "GeeksforGeeks (GFG)",
     companyTag: "Ex-ISRO Scientist",
-    portrait: "/speakers/chandan-jha.webp",
+    portrait: "/speakers/chandan-jha-v2.webp",
     cardImage: "/speakers/chandan-jha-card.webp",
     highlights: [
       "Associate Vice President at GeeksforGeeks (GFG)",
@@ -130,7 +130,7 @@ const speakers: Speaker[] = [
     role: "Senior Software Engineer at Adidas & Tech Educator",
     company: "Adidas",
     companyTag: "Founder @CodeCompile",
-    portrait: "/speakers/ajey-suneja.webp",
+    portrait: "/speakers/ajey-suneja-v2.webp",
     cardImage: "/speakers/ajey-suneja-card.webp",
     highlights: [
       "Senior Software Engineer at Adidas",
@@ -349,12 +349,7 @@ export function SpeakersContent() {
               </div>
             </div>
 
-            {/* Free entry note */}
-            <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-center">
-              <span className="text-xs font-medium text-[#b4afc7]">
-                Free entry for all registered TantraFiesta attendees
-              </span>
-            </div>
+
           </div>
         </Reveal>
       </div>
