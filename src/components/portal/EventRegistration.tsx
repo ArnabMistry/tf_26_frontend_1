@@ -555,7 +555,7 @@ export function EventRegistration() {
           {team.isLeader && team.stats.isRegistered && team.stats.hasPaid && <p className={s.fine}>Payment completed. Paid teams cannot be deleted.</p>}
           {team.isLeader && team.stats.canDelete && <div className={s.entry}>
             <h3>Want a different team?</h3>
-            <p className={s.fine}>Deleting removes this team for good — the roster, every invitation and any registration go with it, and your teammates are free to join another team. You can create a new team for this event straight afterwards. Payment orders, round results or event check-in require organiser assistance.</p>
+            <p className={s.fine}>Deleting removes this team for good — the roster, every invitation and any registration go with it, and your teammates are free to join another team. You can create a new team for this event straight afterwards. Completed payments or event check-in require organiser assistance.</p>
             <button className={s.secondary} disabled={busy} onClick={() => {
               if (!window.confirm(`Delete “${team.name}”? The team, its roster and all invitations are removed permanently. This cannot be undone, but you can create a new team afterwards.`)) return;
               void mutate(async () => { await participantRequest(`/api/user/teams/${team.id}`, undefined, 'DELETE'); setTeamName(''); }, 'Team deleted. Create your new team below.');
