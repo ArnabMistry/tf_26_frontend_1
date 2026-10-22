@@ -39,8 +39,102 @@
 .main {
   width: min(100% - 32px, 1240px);
   margin-inline: auto;
-  padding-top: 48px;
+  padding-top: 36px;
   padding-bottom: 160px;
+}
+
+/* ── Announcement Marquee ─────────────────────────────────────────────── */
+
+.marqueeBanner {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: rgba(18, 12, 45, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 26, 0.22);
+  padding: 8px 0;
+  contain: paint;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 32px,
+    black calc(100% - 32px),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 32px,
+    black calc(100% - 32px),
+    transparent 100%
+  );
+  z-index: 20;
+}
+
+@keyframes merchMarqueeScroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.marqueeTrack {
+  display: flex;
+  width: max-content;
+  user-select: none;
+  animation: merchMarqueeScroll 32s linear infinite;
+  will-change: transform;
+}
+
+.marqueeGroup {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding-right: 2rem;
+  flex-shrink: 0;
+}
+
+.marqueeItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  white-space: nowrap;
+  font-family: var(--font-futura, sans-serif);
+  font-size: clamp(0.72rem, 0.92vw, 0.84rem);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.marqueeHighlight {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #ffff1a;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-shadow: 0 0 16px rgba(255, 255, 26, 0.45);
+}
+
+.marqueeText {
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.marqueeSep {
+  color: rgba(255, 255, 26, 0.65);
+  font-size: 0.75em;
+  line-height: 1;
+}
+
+.bolt {
+  color: #ffff1a;
+  display: inline-block;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 26, 0.6));
 }
 
 /* ── Masthead ─────────────────────────────────────────────────────────── */
@@ -733,10 +827,20 @@
 
 @media (max-width: 640px) {
   .main {
-    padding-top: 32px;
+    padding-top: 24px;
   }
   .body {
     padding: 18px;
+  }
+  .marqueeBanner {
+    padding: 6px 0;
+  }
+  .marqueeGroup {
+    gap: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  .marqueeItem {
+    gap: 8px;
   }
 }
 
@@ -758,5 +862,9 @@
   }
   .skeleton {
     animation: none;
+  }
+  .marqueeTrack {
+    animation: none;
+    transform: none;
   }
 }
