@@ -489,6 +489,44 @@
   color: #ffe43b;
 }
 
+.brochureButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgb(255 255 255 / 35%);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 10%);
+  padding: 12px 18px;
+  color: #fff;
+  font-family: var(--font-futura);
+  font-size: clamp(0.88rem, 1.05vw, 1.05rem);
+  font-weight: 450;
+  line-height: 1;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.brochureButton:hover {
+  background: rgb(255 255 255 / 18%);
+  border-color: #ffe43b;
+  color: #ffe43b;
+}
+
+.brochureIcon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: #ff7cc4;
+  transition: color 160ms ease;
+}
+
+.brochureButton:hover .brochureIcon {
+  color: #ffe43b;
+}
+
 /* ── Generic tab content (stages, rules, contact) ── */
 
 .sectionHeading {
@@ -740,7 +778,8 @@
   }
 
   .register,
-  .unstopRegister {
+  .unstopRegister,
+  .brochureButton {
     width: 100%;
     justify-content: center;
   }
@@ -819,7 +858,8 @@
   .documentCard,
   .tab,
   .register,
-  .unstopRegister {
+  .unstopRegister,
+  .brochureButton {
     transition: none;
   }
 }
