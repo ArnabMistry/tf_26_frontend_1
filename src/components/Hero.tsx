@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { Navbar } from "@/components/Navbar";
+import { MerchBanner } from "@/components/MerchBanner";
 import { ThemeTeaser } from "./ThemeTeaser";
 
 export function Hero() {
@@ -8,6 +9,7 @@ export function Hero() {
     <>
       <section className="relative min-h-[100svh] w-full overflow-hidden flex flex-col">
         <Navbar />
+        <MerchBanner />
 
         {/* Main Hero Content */}
         <div className="relative flex-1 flex flex-col items-center justify-center w-full py-8 md:py-10 overflow-hidden">
