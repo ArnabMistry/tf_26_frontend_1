@@ -349,31 +349,9 @@ export function SpeakersContent() {
               </div>
             </div>
 
-            {/* Poster CTA button */}
-            <div className="mt-4 pt-3 border-t border-white/10 flex flex-wrap items-center justify-center gap-3">
-              <button
-                type="button"
-                onClick={() => setIsPosterOpen(true)}
-                className="inline-flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#FFFF1A] border border-[#FFFF1A]/30 transition-all hover:bg-[#FFFF1A]/20 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                  <polyline points="7 10 12 15 17 10" />
-                  <line x1="12" y1="15" x2="12" y2="3" />
-                </svg>
-                View Official Poster
-              </button>
-
-              <span className="text-xs text-[#b4afc7]">
+            {/* Free entry note */}
+            <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-center">
+              <span className="text-xs font-medium text-[#b4afc7]">
                 Free entry for all registered TantraFiesta attendees
               </span>
             </div>
