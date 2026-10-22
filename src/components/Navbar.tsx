@@ -19,6 +19,7 @@ interface DropdownItem {
 const primaryNav = [
   { href: "/about", label: "About" },
   { href: "/events", label: "Events" },
+  { href: "/speakers", label: "Speakers" },
 ];
 
 const dropdownItems: DropdownItem[] = [
@@ -66,29 +67,6 @@ const dropdownItems: DropdownItem[] = [
         <circle cx="9" cy="7" r="4" />
         <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
         <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-      </svg>
-    ),
-  },
-  {
-    href: "/speakers",
-    label: "Speakers",
-    description: "Keynote & guest talks",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="transition-transform duration-200 group-hover:scale-110"
-      >
-        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
-        <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-        <line x1="12" x2="12" y1="19" y2="22" />
-        <line x1="8" x2="16" y1="22" y2="22" />
       </svg>
     ),
   },
@@ -306,11 +284,11 @@ export function Navbar({
               aria-expanded={isDropdownOpen}
               aria-haspopup="true"
               aria-label="More navigation links"
-              className={`flex items-center gap-1.5 rounded-sm py-1 transition-colors hover:text-[#FFFF1A] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ffe43b] active:scale-[0.97] cursor-pointer ${
+              className={`flex items-center gap-1.5 rounded-sm py-1 font-sans text-xs font-bold uppercase tracking-wider lg:text-sm transition-colors hover:text-[#FFFF1A] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ffe43b] active:scale-[0.97] cursor-pointer ${
                 isDropdownActive || isDropdownOpen ? "text-[#FFFF1A]" : ""
               }`}
             >
-              <span>More</span>
+              <span className="font-sans text-xs font-bold uppercase tracking-wider lg:text-sm">More</span>
               <motion.svg
                 width="12"
                 height="12"
