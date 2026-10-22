@@ -46,10 +46,10 @@ test('super admin can edit an event with correct API payload', async ({ page }) 
   const payload = (await request).postDataJSON(); expect(payload.name).toBe('Updated Hackathon'); expect(payload).not.toHaveProperty('id');
   await expect(page.getByRole('dialog')).toHaveCount(0);
 });
-test('promotion confirms rejection and sends selected IDs', async ({ page }) => {
+test('promotion confirms selection and sends selected IDs', async ({ page }) => {
   await mockApi(page, 'event_admin'); await page.goto('/admin/events/event1?view=promotion');
   await page.getByRole('checkbox', { name: 'Select Alice' }).check();
-  page.once('dialog', dialog => { expect(dialog.message()).toContain('rejected'); void dialog.accept(); });
+  page.once('dialog', dialog => { expect(dialog.message()).toContain('Promote 1 selected participant(s)/team(s)'); void dialog.accept(); });
   const request = page.waitForRequest(r => r.url().endsWith('/promote') && r.method() === 'POST');
   await page.getByRole('button', { name: 'Promote selected' }).click();
   expect((await request).postDataJSON()).toEqual({ userIds: ['user1'], teamIds: [] });

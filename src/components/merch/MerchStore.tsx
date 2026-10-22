@@ -286,7 +286,7 @@ function ItemCard({
 }) {
   const size = item.sizes.length ? chosenSize : null;
   const inBasket = quantityOf(item.id, size);
-  const [view, setView] = useState<'front' | 'back'>('front');
+  const [view, setView] = useState<'front' | 'back'>('back');
   const owned = item.purchases.reduce((n, p) => n + p.quantity, 0);
 
   // The shots this item actually has, in the order they are offered. An item

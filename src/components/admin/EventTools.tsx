@@ -237,8 +237,8 @@ function RoundParticipants({ eventId, round }: { eventId: string; round: string 
   }
 
   const promote = () => act('promote', ids(chosen()),
-    `Promote ${selected.length} selected participants/teams? All other eligible participants/teams in this round will be rejected.`,
-    result => `Promoted: ${result.promotedCount ?? chosen().length}. Rejected: ${result.rejectedCount ?? 0}.`);
+    `Promote ${selected.length} selected participant(s)/team(s) to the next round?`,
+    result => `Promoted: ${result.promotedCount ?? chosen().length}.`);
 
   const demote = () => {
     const picked = promotedSelection();
@@ -251,7 +251,7 @@ function RoundParticipants({ eventId, round }: { eventId: string; round: string 
   };
 
   const headings = ['Select', 'Participant / Team', 'ID', 'Status', ...(feeRequired ? ['Entry fee'] : []), 'Score'];
-  return <><LoadState {...resource} /><p>Choose the participants or teams who qualify. Unselected eligible entries will be rejected when you promote. To reverse a promotion, select those entries and use Demote — that only affects who you select.</p>
+  return <><LoadState {...resource} /><p>Choose the participants or teams who qualify. Selected entries will be promoted to the next round; unselected entries remain unaffected. To reverse a promotion, select those entries and use Demote — that only affects who you select.</p>
     {error && <p role="alert" className="admin-error">{error}</p>}{message && <p role="status" className="admin-success">{message}</p>}
     {feeRequired && <p>Entry fee ₹{text(data.feeAmount)}{data.feePerHead ? ' per participant; team totals appear below' : data.isTeamEvent ? ' per team' : ''} · {text(data.paidCount)} of {list.length} have paid.</p>}
     <div className="admin-actions"><button disabled={busy || !list.length} onClick={() => setSelected(selected.length === list.length ? [] : list.map(key))}>Select / clear all</button><button disabled={!list.length} onClick={() => downloadCsv(`${eventId}-round-${round}.csv`, [['ID', 'Name', 'Status', 'Entry fee', 'Paid at', 'Payment ID', 'Score'], ...list.map(r => { const p = record(r.payment); return [r.teamId || r.userId, r.teamName || r.name, r.status, paymentLabel(p).label, p.paidAt, p.paymentId, r.score]; })])}>Export results</button></div>

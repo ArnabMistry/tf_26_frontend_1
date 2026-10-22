@@ -139,7 +139,7 @@ test('all four tees are shown with their price, colour and full size range', asy
   await expect(page.getByRole('link', { name: /log in or sign up/i })).toBeVisible();
 });
 
-test('a photographed tee can be flipped from its front to its back', async ({ page }) => {
+test('a photographed tee opens on its back and can be flipped to its front', async ({ page }) => {
   await mockStore(page, { signedIn: false });
   await page.goto('/merch');
 
@@ -148,21 +148,21 @@ test('a photographed tee can be flipped from its front to its back', async ({ pa
   const front = article.locator('img[src="/merch/black_front1.webp"]');
   const back = article.locator('img[src="/merch/black_back1.webp"]');
 
-  // Both shots are present from the start — the card opens on the front and
-  // cross-fades, rather than fetching the back on the first click.
-  await expect(front).toHaveCSS('opacity', '1');
-  await expect(back).toHaveCSS('opacity', '0');
-  await expect(views.getByRole('button', { name: 'Front' })).toHaveAttribute('aria-pressed', 'true');
-
-  await views.getByRole('button', { name: 'Back' }).click();
-
+  // Both shots are present from the start — the card opens on the back and
+  // cross-fades, rather than fetching the front on the first click.
   await expect(back).toHaveCSS('opacity', '1');
   await expect(front).toHaveCSS('opacity', '0');
   await expect(views.getByRole('button', { name: 'Back' })).toHaveAttribute('aria-pressed', 'true');
-  await expect(views.getByRole('button', { name: 'Front' })).toHaveAttribute('aria-pressed', 'false');
+
+  await views.getByRole('button', { name: 'Front' }).click();
+
+  await expect(front).toHaveCSS('opacity', '1');
+  await expect(back).toHaveCSS('opacity', '0');
+  await expect(views.getByRole('button', { name: 'Front' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(views.getByRole('button', { name: 'Back' })).toHaveAttribute('aria-pressed', 'false');
 
   // Flipping one card leaves the rest of the drop as it was.
-  await expect(card(page, SIG_WHITE).locator('img[src="/merch/white_front1.webp"]')).toHaveCSS('opacity', '1');
+  await expect(card(page, SIG_WHITE).locator('img[src="/merch/white_back1.webp"]')).toHaveCSS('opacity', '1');
 
   // A tee with no photography has nothing to flip to, so it offers no toggle.
   await expect(card(page, GLITCH_BLACK).getByRole('group', { name: `Views of ${GLITCH_BLACK}` })).toHaveCount(0);
