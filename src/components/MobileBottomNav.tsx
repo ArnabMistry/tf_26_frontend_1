@@ -16,6 +16,7 @@ const primaryItems = [
 ];
 
 const expandedItems = [
+  { href: "/itinerary", label: "Itinerary" },
   { href: "/admin", label: "Admin panel" },
   { href: "/about", label: "About" },
   { href: "/teams", label: "Teams" },

@@ -14,16 +14,82 @@ interface DropdownItem {
   label: string;
   description: string;
   icon: React.ReactNode;
+  adminOnly?: boolean;
 }
 
 const primaryNav = [
   { href: "/about", label: "About" },
   { href: "/events", label: "Events" },
-  { href: "/speakers", label: "Speakers" },
   { href: "/merch", label: "Merch" },
 ];
 
 const dropdownItems: DropdownItem[] = [
+  {
+    href: "/admin",
+    label: "Admin",
+    description: "Admin panel",
+    adminOnly: true,
+    icon: (
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="transition-transform duration-200 group-hover:scale-110"
+      >
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      </svg>
+    ),
+  },
+  {
+    href: "/speakers",
+    label: "Speakers",
+    description: "Keynotes & panel",
+    icon: (
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="transition-transform duration-200 group-hover:scale-110"
+      >
+        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+        <line x1="12" x2="12" y1="19" y2="22" />
+      </svg>
+    ),
+  },
+  {
+    href: "/itinerary",
+    label: "Itinerary",
+    description: "Master schedule",
+    icon: (
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="transition-transform duration-200 group-hover:scale-110"
+      >
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+        <line x1="16" y1="2" x2="16" y2="6" />
+        <line x1="8" y1="2" x2="8" y2="6" />
+        <line x1="3" y1="10" x2="21" y2="10" />
+      </svg>
+    ),
+  },
   {
     href: "/sponsors",
     label: "Sponsors",
@@ -101,7 +167,7 @@ export function Navbar({
   };
 
   const isDropdownActive = dropdownItems.some((item) =>
-    isItemActive(item.href)
+    (!item.adminOnly || isAdmin) && isItemActive(item.href)
   );
 
   const handleMouseEnter = () => {
@@ -221,19 +287,6 @@ export function Navbar({
 
         {/* ── Desktop links ── */}
         <div className="hidden items-center gap-4 text-xs font-bold uppercase tracking-wider text-white md:flex md:ml-auto lg:gap-6 lg:text-sm">
-          {/* Admin link (visible only to admin users, kept directly at top level) */}
-          {isAdmin && (
-            <Link
-              href="/admin"
-              aria-current={isItemActive("/admin") ? "page" : undefined}
-              className={`rounded-sm transition-colors hover:text-[#FFFF1A] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ffe43b] ${
-                isItemActive("/admin") ? "text-[#FFFF1A]" : ""
-              }`}
-            >
-              Admin
-            </Link>
-          )}
-
           {primaryNav.map(({ href, label }) => {
             const isActive = isItemActive(href);
             return (
@@ -304,52 +357,54 @@ export function Navbar({
                       "0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(43, 31, 94, 0.4)",
                   }}
                 >
-                  {dropdownItems.map(({ href, label, description, icon }) => {
-                    const isActive = isItemActive(href);
-                    return (
-                      <Link
-                        key={href}
-                        href={href}
-                        aria-current={isActive ? "page" : undefined}
-                        onClick={() => setIsDropdownOpen(false)}
-                        className={`group flex items-center gap-3.5 rounded-xl p-2.5 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b] active:scale-[0.98] ${
-                          isActive
-                            ? "border border-[#FFFF1A]/40 bg-[#FFFF1A]/10 text-white"
-                            : "border border-transparent hover:bg-white/[0.08] text-white"
-                        }`}
-                      >
-                        <div
-                          className={`flex size-10 shrink-0 items-center justify-center rounded-xl border transition-all duration-200 ${
+                  {dropdownItems
+                    .filter((item) => !item.adminOnly || isAdmin)
+                    .map(({ href, label, description, icon }) => {
+                      const isActive = isItemActive(href);
+                      return (
+                        <Link
+                          key={href}
+                          href={href}
+                          aria-current={isActive ? "page" : undefined}
+                          onClick={() => setIsDropdownOpen(false)}
+                          className={`group flex items-center gap-3.5 rounded-xl p-2.5 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffe43b] active:scale-[0.98] ${
                             isActive
-                              ? "border-[#FFFF1A]/50 bg-[#FFFF1A]/20 text-[#FFFF1A] shadow-[0_0_12px_rgba(255,255,26,0.25)]"
-                              : "border-white/10 bg-white/[0.06] text-white/70 group-hover:border-white/25 group-hover:bg-white/[0.12] group-hover:text-[#FFFF1A]"
+                              ? "border border-[#FFFF1A]/40 bg-[#FFFF1A]/10 text-white"
+                              : "border border-transparent hover:bg-white/[0.08] text-white"
                           }`}
                         >
-                          {icon}
-                        </div>
-                        <div className="flex flex-col text-left">
-                          <span
-                            className={`text-[14px] font-bold tracking-tight normal-case transition-colors duration-200 ${
+                          <div
+                            className={`flex size-10 shrink-0 items-center justify-center rounded-xl border transition-all duration-200 ${
                               isActive
-                                ? "text-[#FFFF1A]"
-                                : "text-white group-hover:text-[#FFFF1A]"
+                                ? "border-[#FFFF1A]/50 bg-[#FFFF1A]/20 text-[#FFFF1A] shadow-[0_0_12px_rgba(255,255,26,0.25)]"
+                                : "border-white/10 bg-white/[0.06] text-white/70 group-hover:border-white/25 group-hover:bg-white/[0.12] group-hover:text-[#FFFF1A]"
                             }`}
                           >
-                            {label}
-                          </span>
-                          <span
-                            className={`text-[12px] font-normal normal-case transition-colors duration-200 ${
-                              isActive
-                                ? "text-[#FFFF1A]/80"
-                                : "text-[#b4afc7] group-hover:text-white/80"
-                            }`}
-                          >
-                            {description}
-                          </span>
-                        </div>
-                      </Link>
-                    );
-                  })}
+                            {icon}
+                          </div>
+                          <div className="flex flex-col text-left">
+                            <span
+                              className={`text-[14px] font-bold tracking-tight normal-case transition-colors duration-200 ${
+                                isActive
+                                  ? "text-[#FFFF1A]"
+                                  : "text-white group-hover:text-[#FFFF1A]"
+                              }`}
+                            >
+                              {label}
+                            </span>
+                            <span
+                              className={`text-[12px] font-normal normal-case transition-colors duration-200 ${
+                                isActive
+                                  ? "text-[#FFFF1A]/80"
+                                  : "text-[#b4afc7] group-hover:text-white/80"
+                              }`}
+                            >
+                              {description}
+                            </span>
+                          </div>
+                        </Link>
+                      );
+                    })}
                 </motion.div>
               )}
             </AnimatePresence>
