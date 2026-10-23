@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { ApiError, authRequest, destination, type AuthUser } from '@/lib/auth';
 import { hasSessionHint, clearSignedIn } from '@/lib/session';
 import dynamic from 'next/dynamic';
-import { adminRequest, downloadCsv, enc, person, record, text, type Dashboard } from '@/lib/admin';
+import { adminRequest, downloadCsv, enc, person, record, rows, text, type Dashboard, type Row } from '@/lib/admin';
 import { LoadState, Table, useAdminData } from '@/components/admin/AdminUI';
 
 const BulkEmail = dynamic(() => import('@/components/admin/BulkEmail').then(m => m.BulkEmail), {
@@ -79,20 +79,58 @@ function Workspace({ user, eventId }: { user: AuthUser; eventId?: string }) {
   async function handleExportSummary() {
     try {
       setExportingSummary(true);
-      const res = await adminRequest('/api/admin/events/export-summary');
-      const data = res as {
-        events?: { name: string; registeredTeams: number; headcount: number }[];
-        totals?: { registeredTeams: number; headcount: number };
-      };
-      const eventsList = Array.isArray(data?.events) ? data.events : [];
-      const totals = data?.totals || { registeredTeams: 0, headcount: 0 };
+      // Fetch latest dashboard data to get the active event list
+      const dashData = (await adminRequest('/api/admin/dashboard')) as Dashboard;
+      const allEvents = Array.isArray(dashData?.perEventStats) ? dashData.perEventStats : [];
 
-      const rows: unknown[][] = [
+      // Process each event using existing endpoints without touching backend:
+      // For solo events or 0 registrations, counts are already available.
+      // For team events with registrations, query existing /api/admin/events/:id/registrations.
+      const rowsData = await Promise.all(
+        allEvents.map(async (ev) => {
+          const regCount = ev._count?.registrations || 0;
+          if (regCount === 0) {
+            return { name: ev.name, registeredTeams: 0, headcount: 0 };
+          }
+          if (!ev.isTeamEvent) {
+            return { name: ev.name, registeredTeams: 0, headcount: regCount };
+          }
+
+          try {
+            const regRes = (await adminRequest(`/api/admin/events/${enc(ev.id)}/registrations?limit=100`)) as {
+              registrations?: Row[];
+            };
+            const activeRegs = rows(regRes?.registrations).filter(r => r.status !== 'cancelled');
+            const registeredTeams = activeRegs.filter(r => r.teamId != null).length;
+            let headcount = 0;
+            for (const r of activeRegs) {
+              const team = record(r.team);
+              const members = rows(team.members);
+              headcount += members.length > 0 ? members.length : 1;
+            }
+            return { name: ev.name, registeredTeams, headcount };
+          } catch {
+            return { name: ev.name, registeredTeams: ev._count?.teams || 0, headcount: regCount };
+          }
+        })
+      );
+
+      rowsData.sort((a, b) => a.name.localeCompare(b.name));
+
+      let totalTeams = 0;
+      let totalHeadcount = 0;
+      for (const r of rowsData) {
+        totalTeams += r.registeredTeams;
+        totalHeadcount += r.headcount;
+      }
+
+      const csvRows: unknown[][] = [
         ['Event Name', 'Registered Teams', 'Headcount'],
-        ...eventsList.map(item => [item.name, item.registeredTeams, item.headcount]),
-        ['All Together', totals.registeredTeams, totals.headcount],
+        ...rowsData.map(r => [r.name, r.registeredTeams, r.headcount]),
+        ['All Together', totalTeams, totalHeadcount],
       ];
-      downloadCsv('tantrafiesta-events-summary.csv', rows);
+
+      downloadCsv('tantrafiesta-events-summary.csv', csvRows);
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Failed to export events summary');
     } finally {
@@ -167,7 +205,7 @@ function Workspace({ user, eventId }: { user: AuthUser; eventId?: string }) {
             {!events.length && <p>No events assigned yet.</p>}<h2>Recent registrations</h2><Table headings={['Event', 'Participant / Team', 'Status']} empty={!recent.length}>{recent.map(r => <tr key={text(r.id)}><td>{text(record(r.event).name)}</td><td>{text(record(r.team).name || person(r.user))}</td><td><span className="admin-badge">{text(r.status)}</span></td></tr>)}</Table>
           </>}
           {view === 'events' && <EventTools eventId={selectedId} superAdmin={superAdmin} changed={resource.reload} />}
-          {view === 'registrations' && <Registrations eventId={selectedId} />}
+          {view === 'registrations' && <Registrations eventId={selectedId} superAdmin={superAdmin} />}
           {view === 'promotion' && <Promotion eventId={selectedId} />}
           {view === 'bulk-email' && <BulkEmail eventId={selectedId} superAdmin={superAdmin} />}
           {view === 'meals' && <Meals events={events} />}

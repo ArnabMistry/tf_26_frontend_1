@@ -114,7 +114,7 @@ export function EventTools({ eventId, superAdmin, changed }: { eventId: string; 
   </section>;
 }
 
-export function Registrations({ eventId }: { eventId: string }) {
+export function Registrations({ eventId, superAdmin = false }: { eventId: string; superAdmin?: boolean }) {
   const [page, setPage] = useState(1); const [status, setStatus] = useState('');
   const [details, setDetails] = useState<unknown>(null); const [error, setError] = useState(''); const [busy, setBusy] = useState(false);
   const path = `/api/admin/events/${enc(eventId)}/registrations`;
@@ -177,19 +177,54 @@ export function Registrations({ eventId }: { eventId: string }) {
   return <section><div className="admin-section-heading"><h2>Registrations</h2><button disabled={busy || resource.loading} onClick={exportAll}>Export all filtered rows</button></div>
     <label>Status<select value={status} onChange={e => { setStatus(e.target.value); setPage(1); setDetails(null); }}><option value="">All statuses</option>{options(['registered', 'in_round', 'shortlisted', 'eliminated', 'confirmed', 'cancelled']).map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select></label>
     <LoadState {...resource} />{error && <p role="alert" className="admin-error">{error}</p>}
+    {superAdmin && list.length > 0 && (
+      <div className="admin-stats" style={{ margin: '14px 0 16px', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))' }}>
+        <article>
+          <span>Registered teams</span>
+          <strong>{list.filter(r => r.teamId != null).length}</strong>
+        </article>
+        <article>
+          <span>Total member headcount</span>
+          <strong>{list.reduce((sum, r) => { const team = record(r.team); const m = rows(team.members); return sum + (r.teamId ? (m.length > 0 ? m.length : 1) : 1); }, 0)}</strong>
+        </article>
+      </div>
+    )}
     {feeRequired && <p>Entry fee ₹{text(data.feeAmount)}{data.feePerHead ? ' per participant; team totals appear below' : data.isTeamEvent ? ' per team' : ''} · {text(list.filter(r => record(r.payment).status === 'PAID').length)} of {list.length} on this page have paid.</p>}
-    <Table headings={['ID', 'Participant / Team', 'Email', 'Status', ...(feeRequired ? ['Entry fee'] : []), ...(showPreferences ? ['Committee preferences'] : []), 'Details']} empty={!list.length}>{list.map(r => {
+    <Table headings={['ID', 'Participant / Team', ...(superAdmin ? ['Members count'] : []), 'Email', 'Status', ...(feeRequired ? ['Entry fee'] : []), ...(showPreferences ? ['Committee preferences'] : []), 'Details']} empty={!list.length}>{list.map(r => {
       const p = record(r.payment); const fee = paymentLabel(p); const picks = preferencesOf(r);
-      return <tr key={text(r.id)}><td>{text(r.id)}</td><td>{text(record(r.team).name || person(r.user))}</td><td>{text(record(r.user).email)}</td><td><span className="admin-badge">{text(r.status)}</span></td>{feeRequired && <td><span className={`admin-badge ${fee.tone}`} title={p.paidAt ? `Paid ${new Date(String(p.paidAt)).toLocaleString()}${p.paymentId ? ` · ${text(p.paymentId)}` : ''}` : undefined}>{fee.label}</span></td>}
-        {showPreferences && <td>{picks.length
-          ? picks.map(pick => (
-              /* Ranked choice, then the stance taken on it. */
-              <div key={pick.rank}>
-                {pick.rank}. {pick.committee} — <strong>{pick.motion}</strong>
-              </div>
-            ))
-          : <span className="admin-badge">Not provided</span>}</td>}
-        <td><button onClick={async () => { setError(''); try { setDetails(await adminRequest(`/api/admin/registrations/${enc(r.id)}`)); } catch (err) { setError(err instanceof Error ? err.message : 'Unable to load details.'); } }}>View</button></td></tr>; })}</Table>
+      const team = record(r.team); const m = rows(team.members);
+      const memberCount = m.length > 0 ? m.length : 1;
+      return (
+        <tr key={text(r.id)}>
+          <td>{text(r.id)}</td>
+          <td>{text(team.name || person(r.user))}</td>
+          {superAdmin && (
+            <td>
+              {r.teamId ? (
+                <span className="admin-badge admin-paid">
+                  {memberCount} {memberCount === 1 ? 'member' : 'members'}
+                </span>
+              ) : (
+                <span className="admin-badge" style={{ opacity: 0.6 }}>
+                  Solo (1)
+                </span>
+              )}
+            </td>
+          )}
+          <td>{text(record(r.user).email)}</td>
+          <td><span className="admin-badge">{text(r.status)}</span></td>
+          {feeRequired && <td><span className={`admin-badge ${fee.tone}`} title={p.paidAt ? `Paid ${new Date(String(p.paidAt)).toLocaleString()}${p.paymentId ? ` · ${text(p.paymentId)}` : ''}` : undefined}>{fee.label}</span></td>}
+          {showPreferences && <td>{picks.length
+            ? picks.map(pick => (
+                <div key={pick.rank}>
+                  {pick.rank}. {pick.committee} — <strong>{pick.motion}</strong>
+                </div>
+              ))
+            : <span className="admin-badge">Not provided</span>}</td>}
+          <td><button onClick={async () => { setError(''); try { setDetails(await adminRequest(`/api/admin/registrations/${enc(r.id)}`)); } catch (err) { setError(err instanceof Error ? err.message : 'Unable to load details.'); } }}>View</button></td>
+        </tr>
+      );
+    })}</Table>
     <div className="admin-actions"><button disabled={page === 1 || resource.loading} onClick={() => setPage(p => p - 1)}>Previous</button><span>Page {page} of {Number(pagination.totalPages) || 1} · {text(pagination.total)} records</span><button disabled={resource.loading || page >= (Number(pagination.totalPages) || 1)} onClick={() => setPage(p => p + 1)}>Next</button></div>
     {!!details && <RegistrationDetails value={details} close={() => setDetails(null)} />}
   </section>;
