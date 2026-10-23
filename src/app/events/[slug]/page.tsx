@@ -60,11 +60,11 @@ function fromPublicEvent(event: PublicEvent): EventDetailData {
     poster: event.image || local?.image || local?.poster,
     image: event.image || local?.image,
     prizePool: local?.prizePool || event.prizePool,
-    prizeNote: local?.prizeNote || event.prizeNote,
+    prizeNote: event.slug === "rann-bhoomi" ? local?.prizeNote : (local?.prizeNote || event.prizeNote),
     prizes: local?.prizes?.length ? local.prizes : (event.prizeBreakdown ?? []),
     stages: local?.stages ?? [],
     organizers: local?.organizers ?? [],
-    rules: event.rules ?? local?.rules ?? [],
+    rules: (event.slug === "rann-bhoomi" ? local?.rules : undefined) ?? event.rules ?? local?.rules ?? [],
     // The backend contract has no highlights field yet, and models eligibility
     // as one free-text string rather than the bullet list the page renders.
     highlights: local?.highlights ?? [],

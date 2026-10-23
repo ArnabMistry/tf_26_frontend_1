@@ -1319,14 +1319,13 @@ export const eventDetails: EventDetail[] = [
     clubs: [{ name: "Iotics", slug: "iotics" }],
     description:
       "Rann Bhoomi 2.0 challenges participants to design and build a manually controlled combat robot capable of engaging in head-to-head battles inside a dedicated arena. Robots must demonstrate superior strength, control, durability and strategy to overpower their opponents — the goal is to outlast and outfight competitors while adhering to strict safety and design standards.",
-    prizePool: "₹1,20,000+",
-    prizeNote: "Winners are declared across 3 weight categories: 1.5 kg, 8 kg, and 15 kg.",
+    prizePool: "₹1,50,000",
     prizes: [
-      { position: 1, label: "15 kg Winner", amount: "₹60,000 (15 kg)" },
-      { position: 1, label: "8 kg Winner", amount: "₹40,000 (8 kg)" },
-      { position: 1, label: "1.5 kg Winner", amount: "₹20,000 (1.5 kg)" },
-      { position: 4, label: "Best Design", amount: "Best Design", note: "Special recognition across all weight classes" },
-      { position: 5, label: "Best Warrior", amount: "Best Warrior", note: "Special recognition across all weight classes" },
+      { position: 1, label: "1st Prize", amount: "₹75,000" },
+      { position: 2, label: "2nd Prize", amount: "₹45,000" },
+      { position: 3, label: "3rd Prize", amount: "₹30,000" },
+      { position: 4, amount: "Best Design" },
+      { position: 5, amount: "Best Warrior" },
     ],
     stages: [
       {
@@ -1341,23 +1340,23 @@ export const eventDetails: EventDetail[] = [
         when: "25 Oct 2026, 5:00 PM – 11:00 PM",
         mode: "Offline",
         detail:
-          "Five-minute matches in an elimination format. The losing bot is eliminated and the winner advances, continuing until the top 6 teams qualify for the finals — 2 from 1.5 kg, 2 from 8 kg and 2 from 15 kg. Victory by knock-out: the opposing bot fails to move 6 inches within 30 seconds. Scored on aggression, damage, control and strategy.",
+          "Five-minute matches in an elimination format. The losing bot is eliminated and the winner advances. Victory by knock-out: the opposing bot fails to move 6 inches within 30 seconds. Scored on aggression, damage, control and strategy.",
       },
       {
         name: "Round 3 — Finals: Championship Battles",
         when: "26 Oct 2026, 10:00 AM – 6:00 PM",
         mode: "Offline",
         detail:
-          "Three championship matches, one final per weight category: 1.5 kg, 8 kg, and 15 kg, consisting of two rounds of 3 minutes each, with a 5-minute break after Round 1 for technical repairs. Winners of each weight category are declared on final-match performance.",
+          "Match consists of two rounds of 3 minutes each, with a 5-minute break after Round 1 for technical repairs. Winners of the weight category are declared based on final-match performance.",
       },
     ],
     highlights: [
-      "Weight categories: 1.5 kg (±5% tolerance), 8 kg (±5% tolerance), and 15 kg (±5% tolerance).",
-      "Prizes: ₹60,000 for 15 kg winner, ₹40,000 for 8 kg winner, ₹20,000 for 1.5 kg winner, plus Best Design and Best Warrior awards.",
+      "Weight categories: 1.5 kg with ±5% error/tolerance permitted on robot weight.",
+      "Prizes: 1st Prize ₹75,000, 2nd Prize ₹45,000, 3rd Prize ₹30,000, plus Best Design and Best Warrior awards.",
       "Accommodation: Available for registered outstation participants on campus.",
       "Arena: a dedicated enclosed 16 × 16 × 10 ft arena built from transparent polycarbonate sheets and metal.",
       "Every robot undergoes a safety inspection before being cleared for competition.",
-      "Typical wheel RPM by class: 400–800 RPM at 1.5 kg, 300–500 RPM at 8 kg, 200–400 RPM at 15 kg.",
+      "Typical wheel RPM: 400–800 RPM at 1.5 kg.",
       "Judging: matches decided by knock-out or points, scored on aggression, damage, control and strategy.",
     ],
     eligibility: [
@@ -1367,7 +1366,7 @@ export const eventDetails: EventDetail[] = [
       "Valid student ID cards are required at registration.",
     ],
     rules: [
-      "Weight categories: 1.5 kg, 8 kg, and 15 kg with ±5% error/tolerance permitted on robot weight.",
+      "Weight categories: 1.5 kg with ±5% error/tolerance permitted on robot weight.",
       "Power supply: electrical (batteries) only — internal combustion engines are prohibited. Maximum 52 V DC between any two points.",
       "Robots must have a manual kill switch, an emergency stop on the controller, and proper insulation and secure wiring.",
       "Hydraulics and pneumatics: maximum 50 bar, fully self-contained and leak-proof; pneumatics need certified tanks and regulators with mandatory safety approvals.",
