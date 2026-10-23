@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { ApiError, authRequest, destination, type AuthUser } from '@/lib/auth';
 import { hasSessionHint, clearSignedIn } from '@/lib/session';
 import dynamic from 'next/dynamic';
-import { enc, person, record, text, type Dashboard } from '@/lib/admin';
+import { adminRequest, downloadCsv, enc, person, record, text, type Dashboard } from '@/lib/admin';
 import { LoadState, Table, useAdminData } from '@/components/admin/AdminUI';
 
 const BulkEmail = dynamic(() => import('@/components/admin/BulkEmail').then(m => m.BulkEmail), {
@@ -74,6 +74,31 @@ function Workspace({ user, eventId }: { user: AuthUser; eventId?: string }) {
   const recent = dashboard?.recentRegistrations?.filter(r => superAdmin || r.eventId === selectedId || record(r.event).id === selectedId) || [];
   function href(tab: string, id = selectedId) { return superAdmin ? `/admin/super?view=${tab}${id ? `&event=${enc(id)}` : ''}` : `${id ? `/admin/events/${enc(id)}` : '/admin/events'}?view=${tab}`; }
   const eventRequired = ['registrations', 'promotion', 'bulk-email'].includes(view);
+  const [exportingSummary, setExportingSummary] = useState(false);
+
+  async function handleExportSummary() {
+    try {
+      setExportingSummary(true);
+      const res = await adminRequest('/api/admin/events/export-summary');
+      const data = res as {
+        events?: { name: string; registeredTeams: number; headcount: number }[];
+        totals?: { registeredTeams: number; headcount: number };
+      };
+      const eventsList = Array.isArray(data?.events) ? data.events : [];
+      const totals = data?.totals || { registeredTeams: 0, headcount: 0 };
+
+      const rows: unknown[][] = [
+        ['Event Name', 'Registered Teams', 'Headcount'],
+        ...eventsList.map(item => [item.name, item.registeredTeams, item.headcount]),
+        ['All Together', totals.registeredTeams, totals.headcount],
+      ];
+      downloadCsv('tantrafiesta-events-summary.csv', rows);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to export events summary');
+    } finally {
+      setExportingSummary(false);
+    }
+  }
   return <main className="admin-workspace"><div className="admin-layout">
     <aside className="admin-sidebar">
       <div className="admin-sidebar-header">
@@ -108,6 +133,21 @@ function Workspace({ user, eventId }: { user: AuthUser; eventId?: string }) {
           <h1>{superAdmin ? 'Admin control center' : selected?.name || 'Event admin panel'}</h1>
         </div>
         <div className="admin-topbar-actions">
+          {superAdmin && (
+            <button
+              type="button"
+              onClick={handleExportSummary}
+              disabled={exportingSummary}
+              title="Export all events registered teams and headcount into CSV"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '6px' }}>
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              <span>{exportingSummary ? 'Exporting CSV…' : 'Export all events CSV'}</span>
+            </button>
+          )}
           <Link href="/" className="admin-home-btn" title="Go to Website Homepage">
             <svg className="admin-home-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M3 9.5L12 3l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9.5z"/>
