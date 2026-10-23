@@ -97,10 +97,20 @@ function Workspace({ user, eventId }: { user: AuthUser; eventId?: string }) {
           }
 
           try {
-            const regRes = (await adminRequest(`/api/admin/events/${enc(ev.id)}/registrations?limit=100`)) as {
-              registrations?: Row[];
-            };
-            const activeRegs = rows(regRes?.registrations).filter(r => r.status !== 'cancelled');
+            const allRegs: Row[] = [];
+            let current = 1;
+            let totalPages = 1;
+            do {
+              const regRes = (await adminRequest(`/api/admin/events/${enc(ev.id)}/registrations?page=${current}&limit=100`)) as {
+                registrations?: Row[];
+                pagination?: { totalPages?: number };
+              };
+              allRegs.push(...rows(regRes?.registrations));
+              totalPages = Number(regRes?.pagination?.totalPages) || 1;
+              current++;
+            } while (current <= totalPages);
+
+            const activeRegs = allRegs.filter(r => r.status !== 'cancelled');
             const registeredTeams = activeRegs.filter(r => r.teamId != null).length;
             let headcount = 0;
             for (const r of activeRegs) {
