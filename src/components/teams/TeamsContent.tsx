@@ -37,8 +37,8 @@ type Secretary = {
 const BASE = "/Domain-leads-photos/";
 
 const secretaries: Secretary[] = [
-  { role: "General Secretary", name: "Apoorva Mundada" },
-  { role: "Technical Secretary", name: "Amulya Yadav" },
+  { role: "General Secretary", name: "Apoorva Mundada", image:  "general_secretary.webp"},
+  { role: "Technical Secretary", name: "Amulya Yadav", image: "tech_secretary.webp" },
 ];
 
 const divisions: Division[] = [
@@ -99,6 +99,15 @@ const divisions: Division[] = [
     subtitle: "Creatives POC - Sarthak Gupta",
     domains: [
       {
+        domain: "Multimedia",
+        members: [
+          { name: "Manu Shrivastava",   btid: "BT24CSH008", position: "Lead",              image: "Multimedia_Lead_Manu.webp" },
+          { name: "Akshit Yadav",       btid: "BT24CSE098", position: "Co-lead (Video)" },
+          { name: "Dilkhush Choubey",   btid: "BT24ECE065", position: "Co-lead (Photo)",   image: "Multimedia_co-lead_Dilkhush.webp" },
+          { name: "Suraj Pratap Singh", btid: "BT24CSH041", position: "Co-lead (Editing)", image: "MULTIMEDIA_CO-LEAD_Suraj.webp" },
+        ],
+      },
+      {
         domain: "Design",
         members: [
           { name: "Sarthak Gupta",        btid: "BT24ECE087", position: "Lead",    image: "Design_lead_Sarthak.webp" },
@@ -125,15 +134,6 @@ const divisions: Division[] = [
         members: [
           { name: "Sambodhi Bhowal", btid: "BT24CSD065", position: "Lead",    image: "webdev_lead_sambodhi.webp" },
           { name: "Arnab Mistry",    btid: "BT24CSE010", position: "Co-lead", image: "webdev_co-lead_arnab_mistry.webp" },
-        ],
-      },
-      {
-        domain: "Multimedia",
-        members: [
-          { name: "Manu Shrivastava",   btid: "BT24CSH008", position: "Lead",              image: "Multimedia_Lead_Manu.webp" },
-          { name: "Akshit Yadav",       btid: "BT24CSE098", position: "Co-lead (Video)" },
-          { name: "Dilkhush Choubey",   btid: "BT24ECE065", position: "Co-lead (Photo)",   image: "Multimedia_co-lead_Dilkhush.webp" },
-          { name: "Suraj Pratap Singh", btid: "BT24CSH041", position: "Co-lead (Editing)", image: "MULTIMEDIA_CO-LEAD_Suraj.webp" },
         ],
       },
       {
@@ -275,7 +275,7 @@ function SecretaryCard({
   shouldLoad?: boolean;
 }) {
   const [isLoaded, setIsLoaded] = useState(false);
-  const imageSrc = shouldLoad && secretary.image ? secretary.image : null;
+  const imageSrc = shouldLoad && secretary.image ? `${BASE}${encodeURIComponent(secretary.image)}` : null;
 
   return (
     <article className={`${styles.card} ${styles.secretaryCard}`} id={`secretary-card-${index}`}>
