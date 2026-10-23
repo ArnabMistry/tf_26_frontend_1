@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { ApiError, authRequest, destination, type AuthUser } from '@/lib/auth';
 import { hasSessionHint, clearSignedIn } from '@/lib/session';
 import dynamic from 'next/dynamic';
-import { enc, person, record, text, type Dashboard } from '@/lib/admin';
+import { adminRequest, downloadCsv, enc, person, record, rows, text, type Dashboard, type Row } from '@/lib/admin';
 import { LoadState, Table, useAdminData } from '@/components/admin/AdminUI';
 
 const BulkEmail = dynamic(() => import('@/components/admin/BulkEmail').then(m => m.BulkEmail), {
@@ -74,6 +74,69 @@ function Workspace({ user, eventId }: { user: AuthUser; eventId?: string }) {
   const recent = dashboard?.recentRegistrations?.filter(r => superAdmin || r.eventId === selectedId || record(r.event).id === selectedId) || [];
   function href(tab: string, id = selectedId) { return superAdmin ? `/admin/super?view=${tab}${id ? `&event=${enc(id)}` : ''}` : `${id ? `/admin/events/${enc(id)}` : '/admin/events'}?view=${tab}`; }
   const eventRequired = ['registrations', 'promotion', 'bulk-email'].includes(view);
+  const [exportingSummary, setExportingSummary] = useState(false);
+
+  async function handleExportSummary() {
+    try {
+      setExportingSummary(true);
+      // Fetch latest dashboard data to get the active event list
+      const dashData = (await adminRequest('/api/admin/dashboard')) as Dashboard;
+      const allEvents = Array.isArray(dashData?.perEventStats) ? dashData.perEventStats : [];
+
+      // Process each event using existing endpoints without touching backend:
+      // For solo events or 0 registrations, counts are already available.
+      // For team events with registrations, query existing /api/admin/events/:id/registrations.
+      const rowsData = await Promise.all(
+        allEvents.map(async (ev) => {
+          const regCount = ev._count?.registrations || 0;
+          if (regCount === 0) {
+            return { name: ev.name, registeredTeams: 0, headcount: 0 };
+          }
+          if (!ev.isTeamEvent) {
+            return { name: ev.name, registeredTeams: 0, headcount: regCount };
+          }
+
+          try {
+            const regRes = (await adminRequest(`/api/admin/events/${enc(ev.id)}/registrations?limit=100`)) as {
+              registrations?: Row[];
+            };
+            const activeRegs = rows(regRes?.registrations).filter(r => r.status !== 'cancelled');
+            const registeredTeams = activeRegs.filter(r => r.teamId != null).length;
+            let headcount = 0;
+            for (const r of activeRegs) {
+              const team = record(r.team);
+              const members = rows(team.members);
+              headcount += members.length > 0 ? members.length : 1;
+            }
+            return { name: ev.name, registeredTeams, headcount };
+          } catch {
+            return { name: ev.name, registeredTeams: ev._count?.teams || 0, headcount: regCount };
+          }
+        })
+      );
+
+      rowsData.sort((a, b) => a.name.localeCompare(b.name));
+
+      let totalTeams = 0;
+      let totalHeadcount = 0;
+      for (const r of rowsData) {
+        totalTeams += r.registeredTeams;
+        totalHeadcount += r.headcount;
+      }
+
+      const csvRows: unknown[][] = [
+        ['Event Name', 'Registered Teams', 'Headcount'],
+        ...rowsData.map(r => [r.name, r.registeredTeams, r.headcount]),
+        ['All Together', totalTeams, totalHeadcount],
+      ];
+
+      downloadCsv('tantrafiesta-events-summary.csv', csvRows);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to export events summary');
+    } finally {
+      setExportingSummary(false);
+    }
+  }
   return <main className="admin-workspace"><div className="admin-layout">
     <aside className="admin-sidebar">
       <div className="admin-sidebar-header">
@@ -108,6 +171,21 @@ function Workspace({ user, eventId }: { user: AuthUser; eventId?: string }) {
           <h1>{superAdmin ? 'Admin control center' : selected?.name || 'Event admin panel'}</h1>
         </div>
         <div className="admin-topbar-actions">
+          {superAdmin && (
+            <button
+              type="button"
+              onClick={handleExportSummary}
+              disabled={exportingSummary}
+              title="Export all events registered teams and headcount into CSV"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '6px' }}>
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              <span>{exportingSummary ? 'Exporting CSV…' : 'Export all events CSV'}</span>
+            </button>
+          )}
           <Link href="/" className="admin-home-btn" title="Go to Website Homepage">
             <svg className="admin-home-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M3 9.5L12 3l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9.5z"/>
@@ -127,7 +205,7 @@ function Workspace({ user, eventId }: { user: AuthUser; eventId?: string }) {
             {!events.length && <p>No events assigned yet.</p>}<h2>Recent registrations</h2><Table headings={['Event', 'Participant / Team', 'Status']} empty={!recent.length}>{recent.map(r => <tr key={text(r.id)}><td>{text(record(r.event).name)}</td><td>{text(record(r.team).name || person(r.user))}</td><td><span className="admin-badge">{text(r.status)}</span></td></tr>)}</Table>
           </>}
           {view === 'events' && <EventTools eventId={selectedId} superAdmin={superAdmin} changed={resource.reload} />}
-          {view === 'registrations' && <Registrations eventId={selectedId} />}
+          {view === 'registrations' && <Registrations eventId={selectedId} superAdmin={superAdmin} />}
           {view === 'promotion' && <Promotion eventId={selectedId} />}
           {view === 'bulk-email' && <BulkEmail eventId={selectedId} superAdmin={superAdmin} />}
           {view === 'meals' && <Meals events={events} />}
