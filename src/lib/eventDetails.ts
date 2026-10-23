@@ -1320,10 +1320,11 @@ export const eventDetails: EventDetail[] = [
     description:
       "Rann Bhoomi 2.0 challenges participants to design and build a manually controlled combat robot capable of engaging in head-to-head battles inside a dedicated arena. Robots must demonstrate superior strength, control, durability and strategy to overpower their opponents — the goal is to outlast and outfight competitors while adhering to strict safety and design standards.",
     prizePool: "₹1,50,000",
+    prizeNote: "Exclusive to 1.5 kg weight category",
     prizes: [
-      { position: 1, label: "1st Prize", amount: "₹75,000" },
-      { position: 2, label: "2nd Prize", amount: "₹45,000" },
-      { position: 3, label: "3rd Prize", amount: "₹30,000" },
+      { position: 1, label: "1st Prize", amount: "₹75,000 (1.5 kg)" },
+      { position: 2, label: "2nd Prize", amount: "₹45,000 (1.5 kg)" },
+      { position: 3, label: "3rd Prize", amount: "₹30,000 (1.5 kg)" },
       { position: 4, amount: "Best Design" },
       { position: 5, amount: "Best Warrior" },
     ],
@@ -1352,7 +1353,7 @@ export const eventDetails: EventDetail[] = [
     ],
     highlights: [
       "Weight categories: 1.5 kg with ±5% error/tolerance permitted on robot weight.",
-      "Prizes: 1st Prize ₹75,000, 2nd Prize ₹45,000, 3rd Prize ₹30,000, plus Best Design and Best Warrior awards.",
+      "Prizes: ₹75,000 (1st), ₹45,000 (2nd), ₹30,000 (3rd) for 1.5 kg bots, plus Best Design and Best Warrior awards.",
       "Accommodation: Available for registered outstation participants on campus.",
       "Arena: a dedicated enclosed 16 × 16 × 10 ft arena built from transparent polycarbonate sheets and metal.",
       "Every robot undergoes a safety inspection before being cleared for competition.",
