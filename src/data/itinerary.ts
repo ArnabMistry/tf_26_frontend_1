@@ -111,13 +111,6 @@ export const ITINERARY_DAYS: DaySchedule[] = [
         location: "CR-203 & Reading Room",
       },
       {
-        timeWindow: "08:00 PM – 10:00 PM",
-        title: "MicroArtist Band Performance",
-        description:
-          "Live musical concert & band pro-show for all students & attendees.",
-        location: "Main Stage",
-      },
-      {
         timeWindow: "10:00 PM onwards",
         title: "Overnight Hackathons & Rest",
         description:
