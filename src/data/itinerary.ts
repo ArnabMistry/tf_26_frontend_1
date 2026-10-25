@@ -86,10 +86,17 @@ export const ITINERARY_DAYS: DaySchedule[] = [
     title: "Inauguration & Overnight Kick-offs",
     events: [
       {
-        timeWindow: "05:00 PM – 06:00 PM",
+        timeWindow: "04:00 PM – 05:00 PM",
         title: "Official Opening Ceremony",
         description:
           "Inaugural address, lamp lighting, dignitaries & guest welcomes.",
+        location: "Main Stage",
+      },
+      {
+        timeWindow: "05:00 PM – 07:00 PM",
+        title: "Chief Guest Keynote Session",
+        description:
+          "Opening address & interactions with festival chief guests and dignitaries.",
         location: "Main Stage",
       },
       {
@@ -106,8 +113,9 @@ export const ITINERARY_DAYS: DaySchedule[] = [
       },
       {
         timeWindow: "06:00 PM – Ongoing (Until D1 06:00 PM)",
-        title: "Brand-Xperience",
-        description: "24-hour brand strategy, marketing, and design challenge.",
+        title: "Brand-Xperience + Multimedia",
+        description:
+          "24-hour brand strategy, marketing, creative design, and multimedia challenge.",
         location: "CR-203 & Reading Room",
       },
       {
@@ -213,8 +221,9 @@ export const ITINERARY_DAYS: DaySchedule[] = [
       {
         timeWindow: "06:00 PM",
         title: "Brand-Xperience Concludes",
-        description: "24-hour branding marathon ends; final evaluations.",
-        location: "CR-203 & Reading Room",
+        description:
+          "24-hour branding marathon ends; final evaluations.",
+        location: "CR-203; Multimedia continues in Reading Room",
       },
       {
         timeWindow: "06:00 PM – 08:00 PM",
@@ -229,10 +238,10 @@ export const ITINERARY_DAYS: DaySchedule[] = [
         location: "Acad Parking Arena",
       },
       {
-        timeWindow: "12:00 AM – 02:00 AM",
-        title: "Phoenix Cup Finals",
+        timeWindow: "08:00 PM – 02:00 AM",
+        title: "Cultural Performances",
         description:
-          "Midnight grand finale showdown projected on the big screen.",
+          "Pro-shows, band acts, and evening cultural performances.",
         location: "Amphitheatre",
       },
       {
@@ -307,8 +316,9 @@ export const ITINERARY_DAYS: DaySchedule[] = [
       {
         timeWindow: "12:00 PM – 06:00 PM",
         title: "FlashCode",
-        description: "Rapid-fire competitive speed coding showdown.",
-        location: "Seminar Hall",
+        description:
+          "Rapid-fire competitive speed coding showdown (relocated to Admin Hall 1).",
+        location: "Admin Hall 1",
       },
       {
         timeWindow: "01:00 PM – 04:00 PM",
@@ -331,8 +341,9 @@ export const ITINERARY_DAYS: DaySchedule[] = [
       {
         timeWindow: "01:00 PM – 06:00 PM",
         title: "Last Man Standing - LMS",
-        description: "Elevate endurance multi-round elimination challenge.",
-        location: "Admin Hall 1",
+        description:
+          "Elevate endurance multi-round elimination challenge (relocated to Seminar Hall).",
+        location: "Seminar Hall",
       },
       {
         timeWindow: "01:00 PM – 06:00 PM",
@@ -342,24 +353,18 @@ export const ITINERARY_DAYS: DaySchedule[] = [
       },
       {
         timeWindow: "06:00 PM – 07:00 PM",
-        title: "Crestoraxia Performance",
-        description: "Cultural music performance & pro-show.",
-        location: "Main Stage",
-      },
-      {
-        timeWindow: "06:00 PM – 07:00 PM",
         title: "Yuvaan Conclave Felicitation",
         description: "Valedictory ceremony & awards for Youth Conclave.",
         location: "Admin Hall 2 / Amphitheatre",
       },
       {
-        timeWindow: "07:00 PM – 07:45 PM",
+        timeWindow: "06:00 PM – 07:30 PM",
         title: "Chief Guest Keynote Session",
         description: "Inspiring valedictory address by festival dignitaries.",
         location: "Main Stage",
       },
       {
-        timeWindow: "07:45 PM – 09:00 PM",
+        timeWindow: "07:30 PM – 09:00 PM",
         title: "Grand Closing Ceremony & Prize Distribution",
         description:
           "Awarding winners across all hackathons, robowars, and competitions.",

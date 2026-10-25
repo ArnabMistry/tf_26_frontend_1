@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { MerchBanner } from "@/components/MerchBanner";
 import { ThemeTeaser } from "./ThemeTeaser";
@@ -48,6 +49,43 @@ export function Hero() {
           <div className="text-5xl md:text-8xl lg:text-[128px] font-bold italic leading-none uppercase tracking-tight text-[#E7137D] mt-2 md:mt-4">
             IIIT NAGPUR
           </div>
+
+          {/* View Itinerary CTA */}
+          <Link
+            href="/itinerary"
+            className="group mt-8 md:mt-10 inline-flex items-center gap-3 rounded-full border-2 border-[#FFFF1A] bg-[#FFFF1A]/10 px-7 py-3.5 text-base md:text-lg font-bold uppercase tracking-wider text-[#FFFF1A] backdrop-blur-md shadow-[0_0_25px_rgba(255,255,26,0.2)] transition-all duration-300 hover:bg-[#FFFF1A] hover:text-[#241A4C] hover:shadow-[0_0_40px_rgba(255,255,26,0.5)] hover:scale-105"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="shrink-0 transition-transform duration-300 group-hover:scale-110"
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            View Itinerary
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="shrink-0 transition-transform duration-300 group-hover:translate-x-1"
+            >
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </Link>
         </div>
       </div>
     </>
