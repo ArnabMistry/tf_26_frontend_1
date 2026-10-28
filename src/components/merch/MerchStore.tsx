@@ -144,7 +144,7 @@ export function MerchStore() {
           ? result.needsAttention
           : `Payment confirmed — ₹${result.amount} for ${result.items
               .map(i => `${i.quantity}x ${i.name}${i.size ? ` (${i.size})` : ''}`)
-              .join(', ')}. Collect it from the merch desk with your Fest ID.`
+              .join(', ')}. We will inform you once it's delivered.`
       );
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Payment could not be completed. Please try again.');
@@ -384,8 +384,7 @@ function ItemCard({
           <p className={s.owned}>
             You have already bought {owned}
             {item.purchases.some(p => p.size) ? ` (${item.purchases.map(p => p.size || 'one size').join(', ')})` : ''}
-            {item.purchases[0]?.paidAt ? ` on ${formatDate(item.purchases[0].paidAt)} IST` : ''}. Collect it from the
-            merch desk with your Fest ID.
+            {item.purchases[0]?.paidAt ? ` on ${formatDate(item.purchases[0].paidAt)} IST` : ''}. We will inform you once it's delivered.
           </p>
         )}
 
