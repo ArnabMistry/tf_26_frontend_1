@@ -11,10 +11,6 @@ function MarqueeMessage() {
         <span className={styles.bolt} aria-hidden="true">⚡</span> TF ’26 MERCH IS LIVE!
       </span>
       <span className={styles.marqueeSep} aria-hidden="true">✦</span>
-      <span className={styles.marqueeOffer}>
-        EARLY BIRD OFFER · EXPIRING SOON!
-      </span>
-      <span className={styles.marqueeSep} aria-hidden="true">✦</span>
       <span className={styles.marqueeText}>WEAR THE FEST</span>
       <span className={styles.marqueeSep} aria-hidden="true">✦</span>
       <span className={styles.marqueeText}>REP THE VIBE</span>
@@ -30,7 +26,7 @@ export function MerchBanner() {
     <Link
       href="/merch"
       className={styles.marqueeBanner}
-      aria-label="Merch announcement: TF '26 Merch is Live! Early bird offer expiring soon. Click to explore"
+      aria-label="Merch announcement: TF '26 Merch is Live! Click to explore"
     >
       <div className={styles.marqueeTrack}>
         <div className={styles.marqueeGroup}>
