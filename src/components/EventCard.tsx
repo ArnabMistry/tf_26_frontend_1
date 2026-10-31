@@ -8,6 +8,7 @@ interface EventCardProps {
   lowerWing?: boolean;
   onRegister?: (event: EventListing) => void;
   reveal?: boolean;
+  disabled?: boolean;
 }
 
 const wingShape = "M16 0H590Q606 0 606 16V221Q606 237 590 237H337Q321 237 310 250L283 282Q275 292 263 292H16Q0 292 0 276V16Q0 0 16 0Z";
@@ -27,7 +28,14 @@ function truncate(text: string, max: number): string {
   return `${cut.slice(0, lastSpace > 0 ? lastSpace : max).trimEnd()}…`;
 }
 
-export function EventCard({ event, variant = "left", lowerWing = false, onRegister, reveal = false }: EventCardProps) {
+export function EventCard({
+  event,
+  variant = "left",
+  lowerWing = false,
+  onRegister,
+  reveal = false,
+  disabled = true,
+}: EventCardProps) {
   const centered = variant === "center";
   const destination = event.href || event.registrationUrl;
   const isExternal = typeof destination === "string" && /^https?:\/\//i.test(destination);
@@ -93,7 +101,17 @@ export function EventCard({ event, variant = "left", lowerWing = false, onRegist
         <p className={styles.description}>{truncate(event.description, MAX_DESCRIPTION_CHARS)}</p>
         {centered && event.prize && <p className={styles.prize}><span className="sr-only">Prize pool: </span>{event.prize}</p>}
         <div className={styles.actionRow}>
-          {destination ? (
+          {disabled ? (
+            <button
+              type="button"
+              className={styles.action}
+              disabled
+              aria-label={`${actionLabel} — ${event.name} (Event ended)`}
+              title="Event ended"
+            >
+              <span className={styles.actionFace}>{actionContent}</span>
+            </button>
+          ) : destination ? (
             <Link
               href={destination}
               className={styles.action}
@@ -104,7 +122,13 @@ export function EventCard({ event, variant = "left", lowerWing = false, onRegist
               <span className={styles.actionFace}>{actionContent}</span>
             </Link>
           ) : (
-            <button type="button" className={styles.action} onClick={() => onRegister?.(event)} aria-label={`More info about ${event.name}`} disabled={!onRegister}>
+            <button
+              type="button"
+              className={styles.action}
+              onClick={() => onRegister?.(event)}
+              aria-label={`More info about ${event.name}`}
+              disabled={!onRegister}
+            >
               <span className={styles.actionFace}>{actionContent}</span>
             </button>
           )}
