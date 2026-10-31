@@ -235,6 +235,7 @@ export function EventsExplorer({ events }: EventsExplorerProps) {
                     variant={group.length === 1 || (group.length === 3 && index === 2) ? "center" : index % 2 === 0 ? "left" : "right"}
                     lowerWing={group.length === 4 && index >= 2}
                     onRegister={showRegistration}
+                    disabled
                   />
                 ))}
               </Reveal>
